@@ -1,33 +1,22 @@
-package lineales.estaticas;
+package lineales.dinamicas;
 
 /**
- * Implementación de Pila estática.
+ * Implementación de Pila dinámica.
  * 
  * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
  */
 public class PilaInt {
 	
 	/**
-	 * El tamaño de la pila.
+	 * El nodo que contiene el elemento tope de la pila.
 	 */
-	private static final int TAM = 32;
-	
-	/**
-	 * Los elementos de la pila.
-	 */
-	private int[] pila;
-	
-	/**
-	 * Posición del elemento tope de la pila; -1 si la pila está vacía.
-	 */
-	private int tope;
+	private NodoInt tope;
 	
 	/**
 	 * Crea y devuelve la pila vacía.
 	 */
 	public PilaInt() {
-		this.pila = new int[TAM];
-		this.tope = -1;
+		tope = null;
 	}
 	
 	/**
@@ -38,14 +27,10 @@ public class PilaInt {
 	 * @return
 	 */
 	public boolean apilar(int nuevoElem) {
-		boolean resultado = false;
+		NodoInt nuevoNodo = new NodoInt(nuevoElem, tope);
+		tope = nuevoNodo;
 		
-		if (tope < (TAM - 1)) {
-			pila[++tope] = nuevoElem;
-			resultado = true;
-		}
-		
-		return resultado;
+		return true;
 	}
 	
 	/**
@@ -58,8 +43,8 @@ public class PilaInt {
 	public boolean desapilar() {
 		boolean resultado = false;
 		
-		if (tope >= 0) {
-			pila[tope--] = 0;
+		if (tope != null) {
+			tope = tope.getEnlace();
 			resultado = true;
 		}
 		
@@ -75,8 +60,8 @@ public class PilaInt {
 	public int obtenerTope() {
 		int topeElem = 0;
 		
-		if (tope >= 0) {
-			topeElem = pila[tope];
+		if (tope != null) {
+			topeElem = tope.getElem();
 		}
 		
 		return topeElem;
@@ -89,15 +74,14 @@ public class PilaInt {
 	 * @return
 	 */
 	public boolean esVacia() {
-		return (tope < 0);
+		return (tope == null);
 	}
 	
 	/**
 	 * Saca todos los elementos de la pila.
 	 */
 	public void vaciar() {
-		pila = new int[TAM];
-		tope = -1;
+		tope = null;
 	}
 	
 	/**
@@ -106,12 +90,18 @@ public class PilaInt {
 	 * @return
 	 */
 	public PilaInt clonar() {
-		PilaInt clon = new PilaInt();
-		int i;
+		PilaInt aux = new PilaInt(), clon = new PilaInt();
+		NodoInt nodo;
 		
-		if (tope >= 0) {
-			for (i = 0; i <= tope; i++) {
-				clon.apilar(pila[i]);
+		if (tope != null) {
+			nodo = tope;
+			while (nodo != null) {
+				aux.apilar(nodo.getElem());
+				nodo = nodo.getEnlace();
+			}
+			while (!aux.esVacia()) {
+				clon.apilar(aux.obtenerTope());
+				aux.desapilar();
 			}
 		}
 		
@@ -126,13 +116,17 @@ public class PilaInt {
 	 */	
 	public String toString() {
 		String cadena = "[";
-		int i;
+		NodoInt nodo;
 		
-		if (tope >= 0) {
-			for (i = tope; i >= 0; i--) {
-				cadena+= pila[i]+" ";
+		if (tope != null) {
+			nodo = tope;
+			while (nodo != null) {
+				cadena+= nodo.getElem();
+				nodo = nodo.getEnlace();
+				if (nodo != null) {
+					cadena+= " ";
+				}
 			}
-			cadena = cadena.trim();
 		}
 		
 		cadena+= "]";
