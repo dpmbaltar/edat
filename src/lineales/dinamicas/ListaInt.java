@@ -237,4 +237,31 @@ public class ListaInt {
 		
 		return cadena;
 	}
+	
+	/**
+	 * Eliminar todos los elementos impares de la lista.
+	 * Método implementado en el 1er parcial.
+	 */
+	public void eliminarImpares() {
+		NodoInt nodoActual, nodoAnterior;
+		
+		if (!esVacia()) {
+			nodoActual = cabecera;
+			nodoAnterior = null;
+			
+			while (nodoActual != null) {
+				if ((nodoActual.getElem() % 2) != 0) {
+					nodoActual = nodoActual.getEnlace();
+					if (nodoAnterior != null) {
+						nodoAnterior.setEnlace(nodoActual);
+					} else {
+						cabecera = nodoActual;
+					}
+				} else {
+					nodoAnterior = nodoActual;
+					nodoActual = nodoActual.getEnlace();
+				}
+			}
+		}
+	}
 }

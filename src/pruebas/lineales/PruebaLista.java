@@ -11,6 +11,7 @@ public class PruebaLista {
 
 	public static void main(String[] args) {
 		pruebaListaInt();
+		//pruebaEliminarImpares();
 	}
 	
 	public static void pruebaListaInt() {
@@ -87,5 +88,16 @@ public class PruebaLista {
 		// Obtener cantidad de elementos de l2
 		System.out.println("Longitud de l1: "+l2.longitud());
 		System.out.println(l2);
+	}
+	
+	public static void pruebaEliminarImpares() {
+		ListaInt l1 = new ListaInt();
+		int i;
+		for (i = 0; i < 20; i++) {
+			l1.insertar(i, l1.longitud() + 1);
+		}
+		
+		l1.eliminarImpares();
+		System.out.println(l1);
 	}
 }

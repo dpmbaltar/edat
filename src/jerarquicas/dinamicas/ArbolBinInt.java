@@ -382,6 +382,14 @@ public class ArbolBinInt {
 		return listarNiveles().toString();
 	}
 	
+	/**
+	 * Suma todas las ramas a partir de un nodo dado, en forma recursiva.
+	 * Método implementado en el 1er parcial.
+	 * 
+	 * @param nodo
+	 * @param suma
+	 * @return
+	 */
 	private int sumarRamas(NodoArbolInt nodo, int suma) {
 		int resultado = 0;
 		NodoArbolInt izquierdo, derecho;
@@ -406,6 +414,12 @@ public class ArbolBinInt {
 		return resultado;
 	}
 	
+	/**
+	 * Suma todas las ramas.
+	 * Método implementado en el 1er parcial.
+	 * 
+	 * @return
+	 */
 	public int sumarRamas() {
 		return sumarRamas(raiz, 0);
 	}
