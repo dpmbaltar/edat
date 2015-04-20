@@ -113,11 +113,16 @@ public class ColaInt {
 	 * @return
 	 */
 	public ColaInt clonar() {
-		ColaInt clon = new ColaInt(), aux;
+		ColaInt clon = new ColaInt();
+		int frente = this.frente,
+			ultimo = this.ultimo;
 		
 		if (!this.esVacia()) {
-			aux = new ColaInt();
-			
+			while (frente != ultimo) {
+				clon.poner(cola[frente]);
+				frente++;
+				frente%= TAM;
+			}
 		}
 		
 		return clon;
@@ -134,10 +139,12 @@ public class ColaInt {
 		int frente = this.frente,
 			ultimo = this.ultimo;
 		
-		while (frente != ultimo) {
-			cadena+= cola[frente]+" ";
-			frente++;
-			frente%= TAM;
+		if (!this.esVacia()) {
+			while (frente != ultimo) {
+				cadena+= cola[frente]+" ";
+				frente++;
+				frente%= TAM;
+			}
 		}
 		
 		cadena = cadena.trim()+"]";

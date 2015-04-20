@@ -38,8 +38,8 @@ public class ColaInt {
 		if (this.esVacia()) {
 			this.frente = this.ultimo = nuevoNodo;
 		} else {
-			nuevoNodo.setEnlace(this.frente);
-			this.frente = nuevoNodo;
+			this.ultimo.setEnlace(nuevoNodo);
+			this.ultimo = nuevoNodo;
 		}
 		
 		return true;
@@ -106,9 +106,16 @@ public class ColaInt {
 	 * @return
 	 */
 	public ColaInt clonar() {
-		ColaInt clon;
+		ColaInt clon = new ColaInt();
+		NodoInt nodo;
 		
-		
+		if (!this.esVacia()) {
+			nodo = this.frente;
+			while (nodo != null) {
+				clon.poner(nodo.getElem());
+				nodo = nodo.getEnlace();
+			}
+		}
 		
 		return clon;
 	}
@@ -120,9 +127,18 @@ public class ColaInt {
 	 * luego comentar el código.
 	 */
 	public String toString() {
-		String cadena = "";
+		String cadena = "[";
+		NodoInt nodo;
 		
+		if (!this.esVacia()) {
+			nodo = this.frente;
+			while (nodo != null) {
+				cadena+= nodo.getElem()+" ";
+				nodo = nodo.getEnlace();
+			}
+		}
 		
+		cadena = cadena.trim()+"]";
 		
 		return cadena;
 	}

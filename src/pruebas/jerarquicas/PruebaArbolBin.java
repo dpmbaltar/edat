@@ -1,6 +1,6 @@
 package pruebas.jerarquicas;
 
-import jerarquicas.dinamicas.ArbolBin;
+import jerarquicas.dinamicas.ArbolBinInt;
 //import jerarquicas.estaticas.ArbolBin;
 
 public class PruebaArbolBin {
@@ -13,7 +13,7 @@ public class PruebaArbolBin {
 	}
 	
 	public static void pruebaArbolBinInt() {
-		ArbolBin a1 = new ArbolBin();
+		ArbolBinInt a1 = new ArbolBinInt();
 		
 		System.out.println("Insertar raiz (1):");
 		a1.insertarRaiz(1);
@@ -35,7 +35,20 @@ public class PruebaArbolBin {
 		System.out.println(a1.listarPosorden());
 		// Listar niveles
 		System.out.println(a1.listarNiveles());
+		// Mostrar altura del árbol
+		System.out.println("Altura del árbol: "+a1.altura());
+		// Mostrar nivel del elem. 7
+		System.out.println("Nivel del elem. 7: "+a1.nivel(7));
+		// Mostrar elem. padre de 5
+		System.out.println("Padre del elem. 5: "+a1.padre(5));
+		// Clonar árbol a a2
+		System.out.println("Clonar a1 a a2 y mostrar:");
+		ArbolBinInt a2 = a1.clonar();
+		System.out.println(a2);
+		System.out.println("Sumar ramas de a2:");
+		System.out.println(a2.sumarRamas());
 		
+		// Mostrar arbol a1
 		System.out.println(a1);
 	}
 }

@@ -47,5 +47,45 @@ public class PruebaLista {
 		ListaInt l2 = l1.clonar();
 		System.out.println("Crear copia de l1 (l2):");
 		System.out.println(l2);
+		// Localizar elemento en l2
+		System.out.println("Localizar elem. 6:");
+		System.out.println(l2.localizar(6));
+		System.out.println("Localizar elem. 2:");
+		System.out.println(l2.localizar(2));
+		System.out.println("Localizar elem. 10:");
+		System.out.println(l2.localizar(10));
+		// Obtener elem. @2, @5, @7
+		System.out.println("Recuperar elem. @2:");
+		System.out.println(l2.recuperar(2));
+		System.out.println("Recuperar elem. @5:");
+		System.out.println(l2.recuperar(5));
+		System.out.println("Recuperar elem. @7 (no existe):");
+		System.out.println(l2.recuperar(7));
+		// Modificar l1
+		System.out.println("Eliminar elem. @2: "+l1.eliminar(2));
+		System.out.println(l1);
+		System.out.println("Eliminar elem. @3: "+l1.eliminar(3));
+		System.out.println(l1);
+		System.out.println("Eliminar elem. @2: "+l1.eliminar(2));
+		System.out.println(l1);
+		// Modificar l2
+		System.out.println("Eliminar elem. @1: "+l2.eliminar(1));
+		System.out.println(l2);
+		System.out.println("Eliminar elem. @4: "+l2.eliminar(4));
+		System.out.println(l2);
+		// Vaciar l1
+		System.out.println("Vaciar l1:");
+		l1.vaciar();
+		System.out.println(l1);
+		// Vaciar l1
+		System.out.println("Vaciar l2:");
+		l2.vaciar();
+		System.out.println(l2);
+		// Obtener cantidad de elementos de l1
+		System.out.println("Longitud de l1: "+l1.longitud());
+		System.out.println(l1);
+		// Obtener cantidad de elementos de l2
+		System.out.println("Longitud de l1: "+l2.longitud());
+		System.out.println(l2);
 	}
 }

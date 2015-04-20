@@ -21,8 +21,8 @@ public class ListaInt {
 	 * Crea y devuelve una lista vacía.
 	 */
 	public ListaInt() {
-		this.cabecera = null;
-		this.longitud = 0;
+		cabecera = null;
+		longitud = 0;
 	}
 	
 	/**
@@ -40,18 +40,18 @@ public class ListaInt {
 	public boolean insertar(int elemento, int posicion) {
 		boolean resultado = false;
 		
-		if (1 <= posicion && posicion <= (this.longitud + 1)) {
-			if (this.longitud == 0) {
-				this.cabecera = new NodoInt(elemento);
-			} else if (this.longitud >= 1) {
+		if (1 <= posicion && posicion <= (longitud + 1)) {
+			if (longitud == 0) {
+				cabecera = new NodoInt(elemento);
+			} else if (longitud >= 1) {
 				NodoInt nodoNuevo = new NodoInt(elemento);
 				
 				if (posicion == 1) {
-					nodoNuevo.setEnlace(this.cabecera);
-					this.cabecera = nodoNuevo;
+					nodoNuevo.setEnlace(cabecera);
+					cabecera = nodoNuevo;
 				} else {
 					int puntero = 1;
-					NodoInt nodoPrevio = this.cabecera;
+					NodoInt nodoPrevio = cabecera;
 					
 					while (puntero < (posicion - 1)) {
 						nodoPrevio = nodoPrevio.getEnlace();
@@ -63,7 +63,7 @@ public class ListaInt {
 				}
 			}
 			
-			this.longitud++;
+			longitud++;
 			resultado = true;
 		}
 		
@@ -86,11 +86,11 @@ public class ListaInt {
 		int i;
 		NodoInt nodo;
 		
-		if (1 <= pos && pos <= this.longitud) {
+		if (1 <= pos && pos <= longitud) {
 			if (pos == 1) {
-				this.cabecera = this.cabecera.getEnlace();
+				cabecera = cabecera.getEnlace();
 			} else {
-				nodo = this.cabecera;
+				nodo = cabecera;
 				i = 1;
 				while (i < (pos - 1)) {
 					nodo = nodo.getEnlace();
@@ -99,7 +99,7 @@ public class ListaInt {
 				nodo.setEnlace(nodo.getEnlace().getEnlace());
 			}
 			
-			this.longitud--;
+			longitud--;
 			resultado = true;
 		}
 		
@@ -117,9 +117,9 @@ public class ListaInt {
 		int i, elem = 0;
 		NodoInt nodo;
 		
-		if (1 <= pos && pos <= this.longitud) {
+		if (1 <= pos && pos <= longitud) {
 			i = 1;
-			nodo = this.cabecera;
+			nodo = cabecera;
 			while (i < pos) {
 				nodo = nodo.getEnlace();
 				i++;
@@ -138,11 +138,11 @@ public class ListaInt {
 	 * @return
 	 */
 	public int localizar(int elem) {
-		int elemPos = -1, pos = 0;
+		int elemPos = -1, pos = 1;
 		NodoInt nodo;
 		
-		if (!this.esVacia()) {
-			nodo = this.cabecera;
+		if (!esVacia()) {
+			nodo = cabecera;
 			while (nodo != null && elemPos < 0) {
 				if (nodo.getElem() == elem) {
 					elemPos = pos;
@@ -164,7 +164,7 @@ public class ListaInt {
 	public int longitud() {
 		/*
 		int longitud = 0;
-		NodoInt nodo = this.cabecera;
+		NodoInt nodo = cabecera;
 		
 		while (nodo != null) {
 			nodo = nodo.getEnlace();
@@ -173,7 +173,7 @@ public class ListaInt {
 		
 		return longitud;
 		*/
-		return this.longitud;
+		return longitud;
 	}
 	
 	/**
@@ -182,7 +182,8 @@ public class ListaInt {
 	 * Pila dinámicas.
 	 */
 	public void vaciar() {
-		this.cabecera = null;
+		cabecera = null;
+		longitud = 0;
 	}
 	
 	/**
@@ -192,7 +193,7 @@ public class ListaInt {
 	 * @return
 	 */
 	public boolean esVacia() {
-		return (this.cabecera == null);
+		return (cabecera == null);
 	}
 	
 	/**
@@ -203,7 +204,14 @@ public class ListaInt {
 	public ListaInt clonar() {
 		ListaInt clon = new ListaInt();
 		
-		
+		if (!esVacia()) {
+			int pos = 1;
+			NodoInt nodo = cabecera;
+			while (nodo != null) {
+				clon.insertar(nodo.getElem(), pos++);
+				nodo = nodo.getEnlace();
+			}
+		}
 		
 		return clon;
 	}

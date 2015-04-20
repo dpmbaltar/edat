@@ -381,4 +381,32 @@ public class ArbolBinInt {
 	public String toString() {
 		return listarNiveles().toString();
 	}
+	
+	private int sumarRamas(NodoArbolInt nodo, int suma) {
+		int resultado = 0;
+		NodoArbolInt izquierdo, derecho;
+		
+		if (nodo != null) {
+			izquierdo = nodo.getIzquierdo();
+			derecho = nodo.getDerecho();
+			suma+= nodo.getElemento();
+			
+			if (izquierdo == null && derecho == null) {
+				resultado = suma;
+			} else {
+				if (izquierdo != null) {
+					resultado+= sumarRamas(izquierdo, suma);
+				}
+				if (derecho != null) {
+					resultado+= sumarRamas(derecho, suma);
+				}
+			}
+		}
+		
+		return resultado;
+	}
+	
+	public int sumarRamas() {
+		return sumarRamas(raiz, 0);
+	}
 }
