@@ -9,67 +9,50 @@ public class PruebaCola {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		pruebaPonerSacarObtenerFrente();
-		pruebaVaciar();
+		try {
+			pruebaColaInt();
+		} catch (AssertionError ae) {
+			System.out.println(ae.getMessage());
+		} finally {
+			System.out.println("Prueba ColaInt OK");
+		}
 	}
 	
-	public static void pruebaPonerSacarObtenerFrente() {
-		ColaInt cola;
-		int elem = 1;
+	public static void pruebaColaInt() {
+		ColaInt c1 = new ColaInt(),
+				c2;
 		
-		System.out.println("Crear cola vacía:");
-		cola = new ColaInt();
-		System.out.println(cola);
+		// Probar poner()
+		assert c1.poner(1);
+		assert c1.poner(2);
+		assert c1.poner(3);
+		assert c1.poner(4);
 		
-		while (elem < /*ColaInt.TAM*/10) {
-			System.out.println("Poner \""+elem+"\": "+cola.poner(elem++));
-			System.out.println(cola);
-		}
+		// Probar obtenerFrente()
+		assert c1.obtenerFrente() == 1;
 		
-		//System.out.println("Poner \"10\" (cola llena): "+cola.poner(10));
-		//System.out.println(cola);
-		System.out.println("Obtener frente (1): "+cola.obtenerFrente());
-		System.out.println(cola);
-		System.out.println("Sacar (1): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Obtener frente (2): "+cola.obtenerFrente());
-		System.out.println(cola);
-		System.out.println("Sacar (2): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (3): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Obtener frente (4): "+cola.obtenerFrente());
-		System.out.println(cola);
-		System.out.println("Sacar (4): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (5): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (6): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (7): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (8): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (9): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Sacar (cola vacía): "+cola.sacar());
-		System.out.println(cola);
-		System.out.println("Poner (2): "+cola.poner(4));
-		System.out.println(cola);
-		System.out.println("Poner (8): "+cola.poner(8));
-		System.out.println(cola);
-	}
-	
-	public static void pruebaVaciar() {
-		ColaInt cola = new ColaInt();
-		int elem = 0;
+		// Probar toString()
+		assert c1.toString().equals("[1, 2, 3, 4]");
 		
-		while (elem < /*ColaInt.TAM*/10) {
-			cola.poner(++elem);
-		}
+		c2 = c1.clonar();
 		
-		System.out.println("Vaciar cola \""+cola+"\":");
-		cola.vaciar();
-		System.out.println(cola);
+		// Probar clonar()
+		assert c1.toString().equals(c2.toString());
+		
+		// Probar sacar()
+		assert c2.sacar();
+		assert c2.sacar();
+		assert c2.sacar();
+		assert c2.sacar();
+		assert c2.sacar() == false;
+		
+		c1.vaciar();
+		
+		// Probar vaciar()
+		assert c1.toString().equals("[]");
+		
+		// Probar esVacia()
+		assert c1.esVacia();
+		assert c2.esVacia();
 	}
 }

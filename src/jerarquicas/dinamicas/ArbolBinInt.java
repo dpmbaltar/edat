@@ -1,7 +1,6 @@
 package jerarquicas.dinamicas;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 import lineales.dinamicas.ListaInt;
 

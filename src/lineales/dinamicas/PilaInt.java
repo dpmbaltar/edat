@@ -3,7 +3,7 @@ package lineales.dinamicas;
 /**
  * Implementación de Pila dinámica.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PilaInt {
 	
@@ -13,7 +13,7 @@ public class PilaInt {
 	private NodoInt tope;
 	
 	/**
-	 * Crea y devuelve la pila vacía.
+	 * Crea y devuelve una pila vacía.
 	 */
 	public PilaInt() {
 		tope = null;
@@ -27,8 +27,7 @@ public class PilaInt {
 	 * @return
 	 */
 	public boolean apilar(int nuevoElem) {
-		NodoInt nuevoNodo = new NodoInt(nuevoElem, tope);
-		tope = nuevoNodo;
+		tope = new NodoInt(nuevoElem, tope);
 		
 		return true;
 	}
@@ -43,7 +42,7 @@ public class PilaInt {
 	public boolean desapilar() {
 		boolean resultado = false;
 		
-		if (tope != null) {
+		if (!esVacia()) {
 			tope = tope.getEnlace();
 			resultado = true;
 		}
@@ -60,7 +59,7 @@ public class PilaInt {
 	public int obtenerTope() {
 		int topeElem = 0;
 		
-		if (tope != null) {
+		if (!esVacia()) {
 			topeElem = tope.getElem();
 		}
 		
@@ -90,10 +89,11 @@ public class PilaInt {
 	 * @return
 	 */
 	public PilaInt clonar() {
-		PilaInt aux = new PilaInt(), clon = new PilaInt();
+		PilaInt aux, clon = new PilaInt();
 		NodoInt nodo;
 		
-		if (tope != null) {
+		if (!esVacia()) {
+			aux = new PilaInt();
 			nodo = tope;
 			while (nodo != null) {
 				aux.apilar(nodo.getElem());
@@ -118,13 +118,13 @@ public class PilaInt {
 		String cadena = "[";
 		NodoInt nodo;
 		
-		if (tope != null) {
+		if (!esVacia()) {
 			nodo = tope;
 			while (nodo != null) {
 				cadena+= nodo.getElem();
 				nodo = nodo.getEnlace();
 				if (nodo != null) {
-					cadena+= " ";
+					cadena+= ", ";
 				}
 			}
 		}

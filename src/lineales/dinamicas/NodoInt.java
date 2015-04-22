@@ -3,12 +3,12 @@ package lineales.dinamicas;
 /**
  * Implementación de un nodo de datos tipo entero.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class NodoInt {
 	
 	/**
-	 * Valor contenido por el nodo.
+	 * Elemento del nodo.
 	 */
 	private int elem;
 	
@@ -18,15 +18,23 @@ public class NodoInt {
 	private NodoInt enlace;
 	
 	/**
-	 * Crea y devuelve un nodo sín enlace.
+	 * Crea y devuelve un nodo sin enlace y elemento "0".
 	 */
-	public NodoInt(int elem) {
-		this.elem = elem;
-		enlace = null;
+	public NodoInt() {
+		this(0, null);
 	}
 	
 	/**
-	 * Crea y devuelve un nodo con el valor y enlace establecidos.
+	 * Crea y devuelve un nodo sín enlace, y el elemento establecido.
+	 * 
+	 * @param elem
+	 */
+	public NodoInt(int elem) {
+		this(elem, null);
+	}
+	
+	/**
+	 * Crea y devuelve un nodo con el elemento y enlace establecidos.
 	 * 
 	 * @param elem
 	 * @param enlace
@@ -37,6 +45,7 @@ public class NodoInt {
 	}
 	
 	/**
+	 * Devuelve el elemento del nodo.
 	 * 
 	 * @return
 	 */
@@ -45,6 +54,7 @@ public class NodoInt {
 	}
 	
 	/**
+	 * Devuelve el enlace del nodo.
 	 * 
 	 * @return
 	 */
@@ -53,6 +63,7 @@ public class NodoInt {
 	}
 	
 	/**
+	 * Establece el elemento del nodo.
 	 * 
 	 * @param elem
 	 */
@@ -61,6 +72,7 @@ public class NodoInt {
 	}
 	
 	/**
+	 * Establece el enlace del nodo.
 	 * 
 	 * @param enlace
 	 */

@@ -3,7 +3,7 @@ package lineales.dinamicas;
 /**
  * Implementación de Cola dinámica.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class ColaInt {
 
@@ -18,11 +18,11 @@ public class ColaInt {
 	private NodoInt ultimo;
 	
 	/**
-	 * Crea y devuelve la cola vacía.
+	 * Crea y devuelve una cola vacía.
 	 */
 	public ColaInt() {
-		this.frente = null;
-		this.ultimo = null;
+		frente = null;
+		ultimo = null;
 	}
 	
 	/**
@@ -35,11 +35,12 @@ public class ColaInt {
 	public boolean poner(int nuevoElem) {
 		NodoInt nuevoNodo = new NodoInt(nuevoElem);
 		
-		if (this.esVacia()) {
-			this.frente = this.ultimo = nuevoNodo;
+		if (esVacia()) {
+			frente = nuevoNodo;
+			ultimo = nuevoNodo;
 		} else {
-			this.ultimo.setEnlace(nuevoNodo);
-			this.ultimo = nuevoNodo;
+			ultimo.setEnlace(nuevoNodo);
+			ultimo = nuevoNodo;
 		}
 		
 		return true;
@@ -55,10 +56,10 @@ public class ColaInt {
 	public boolean sacar() {
 		boolean resultado = false;
 		
-		if (!this.esVacia()) {
-			this.frente = this.frente.getEnlace();
-			if (this.frente == null) {
-				this.ultimo = null;
+		if (!esVacia()) {
+			frente = frente.getEnlace();
+			if (frente == null) {
+				ultimo = null;
 			}
 			resultado = true;
 		}
@@ -75,8 +76,8 @@ public class ColaInt {
 	public int obtenerFrente() {
 		int elem = 0;
 		
-		if (!this.esVacia()) {
-			elem = this.frente.getElem();
+		if (!esVacia()) {
+			elem = frente.getElem();
 		}
 		
 		return elem;
@@ -89,19 +90,19 @@ public class ColaInt {
 	 * @return
 	 */
 	public boolean esVacia() {
-		return (this.frente == null);
+		return (frente == null);
 	}
 	
 	/**
 	 * Saca todos los elementos de la estructura.
 	 */
 	public void vaciar() {
-		this.frente = null;
-		this.ultimo = null;
+		frente = null;
+		ultimo = null;
 	}
 	
 	/**
-	 * Devuelve una copia de la cola original
+	 * Devuelve una copia de la cola original.
 	 * 
 	 * @return
 	 */
@@ -109,8 +110,8 @@ public class ColaInt {
 		ColaInt clon = new ColaInt();
 		NodoInt nodo;
 		
-		if (!this.esVacia()) {
-			nodo = this.frente;
+		if (!esVacia()) {
+			nodo = frente;
 			while (nodo != null) {
 				clon.poner(nodo.getElem());
 				nodo = nodo.getEnlace();
@@ -130,15 +131,18 @@ public class ColaInt {
 		String cadena = "[";
 		NodoInt nodo;
 		
-		if (!this.esVacia()) {
-			nodo = this.frente;
+		if (!esVacia()) {
+			nodo = frente;
 			while (nodo != null) {
-				cadena+= nodo.getElem()+" ";
+				cadena+= nodo.getElem();
 				nodo = nodo.getEnlace();
+				if (nodo != null) {
+					cadena+= ", ";
+				}
 			}
 		}
 		
-		cadena = cadena.trim()+"]";
+		cadena+= "]";
 		
 		return cadena;
 	}
