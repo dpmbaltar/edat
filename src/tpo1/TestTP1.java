@@ -24,9 +24,11 @@ public class TestTP1 {
 		int accion, longitud;
 		String digitos;
 		
+		// Solicitar acción
 		mostrarMenu();
 		accion = leerAccion();
 		
+		// Ejecutar acción
 		switch (accion) {
 			case ACCION_GENERAR_COLA:
 				digitos = leerDigitos();
@@ -41,6 +43,9 @@ public class TestTP1 {
 		//pruebaGenerarCola();
 	}
 
+	/**
+	 * Prueba el método generarCola()
+	 */
 	public static void pruebaGenerarCola() {
 		String s = "0123456789";
 		String r = "["+Pattern.quote("[, ]")+"]+";
@@ -56,6 +61,8 @@ public class TestTP1 {
 		assert generarCola("", 3).toString().replaceAll(r, "")
 			.equals("");
 
+		System.out.println(generarCola("01234a56789", 0));
+		System.out.println(generarCola("", 0));
 		System.out.println(generarCola(s, 0));
 		System.out.println(generarCola(s, 1));
 		System.out.println(generarCola(s, 2));
@@ -183,17 +190,27 @@ public class TestTP1 {
 		return esValida;
 	}
 	
+	/**
+	 * Solicita y lee una cadena de dígitos válida para generar la cola.
+	 * 
+	 * @return
+	 */
 	public static String leerDigitos() {
 		String digitos = "";
 		
 		while (!validarDigitos(digitos)) {
 			System.out.print("Ingrese una cadena que contenga sólo dígitos:\n>>>");
-			digitos = TecladoIn.readLineWord().trim();
+			digitos = TecladoIn.readLine().trim();
 		}
 		
 		return digitos;
 	}
 	
+	/**
+	 * Solicita y lee una longitud válida para generar la cola.
+	 * 
+	 * @return
+	 */
 	public static int leerLongitud() {
 		int longitud = -1;
 		
@@ -205,6 +222,11 @@ public class TestTP1 {
 		return longitud;
 	}
 	
+	/**
+	 * Solicita y lee una acción válida del menú.
+	 * 
+	 * @return
+	 */
 	public static int leerAccion() {
 		int accion = -1;
 		
@@ -216,6 +238,9 @@ public class TestTP1 {
 		return accion;
 	}
 	
+	/**
+	 * Muestra el menú del programa.
+	 */
 	public static void mostrarMenu() {
 		System.out.println(
 			"Elija una opción:\n"+
