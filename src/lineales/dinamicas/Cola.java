@@ -5,22 +5,22 @@ package lineales.dinamicas;
  * 
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
-public class ColaInt {
+public class Cola<T> {
 
     /**
-     * El nodo del elemento del frente de la cola.
+     * El nodo del frente de la cola.
      */
-    private NodoInt frente;
+    private Nodo<T> frente;
 
     /**
-     * El nodo del elemento del final de la cola.
+     * El nodo del final de la cola.
      */
-    private NodoInt ultimo;
+    private Nodo<T> ultimo;
 
     /**
      * Crea y devuelve una cola vacía.
      */
-    public ColaInt() {
+    public Cola() {
         frente = null;
         ultimo = null;
     }
@@ -29,13 +29,13 @@ public class ColaInt {
      * Pone el elemento al final de la cola. Devuelve verdadero si el elemento
      * se pudo agregar en la estructura y falso en caso contrario.
      * 
-     * @param nuevoElem
+     * @param nuevoElemento
      * @return
      */
-    public boolean poner(int nuevoElem) {
-        NodoInt nuevoNodo = new NodoInt(nuevoElem);
+    public boolean poner(T nuevoElemento) {
+        Nodo<T> nuevoNodo = new Nodo<T>(nuevoElemento);
 
-        if (esVacia()) {
+        if (frente == null) {
             frente = nuevoNodo;
             ultimo = nuevoNodo;
         } else {
@@ -56,11 +56,13 @@ public class ColaInt {
     public boolean sacar() {
         boolean resultado = false;
 
-        if (!esVacia()) {
+        if (frente != null) {
             frente = frente.getEnlace();
+            
             if (frente == null) {
                 ultimo = null;
             }
+            
             resultado = true;
         }
 
@@ -68,19 +70,13 @@ public class ColaInt {
     }
 
     /**
-     * Devuelve el elemento que está en el frente. Precondición : la cola no
+     * Devuelve el elemento que está en el frente. Precondición: la cola no
      * está vacía.
      * 
      * @return
      */
-    public int obtenerFrente() {
-        int elem = 0;
-
-        if (!esVacia()) {
-            elem = frente.getElem();
-        }
-
-        return elem;
+    public T obtenerFrente() {
+        return frente != null ? frente.getElemento() : null;
     }
 
     /**
@@ -90,7 +86,7 @@ public class ColaInt {
      * @return
      */
     public boolean esVacia() {
-        return (frente == null);
+        return frente == null;
     }
 
     /**
@@ -106,14 +102,14 @@ public class ColaInt {
      * 
      * @return
      */
-    public ColaInt clonar() {
-        ColaInt clon = new ColaInt();
-        NodoInt nodo;
+    public Cola<T> clonar() {
+        Cola<T> clon = new Cola<T>();
 
-        if (!esVacia()) {
-            nodo = frente;
+        if (frente != null) {
+            Nodo<T> nodo = frente;
+            
             while (nodo != null) {
-                clon.poner(nodo.getElem());
+                clon.poner(nodo.getElemento());
                 nodo = nodo.getEnlace();
             }
         }
@@ -122,27 +118,28 @@ public class ColaInt {
     }
 
     /**
-     * Crea y devuelve una cadena de caracteres formada por todos los elementos
+     * Crea y devuelve una cadena de carácteres formada por todos los elementos
      * de la cola para poder mostrarla por pantalla. Es recomendable utilizar
      * este método únicamente en la etapa de prueba y luego comentar el código.
      */
     public String toString() {
-        String cadena = "[";
-        NodoInt nodo;
+        StringBuilder cadena = new StringBuilder("[");
 
-        if (!esVacia()) {
-            nodo = frente;
+        if (frente != null) {
+            Nodo<T> nodo = frente;
+            
             while (nodo != null) {
-                cadena += nodo.getElem();
+                cadena.append(((Object)nodo.getElemento()).toString());
                 nodo = nodo.getEnlace();
+                
                 if (nodo != null) {
-                    cadena += ", ";
+                    cadena.append(' ');
                 }
             }
         }
 
-        cadena += "]";
+        cadena.append(']');
 
-        return cadena;
+        return cadena.toString();
     }
 }
