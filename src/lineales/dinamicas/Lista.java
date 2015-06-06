@@ -218,7 +218,7 @@ public class Lista<T> {
 	 * luego comentar el código.
 	 */
 	public String toString() {
-		StringBuilder cadena = new StringBuilder('[');
+		StringBuilder cadena = new StringBuilder("[");
 		
 		if (cabecera != null) {
 			Nodo<T> nodo = cabecera;
