@@ -69,6 +69,7 @@ public class PruebaArbolGenerico {
         assert ag.nivel('g') == 2 : "Nivel de 'g' debe ser 2";
         assert ag.nivel('k') == 3 : "Nivel de 'k' debe ser 3";
         assert ag.nivel('m') == 4 : "Nivel de 'm' debe ser 4";
+        assert ag.nivel('o') == -1 : "Nivel de 'o' debe ser -1";
     }
 
     protected static void pruebaPadre() {
