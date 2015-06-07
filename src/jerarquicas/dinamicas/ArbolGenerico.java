@@ -38,8 +38,8 @@ public class ArbolGenerico<T> {
             Nodo<T> nodoPadre = buscarNodo(elementoPadre);
 
             if (nodoPadre != null) {
-                Nodo<T> nodoNuevo = new Nodo<T>(elemento), nodoHermano = nodoPadre
-                        .getIzquierdo();
+                Nodo<T> nodoNuevo = new Nodo<T>(elemento),
+                        nodoHermano = nodoPadre.getIzquierdo();
 
                 // Agregar nuevo nodo al principio,
                 // si el nodo padre ya tiene hijos
@@ -131,7 +131,7 @@ public class ArbolGenerico<T> {
      * @return
      */
     public int altura() {
-        return calcularAltura(raiz);
+        return alturaNodo(raiz);
     }
 
     /**
@@ -140,7 +140,7 @@ public class ArbolGenerico<T> {
      * @param nodo
      * @return
      */
-    private int calcularAltura(Nodo<T> nodo) {
+    private int alturaNodo(Nodo<T> nodo) {
         int altura = 0, maxima = 0;
 
         if (nodo != null) {
@@ -148,7 +148,7 @@ public class ArbolGenerico<T> {
 
             // Calcular la altura del sub-árbol correspondiente al primer hijo
             if (hijo != null) {
-                altura = 1 + calcularAltura(hijo);
+                altura = 1 + alturaNodo(hijo);
                 maxima = altura;
             }
 
@@ -158,7 +158,7 @@ public class ArbolGenerico<T> {
             while (hermano != null) {
                 hijo = hermano.getIzquierdo();
                 if (hijo != null) {
-                    altura = 1 + calcularAltura(hijo);
+                    altura = 1 + alturaNodo(hijo);
                     if (altura > maxima) {
                         maxima = altura;
                     }
@@ -172,18 +172,47 @@ public class ArbolGenerico<T> {
     }
 
     /**
+     * Devuelve el nivel del elemento dado, o -1 si el elemento no existe.
      * 
      * @param elemento
      * @return
      */
     public int nivel(T elemento) {
+        return buscarNivel(elemento, raiz, 0);
+    }
+    
+    private int buscarNivel(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
-        // TODO
+        
+        if (nodo != null) {
+            if (((Object)nodo.getElemento()).equals(elemento)) {
+                nivel = nivelActual;
+            } else {
+                Nodo<T> hijo = nodo.getIzquierdo(),
+                        hermano = nodo.getDerecho();
+                
+                if (hijo != null) {
+                    nivel = buscarNivel(elemento, hijo, nivelActual + 1);
+                }
+                
+                while (hermano != null && nivel < 0) {
+                    if (((Object)hermano.getElemento()).equals(elemento)) {
+                        nivel = nivelActual;
+                    } else {
+                        nivel = buscarNivel(elemento,
+                                            hermano.getIzquierdo(),
+                                            nivelActual + 1);
+                        hermano = hermano.getDerecho();
+                    }
+                }
+            }
+        }
+        
         return nivel;
     }
 
     /**
-     * Devuelve el elemento padre de un elemento dado.
+     * Devuelve el elemento padre de un elemento dado (si existe el elemento).
      * 
      * @param elemento
      * @return
@@ -273,8 +302,8 @@ public class ArbolGenerico<T> {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
         // TODO
