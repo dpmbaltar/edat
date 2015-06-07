@@ -35,7 +35,9 @@ public class ArbolGenerico<T> {
             raiz = new Nodo<T>(elemento);
             resultado = true;
         } else if (elementoPadre != null) {
-            Nodo<T> nodoPadre = buscarNodo(elementoPadre);
+            //Nodo<T> nodoPadre = buscarNodo(elementoPadre);
+            Busqueda<T> busqueda = buscar(elementoPadre);
+            Nodo<T> nodoPadre = busqueda != null ? busqueda.getNodo() : null;
 
             if (nodoPadre != null) {
                 Nodo<T> nodoNuevo = new Nodo<T>(elemento),
@@ -59,9 +61,11 @@ public class ArbolGenerico<T> {
      * Busca un nodo en forma recursiva con el elemento dado a partir del nodo
      * raíz del árbol.
      * 
+     * @deprecated usar buscar(T)
      * @param elemento
      * @return
      */
+    @Deprecated
     private Nodo<T> buscarNodo(T elemento) {
         return buscarNodo(elemento, raiz);
     }
@@ -70,10 +74,12 @@ public class ArbolGenerico<T> {
      * Busca un nodo en forma recursiva con el elemento a partir de un nodo
      * específico.
      * 
+     * @deprecated usar buscar(T, Nodo<T>, Nodo<T>, int, Lista<T>)
      * @param elemento
      * @param nodo
      * @return
      */
+    @Deprecated
     private Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
 
@@ -103,6 +109,115 @@ public class ArbolGenerico<T> {
         }
 
         return buscado;
+    }
+    
+    private Busqueda<T> buscar(T elemento) {
+        return buscar(elemento, raiz, null, new Lista<T>(), 0);
+    }
+    
+    private Busqueda<T> buscar(T elemento,
+                               Nodo<T> nodo,
+                               Nodo<T> padre,
+                               Lista<T> ancestros,
+                               int nivel) {
+        Busqueda<T> busqueda = null;
+        
+        if (nodo != null) {
+            if (((Object) nodo.getElemento()).equals(elemento)) {
+                busqueda = new Busqueda<T>(nivel, nodo, padre, ancestros);
+            } else {
+                ancestros.insertar(nodo.getElemento(), 1);
+                
+                // Buscar en los hijos del nodo actual
+                busqueda = buscar(elemento,
+                                  nodo.getIzquierdo(),
+                                  nodo,
+                                  ancestros.clonar(),
+                                  nivel + 1);
+
+                // Si no fue encontrado, buscar en los hermanos
+                // (y en los hijos de los hermanos, en forma recursiva)
+                if (busqueda == null) {
+                    Nodo<T> hermano = nodo.getDerecho();
+                    Lista<T> ancestrosClon;
+                    ancestros.eliminar(1);
+
+                    while (hermano != null && busqueda == null) {
+                        if (((Object) hermano.getElemento()).equals(elemento)) {
+                            busqueda = new Busqueda<T>();
+                            busqueda.setNivel(nivel);
+                            busqueda.setNodo(hermano);
+                            busqueda.setPadre(padre);
+                            busqueda.setAncestros(ancestros);
+                        } else {
+                            ancestrosClon = ancestros.clonar();
+                            ancestrosClon.insertar(hermano.getElemento(), 1);
+                            busqueda = buscar(elemento,
+                                              hermano.getIzquierdo(),
+                                              hermano,
+                                              ancestrosClon,
+                                              nivel + 1);
+                            hermano = hermano.getDerecho();
+                        }
+                    }
+                }
+            }
+        }
+        
+        return busqueda;
+    }
+    
+    private class Busqueda<T> {
+        private int nivel;
+        private Nodo<T> nodo;
+        private Nodo<T> padre;
+        private Lista<T> ancestros;
+        
+        public Busqueda() {
+            this(-1, null, null, null);
+        }
+        
+        public Busqueda(int nivel,
+                        Nodo<T> nodo,
+                        Nodo<T> padre,
+                        Lista<T> ancestros) {
+            this.nivel = nivel;
+            this.nodo = nodo;
+            this.padre = padre;
+            this.ancestros = ancestros;
+        }
+        
+        public int getNivel() {
+            return nivel;
+        }
+        
+        public void setNivel(int nivel) {
+            this.nivel = nivel;
+        }
+        
+        public Nodo<T> getNodo() {
+            return nodo;
+        }
+        
+        public void setNodo(Nodo<T> nodo) {
+            this.nodo = nodo;
+        }
+        
+        public Nodo<T> getPadre() {
+            return padre;
+        }
+        
+        public void setPadre(Nodo<T> padre) {
+            this.padre = padre;
+        }
+        
+        public Lista<T> getAncestros() {
+            return ancestros;
+        }
+        
+        public void setAncestros(Lista<T> ancestros) {
+            this.ancestros = ancestros;
+        }
     }
 
     /**
@@ -178,10 +293,21 @@ public class ArbolGenerico<T> {
      * @return
      */
     public int nivel(T elemento) {
-        return buscarNivel(elemento, raiz, 0);
+        //return buscarNivel(elemento, raiz, 0);
+        Busqueda<T> busqueda = buscar(elemento);
+        return busqueda != null ? busqueda.getNivel() : -1;
     }
     
-    private int buscarNivel(T elemento, Nodo<T> nodo, int nivelActual) {
+    /**
+     * 
+     * @deprecated usar buscar(T, Nodo<T>, Nodo<T>, int, Lista<T>)
+     * @param elemento
+     * @param nodo
+     * @param nivelActual
+     * @return
+     */
+    @Deprecated
+    private int nivelNodo(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
         
         if (nodo != null) {
@@ -192,14 +318,14 @@ public class ArbolGenerico<T> {
                         hermano = nodo.getDerecho();
                 
                 if (hijo != null) {
-                    nivel = buscarNivel(elemento, hijo, nivelActual + 1);
+                    nivel = nivelNodo(elemento, hijo, nivelActual + 1);
                 }
                 
                 while (hermano != null && nivel < 0) {
                     if (((Object)hermano.getElemento()).equals(elemento)) {
                         nivel = nivelActual;
                     } else {
-                        nivel = buscarNivel(elemento,
+                        nivel = nivelNodo(elemento,
                                             hermano.getIzquierdo(),
                                             nivelActual + 1);
                         hermano = hermano.getDerecho();
@@ -218,15 +344,31 @@ public class ArbolGenerico<T> {
      * @return
      */
     public T padre(T elemento) {
-        T padre = null;
-        // TODO
-        return padre;
+        Busqueda<T> busqueda = buscar(elemento);
+        Nodo<T> nodoPadre = null;
+        T elementoPadre = null;
+        
+        if (busqueda != null) {
+            nodoPadre = busqueda.getPadre();
+            if (nodoPadre != null) {
+                elementoPadre = nodoPadre.getElemento();
+            }
+        }
+        
+        return elementoPadre;
     }
 
     public Lista<T> ancestros(T elemento) {
-        Lista<T> lista = new Lista<T>();
-        // TODO
-        return lista;
+        Busqueda<T> busqueda = buscar(elemento);
+        Lista<T> ancestros;
+        
+        if (busqueda != null) {
+            ancestros = busqueda.getAncestros();
+        } else {
+            ancestros = new Lista<T>();
+        }
+        
+        return ancestros;
     }
 
     public Lista<T> listarPreorden() {
@@ -238,10 +380,10 @@ public class ArbolGenerico<T> {
     private void preorden(Nodo<T> nodo, Lista<T> lista) {
         // FIXME
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(), derecho = nodo
-                    .getDerecho();
+            Nodo<T> izquierdo = nodo.getIzquierdo(),
+                    derecho = nodo.getDerecho();
 
-            lista.insertar(nodo.getElemento(), (lista.longitud() + 1));
+            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
 
             if (izquierdo != null) {
                 preorden(izquierdo, lista);
