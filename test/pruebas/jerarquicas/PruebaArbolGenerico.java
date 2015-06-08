@@ -117,7 +117,6 @@ public class PruebaArbolGenerico {
     
     protected static void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
-        System.out.println(ag.toString()+" "+ag.clonar().toString());
         assert ag.toString().equals(ag.clonar().toString()) : "Árbol debe ser igual a su clon";
     }
 
@@ -152,19 +151,19 @@ public class PruebaArbolGenerico {
     protected static ArbolGenerico<Character> crearArbolPrueba() {
         ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
         ag.insertar('a', null);
-        ag.insertar('d', 'a');
-        ag.insertar('c', 'a');
         ag.insertar('b', 'a');
-        ag.insertar('f', 'b');
+        ag.insertar('c', 'a');
+        ag.insertar('d', 'a');
         ag.insertar('e', 'b');
+        ag.insertar('f', 'b');
         ag.insertar('g', 'c');
-        ag.insertar('i', 'd');
         ag.insertar('h', 'd');
-        ag.insertar('l', 'h');
-        ag.insertar('k', 'h');
+        ag.insertar('i', 'd');
         ag.insertar('j', 'h');
-        ag.insertar('n', 'l');
+        ag.insertar('k', 'h');
+        ag.insertar('l', 'h');
         ag.insertar('m', 'l');
+        ag.insertar('n', 'l');
 
         return ag;
     }
