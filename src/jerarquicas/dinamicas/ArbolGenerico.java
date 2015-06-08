@@ -1,5 +1,6 @@
 package jerarquicas.dinamicas;
 
+import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
 /**
@@ -47,6 +48,9 @@ public class ArbolGenerico<T> {
                 // si el nodo padre ya tiene hijos
                 if (nodoHermano != null) {
                     nodoNuevo.setDerecho(nodoHermano);
+                    /*while (nodoHermano != null) {
+                        
+                    }*/
                 }
 
                 nodoPadre.setIzquierdo(nodoNuevo);
@@ -378,79 +382,136 @@ public class ArbolGenerico<T> {
     }
 
     private void preorden(Nodo<T> nodo, Lista<T> lista) {
-        // FIXME
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
+            Nodo<T> primerHijo = nodo.getIzquierdo(),
+                    hijoSiguiente = null;
 
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
 
-            if (izquierdo != null) {
-                preorden(izquierdo, lista);
+            if (primerHijo != null) {
+                preorden(primerHijo, lista);
+                hijoSiguiente = primerHijo.getDerecho();
             }
 
-            while (derecho != null) {
-                preorden(derecho, lista);
-                derecho = derecho.getDerecho();
+            while (hijoSiguiente != null) {
+                preorden(hijoSiguiente, lista);
+                hijoSiguiente = hijoSiguiente.getDerecho();
             }
         }
     }
 
     public Lista<T> listarInorden() {
         Lista<T> lista = new Lista<T>();
-        // TODO
+        inorden(raiz, lista);
         return lista;
     }
-
-    public Lista<T> listarPosorden() {
-        Lista<T> lista = new Lista<T>();
-        // TODO
-        return lista;
-    }
-
-    public Lista<T> listarNiveles() {
-        Lista<T> lista = new Lista<T>();
-        niveles(raiz, lista);
-        return lista;
-    }
-
-    private void niveles(Nodo<T> nodo, Lista<T> lista) {
-        // FIXME
+    
+    private void inorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(), derecho = nodo
-                    .getDerecho(), hijo;
+            Nodo<T> primerHijo = nodo.getIzquierdo(),
+                    hijoSiguiente = null;
 
-            lista.insertar(nodo.getElemento(), (lista.longitud() + 1));
-
-            while (derecho != null) {
-                lista.insertar(derecho.getElemento(), (lista.longitud() + 1));
-                hijo = derecho.getIzquierdo();
-                if (hijo != null) {
-                    niveles(hijo, lista);
-                }
-                derecho = derecho.getDerecho();
+            if (primerHijo != null) {
+                inorden(primerHijo, lista);
+                hijoSiguiente = primerHijo.getDerecho();
             }
+            
+            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
 
-            if (izquierdo != null) {
-                niveles(izquierdo, lista);
+            while (hijoSiguiente != null) {
+                inorden(hijoSiguiente, lista);
+                hijoSiguiente = hijoSiguiente.getDerecho();
             }
         }
     }
 
+    public Lista<T> listarPosorden() {
+        Lista<T> lista = new Lista<T>();
+        posorden(raiz, lista);
+        return lista;
+    }
+    
+    private void posorden(Nodo<T> nodo, Lista<T> lista) {
+        if (nodo != null) {
+            Nodo<T> primerHijo = nodo.getIzquierdo(),
+                    hijoSiguiente = null;
+
+            if (primerHijo != null) {
+                posorden(primerHijo, lista);
+                hijoSiguiente = primerHijo.getDerecho();
+            }
+
+            while (hijoSiguiente != null) {
+                posorden(hijoSiguiente, lista);
+                hijoSiguiente = hijoSiguiente.getDerecho();
+            }
+            
+            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+        }
+    }
+
+    public Lista<T> listarNiveles() {
+        Lista<T> lista = new Lista<T>();
+        
+        if (raiz != null) {
+            Cola<Nodo<T>> cola = new Cola<Nodo<T>>();
+            Nodo<T> nodo, primerHijo, hijoSiguiente;
+            cola.poner(raiz);
+            
+            while (!cola.esVacia()) {
+                nodo = cola.obtenerFrente();
+                primerHijo = nodo.getIzquierdo();
+                cola.sacar();
+                lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+                
+                if (primerHijo != null) {
+                    cola.poner(primerHijo);
+                    hijoSiguiente = primerHijo.getDerecho();
+                    while (hijoSiguiente != null) {
+                        cola.poner(hijoSiguiente);
+                        hijoSiguiente = hijoSiguiente.getDerecho();
+                    }
+                }
+            }
+        }
+        
+        return lista;
+    }
+
     public ArbolGenerico<T> clonar() {
         ArbolGenerico<T> clon = new ArbolGenerico<T>();
-        // TODO
+        
+        if (raiz != null) {
+            Cola<Nodo<T>> cola = new Cola<Nodo<T>>();
+            Nodo<T> nodo, primerHijo, hijoSiguiente;
+            cola.poner(raiz);
+            clon.insertar(raiz.getElemento(), null);
+            
+            while (!cola.esVacia()) {
+                nodo = cola.obtenerFrente();
+                primerHijo = nodo.getIzquierdo();
+                cola.sacar();
+                
+                if (primerHijo != null) {
+                    clon.insertar(primerHijo.getElemento(), nodo.getElemento());
+                    hijoSiguiente = primerHijo.getDerecho();
+                    while (hijoSiguiente != null) {
+                        clon.insertar(hijoSiguiente.getElemento(),
+                                      nodo.getElemento());
+                        hijoSiguiente = hijoSiguiente.getDerecho();
+                    }
+                }
+            }
+        }
+        
         return clon;
     }
 
     /**
-     * 
+     * Devuelve la representación del árbol en forma de cadena.
+     * Por defecto, éste método equivale a llamar listarNiveles.toString().
      */
     public String toString() {
-        StringBuilder cadena = new StringBuilder("[");
-        // TODO
-        cadena.append(']');
-
-        return cadena.toString();
+        return listarNiveles().toString();
     }
 }

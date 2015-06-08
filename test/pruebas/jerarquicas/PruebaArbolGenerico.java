@@ -22,6 +22,7 @@ public class PruebaArbolGenerico {
             pruebaListarInorden();
             pruebaListarPosorden();
             pruebaListarNiveles();
+            pruebaClonar();
             System.out.println("Prueba OK");
         } catch (AssertionError e) {
             System.out.println("Error de prueba: " + e.getMessage());
@@ -112,6 +113,12 @@ public class PruebaArbolGenerico {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.listarNiveles().toString()
                  .equals("[a b c d e f g h i j k l m n]") : "Listado por niveles debe ser: a b c d e f g h i j k l m n";
+    }
+    
+    protected static void pruebaClonar() {
+        ArbolGenerico<Character> ag = crearArbolPrueba();
+        System.out.println(ag.toString()+" "+ag.clonar().toString());
+        assert ag.toString().equals(ag.clonar().toString()) : "Árbol debe ser igual a su clon";
     }
 
     /**
