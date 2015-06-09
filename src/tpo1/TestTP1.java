@@ -1,11 +1,7 @@
 package tpo1;
 
 import java.util.regex.Pattern;
-
 import utiles.TecladoIn;
-
-import lineales.dinamicas.PilaInt;
-import lineales.dinamicas.ColaInt;
 
 /**
  * Trabajo Práctico Obligatorio No. 1.
