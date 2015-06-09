@@ -7,10 +7,18 @@ import lineales.dinamicas.Lista;
  * Implementación dinámica de Árbol Binaro.
  * 
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <T>
  */
 public class ArbolBinario<T> {
 
-    public enum Posicion { IZQUIERDO, DERECHO, RAIZ }
+    /**
+     * Enumeración de posibles posiciones al insertar un elemento.
+     */
+    public enum Posicion {
+        IZQUIERDO,
+        DERECHO,
+        RAIZ
+    }
 
     /**
      * El nodo raíz del árbol.
@@ -48,7 +56,7 @@ public class ArbolBinario<T> {
                 if (nodoPadre != null) {
                     Nodo<T> nodoNuevo = new Nodo<T>(elemento, nodoPadre);
                     resultado = true;
-                    
+
                     switch (posicion) {
                         case IZQUIERDO:
                             nodoPadre.setIzquierdo(nodoNuevo);
@@ -96,7 +104,7 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Busca y retorna el nodo del elemento especificado a partir del nodo raíz.
+     * Busca el nodo del elemento dado a partir del nodo raíz.
      * 
      * @param elemento
      * @return
@@ -106,8 +114,7 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Busca y retorna el nodo del elemento especificado a partir de un nodo
-     * en particular.
+     * Busca el nodo del elemento dado a partir de un nodo en particular.
      * 
      * @param elemento
      * @param nodo
@@ -121,7 +128,6 @@ public class ArbolBinario<T> {
                 buscado = nodo;
             } else {
                 buscado = buscarNodo(elemento, nodo.getIzquierdo());
-
                 if (buscado == null) {
                     buscado = buscarNodo(elemento, nodo.getDerecho());
                 }
@@ -142,7 +148,7 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Elimina todos los nodos del árbol.
+     * Elimina todos los elementos del árbol.
      */
     public void vaciar() {
         raiz = null;
@@ -158,15 +164,14 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Calcula la altura del sub-árbol correspondiente a un nodo del árbol.
+     * Calcula la altura del sub-árbol correspondiente a un nodo en particular.
      * 
      * @param nodo
-     * @param nivel
-     * @param altura
      * @return
      */
-    private int alturaNodo(Nodo<T> nodo) {
-        int altura = 0, maxima = 0;
+    protected int alturaNodo(Nodo<T> nodo) {
+        int altura = 0,
+            maxima = 0;
 
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
@@ -239,7 +244,7 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    private void preorden(Nodo<T> nodo, Lista<T> lista) {
+    protected void preorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -261,7 +266,7 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    private void inorden(Nodo<T> nodo, Lista<T> lista) {
+    protected void inorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -283,7 +288,7 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    private void posorden(Nodo<T> nodo, Lista<T> lista) {
+    protected void posorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -338,7 +343,7 @@ public class ArbolBinario<T> {
         return clon;
     }
 
-    private void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
+    protected void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -355,7 +360,7 @@ public class ArbolBinario<T> {
 
             if (hijoDerecho != null) {
                 arbol.insertarDerecho(hijoDerecho.getElemento(),
-                                        nodo.getElemento());
+                                      nodo.getElemento());
                 clonar(hijoDerecho, arbol);
             }
         }

@@ -62,6 +62,9 @@ public class PruebaArbolBinario {
 
     protected static void pruebaNivel() {
         ArbolBinario<Character> ab = crearArbolDePrueba();
+        assert ab.nivel('a') == 0 : "Nivel de 'a' debe ser 0";
+        assert ab.nivel('b') == 1 : "Nivel de 'b' debe ser 1";
+        assert ab.nivel('e') == 2 : "Nivel de 'e' debe ser 2";
         assert ab.nivel('j') == 3 : "Nivel de 'j' debe ser 3";
     }
 
