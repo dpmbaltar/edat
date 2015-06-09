@@ -1,9 +1,10 @@
 package jerarquicas.dinamicas;
 
 /**
- * Implementación de un nodo genérico de doble enlace.
+ * Implementación de un nodo de tres enlaces: izquierdo, derecho y padre.
  * 
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <E>
  */
 public class Nodo<E> {
 
@@ -23,10 +24,45 @@ public class Nodo<E> {
     private Nodo<E> derecho;
 
     /**
-     * Crea y devuelve un nodo.
+     * El nodo padre.
+     */
+    private Nodo<E> padre;
+
+    /**
+     * Crea y devuelve un nodo sin elemento ni enlaces.
      */
     public Nodo() {
-        this(null, null, null);
+        this(null, null, null, null);
+    }
+
+    /**
+     * Crea y devuelve un nodo con el enlace padre establecido.
+     * 
+     * @param padre
+     */
+    public Nodo(Nodo<E> padre) {
+        this(null, null, null, padre);
+    }
+
+    /**
+     * Crea y devuelve un nodo con los enlaces izquierdo y derecho establecidos.
+     * 
+     * @param izquierdo
+     * @param derecho
+     */
+    public Nodo(Nodo<E> izquierdo, Nodo<E> derecho) {
+        this(null, izquierdo, derecho, null);
+    }
+
+    /**
+     * Crea y devuelve un nodo con los todos los enlaces establecidos.
+     * 
+     * @param izquierdo
+     * @param derecho
+     * @param padre
+     */
+    public Nodo(Nodo<E> izquierdo, Nodo<E> derecho, Nodo<E> padre) {
+        this(null, izquierdo, derecho, padre);
     }
 
     /**
@@ -35,30 +71,44 @@ public class Nodo<E> {
      * @param elemento
      */
     public Nodo(E elemento) {
-        this(elemento, null, null);
+        this(elemento, null, null, null);
     }
 
     /**
-     * Crea y devuelve un nodo con los enlaces establecidos.
+     * Crea y devuelve un nodo con el elemento y el nodo padre establecidos.
      * 
-     * @param izquierdo
-     * @param derecho
+     * @param elemento
+     * @param padre
      */
-    public Nodo(Nodo<E> izquierdo, Nodo<E> derecho) {
-        this(null, izquierdo, derecho);
+    public Nodo(E elemento, Nodo<E> padre) {
+        this(elemento, null, null, padre);
     }
 
     /**
-     * Crea y devuelve un nodo con el elemento y los enlaces establecidos.
+     * Crea y devuelve un nodo con el elemento y los enlaces izquierdo y derecho
+     * establecidos.
      * 
      * @param elemento
      * @param izquierdo
      * @param derecho
      */
     public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho) {
+        this(elemento, izquierdo, derecho, null);
+    }
+
+    /**
+     * Crea y devuelve un nodo con el elemento y todos los enlaces establecidos.
+     * 
+     * @param elemento
+     * @param izquierdo
+     * @param derecho
+     * @param padre
+     */
+    public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho, Nodo<E> padre) {
         this.elemento = elemento;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
+        this.padre = padre;
     }
 
     /**
@@ -113,5 +163,23 @@ public class Nodo<E> {
      */
     public void setDerecho(Nodo<E> derecho) {
         this.derecho = derecho;
+    }
+
+    /**
+     * Devuelve el nodo padre.
+     * 
+     * @return
+     */
+    public Nodo<E> getPadre() {
+        return padre;
+    }
+
+    /**
+     * Establece el nodo padre.
+     * 
+     * @param padre
+     */
+    public void setPadre(Nodo<E> padre) {
+        this.padre = padre;
     }
 }
