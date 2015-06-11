@@ -50,7 +50,7 @@ public class PruebaArbolBB {
     private static void pruebaPertenece() {
         ArbolBB<Integer> abb = crearArbolBBDePrueba();
         assert abb.pertenece(8) : "8 debe pertenecer al árbol";
-        assert abb.pertenece(16) : "16 no debe pertenecer al árbol (elemento inexistente)";
+        assert !abb.pertenece(16) : "16 no debe pertenecer al árbol (elemento inexistente)";
     }
 
     private static void pruebaMaximo() {
