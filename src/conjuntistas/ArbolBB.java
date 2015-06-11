@@ -68,8 +68,56 @@ public class ArbolBB<T extends Comparable<T>> {
     }
 
     public boolean eliminar(T elemento) {
+        return eliminar(elemento, raiz, null);
+    }
+
+    private boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean resultado = false;
-        
+
+        if (nodo != null) {
+            Nodo<T> izquierdo = nodo.getIzquierdo(),
+                    derecho = nodo.getDerecho();
+            T elementoNodo = nodo.getElemento();
+
+            // Buscar (recursivamente) el elemento a eliminar
+            if (elemento.compareTo(elementoNodo) < 0) {
+                if (izquierdo != null) {
+                    resultado = eliminar(elemento, izquierdo, nodo);
+                }
+            } else if (elemento.compareTo(elementoNodo) > 0) {
+                if (derecho != null) {
+                    resultado = eliminar(elemento, derecho, nodo);
+                }
+            } else {
+                // Elemento encontrado. Eliminarlo según los 3 casos posibles
+                if (izquierdo == null && derecho == null) {
+                    // Caso 1:
+                    T elementoPadre = padre.getElemento();
+                    if (elemento.compareTo(elementoPadre) < 0) {
+                        padre.setIzquierdo(null);
+                    } else if (elemento.compareTo(elementoPadre) > 0) {
+                        padre.setDerecho(null);
+                    }
+                    resultado = true;
+                } else if (izquierdo != null && derecho != null) {
+                    // Caso 3:
+                    T elementoMinimoDerecho = minimo(derecho).getElemento();
+                    resultado = eliminar(elementoMinimoDerecho, derecho, nodo);
+                    nodo.setElemento(elementoMinimoDerecho);
+                } else {
+                    // Caso 2:
+                    Nodo<T> reemplazo = derecho == null ? izquierdo : derecho;
+                    T elementoPadre = padre.getElemento();
+                    if (elemento.compareTo(elementoPadre) < 0) {
+                        padre.setIzquierdo(reemplazo);
+                    } else if (elemento.compareTo(elementoPadre) > 0) {
+                        padre.setDerecho(reemplazo);
+                    }
+                    resultado = true;
+                }
+            }
+        }
+
         return resultado;
     }
 
@@ -80,35 +128,51 @@ public class ArbolBB<T extends Comparable<T>> {
     }
 
     public T maximo() {
-        Nodo<T> derecho, nodo = raiz;
-        T elementoMaximo = null;
+        return raiz == null ? null : maximo(raiz).getElemento();
+    }
+
+    /**
+     * Devuelve el nodo con el elemento máximo, a partir de un nodo dado.
+     * 
+     * @param nodo
+     * @return
+     */
+    private Nodo<T> maximo(Nodo<T> nodo) {
+        Nodo<T> derecho, maximo = null;
 
         while (nodo != null) {
             derecho = nodo.getDerecho();
             if (derecho == null) {
-                elementoMaximo = nodo.getElemento();
-            } else {
-                nodo = derecho;
+                maximo = nodo;
             }
+            nodo = derecho;
         }
 
-        return elementoMaximo;
+        return maximo;
     }
 
     public T minimo() {
-        Nodo<T> izquierdo, nodo = raiz;
-        T elementoMinimo = null;
+        return raiz == null ? null : minimo(raiz).getElemento();
+    }
+
+    /**
+     * Devuelve el nodo con el elemento mínimo, a partir de un nodo dado.
+     * 
+     * @param nodo
+     * @return
+     */
+    private Nodo<T> minimo(Nodo<T> nodo) {
+        Nodo<T> izquierdo, minimo = null;
 
         while (nodo != null) {
             izquierdo = nodo.getIzquierdo();
             if (izquierdo == null) {
-                elementoMinimo = nodo.getElemento();
-            } else {
-                nodo = izquierdo;
+                minimo = nodo;
             }
+            nodo = izquierdo;
         }
 
-        return elementoMinimo;
+        return minimo;
     }
 
     public boolean vacio() {
