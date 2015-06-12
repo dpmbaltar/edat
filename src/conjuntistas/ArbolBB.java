@@ -14,7 +14,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * El nodo raíz del árbol.
      */
-    private Nodo<T> raiz;
+    protected Nodo<T> raiz;
 
     /**
      * Crea y devuelve un árbol BB vacío.
@@ -49,7 +49,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private boolean insertar(T elemento, Nodo<T> nodo) {
+    protected boolean insertar(T elemento, Nodo<T> nodo) {
         boolean resultado = false;
 
         if (nodo != null) {
@@ -98,7 +98,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param padre
      * @return
      */
-    private boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
+    protected boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean resultado = false;
 
         if (nodo != null) {
@@ -167,7 +167,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private boolean pertenece(T elemento, Nodo<T> nodo) {
+    protected boolean pertenece(T elemento, Nodo<T> nodo) {
         boolean resultado = false;
 
         if (nodo != null) {
@@ -202,7 +202,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private Nodo<T> maximo(Nodo<T> nodo) {
+    protected Nodo<T> maximo(Nodo<T> nodo) {
         Nodo<T> derecho, maximo = null;
 
         while (nodo != null) {
@@ -232,7 +232,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private Nodo<T> minimo(Nodo<T> nodo) {
+    protected Nodo<T> minimo(Nodo<T> nodo) {
         Nodo<T> izquierdo, minimo = null;
 
         while (nodo != null) {
@@ -281,7 +281,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param lista
      * @param nodo
      */
-    private void listar(Lista<T> lista, Nodo<T> nodo) {
+    protected void listar(Lista<T> lista, Nodo<T> nodo) {
         if (nodo != null) {
             Nodo<T> izquierdo = nodo.getIzquierdo(),
                     derecho = nodo.getDerecho();
@@ -318,7 +318,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param lista
      * @param nodo
      */
-    private void listarRango(T minimo, T maximo, Lista<T> lista, Nodo<T> nodo) {
+    protected void listarRango(T minimo, T maximo, Lista<T> lista, Nodo<T> nodo) {
         if (nodo != null) {
             Nodo<T> izquierdo = nodo.getIzquierdo(),
                     derecho = nodo.getDerecho();

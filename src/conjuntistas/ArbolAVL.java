@@ -1,5 +1,7 @@
 package conjuntistas;
 
+import jerarquicas.dinamicas.Nodo;
+
 /**
  * Implementación de Árbol AVL.
  * 
@@ -10,14 +12,23 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     @Override
     public boolean insertar(T elemento) {
-        return false;
-        
+        boolean resultado = super.insertar(elemento);
+        balancear();
+        return resultado;
     }
 
     @Override
     public boolean eliminar(T elemento) {
-        return false;
-        
+        boolean resultado = super.eliminar(elemento);
+        balancear();
+        return resultado;
+    }
+
+    /**
+     * Balancea el árbol.
+     */
+    protected void balancear() {
+        balancear(raiz, null);
     }
 
     /**
@@ -26,25 +37,48 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @param padre
      */
-    protected void balancear(NodoAVL<T> nodo, NodoAVL<T> padre) {
+    protected void balancear(Nodo<T> nodo, Nodo<T> padre) {
         if (nodo != null) {
-            int balance = balance(nodo),
+            Nodo<T> reemplazo = null;
+            int balanceNodo = balance(nodo),
                 balanceHijo;
-            if (balance == 2) {
+
+            // Detectar si el nodo no está balanceado, y de estarlo, hacer las
+            // rotaciones necesarias para que éste quede balanceado
+            if (balanceNodo == 2) {
                 balanceHijo = balance(nodo.getIzquierdo());
                 if (balanceHijo == 1) {
-                    rotarDerecha(nodo);
+                    reemplazo = rotarDerecha(nodo);
                 } else if (balanceHijo == -1) {
-                    rotarIzquierdaDerecha(nodo);
+                    reemplazo = rotarIzquierdaDerecha(nodo);
                 }
-            } else if (balance == -2) {
+            } else if (balanceNodo == -2) {
                 balanceHijo = balance(nodo.getDerecho());
                 if (balanceHijo == 1) {
-                    rotarIzquierda(nodo);
+                    reemplazo = rotarDerechaIzquierda(nodo);
                 } else if (balanceHijo == -1) {
-                    rotarDerechaIzquierda(nodo);
+                    reemplazo = rotarIzquierda(nodo);
                 }
             }
+
+            // Reemplazar el nodo correspondiente al padre, si ha sido rotado
+            if (reemplazo != null) {
+                if (padre == null) {
+                    raiz = reemplazo;
+                } else {
+                    T elementoPadre = padre.getElemento(),
+                      elementoReemplazo = reemplazo.getElemento();
+                    if (elementoReemplazo.compareTo(elementoPadre) < 0) {
+                        padre.setIzquierdo(reemplazo);
+                    } else if (elementoReemplazo.compareTo(elementoPadre) > 0) {
+                        padre.setDerecho(reemplazo);
+                    }
+                }
+            }
+
+            // Balancear nodos hijos
+            balancear(nodo.getIzquierdo(), nodo);
+            balancear(nodo.getDerecho(), nodo);
         }
     }
 
@@ -54,17 +88,24 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @return
      */
-    protected int balance(NodoAVL<T> nodo) {
-        NodoAVL<T> izquierdo = nodo.getIzquierdo(),
+    protected int balance(Nodo<T> nodo) {
+        Nodo<T> izquierdo = nodo.getIzquierdo(),
                    derecho = nodo.getDerecho();
-        int alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura(),
-            alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+        int alturaIzquierdo = izquierdo == null ? 0 : izquierdo.getAltura(),
+            alturaDerecho = derecho == null ? 0 : derecho.getAltura();
 
         return alturaIzquierdo - alturaDerecho;
     }
 
-    protected NodoAVL<T> rotarDerecha(NodoAVL<T> nodo) {
-        NodoAVL<T> izquierdo = nodo.getIzquierdo(),
+    /**
+     * Aplica una rotación simple a la derecha al sub-árbol correspondiente
+     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * 
+     * @param nodo
+     * @return
+     */
+    protected Nodo<T> rotarDerecha(Nodo<T> nodo) {
+        Nodo<T> izquierdo = nodo.getIzquierdo(),
                    auxiliar = izquierdo == null ? null : izquierdo.getDerecho();
         izquierdo.setDerecho(nodo);
         nodo.setIzquierdo(auxiliar);
@@ -72,8 +113,15 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         return izquierdo;
     }
 
-    protected NodoAVL<T> rotarIzquierda(NodoAVL<T> nodo) {
-        NodoAVL<T> derecho = nodo.getDerecho(),
+    /**
+     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente
+     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * 
+     * @param nodo
+     * @return
+     */
+    protected Nodo<T> rotarIzquierda(Nodo<T> nodo) {
+        Nodo<T> derecho = nodo.getDerecho(),
                    auxiliar = derecho == null ? null : derecho.getIzquierdo();
         derecho.setIzquierdo(nodo);
         nodo.setDerecho(auxiliar);
@@ -81,12 +129,32 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         return derecho;
     }
 
-    protected NodoAVL<T> rotarDerechaIzquierda(NodoAVL<T> nodo) {
-        return null;
+    /**
+     * Aplica una rotación doble derecha-izquierda al sub-árbol correspondiente
+     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * 
+     * @param nodo
+     * @return
+     */
+    protected Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
+        Nodo<T> derecho = nodo.getDerecho();
+        nodo.setDerecho(rotarDerecha(derecho));
+
+        return rotarIzquierda(nodo);
     }
 
-    protected NodoAVL<T> rotarIzquierdaDerecha(NodoAVL<T> nodo) {
-        return null;
+    /**
+     * Aplica una rotación doble izquierda-derecha al sub-árbol correspondiente
+     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * 
+     * @param nodo
+     * @return
+     */
+    protected Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
+        Nodo<T> izquierdo = nodo.getIzquierdo();
+        nodo.setIzquierdo(rotarIzquierda(izquierdo));
+
+        return rotarDerecha(nodo);
     }
 
     @Override
