@@ -39,32 +39,50 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      */
     protected void balancear(Nodo<T> nodo, Nodo<T> padre) {
         if (nodo != null) {
-            Nodo<T> reemplazo = null;
+            boolean balanceado = false;
+            Nodo<T> reemplazo = null, nodoHijo;
             int balanceNodo = balance(nodo),
                 balanceHijo;
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
             // rotaciones necesarias para que éste quede balanceado
             if (balanceNodo == 2) {
-                balanceHijo = balance(nodo.getIzquierdo());
+                nodoHijo = nodo.getIzquierdo();
+                balanceHijo = balance(nodoHijo);
+
                 if (balanceHijo == 1) {
                     reemplazo = rotarDerecha(nodo);
                 } else if (balanceHijo == -1) {
                     reemplazo = rotarIzquierdaDerecha(nodo);
+                } else if (balanceHijo > 1 || balanceHijo < -1) {
+                    balancear(nodoHijo, nodo);
                 }
+
+                balanceado = true;
             } else if (balanceNodo == -2) {
-                balanceHijo = balance(nodo.getDerecho());
+                nodoHijo = nodo.getDerecho();
+                balanceHijo = balance(nodoHijo);
+
                 if (balanceHijo == 1) {
                     reemplazo = rotarDerechaIzquierda(nodo);
                 } else if (balanceHijo == -1) {
                     reemplazo = rotarIzquierda(nodo);
+                } else if (balanceHijo > 1 || balanceHijo < -1) {
+                    balancear(nodoHijo, nodo);
                 }
+
+                balanceado = true;
             }
 
             // Reemplazar el nodo correspondiente al padre, si ha sido rotado
-            if (reemplazo != null) {
-                System.out.println();
+            if (!balanceado) {
+             // Balancear nodos hijos
+                balancear(nodo.getIzquierdo(), nodo);
+                balancear(nodo.getDerecho(), nodo);
+            } else if (reemplazo != null) {
+                System.out.println("--------------balanceado-------------");
                 if (padre == null) {
+                    reemplazo.setPadre(null);
                     raiz = reemplazo;
                 } else {
                     int alturaReemplazo = reemplazo.getAltura(),
@@ -72,6 +90,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     Nodo<T> hermano = null;
                     T elementoPadre = padre.getElemento(),
                       elementoReemplazo = reemplazo.getElemento();
+                    reemplazo.setPadre(padre);
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
@@ -89,11 +108,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                         nodo.setAltura(alturaHermano + 1);
                     }
                 }
-            } else {
+            }/* else {
                 // Balancear nodos hijos
                 balancear(nodo.getIzquierdo(), nodo);
                 balancear(nodo.getDerecho(), nodo);
-            }
+            }*/
         }
     }
 
@@ -134,7 +153,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
 
         izquierdo.setDerecho(nodo);
+        nodo.setPadre(izquierdo);
         nodo.setIzquierdo(auxiliar1);
+        if (auxiliar1 != null) {
+            auxiliar1.setPadre(nodo);
+        }
 
         // Calcular altura del nodo
         if (alturaDerecho > alturaAuxiliar1) {
@@ -170,7 +193,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
 
         derecho.setIzquierdo(nodo);
+        nodo.setPadre(derecho);
         nodo.setDerecho(auxiliar1);
+        if (auxiliar1 != null) {
+            auxiliar1.setPadre(nodo);
+        }
 
         // Recalcular altura del nodo
         if (alturaIzquierdo > alturaAuxiliar1) {
@@ -204,6 +231,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             alturaRotado = rotado == null ? -1 : rotado.getAltura();
 
         nodo.setDerecho(rotado);
+        rotado.setPadre(nodo);
 
         // Recalcular altura del nodo
         if (alturaIzquierdo > alturaRotado) {
@@ -230,6 +258,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             alturaRotado = rotado == null ? -1 : rotado.getAltura();
 
         nodo.setIzquierdo(rotado);
+        rotado.setPadre(nodo);
 
         // Recalcular altura del nodo
         if (alturaDerecho > alturaRotado) {

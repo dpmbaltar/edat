@@ -66,6 +66,7 @@ public class ArbolBB<T extends Comparable<T>> {
                     nuevo = new Nodo<T>(elemento);
                     nuevo.setPadre(nodo);
                     nodo.setIzquierdo(nuevo);
+
                     if (derecho == null) {
                         nodo.setAltura(nodo.getAltura() + 1);
                     }
@@ -77,6 +78,7 @@ public class ArbolBB<T extends Comparable<T>> {
                     nuevo = new Nodo<T>(elemento);
                     nuevo.setPadre(nodo);
                     nodo.setDerecho(nuevo);
+
                     if (izquierdo == null) {
                         nodo.setAltura(nodo.getAltura() + 1);
                     }
@@ -85,10 +87,40 @@ public class ArbolBB<T extends Comparable<T>> {
                 }
             }
 
-            resultado = nuevo == null ? false : true;
+            if (nuevo != null) {
+                System.out.println("--------------insertar("+nuevo.getElemento()+")-------------");
+                actualizarAltura(nodo);
+                resultado = true;
+            }
         }
 
         return resultado;
+    }
+
+    /**
+     * Actualiza la altura de los ancestros del nodo dado.
+     * 
+     * @param nodo
+     */
+    protected void actualizarAltura(Nodo<T> nodo) {
+        Nodo<T> padre, izquierdo, derecho;
+        int alturaIzquierdo, alturaDerecho;
+        padre = nodo.getPadre();
+
+        while (padre != null) {
+            izquierdo = padre.getIzquierdo();
+            derecho = padre.getDerecho();
+            alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
+            alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+
+            if (alturaIzquierdo > alturaDerecho) {
+                padre.setAltura(alturaIzquierdo + 1);
+            } else {
+                padre.setAltura(alturaDerecho + 1);
+            }
+
+            padre = padre.getPadre();
+        }
     }
 
     /**
