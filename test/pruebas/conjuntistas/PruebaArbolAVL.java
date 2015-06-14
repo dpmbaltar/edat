@@ -10,20 +10,6 @@ import conjuntistas.ArbolAVL;
 public class PruebaArbolAVL {
 
     public static void main(String[] args) {
-        ArbolAVL<Integer> avl = new ArbolAVL<Integer>();
-        avl.insertar(5);
-        avl.insertar(10);
-        avl.insertar(15);
-        avl.insertar(20);
-        avl.insertar(25);
-        avl.insertar(30);
-        avl.insertar(35);
-        avl.insertar(40);
-        avl.minimo();
-        System.out.println();
-        avl.maximo();
-        System.out.println();
-        System.exit(0);
         try {
             // Inicio de pruebas
             pruebaInsertar();

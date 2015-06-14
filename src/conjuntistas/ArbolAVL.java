@@ -80,7 +80,6 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 balancear(nodo.getIzquierdo(), nodo);
                 balancear(nodo.getDerecho(), nodo);
             } else if (reemplazo != null) {
-                System.out.println("--------------balanceado-------------");
                 if (padre == null) {
                     reemplazo.setPadre(null);
                     raiz = reemplazo;
@@ -103,16 +102,12 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     // Recalcular altura del nodo
                     alturaHermano = hermano == null ? -1 : hermano.getAltura();
                     if (alturaReemplazo > alturaHermano) {
-                        nodo.setAltura(alturaReemplazo + 1);
+                        padre.setAltura(alturaReemplazo + 1);
                     } else {
-                        nodo.setAltura(alturaHermano + 1);
+                        padre.setAltura(alturaHermano + 1);
                     }
                 }
-            }/* else {
-                // Balancear nodos hijos
-                balancear(nodo.getIzquierdo(), nodo);
-                balancear(nodo.getDerecho(), nodo);
-            }*/
+            }
         }
     }
 
@@ -127,12 +122,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 derecho = nodo.getDerecho();
         int alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura(),
             alturaDerecho = derecho == null ? -1 : derecho.getAltura();
-        System.out.print(nodo.getElemento()+" => ");
-        System.out.print("altura("+(izquierdo==null?null:izquierdo.getElemento())+") - ");
-        System.out.println("altura("+(derecho==null?null:derecho.getElemento())+")");
-        System.out.print(alturaIzquierdo+" - "+alturaDerecho+" = ");
-        System.out.print(alturaIzquierdo - alturaDerecho);
-        System.out.println();
+
         return alturaIzquierdo - alturaDerecho;
     }
 
