@@ -116,12 +116,28 @@ public class Nodo<E> {
         this.padre = padre;
         this.altura = 0;
 
+        //actualizarAltura();
+    }
+
+    public void actualizarAltura() {
         if (izquierdo != null) {
-            this.altura = 1 + izquierdo.getAltura();
+            altura = 1;
+            if (izquierdo.getAltura() > altura) {
+                altura+= izquierdo.getAltura();
+            }
         }
 
-        if (derecho != null && derecho.getAltura() > this.altura) {
-            this.altura = 1 + derecho.getAltura();
+        if (derecho != null) {
+            altura = 1;
+            if (derecho.getAltura() > altura) {
+                altura+= derecho.getAltura();
+            }
+        }
+
+        if (padre != null) {
+            padre.actualizarAltura();
+            System.out.println(padre.getElemento());
+            System.out.println(getElemento());
         }
     }
 
@@ -176,7 +192,17 @@ public class Nodo<E> {
      * @param izquierdo
      */
     public void setIzquierdo(Nodo<E> izquierdo) {
+        /*if (this.izquierdo != null) {
+            this.izquierdo.setPadre(null);
+        }*/
+
         this.izquierdo = izquierdo;
+
+        /*if (this.izquierdo != null) {
+            this.izquierdo.setPadre(this);
+        }
+
+        actualizarAltura();*/
     }
 
     /**
@@ -194,7 +220,17 @@ public class Nodo<E> {
      * @param derecho
      */
     public void setDerecho(Nodo<E> derecho) {
+        /*if (this.derecho != null) {
+            this.derecho.setPadre(null);
+        }*/
+
         this.derecho = derecho;
+
+        /*if (this.derecho != null) {
+            this.derecho.setPadre(this);
+        }
+
+        actualizarAltura();*/
     }
 
     /**

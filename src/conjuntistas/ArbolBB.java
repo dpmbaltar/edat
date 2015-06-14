@@ -54,7 +54,8 @@ public class ArbolBB<T extends Comparable<T>> {
 
         if (nodo != null) {
             Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
+                    derecho = nodo.getDerecho(),
+                    nuevo = null;
 
             // Si el elemento es menor al del nodo, insertar en el sub-árbol
             // izquierdo. Si el elemento es mayor al del nodo, insertar en el
@@ -62,19 +63,29 @@ public class ArbolBB<T extends Comparable<T>> {
             // resultado será falso y no continuará hacia los nodos hijos.
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
-                    nodo.setIzquierdo(new Nodo<T>(elemento));
-                    resultado = true;
+                    nuevo = new Nodo<T>(elemento);
+                    nuevo.setPadre(nodo);
+                    nodo.setIzquierdo(nuevo);
+                    if (derecho == null) {
+                        nodo.setAltura(nodo.getAltura() + 1);
+                    }
                 } else {
                     resultado = insertar(elemento, izquierdo);
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
-                    nodo.setDerecho(new Nodo<T>(elemento));
-                    resultado = true;
+                    nuevo = new Nodo<T>(elemento);
+                    nuevo.setPadre(nodo);
+                    nodo.setDerecho(nuevo);
+                    if (izquierdo == null) {
+                        nodo.setAltura(nodo.getAltura() + 1);
+                    }
                 } else {
                     resultado = insertar(elemento, derecho);
                 }
             }
+
+            resultado = nuevo == null ? false : true;
         }
 
         return resultado;
@@ -205,7 +216,7 @@ public class ArbolBB<T extends Comparable<T>> {
     protected Nodo<T> maximo(Nodo<T> nodo) {
         Nodo<T> derecho, maximo = null;
 
-        while (nodo != null) {
+        while (nodo != null) {System.out.println(nodo.getElemento());
             derecho = nodo.getDerecho();
             if (derecho == null) {
                 maximo = nodo;
@@ -235,7 +246,7 @@ public class ArbolBB<T extends Comparable<T>> {
     protected Nodo<T> minimo(Nodo<T> nodo) {
         Nodo<T> izquierdo, minimo = null;
 
-        while (nodo != null) {
+        while (nodo != null) {System.out.println(nodo.getElemento());
             izquierdo = nodo.getIzquierdo();
             if (izquierdo == null) {
                 minimo = nodo;
