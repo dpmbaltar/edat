@@ -133,6 +133,8 @@ public class ArbolBB<T extends Comparable<T>> {
     }
 
     /**
+     * TODO: Falta actualizar altura de los nodos correspondientes al eliminar.
+     * 
      * Elimina un elemento del sub-árbol correspondiente al nodo dado.
      * 
      * @param elemento
