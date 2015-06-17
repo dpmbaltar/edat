@@ -12,16 +12,24 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     @Override
     public boolean insertar(T elemento) {
-        boolean resultado = super.insertar(elemento);
-        balancear();
-        return resultado;
+        boolean insertado = super.insertar(elemento);
+
+        if (insertado) {
+            balancear();
+        }
+
+        return insertado;
     }
 
     @Override
     public boolean eliminar(T elemento) {
-        boolean resultado = super.eliminar(elemento);
-        balancear();
-        return resultado;
+        boolean eliminado = super.eliminar(elemento);
+
+        if (eliminado) {
+            balancear();
+        }
+
+        return eliminado;
     }
 
     /**
@@ -40,9 +48,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     protected void balancear(Nodo<T> nodo, Nodo<T> padre) {
         if (nodo != null) {
             boolean balanceado = false;
-            Nodo<T> reemplazo = null, nodoHijo;
-            int balanceNodo = balance(nodo),
-                balanceHijo;
+            Nodo<T> nodoHijo, reemplazo = null;
+            int balanceHijo, balanceNodo = balance(nodo);
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
             // rotaciones necesarias para que éste quede balanceado
@@ -76,7 +83,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
             // Reemplazar el nodo correspondiente al padre, si ha sido rotado
             if (!balanceado) {
-             // Balancear nodos hijos
+                // Balancear nodos hijos
                 balancear(nodo.getIzquierdo(), nodo);
                 balancear(nodo.getDerecho(), nodo);
             } else if (reemplazo != null) {
@@ -84,11 +91,13 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     reemplazo.setPadre(null);
                     raiz = reemplazo;
                 } else {
-                    int alturaReemplazo = reemplazo.getAltura(),
-                        alturaHermano;
+                    int alturaHermano, alturaReemplazo;
                     Nodo<T> hermano = null;
-                    T elementoPadre = padre.getElemento(),
-                      elementoReemplazo = reemplazo.getElemento();
+                    T elementoPadre, elementoReemplazo;
+
+                    alturaReemplazo = reemplazo.getAltura();
+                    elementoPadre = padre.getElemento();
+                    elementoReemplazo = reemplazo.getElemento();
                     reemplazo.setPadre(padre);
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
@@ -262,7 +271,22 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     @Override
     public ArbolAVL<T> clonar() {
-        return null;
-        
+        ArbolAVL<T> clon = new ArbolAVL<T>();
+        clonar(raiz, clon);
+
+        return clon;
+    }
+
+    protected void clonar(Nodo<T> nodo, ArbolAVL<T> arbol) {
+        if (nodo != null) {
+            Nodo<T> izquierdo, derecho;
+
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+
+            arbol.insertar(nodo.getElemento());
+            clonar(izquierdo, arbol);
+            clonar(derecho, arbol);
+        }
     }
 }
