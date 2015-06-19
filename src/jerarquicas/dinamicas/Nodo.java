@@ -9,6 +9,11 @@ package jerarquicas.dinamicas;
 public class Nodo<E> {
 
     /**
+     * La altura del nodo.
+     */
+    private int altura;
+
+    /**
      * El elemento del nodo.
      */
     private E elemento;
@@ -109,6 +114,25 @@ public class Nodo<E> {
         this.izquierdo = izquierdo;
         this.derecho = derecho;
         this.padre = padre;
+        this.altura = 0;
+    }
+
+    /**
+     * Devuelve la altura del nodo.
+     * 
+     * @return
+     */
+    public int getAltura() {
+        return altura;
+    }
+
+    /**
+     * Establece la altura del nodo.
+     * 
+     * @param altura
+     */
+    public void setAltura(int altura) {
+        this.altura = altura;
     }
 
     /**

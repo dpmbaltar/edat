@@ -14,7 +14,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * El nodo raíz del árbol.
      */
-    private Nodo<T> raiz;
+    protected Nodo<T> raiz;
 
     /**
      * Crea y devuelve un árbol BB vacío.
@@ -30,16 +30,16 @@ public class ArbolBB<T extends Comparable<T>> {
      * @return
      */
     public boolean insertar(T elemento) {
-        boolean resultado = false;
+        boolean insertado = false;
 
         if (raiz == null) {
             raiz = new Nodo<T>(elemento);
-            resultado = true;
+            insertado = true;
         } else {
-            resultado = insertar(elemento, raiz);
+            insertado = insertar(elemento, raiz);
         }
 
-        return resultado;
+        return insertado;
     }
 
     /**
@@ -49,12 +49,14 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private boolean insertar(T elemento, Nodo<T> nodo) {
-        boolean resultado = false;
+    protected boolean insertar(T elemento, Nodo<T> nodo) {
+        boolean insertado = false;
 
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
+            Nodo<T> izquierdo, derecho, nuevo;
+
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
 
             // Si el elemento es menor al del nodo, insertar en el sub-árbol
             // izquierdo. Si el elemento es mayor al del nodo, insertar en el
@@ -62,22 +64,52 @@ public class ArbolBB<T extends Comparable<T>> {
             // resultado será falso y no continuará hacia los nodos hijos.
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
-                    nodo.setIzquierdo(new Nodo<T>(elemento));
-                    resultado = true;
+                    nuevo = new Nodo<T>(elemento);
+                    nuevo.setPadre(nodo);
+                    nodo.setIzquierdo(nuevo);
+                    insertado = true;
                 } else {
-                    resultado = insertar(elemento, izquierdo);
+                    insertado = insertar(elemento, izquierdo);
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
-                    nodo.setDerecho(new Nodo<T>(elemento));
-                    resultado = true;
+                    nuevo = new Nodo<T>(elemento);
+                    nuevo.setPadre(nodo);
+                    nodo.setDerecho(nuevo);
+                    insertado = true;
                 } else {
-                    resultado = insertar(elemento, derecho);
+                    insertado = insertar(elemento, derecho);
                 }
+            }
+
+            // Actualizar altura del ancestro del nuevo nodo
+            if (insertado) {
+                actualizarAltura(nodo);
             }
         }
 
-        return resultado;
+        return insertado;
+    }
+
+    /**
+     * Actualiza la altura del nodo dado.
+     * 
+     * @param nodo
+     */
+    protected void actualizarAltura(Nodo<T> nodo) {
+        Nodo<T> izquierdo, derecho;
+        int alturaIzquierdo, alturaDerecho;
+
+        izquierdo = nodo.getIzquierdo();
+        derecho = nodo.getDerecho();
+        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
+        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+
+        if (alturaIzquierdo > alturaDerecho) {
+            nodo.setAltura(alturaIzquierdo + 1);
+        } else {
+            nodo.setAltura(alturaDerecho + 1);
+        }
     }
 
     /**
@@ -87,7 +119,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @return
      */
     public boolean eliminar(T elemento) {
-        return eliminar(elemento, raiz, null);
+        return eliminar(elemento, raiz);
     }
 
     /**
@@ -95,57 +127,65 @@ public class ArbolBB<T extends Comparable<T>> {
      * 
      * @param elemento
      * @param nodo
-     * @param padre
      * @return
      */
-    private boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
-        boolean resultado = false;
+    protected boolean eliminar(T elemento, Nodo<T> nodo) {
+        boolean eliminado = false;
 
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
-            T elementoNodo = nodo.getElemento();
+            Nodo<T> izquierdo, derecho, padre;
 
-            // Buscar (recursivamente) el elemento a eliminar
-            if (elemento.compareTo(elementoNodo) < 0) {
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+            padre = nodo.getPadre();
+
+            // Buscar el elemento a eliminar
+            if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo != null) {
-                    resultado = eliminar(elemento, izquierdo, nodo);
+                    eliminado = eliminar(elemento, izquierdo);
                 }
-            } else if (elemento.compareTo(elementoNodo) > 0) {
+            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho != null) {
-                    resultado = eliminar(elemento, derecho, nodo);
+                    eliminado = eliminar(elemento, derecho);
                 }
             } else {
-                // Elemento encontrado. Eliminarlo según los 3 casos posibles
-                if (izquierdo == null && derecho == null) {
-                    // Caso 1:
+                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
+                if (izquierdo == null && derecho == null) { // Caso 1:
                     T elementoPadre = padre.getElemento();
+
                     if (elemento.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(null);
                     } else if (elemento.compareTo(elementoPadre) > 0) {
                         padre.setDerecho(null);
                     }
-                    resultado = true;
-                } else if (izquierdo != null && derecho != null) {
-                    // Caso 3:
+
+                    eliminado = true;
+                } else if (izquierdo != null && derecho != null) { // Caso 3:
                     T elementoMinimoDerecho = minimo(derecho).getElemento();
-                    resultado = eliminar(elementoMinimoDerecho, derecho, nodo);
+
+                    eliminado = eliminar(elementoMinimoDerecho, derecho);
                     nodo.setElemento(elementoMinimoDerecho);
-                } else {
-                    // Caso 2:
+                } else { // Caso 2:
                     Nodo<T> reemplazo = derecho == null ? izquierdo : derecho;
                     T elementoPadre = padre.getElemento();
+
                     if (elemento.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
                     } else if (elemento.compareTo(elementoPadre) > 0) {
                         padre.setDerecho(reemplazo);
                     }
-                    resultado = true;
+
+                    eliminado = true;
                 }
+            }
+
+            // Actualizar altura del ancestro del nodo eliminado
+            if (eliminado) {
+                actualizarAltura(nodo);
             }
         }
 
-        return resultado;
+        return eliminado;
     }
 
     /**
@@ -167,23 +207,25 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private boolean pertenece(T elemento, Nodo<T> nodo) {
-        boolean resultado = false;
+    protected boolean pertenece(T elemento, Nodo<T> nodo) {
+        boolean existe = false;
 
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
+            Nodo<T> izquierdo, derecho;
+
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
 
             if (elemento.compareTo(nodo.getElemento()) < 0) {
-                resultado = pertenece(elemento, izquierdo);
+                existe = pertenece(elemento, izquierdo);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
-                resultado = pertenece(elemento, derecho);
+                existe = pertenece(elemento, derecho);
             } else {
-                resultado = true;
+                existe = true;
             }
         }
 
-        return resultado;
+        return existe;
     }
 
     /**
@@ -202,14 +244,12 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private Nodo<T> maximo(Nodo<T> nodo) {
+    protected Nodo<T> maximo(Nodo<T> nodo) {
         Nodo<T> derecho, maximo = null;
 
         while (nodo != null) {
             derecho = nodo.getDerecho();
-            if (derecho == null) {
-                maximo = nodo;
-            }
+            maximo = derecho == null ? nodo : null;
             nodo = derecho;
         }
 
@@ -232,14 +272,12 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo
      * @return
      */
-    private Nodo<T> minimo(Nodo<T> nodo) {
+    protected Nodo<T> minimo(Nodo<T> nodo) {
         Nodo<T> izquierdo, minimo = null;
 
         while (nodo != null) {
             izquierdo = nodo.getIzquierdo();
-            if (izquierdo == null) {
-                minimo = nodo;
-            }
+            minimo = izquierdo == null ? nodo : null;
             nodo = izquierdo;
         }
 
@@ -271,6 +309,7 @@ public class ArbolBB<T extends Comparable<T>> {
     public Lista<T> listar() {
         Lista<T> lista = new Lista<T>();
         listar(lista, raiz);
+
         return lista;
     }
 
@@ -281,10 +320,12 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param lista
      * @param nodo
      */
-    private void listar(Lista<T> lista, Nodo<T> nodo) {
+    protected void listar(Lista<T> lista, Nodo<T> nodo) {
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
+            Nodo<T> izquierdo, derecho;
+
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
 
             listar(lista, izquierdo);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
@@ -304,6 +345,7 @@ public class ArbolBB<T extends Comparable<T>> {
     public Lista<T> listarRango(T minimo, T maximo) {
         Lista<T> lista = new Lista<T>();
         listarRango(minimo, maximo, lista, raiz);
+
         return lista;
     }
 
@@ -318,13 +360,17 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param lista
      * @param nodo
      */
-    private void listarRango(T minimo, T maximo, Lista<T> lista, Nodo<T> nodo) {
+    protected void listarRango(T minimo, T maximo, Lista<T> lista, Nodo<T> nodo) {
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo(),
-                    derecho = nodo.getDerecho();
-            T elemento = nodo.getElemento();
-            boolean esMayorIgualQueMinimo = elemento.compareTo(minimo) >= 0,
-                    esMenorIgualQueMaximo = elemento.compareTo(maximo) <= 0;
+            Nodo<T> izquierdo, derecho;
+            T elemento;
+            boolean esMayorIgualQueMinimo, esMenorIgualQueMaximo;
+
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+            elemento = nodo.getElemento();
+            esMayorIgualQueMinimo = elemento.compareTo(minimo) >= 0;
+            esMenorIgualQueMaximo = elemento.compareTo(maximo) <= 0;
 
             listarRango(minimo, maximo, lista, izquierdo);
 
@@ -345,8 +391,7 @@ public class ArbolBB<T extends Comparable<T>> {
         ArbolBB<T> clon = new ArbolBB<T>();
         Lista<T> lista = listar();
         T elemento = null;
-        int longitud = 0,
-            medio = 0;
+        int longitud = 0, medio = 0;
 
         // Insertar elementos al árbol de manera tal que éste quede balanceado
         while (!lista.esVacia()) {
@@ -356,7 +401,7 @@ public class ArbolBB<T extends Comparable<T>> {
             } else if (medio > 0) {
                 medio = medio > 1 ? medio / 2 : 1;
             }
-            
+
             elemento = lista.recuperar(medio);
             lista.eliminar(medio);
 
@@ -370,7 +415,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve la representación del árbol en forma de cadena.
-     * Por defecto, éste método equivale a llamar listar.toString().
+     * Éste método equivale a llamar listar.toString().
      */
     public String toString() {
         return listar().toString();
