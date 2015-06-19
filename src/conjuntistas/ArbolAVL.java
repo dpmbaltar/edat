@@ -127,10 +127,13 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected int balance(Nodo<T> nodo) {
-        Nodo<T> izquierdo = nodo.getIzquierdo(),
-                derecho = nodo.getDerecho();
-        int alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura(),
-            alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+        Nodo<T> izquierdo, derecho;
+        int alturaIzquierdo, alturaDerecho;
+
+        izquierdo = nodo.getIzquierdo();
+        derecho = nodo.getDerecho();
+        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
+        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
 
         return alturaIzquierdo - alturaDerecho;
     }
@@ -143,13 +146,16 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarDerecha(Nodo<T> nodo) {
-        Nodo<T> izquierdo = nodo.getIzquierdo(),
-                derecho = nodo.getDerecho(),
-                auxiliar1 = izquierdo == null ? null : izquierdo.getDerecho(),
-                auxiliar2 = izquierdo == null ? null : izquierdo.getIzquierdo();
-        int alturaDerecho = derecho == null ? -1 : derecho.getAltura(),
-            alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura(),
-            alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
+        Nodo<T> izquierdo, derecho, auxiliar1, auxiliar2;
+        int alturaDerecho, alturaAuxiliar1, alturaAuxiliar2;
+
+        izquierdo = nodo.getIzquierdo();
+        derecho = nodo.getDerecho();
+        auxiliar1 = izquierdo == null ? null : izquierdo.getDerecho();
+        auxiliar2 = izquierdo == null ? null : izquierdo.getIzquierdo();
+        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+        alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura();
+        alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
 
         izquierdo.setDerecho(nodo);
         nodo.setPadre(izquierdo);
@@ -158,14 +164,14 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             auxiliar1.setPadre(nodo);
         }
 
-        // Calcular altura del nodo
+        // Recalcular altura del nodo
         if (alturaDerecho > alturaAuxiliar1) {
             nodo.setAltura(alturaDerecho + 1);
         } else {
             nodo.setAltura(alturaAuxiliar1 + 1);
         }
 
-        // Calcular altura del reemplazo
+        // Recalcular altura del reemplazo
         if (alturaAuxiliar2 > nodo.getAltura()) {
             izquierdo.setAltura(alturaAuxiliar2 + 1);
         } else {
@@ -183,13 +189,16 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarIzquierda(Nodo<T> nodo) {
-        Nodo<T> derecho = nodo.getDerecho(),
-                izquierdo = nodo.getIzquierdo(),
-                auxiliar1 = derecho == null ? null : derecho.getIzquierdo(),
-                auxiliar2 = derecho == null ? null : derecho.getDerecho();
-        int alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura(),
-            alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura(),
-            alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
+        Nodo<T> derecho, izquierdo, auxiliar1, auxiliar2;
+        int alturaIzquierdo, alturaAuxiliar1, alturaAuxiliar2;
+
+        derecho = nodo.getDerecho();
+        izquierdo = nodo.getIzquierdo();
+        auxiliar1 = derecho == null ? null : derecho.getIzquierdo();
+        auxiliar2 = derecho == null ? null : derecho.getDerecho();
+        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
+        alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura();
+        alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
 
         derecho.setIzquierdo(nodo);
         nodo.setPadre(derecho);
@@ -223,12 +232,16 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
-        Nodo<T> derecho = nodo.getDerecho(),
-                izquierdo = nodo.getIzquierdo(),
-                rotado = rotarDerecha(derecho);
-        int alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura(),
-            alturaRotado = rotado == null ? -1 : rotado.getAltura();
+        Nodo<T> derecho, izquierdo, rotado;
+        int alturaIzquierdo, alturaRotado;
 
+        derecho = nodo.getDerecho();
+        izquierdo = nodo.getIzquierdo();
+        rotado = rotarDerecha(derecho);
+        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
+        alturaRotado = rotado == null ? -1 : rotado.getAltura();
+
+        // Reemplazar nodo previo
         nodo.setDerecho(rotado);
         rotado.setPadre(nodo);
 
@@ -250,12 +263,16 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
-        Nodo<T> izquierdo = nodo.getIzquierdo(),
-                derecho = nodo.getDerecho(),
-                rotado = rotarIzquierda(izquierdo);
-        int alturaDerecho = derecho == null ? -1 : derecho.getAltura(),
-            alturaRotado = rotado == null ? -1 : rotado.getAltura();
+        Nodo<T> izquierdo, derecho, rotado;
+        int alturaDerecho, alturaRotado;
 
+        izquierdo = nodo.getIzquierdo();
+        derecho = nodo.getDerecho();
+        rotado = rotarIzquierda(izquierdo);
+        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
+        alturaRotado = rotado == null ? -1 : rotado.getAltura();
+
+        // Reemplazar nodo previo
         nodo.setIzquierdo(rotado);
         rotado.setPadre(nodo);
 
