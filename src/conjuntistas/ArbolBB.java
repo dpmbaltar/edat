@@ -1,6 +1,6 @@
 package conjuntistas;
 
-import jerarquicas.dinamicas.Nodo;
+import jerarquicas.Nodo;
 import lineales.dinamicas.Lista;
 
 /**

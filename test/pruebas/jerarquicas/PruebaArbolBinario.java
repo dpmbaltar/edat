@@ -1,6 +1,6 @@
 package pruebas.jerarquicas;
 
-import jerarquicas.dinamicas.ArbolBinario;
+import jerarquicas.ArbolBinario;
 
 /**
  * Prueba implementación de Árbol Binario.

@@ -1,4 +1,4 @@
-package jerarquicas.dinamicas;
+package jerarquicas;
 
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;

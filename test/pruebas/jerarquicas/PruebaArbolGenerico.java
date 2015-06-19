@@ -1,6 +1,6 @@
 package pruebas.jerarquicas;
 
-import jerarquicas.dinamicas.ArbolGenerico;
+import jerarquicas.ArbolGenerico;
 
 /**
  * Prueba implementación de Árbol Genérico.

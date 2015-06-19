@@ -1,4 +1,4 @@
-package jerarquicas.dinamicas;
+package jerarquicas;
 
 /**
  * Implementación de un nodo de tres enlaces: izquierdo, derecho y padre.

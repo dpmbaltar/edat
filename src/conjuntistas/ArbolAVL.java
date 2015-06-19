@@ -1,6 +1,6 @@
 package conjuntistas;
 
-import jerarquicas.dinamicas.Nodo;
+import jerarquicas.Nodo;
 
 /**
  * Implementación de Árbol AVL.
