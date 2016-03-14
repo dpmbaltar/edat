@@ -3,7 +3,7 @@ package tpo1;
 /**
  * Implementación de Lista dinámica.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class ListaInt {
 

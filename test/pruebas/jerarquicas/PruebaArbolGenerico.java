@@ -5,7 +5,7 @@ import jerarquicas.ArbolGenerico;
 /**
  * Prueba implementación de Árbol Genérico.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaArbolGenerico {
 

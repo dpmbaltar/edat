@@ -6,7 +6,7 @@ import lineales.dinamicas.Pila;
 /**
  * Prueba implementación de Pila dinámica/estática.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaPila {
 

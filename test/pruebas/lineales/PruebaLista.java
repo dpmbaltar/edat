@@ -5,7 +5,7 @@ import lineales.dinamicas.Lista;
 /**
  * Prueba implementación de Lista.
  * 
- * @author Diego P. M. Baltar <www.dpmbaltar.com.ar>
+ * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaLista {
 
