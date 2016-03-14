@@ -6,11 +6,11 @@ import pruebas.lineales.PruebaLista;
 
 /**
  * Prueba implementación de todas las estructuras de datos.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaTodo {
-    
+
     public static void main(String[] args) {
         try {
             PruebaCola pruebaCola = new PruebaCola();
