@@ -1,7 +1,6 @@
-package pruebas.lineales;
+package pruebas.lineales.dinamicas;
 
 import lineales.dinamicas.Cola;
-//import lineales.estaticas.Cola;
 
 /**
  * Prueba implementación de Cola dinámica/estática.
