@@ -2,7 +2,7 @@ package lineales.dinamicas;
 
 /**
  * Implementación de Pila dinámica.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class Pila<T> {
@@ -22,7 +22,7 @@ public class Pila<T> {
     /**
      * Pone el elemento nuevoElemento en el tope de la pila. Devuelve verdadero
      * si el elemento se pudo apilar y falso en caso contrario.
-     * 
+     *
      * @param nuevoElemento
      * @return
      */
@@ -35,7 +35,7 @@ public class Pila<T> {
      * Saca el elemento del tope de la pila. Devuelve verdadero si la pila no
      * estaba vacía al momento de desapilar (es decir que se pudo desapilar) y
      * falso en caso contrario.
-     * 
+     *
      * @return
      */
     public boolean desapilar() {
@@ -52,7 +52,7 @@ public class Pila<T> {
     /**
      * Devuelve el elemento en el tope de la pila.
      * Precondición: la pila no está vacía.
-     * 
+     *
      * @return
      */
     public T obtenerTope() {
@@ -62,7 +62,7 @@ public class Pila<T> {
     /**
      * Devuelve verdadero si la pila no tiene elementos y falso en caso
      * contrario.
-     * 
+     *
      * @return
      */
     public boolean esVacia() {
@@ -78,7 +78,7 @@ public class Pila<T> {
 
     /**
      * Devuelve una copia de la pila original.
-     * 
+     *
      * @return
      */
     public Pila<T> clonar() {
@@ -107,6 +107,7 @@ public class Pila<T> {
      * pila para poder mostrarla por pantalla. Es recomendable utilizar este
      * método únicamente en la etapa de prueba y luego comentar el código.
      */
+    @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
 
@@ -118,7 +119,7 @@ public class Pila<T> {
                 nodo = nodo.getEnlace();
 
                 if (nodo != null) {
-                    cadena.append(' ');
+                    cadena.append(", ");
                 }
             }
         }

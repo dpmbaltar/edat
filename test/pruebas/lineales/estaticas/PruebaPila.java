@@ -118,8 +118,8 @@ public class PruebaPila {
         pila.apilar(1);
         pila.apilar(2);
         pila.apilar(3);
-        assert pila.toString().equals("[3 2 1]")
-             : "Pila con elementos 1, 2, 3 debe ser representada como [3 2 1] "
-             + "en forma de cadena";
+        assert pila.toString().equals("[3, 2, 1]")
+             : "Pila con elementos 1, 2, 3 debe ser representada como "
+             + "[3, 2, 1] en forma de cadena";
     }
 }
