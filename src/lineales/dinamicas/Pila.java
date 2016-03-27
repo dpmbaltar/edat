@@ -39,14 +39,14 @@ public class Pila<T> {
      * @return
      */
     public boolean desapilar() {
-        boolean resultado = false;
+        boolean exito = false;
 
         if (tope != null) {
             tope = tope.getEnlace();
-            resultado = true;
+            exito = true;
         }
 
-        return resultado;
+        return exito;
     }
 
     /**
@@ -113,11 +113,9 @@ public class Pila<T> {
 
         if (tope != null) {
             Nodo<T> nodo = tope;
-
             while (nodo != null) {
-                cadena.append(((Object) nodo.getElemento()).toString());
+                cadena.append(String.valueOf(nodo.getElemento()));
                 nodo = nodo.getEnlace();
-
                 if (nodo != null) {
                     cadena.append(", ");
                 }

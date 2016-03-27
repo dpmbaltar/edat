@@ -125,7 +125,7 @@ public class Pila<T> {
         int posicion;
 
         for (posicion = tope; posicion > -1; posicion--) {
-            cadena.append(pila[posicion].toString());
+            cadena.append(String.valueOf(pila[posicion]));
             if ((posicion - 1) > -1) {
                 cadena.append(", ");
             }

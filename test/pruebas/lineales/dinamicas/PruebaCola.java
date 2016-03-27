@@ -3,29 +3,40 @@ package pruebas.lineales.dinamicas;
 import lineales.dinamicas.Cola;
 
 /**
- * Prueba implementación de Cola dinámica/estática.
+ * Prueba implementación de Cola dinámica (de caracteres).
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaCola {
 
+    protected Cola<Character> cola;
+
     public PruebaCola() {
+        preparar();
         pruebaPoner();
+        preparar();
         pruebaObtenerFrente();
+        preparar();
         pruebaSacar();
+        preparar();
         pruebaEsVacia();
+        preparar();
         pruebaVaciar();
+        preparar();
         pruebaClonar();
+        preparar();
         pruebaToString();
     }
 
+    protected void preparar() {
+        cola = new Cola<Character>();
+    }
+
     protected void pruebaPoner() {
-        Cola<Character> cola = new Cola<Character>();
         assert cola.poner('a') : "Debe poner 'a' en el frente";
     }
 
     protected void pruebaObtenerFrente() {
-        Cola<Character> cola = new Cola<Character>();
         cola.poner('a');
         cola.poner('b');
         cola.poner('c');
@@ -33,7 +44,6 @@ public class PruebaCola {
     }
 
     protected void pruebaSacar() {
-        Cola<Character> cola = new Cola<Character>();
         cola.poner('a');
         cola.poner('b');
         cola.poner('c');
@@ -42,14 +52,12 @@ public class PruebaCola {
     }
 
     protected void pruebaEsVacia() {
-        Cola<Character> cola = new Cola<Character>();
         assert cola.esVacia() : "Cola debe ser vacía";
         cola.poner('a');
         assert cola.esVacia() == false : "Cola no debe ser vacía";
     }
 
     protected void pruebaVaciar() {
-        Cola<Character> cola = new Cola<Character>();
         cola.poner('a');
         cola.poner('b');
         cola.poner('c');
@@ -59,7 +67,6 @@ public class PruebaCola {
     }
 
     protected void pruebaClonar() {
-        Cola<Character> cola = new Cola<Character>();
         cola.poner('a');
         cola.poner('b');
         cola.poner('c');
@@ -81,7 +88,6 @@ public class PruebaCola {
     }
 
     protected void pruebaToString() {
-        Cola<Character> cola = new Cola<Character>();
         cola.poner('a');
         cola.poner('b');
         cola.poner('c');
