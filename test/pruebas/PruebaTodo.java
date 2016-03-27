@@ -15,25 +15,39 @@ public class PruebaTodo {
     public static void main(String[] args) {
         try {
         	prueba = new pruebas.lineales.estaticas.PruebaPila();
-        	System.out.println(prueba.getClass().getName() + " OK");
+        	exito();
         	prueba = new pruebas.lineales.dinamicas.PruebaPila();
-        	System.out.println(prueba.getClass().getName() + " OK");
+        	exito();
         	prueba = new PruebaCola();
-        	System.out.println(prueba.getClass().getName() + " OK");
+        	exito();
         	prueba = new PruebaLista();
-        	System.out.println(prueba.getClass().getName() + " OK");
+        	exito();
         	System.out.println();
             System.out.println("¡ÉXITO de prueba!");
-        } catch (AssertionError error) {
-        	StackTraceElement origen = error.getStackTrace()[0];
-            System.out.println("¡ERROR de prueba!");
+        } catch (AssertionError e) {
+        	System.out.println("¡ERROR de prueba!");
             System.out.println();
-            System.out.println(error.getMessage());
-            System.out.print("    en " + origen.getClassName());
-            System.out.print("." + origen.getMethodName() + "()");
-            System.out.print(" (" + origen.getFileName());
-            System.out.print(":" + origen.getLineNumber() + ")");
-            System.out.println();
+            error(e);
         }
+    }
+    
+    /**
+     * Muestra mensaje de éxito de la prueba actual.
+     */
+    private static void exito() {
+    	System.out.println(prueba.getClass().getName() + " OK");
+    }
+    
+    /**
+     * Muestra mensaje de error de la prueba actual.
+     */
+    private static void error(AssertionError error) {
+    	StackTraceElement origen = error.getStackTrace()[0];
+        System.out.println(error.getMessage());
+        System.out.print("    en " + origen.getClassName());
+        System.out.print("." + origen.getMethodName() + "()");
+        System.out.print(" (" + origen.getFileName());
+        System.out.print(":" + origen.getLineNumber() + ")");
+        System.out.println();
     }
 }
