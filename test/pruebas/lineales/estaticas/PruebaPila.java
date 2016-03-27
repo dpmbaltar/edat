@@ -3,16 +3,16 @@ package pruebas.lineales.estaticas;
 import lineales.estaticas.Pila;
 
 /**
- * Prueba implementación de Pila estática (de caracteres).
+ * Prueba implementación de Pila estática (de enteros).
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaPila {
 
-	protected Pila<Character> pila;
-	
+    protected Pila<Integer> pila;
+
     public PruebaPila() {
-    	preparar();
+        preparar();
         pruebaApilar();
         preparar();
         pruebaObtenerTope();
@@ -27,42 +27,42 @@ public class PruebaPila {
         preparar();
         pruebaToString();
     }
-    
+
     protected void preparar() {
-    	pila = new Pila<Character>();
+        pila = new Pila<Integer>();
     }
 
     /**
      * Prueba lineales.estaticas.Pila.apilar().
      */
     protected void pruebaApilar() {
-        assert pila.apilar('a') : "Debe apilar 'a'";
+        assert pila.apilar(1) : "Debe apilar 1";
     }
 
     /**
      * Prueba lineales.estaticas.Pila.obtenerTope().
      */
     protected void pruebaObtenerTope() {
-    	assert (Character)pila.obtenerTope() == null
+        assert pila.obtenerTope() == null
              : "Tope de pila vacía debe ser nulo";
-        pila.apilar('a');
-        pila.apilar('b');
-        pila.apilar('c');
-        assert (Character)pila.obtenerTope() == 'c'
-             : "Tope de pila debe ser 'c'";
+        pila.apilar(1);
+        pila.apilar(2);
+        pila.apilar(3);
+        assert pila.obtenerTope() == 3
+             : "Tope de pila debe ser 3";
     }
 
     /**
      * Prueba lineales.estaticas.Pila.desapilar().
      */
     protected void pruebaDesapilar() {
-    	assert !pila.desapilar() : "No debe desapilar pila vacía";
-        pila.apilar('a');
-        pila.apilar('b');
-        pila.apilar('c');
-        assert pila.desapilar() : "Debe desapilar 'c'";
-        assert (Character)pila.obtenerTope() == 'b'
-        	 : "Tope de pila debe ser 'b'";
+        assert !pila.desapilar() : "No debe desapilar pila vacía";
+        pila.apilar(1);
+        pila.apilar(2);
+        pila.apilar(3);
+        assert pila.desapilar() : "Debe desapilar 3";
+        assert pila.obtenerTope() == 2
+             : "Tope de pila debe ser 2";
     }
 
     /**
@@ -70,7 +70,7 @@ public class PruebaPila {
      */
     protected void pruebaEsVacia() {
         assert pila.esVacia() : "Pila debe ser vacía";
-        pila.apilar('a');
+        pila.apilar(1);
         assert !pila.esVacia() : "Pila no debe ser vacía";
     }
 
@@ -78,47 +78,48 @@ public class PruebaPila {
      * Prueba lineales.estaticas.Pila.vaciar().
      */
     protected void pruebaVaciar() {
-        pila.apilar('a');
-        pila.apilar('b');
-        pila.apilar('c');
+        pila.apilar(1);
+        pila.apilar(2);
+        pila.apilar(3);
         pila.vaciar();
-        assert pila.esVacia() : "Pila debe ser vacía";
+        assert !pila.desapilar() : "No debe desapilar pila vacía";
         assert pila.obtenerTope() == null : "Tope de pila debe ser nulo";
+        assert pila.esVacia() : "Pila debe ser vacía";
     }
 
     /**
      * Prueba lineales.estaticas.Pila.clonar().
      */
-	protected void pruebaClonar() {
-        pila.apilar('a');
-        pila.apilar('b');
-        pila.apilar('c');
-        Pila<Character> clon = (Pila<Character>)pila.clonar();
+    protected void pruebaClonar() {
+        pila.apilar(1);
+        pila.apilar(2);
+        pila.apilar(3);
+        Pila<Integer> clon = pila.clonar();
         assert pila.obtenerTope() == clon.obtenerTope()
-             : "Tope de pila debe ser igual al de su clon ('c')";
+             : "Tope de pila debe ser igual al de su clon (1)";
         pila.desapilar();
         clon.desapilar();
         assert pila.obtenerTope() == clon.obtenerTope()
-             : "Tope de pila debe ser igual al de su clon ('b')";
+             : "Tope de pila debe ser igual al de su clon (2)";
         pila.desapilar();
         clon.desapilar();
         assert pila.obtenerTope() == clon.obtenerTope()
-             : "Tope de pila debe ser igual al de su clon ('a')";
+             : "Tope de pila debe ser igual al de su clon (3)";
         pila.desapilar();
         clon.desapilar();
         assert pila.esVacia() && clon.esVacia()
              : "Pila y su clon deben ser vacías";
     }
 
-	/**
+    /**
      * Prueba lineales.estaticas.Pila.toString().
      */
     protected void pruebaToString() {
-        pila.apilar('a');
-        pila.apilar('b');
-        pila.apilar('c');
-        assert pila.toString().equals("[c b a]")
-             : "Pila con elementos 'a', 'b', 'c' debe ser representada como "
-             + "[c b a] en forma de cadena";
+        pila.apilar(1);
+        pila.apilar(2);
+        pila.apilar(3);
+        assert pila.toString().equals("[3 2 1]")
+             : "Pila con elementos 1, 2, 3 debe ser representada como [3 2 1] "
+             + "en forma de cadena";
     }
 }
