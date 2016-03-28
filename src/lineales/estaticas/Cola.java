@@ -45,10 +45,11 @@ public class Cola<T> {
      */
     public boolean poner(T nuevoElemento) {
         boolean exito = false;
+        int nuevo = (ultimo + 1) % cola.length;
 
-        if (frente == ultimo || ((ultimo + 1) % cola.length) != frente) {
+        if (frente == ultimo || nuevo != frente) {
             cola[ultimo] = nuevoElemento;
-            ultimo = (ultimo + 1) % cola.length;
+            ultimo = nuevo;
             exito = true;
         }
 
