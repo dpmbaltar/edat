@@ -48,7 +48,7 @@ public class PruebaPila {
         pila.apilar("Uno");
         pila.apilar("Dos");
         pila.apilar("Tres");
-        assert pila.obtenerTope() == "Tres"
+        assert pila.obtenerTope().equals("Tres")
              : "Tope de pila debe ser \"Tres\"";
     }
 
@@ -61,7 +61,7 @@ public class PruebaPila {
         pila.apilar("Dos");
         pila.apilar("Tres");
         assert pila.desapilar() : "Debe desapilar \"Tres\"";
-        assert pila.obtenerTope() == "Dos"
+        assert pila.obtenerTope().equals("Dos")
              : "Tope de pila debe ser \"Dos\"";
     }
 
@@ -95,15 +95,15 @@ public class PruebaPila {
         pila.apilar("Dos");
         pila.apilar("Tres");
         Pila<String> clon = pila.clonar();
-        assert pila.obtenerTope() == clon.obtenerTope()
+        assert pila.obtenerTope().equals(clon.obtenerTope())
              : "Tope de pila debe ser igual al de su clon (\"Tres\")";
         pila.desapilar();
         clon.desapilar();
-        assert pila.obtenerTope() == clon.obtenerTope()
+        assert pila.obtenerTope().equals(clon.obtenerTope())
              : "Tope de pila debe ser igual al de su clon (\"Dos\")";
         pila.desapilar();
         clon.desapilar();
-        assert pila.obtenerTope() == clon.obtenerTope()
+        assert pila.obtenerTope().equals(clon.obtenerTope())
              : "Tope de pila debe ser igual al de su clon (\"Uno\")";
         pila.desapilar();
         clon.desapilar();
