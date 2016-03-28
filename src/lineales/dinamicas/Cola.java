@@ -2,7 +2,7 @@ package lineales.dinamicas;
 
 /**
  * Implementación de Cola dinámica.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class Cola<T> {
@@ -28,7 +28,7 @@ public class Cola<T> {
     /**
      * Pone el elemento al final de la cola. Devuelve verdadero si el elemento
      * se pudo agregar en la estructura y falso en caso contrario.
-     * 
+     *
      * @param nuevoElemento
      * @return
      */
@@ -50,7 +50,7 @@ public class Cola<T> {
      * Saca el elemento que está en el frente de la cola. Devuelve verdadero si
      * el elemento se pudo sacar (la estructura no estaba vacía) y falso en caso
      * contrario.
-     * 
+     *
      * @return
      */
     public boolean sacar() {
@@ -58,11 +58,11 @@ public class Cola<T> {
 
         if (frente != null) {
             frente = frente.getEnlace();
-            
+
             if (frente == null) {
                 ultimo = null;
             }
-            
+
             resultado = true;
         }
 
@@ -72,7 +72,7 @@ public class Cola<T> {
     /**
      * Devuelve el elemento que está en el frente. Precondición: la cola no
      * está vacía.
-     * 
+     *
      * @return
      */
     public T obtenerFrente() {
@@ -82,7 +82,7 @@ public class Cola<T> {
     /**
      * Devuelve verdadero si la cola no tiene elementos y falso en caso
      * contrario.
-     * 
+     *
      * @return
      */
     public boolean esVacia() {
@@ -99,7 +99,7 @@ public class Cola<T> {
 
     /**
      * Devuelve una copia de la cola original.
-     * 
+     *
      * @return
      */
     public Cola<T> clonar() {
@@ -107,7 +107,7 @@ public class Cola<T> {
 
         if (frente != null) {
             Nodo<T> nodo = frente;
-            
+
             while (nodo != null) {
                 clon.poner(nodo.getElemento());
                 nodo = nodo.getEnlace();
@@ -122,18 +122,17 @@ public class Cola<T> {
      * de la cola para poder mostrarla por pantalla. Es recomendable utilizar
      * este método únicamente en la etapa de prueba y luego comentar el código.
      */
+    @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
 
         if (frente != null) {
             Nodo<T> nodo = frente;
-            
             while (nodo != null) {
-                cadena.append(((Object)nodo.getElemento()).toString());
+                cadena.append(String.valueOf(nodo.getElemento()));
                 nodo = nodo.getEnlace();
-                
                 if (nodo != null) {
-                    cadena.append(' ');
+                    cadena.append(", ");
                 }
             }
         }
