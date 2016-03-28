@@ -17,6 +17,8 @@ public class PruebaTodo {
         	exito();
         	prueba = new pruebas.lineales.dinamicas.PruebaPila();
         	exito();
+        	prueba = new pruebas.lineales.estaticas.PruebaCola();
+            exito();
         	prueba = new pruebas.lineales.dinamicas.PruebaCola();
         	exito();
         	prueba = new PruebaLista();
