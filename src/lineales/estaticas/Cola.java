@@ -46,6 +46,12 @@ public class Cola<T> {
     public boolean poner(T nuevoElemento) {
         boolean exito = false;
 
+        if (frente == ultimo || ((ultimo + 1) % cola.length) != frente) {
+            cola[ultimo] = nuevoElemento;
+            ultimo = (ultimo + 1) % cola.length;
+            exito = true;
+        }
+
         return exito;
     }
 
@@ -59,6 +65,12 @@ public class Cola<T> {
     public boolean sacar() {
         boolean exito = false;
 
+        if (frente != ultimo) {
+            cola[frente] = null;
+            frente = (frente + 1) % cola.length;
+            exito = true;
+        }
+
         return exito;
     }
 
@@ -68,8 +80,9 @@ public class Cola<T> {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public T obtenerFrente() {
-        return null;
+        return (T)cola[frente];
     }
 
     /**
@@ -79,14 +92,16 @@ public class Cola<T> {
      * @return
      */
     public boolean esVacia() {
-        return false;
+        return frente == ultimo;
     }
 
     /**
      * Saca todos los elementos de la estructura.
      */
     public void vaciar() {
-
+        cola = new Object[TAM];
+        frente = 0;
+        ultimo = 0;
     }
 
     /**
@@ -94,8 +109,14 @@ public class Cola<T> {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Cola<T> clonar() {
         Cola<T> clon = new Cola<T>();
+        int indice;
+
+        for (indice = frente; (indice % cola.length) != ultimo; indice++) {
+            clon.poner((T)cola[indice]);
+        }
 
         return clon;
     }
@@ -107,6 +128,18 @@ public class Cola<T> {
      */
     @Override
     public String toString() {
-        return "";
+        StringBuilder cadena = new StringBuilder("[");
+        int indice;
+
+        for (indice = frente; (indice % cola.length) != ultimo; indice++) {
+            cadena.append(String.valueOf(cola[indice]));
+            if (((indice + 1) % cola.length) != ultimo) {
+                cadena.append(", ");
+            }
+        }
+
+        cadena.append("]");
+
+        return cadena.toString();
     }
 }
