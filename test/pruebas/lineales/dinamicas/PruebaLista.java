@@ -3,70 +3,89 @@ package pruebas.lineales.dinamicas;
 import lineales.dinamicas.Lista;
 
 /**
- * Prueba implementación de Lista.
+ * Prueba implementación de Lista (de enteros).
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaLista {
 
+    protected Lista<Integer> lista;
+
     public PruebaLista() {
+        preparar();
         pruebaInsertar();
+        preparar();
         pruebaRecuperar();
+        preparar();
         pruebaEliminar();
+        preparar();
         pruebaLocalizar();
+        preparar();
         pruebaLongitud();
+        preparar();
         pruebaEsVacia();
+        preparar();
         pruebaVaciar();
+        preparar();
         pruebaClonar();
+        preparar();
         pruebaToString();
     }
 
+    protected void preparar() {
+        lista = new Lista<Integer>();
+    }
+
+    /**
+     * Prueba lineales.dinamicas.Lista.insertar().
+     */
     protected void pruebaInsertar() {
-        Lista<Character> lista = new Lista<Character>();
-        assert lista.insertar('a', 1) : "Debe insertar 'a' en la posición 1";
-        assert lista.insertar('b', 0) == false
-             : "No debe insertar 'b' en la posición 0 (inválida: < 1)";
-        assert lista.insertar('c', 3) == false
-             : "No debe insertar 'c' en la posición 3 "
-             + "(inválida: > longitud de lista + 1)";
+        assert lista.insertar(1, 1) : "Debe insertar 1@1";
+        assert !lista.insertar(2, 0)
+             : "No debe insertar 2@0 (pos. inválida: < 1)";
+        assert !lista.insertar(3, 3)
+             : "No debe insertar 3@3 (pos. inválida: > longitud de lista + 1)";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.recuperar().
+     */
     protected void pruebaRecuperar() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
-        assert lista.recuperar(3) == 'c'
-             : "Debe recuperar elemento de la posición 3 ('c')";
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        assert lista.recuperar(3) == 3 : "Debe recuperar 3@3";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.eliminar().
+     */
     protected void pruebaEliminar() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
-        assert lista.eliminar(3)
-             : "Debe eliminar elemento en la posición 3 ('c')";
-        assert lista.recuperar(3) == null
-             : "No debe recuperar elemento eliminado ('c')";
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        assert lista.eliminar(3) : "Debe eliminar 3@3";
+        assert lista.recuperar(3) == null : "No debe recuperar 3@3 (eliminado)";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.localizar().
+     */
     protected void pruebaLocalizar() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
-        assert lista.localizar('b') == 2
-             : "Debe localizar 'b' en la posición 2";
-        assert lista.localizar('d') == -1
-             : "No debe localizar 'd' (elemento inexistente)";
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        assert lista.localizar(2) == 2 : "Debe localizar 2@2";
+        assert lista.localizar(4) == -1 : "No debe localizar 4 (inexistente)";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.longitud().
+     */
     protected void pruebaLongitud() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
         assert lista.longitud() == 3 : "Longitud de lista debe ser 3";
         lista.eliminar(3);
         assert lista.longitud() == 2 : "Longitud de lista debe ser 2";
@@ -75,44 +94,63 @@ public class PruebaLista {
         assert lista.longitud() == 0 : "Longitud de lista debe ser 0";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.esVacia().
+     */
     protected void pruebaEsVacia() {
-        Lista<Character> lista = new Lista<Character>();
         assert lista.esVacia() : "Lista debe ser vacía";
-        lista.insertar('a', 1);
-        assert lista.esVacia() == false : "Lista no debe ser vacía";
+        lista.insertar(1, 1);
+        assert !lista.esVacia() : "Lista no debe ser vacía";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.vaciar().
+     */
     protected void pruebaVaciar() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
         lista.vaciar();
-        assert lista.esVacia() : "Lista debe ser vacía";
+        assert !lista.eliminar(1) : "No debe eliminar de lista vacía";
+        assert lista.localizar(2) == -1 : "No debe localizar 2 (lista vacía)";
+        assert lista.recuperar(3) == null : "No debe recuperar 3 (lista vacía)";
         assert lista.longitud() == 0 : "Longitud de lista debe ser 0";
+        assert lista.esVacia() : "Lista debe ser vacía";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.clonar().
+     */
     protected void pruebaClonar() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
-        Lista<Character> clon = lista.clonar();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        Lista<Integer> clon = lista.clonar();
         assert lista.recuperar(1) == clon.recuperar(1)
-             : "Lista debe ser igual a su clon";
+             : "Elemento @1 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
         assert lista.recuperar(2) == clon.recuperar(2)
-             : "Lista debe ser igual a su clon";
+             : "Elemento @2 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
         assert lista.recuperar(3) == clon.recuperar(3)
-             : "Lista debe ser igual a su clon";
+             : "Elemento @3 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
+        assert lista.esVacia() && clon.esVacia()
+             : "Lista y su clon deben ser vacías";
     }
 
+    /**
+     * Prueba lineales.dinamicas.Lista.toString().
+     */
     protected void pruebaToString() {
-        Lista<Character> lista = new Lista<Character>();
-        lista.insertar('a', 1);
-        lista.insertar('b', 2);
-        lista.insertar('c', 3);
-        assert lista.toString().equals("[a b c]")
-             : "Lista con elementos 'a', 'b', 'c' debe ser representada como "
-             + "[a b c] en forma de cadena";
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        assert lista.toString().equals("[1, 2, 3]")
+             : "Lista con elementos 1, 2, 3 debe ser representada como "
+             + "[1, 2, 3] en forma de cadena";
     }
 }

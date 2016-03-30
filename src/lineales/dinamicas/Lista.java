@@ -2,7 +2,7 @@ package lineales.dinamicas;
 
 /**
  * Implementación de Lista dinámica.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class Lista<T> {
@@ -30,42 +30,42 @@ public class Lista<T> {
      * inserción exitosa, la posición recibida debe ser: 1 ≤ posicion ≤
      * longitud(lista) + 1 Devuelve verdadero si se puede insertar correctamente
      * y falso en caso contrario.
-     * 
+     *
      * @param elemento
      * @param posicion
      * @return
      */
     public boolean insertar(T elemento, int posicion) {
-        boolean resultado = false;
+        boolean exito = false;
 
         if (1 <= posicion && posicion <= (longitud + 1)) {
             if (longitud == 0) {
                 cabecera = new Nodo<T>(elemento);
             } else if (longitud >= 1) {
-                Nodo<T> nodoNuevo = new Nodo<T>(elemento);
+                Nodo<T> nuevo = new Nodo<T>(elemento);
 
                 if (posicion == 1) {
-                    nodoNuevo.setEnlace(cabecera);
-                    cabecera = nodoNuevo;
+                    nuevo.setEnlace(cabecera);
+                    cabecera = nuevo;
                 } else {
                     int puntero = 1;
-                    Nodo<T> nodoPrevio = cabecera;
+                    Nodo<T> previo = cabecera;
 
                     while (puntero < (posicion - 1)) {
-                        nodoPrevio = nodoPrevio.getEnlace();
+                        previo = previo.getEnlace();
                         puntero++;
                     }
 
-                    nodoNuevo.setEnlace(nodoPrevio.getEnlace());
-                    nodoPrevio.setEnlace(nodoNuevo);
+                    nuevo.setEnlace(previo.getEnlace());
+                    previo.setEnlace(nuevo);
                 }
             }
 
             longitud++;
-            resultado = true;
+            exito = true;
         }
 
-        return resultado;
+        return exito;
     }
 
     /**
@@ -74,12 +74,12 @@ public class Lista<T> {
      * lista no debe estar vacía y la posición recibida debe ser: 1 ≤ posicion ≤
      * longitud(lista) Devuelve verdadero si se puede eliminar correctamente y
      * falso en caso contrario.
-     * 
+     *
      * @param posicion
      * @return
      */
     public boolean eliminar(int posicion) {
-        boolean resultado = false;
+        boolean exito = false;
 
         if (1 <= posicion && posicion <= longitud) {
             if (posicion == 1) {
@@ -88,7 +88,7 @@ public class Lista<T> {
                 int puntero = 1;
                 Nodo<T> nodo = cabecera;
 
-                while (puntero < (posicion - 1)) {
+                while (puntero != (posicion - 1)) {
                     nodo = nodo.getEnlace();
                     puntero++;
                 }
@@ -97,16 +97,16 @@ public class Lista<T> {
             }
 
             longitud--;
-            resultado = true;
+            exito = true;
         }
 
-        return resultado;
+        return exito;
     }
 
     /**
      * Devuelve el elemento de la posición dada. La precondición es que la
      * posición sea válida.
-     * 
+     *
      * @param posicion
      * @return
      */
@@ -117,7 +117,7 @@ public class Lista<T> {
             int puntero = 1;
             Nodo<T> nodo = cabecera;
 
-            while (puntero < posicion) {
+            while (puntero != posicion) {
                 nodo = nodo.getEnlace();
                 puntero++;
             }
@@ -131,43 +131,47 @@ public class Lista<T> {
     /**
      * Devuelve la posición en la que se encuentra la primera ocurrencia del
      * elemento dado dentro de la lista. En caso de no encontrarlo devuelve -1.
-     * 
+     *
      * @param elemento
      * @return
      */
     public int localizar(T elemento) {
         int posicion = -1;
+        int puntero = 1;
+        Nodo<T> nodo = cabecera;
+        T actual = null;
 
-        if (cabecera != null) {
-            int puntero = 1;
-            Nodo<T> nodo = cabecera;
-
-            while (nodo != null && posicion < 0) {
-                if (((Object) nodo.getElemento()).equals(elemento)) {
-                    posicion = puntero;
-                } else {
-                    nodo = nodo.getEnlace();
-                    puntero++;
-                }
+        // No utilizar "if": "while" verificará si el nodo cabecera es nulo
+        //if (cabecera != null) {
+        while (nodo != null && posicion < 0) {
+            actual = nodo.getElemento();
+            if (actual != null && actual.equals(elemento)) {
+                posicion = puntero;
+            } else {
+                nodo = nodo.getEnlace();
+                puntero++;
             }
         }
+        //}
 
         return posicion;
     }
 
     /**
      * Devuelve la cantidad de elementos de la lista.
-     * 
+     *
      * @return
      */
     public int longitud() {
-        /*
-         * int longitud = 0; Nodo<T> nodo = cabecera;
-         * 
-         * while (nodo != null) { nodo = nodo.getEnlace(); longitud++; }
-         * 
-         * return longitud;
-         */
+        //int longitud = 0;
+        //Nodo<T> nodo = cabecera;
+        //
+        //while (nodo != null) {
+        //    nodo = nodo.getEnlace();
+        //    longitud++;
+        //}
+        //
+        //return longitud;
         return longitud;
     }
 
@@ -183,7 +187,7 @@ public class Lista<T> {
     /**
      * Devuelve verdadero si la lista no tiene elementos y falso en caso
      * contrario.
-     * 
+     *
      * @return
      */
     public boolean esVacia() {
@@ -192,21 +196,21 @@ public class Lista<T> {
 
     /**
      * Crea una copia exacta de la lista original.
-     * 
+     *
      * @return
      */
     public Lista<T> clonar() {
+        int posicion = 1;
         Lista<T> clon = new Lista<T>();
+        Nodo<T> nodo = cabecera;
 
-        if (cabecera != null) {
-            int posicion = 1;
-            Nodo<T> nodo = cabecera;
-
-            while (nodo != null) {
-                clon.insertar(nodo.getElemento(), posicion++);
-                nodo = nodo.getEnlace();
-            }
+        // No utilizar "if": "while" verificará si el nodo cabecera es nulo
+        //if (cabecera != null) {
+        while (nodo != null) {
+            clon.insertar(nodo.getElemento(), posicion++);
+            nodo = nodo.getEnlace();
         }
+        //}
 
         return clon;
     }
@@ -216,21 +220,21 @@ public class Lista<T> {
      * de la lista para poder mostrarla por pantalla. Es recomendable utilizar
      * este método únicamente en la etapa de prueba y luego comentar el código.
      */
+    @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
+        Nodo<T> nodo = cabecera;
 
-        if (cabecera != null) {
-            Nodo<T> nodo = cabecera;
-
-            while (nodo != null) {
-                cadena.append(((Object) nodo.getElemento()).toString());
-                nodo = nodo.getEnlace();
-
-                if (nodo != null) {
-                    cadena.append(' ');
-                }
+        // No utilizar "if": "while" verificará si el nodo cabecera es nulo
+        //if (cabecera != null) {
+        while (nodo != null) {
+            cadena.append(String.valueOf(nodo.getElemento()));
+            nodo = nodo.getEnlace();
+            if (nodo != null) {
+                cadena.append(", ");
             }
         }
+        //}
 
         cadena.append(']');
 
