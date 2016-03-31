@@ -7,24 +7,34 @@ package pruebas;
  */
 public class Prueba {
 
-	private static Object prueba;
+    private static Object prueba;
 
     public static void main(String[] args) {
         try {
-        	prueba = new pruebas.lineales.estaticas.PruebaPila();
-        	exito();
-        	prueba = new pruebas.lineales.dinamicas.PruebaPila();
-        	exito();
-        	prueba = new pruebas.lineales.estaticas.PruebaCola();
+            try {
+                assert 1 != 1;
+                System.out.println(
+                    "ERROR: las pruebas deben ser ejecutadas con el parámetro "+
+                    "-enableassertions (ó -ea). Leer README.md!"
+                );
+                System.exit(0);
+            } catch (AssertionError e) {
+            }
+            
+            prueba = new pruebas.lineales.estaticas.PruebaPila();
             exito();
-        	prueba = new pruebas.lineales.dinamicas.PruebaCola();
-        	exito();
-        	prueba = new pruebas.lineales.dinamicas.PruebaLista();
-        	exito();
-        	System.out.println();
+            prueba = new pruebas.lineales.dinamicas.PruebaPila();
+            exito();
+            prueba = new pruebas.lineales.estaticas.PruebaCola();
+                exito();
+            prueba = new pruebas.lineales.dinamicas.PruebaCola();
+            exito();
+            prueba = new pruebas.lineales.dinamicas.PruebaLista();
+            exito();
+            System.out.println();
             System.out.println("¡ÉXITO de prueba!");
         } catch (AssertionError e) {
-        	System.out.println("¡ERROR de prueba!");
+            System.out.println("¡ERROR de prueba!");
             System.out.println();
             error(e);
         }
@@ -34,14 +44,14 @@ public class Prueba {
      * Muestra mensaje de éxito de la prueba actual.
      */
     private static void exito() {
-    	System.out.println(prueba.getClass().getName() + " OK");
+        System.out.println(prueba.getClass().getName() + " OK");
     }
 
     /**
      * Muestra mensaje de error de la prueba actual.
      */
     private static void error(AssertionError error) {
-    	StackTraceElement origen = error.getStackTrace()[0];
+        StackTraceElement origen = error.getStackTrace()[0];
         System.out.println(error.getMessage());
         System.out.print("    en " + origen.getClassName());
         System.out.print("." + origen.getMethodName() + "()");
