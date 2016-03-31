@@ -12,7 +12,7 @@ public class Prueba {
     public static void main(String[] args) {
         try {
             try {
-                assert 1 != 1;
+                assert false;
                 System.out.println(
                     "ERROR: las pruebas deben ser ejecutadas con el parámetro "+
                     "-enableassertions (ó -ea). Leer README.md!"
@@ -20,17 +20,19 @@ public class Prueba {
                 System.exit(0);
             } catch (AssertionError e) {
             }
-            
+
+            // Inicio de pruebas
             prueba = new pruebas.lineales.estaticas.PruebaPila();
             exito();
             prueba = new pruebas.lineales.dinamicas.PruebaPila();
             exito();
             prueba = new pruebas.lineales.estaticas.PruebaCola();
-                exito();
+            exito();
             prueba = new pruebas.lineales.dinamicas.PruebaCola();
             exito();
             prueba = new pruebas.lineales.dinamicas.PruebaLista();
             exito();
+            // Fin de pruebas
             System.out.println();
             System.out.println("¡ÉXITO de prueba!");
         } catch (AssertionError e) {
