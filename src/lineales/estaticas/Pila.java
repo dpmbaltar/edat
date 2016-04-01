@@ -4,6 +4,7 @@ package lineales.estaticas;
  * Implementación de Pila estática.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <T>
  */
 public class Pila<T> {
 

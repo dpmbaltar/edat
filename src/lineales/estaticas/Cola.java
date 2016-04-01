@@ -4,6 +4,7 @@ package lineales.estaticas;
  * Implementación de Cola estática.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <T>
  */
 public class Cola<T> {
 

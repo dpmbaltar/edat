@@ -4,6 +4,7 @@ package lineales.dinamicas;
  * Implementación de Pila dinámica.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <T>
  */
 public class Pila<T> {
 

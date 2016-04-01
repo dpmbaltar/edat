@@ -4,6 +4,7 @@ package lineales.dinamicas;
  * Implementación de Lista dinámica.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @param <T>
  */
 public class Lista<T> {
 
