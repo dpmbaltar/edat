@@ -102,7 +102,7 @@ public class ArbolBinario<T> {
      * @param nodo
      * @return
      */
-    protected Nodo<T> obtenerNodo(T elemento, Nodo<T> nodo) {
+    private Nodo<T> obtenerNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
 
         if (nodo != null) {
@@ -125,7 +125,7 @@ public class ArbolBinario<T> {
      * @param elemento
      * @return
      */
-    protected Nodo<T> obtenerNodo(T elemento) {
+    private Nodo<T> obtenerNodo(T elemento) {
         return obtenerNodo(elemento, raiz);
     }
 
