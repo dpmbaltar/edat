@@ -5,7 +5,7 @@ import lineales.dinamicas.Lista;
 
 /**
  * Implementación dinámica de Árbol Binaro.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
  */
@@ -35,45 +35,37 @@ public class ArbolBinario<T> {
     /**
      * Inserta el elemento dado como raíz del árbol, o como hijo
      * izquierdo/derecho del padre especificado, si éste existe en el árbol.
-     * 
+     *
      * @param elemento
      * @param padre
      * @param posicion
      * @return
      */
     public boolean insertar(T elemento, T padre, Posicion posicion) {
-        boolean resultado = false;
+        boolean exito = false;
 
-        switch (posicion) {
-            case RAIZ:
-                if (raiz == null) {
-                    raiz = new Nodo<T>(elemento);
-                    resultado = true;
+        if (raiz == null && posicion == Posicion.RAIZ) {
+            raiz = new Nodo<T>(elemento);
+            exito = true;
+        } else {
+            Nodo<T> nodoPadre = obtenerNodo(padre);
+            if (nodoPadre != null) {
+                if (posicion == Posicion.IZQUIERDO) {
+                    nodoPadre.setIzquierdo(new Nodo<T>(elemento, nodoPadre));
+                } else if (posicion == Posicion.DERECHO) {
+                    nodoPadre.setDerecho(new Nodo<T>(elemento, nodoPadre));
                 }
-                break;
-            default:
-                Nodo<T> nodoPadre = buscarNodo(padre);
-                if (nodoPadre != null) {
-                    Nodo<T> nodoNuevo = new Nodo<T>(elemento, nodoPadre);
-                    resultado = true;
 
-                    switch (posicion) {
-                        case IZQUIERDO:
-                            nodoPadre.setIzquierdo(nodoNuevo);
-                        break;
-                        case DERECHO:
-                            nodoPadre.setDerecho(nodoNuevo);
-                            break;
-                    }
-                }
+                exito = true;
+            }
         }
 
-        return resultado;
+        return exito;
     }
 
     /**
      * Inserta el elemento dado como raíz del árbol.
-     * 
+     *
      * @param elemento
      * @return
      */
@@ -83,7 +75,7 @@ public class ArbolBinario<T> {
 
     /**
      * Inserta el elemento dado como hijo izquierdo del padre especificado.
-     * 
+     *
      * @param elemento
      * @param padre
      * @return
@@ -94,7 +86,7 @@ public class ArbolBinario<T> {
 
     /**
      * Inserta el elemento dado como hijo derecho del padre especificado.
-     * 
+     *
      * @param elemento
      * @param padre
      * @return
@@ -104,32 +96,22 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Busca el nodo del elemento dado a partir del nodo raíz.
-     * 
-     * @param elemento
-     * @return
-     */
-    protected Nodo<T> buscarNodo(T elemento) {
-        return buscarNodo(elemento, raiz);
-    }
-
-    /**
      * Busca el nodo del elemento dado a partir de un nodo en particular.
-     * 
+     *
      * @param elemento
      * @param nodo
      * @return
      */
-    protected Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
+    protected Nodo<T> obtenerNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
 
         if (nodo != null) {
-            if (((Object) nodo.getElemento()).equals(elemento)) {
+            if (nodo.getElemento().equals(elemento)) {
                 buscado = nodo;
             } else {
-                buscado = buscarNodo(elemento, nodo.getIzquierdo());
+                buscado = obtenerNodo(elemento, nodo.getIzquierdo());
                 if (buscado == null) {
-                    buscado = buscarNodo(elemento, nodo.getDerecho());
+                    buscado = obtenerNodo(elemento, nodo.getDerecho());
                 }
             }
         }
@@ -138,9 +120,19 @@ public class ArbolBinario<T> {
     }
 
     /**
+     * Busca el nodo del elemento dado a partir del nodo raíz.
+     *
+     * @param elemento
+     * @return
+     */
+    protected Nodo<T> obtenerNodo(T elemento) {
+        return obtenerNodo(elemento, raiz);
+    }
+
+    /**
      * Devuelve verdadero si el árbol no tiene elementos, de lo contrario
      * devuelve falso.
-     * 
+     *
      * @return
      */
     public boolean esVacio() {
@@ -156,20 +148,20 @@ public class ArbolBinario<T> {
 
     /**
      * Devuelve la altura del árbol.
-     * 
+     *
      * @return
      */
     public int altura() {
-        return alturaNodo(raiz);
+        return altura(raiz);
     }
 
     /**
      * Calcula la altura del sub-árbol correspondiente a un nodo en particular.
-     * 
+     *
      * @param nodo
      * @return
      */
-    protected int alturaNodo(Nodo<T> nodo) {
+    private int altura(Nodo<T> nodo) {
         int altura = 0,
             maxima = 0;
 
@@ -178,12 +170,14 @@ public class ArbolBinario<T> {
                     hijoDerecho = nodo.getDerecho();
 
             if (hijoIzquierdo != null) {
-                altura = 1 + alturaNodo(hijoIzquierdo);
-                maxima = altura;
+                altura = 1 + altura(hijoIzquierdo);
+                if (altura > maxima) {
+                    maxima = altura;
+                }
             }
 
             if (hijoDerecho != null) {
-                altura = 1 + alturaNodo(hijoDerecho);
+                altura = 1 + altura(hijoDerecho);
                 if (altura > maxima) {
                     maxima = altura;
                 }
@@ -195,18 +189,34 @@ public class ArbolBinario<T> {
 
     /**
      * Devuelve el nivel del elemento dado.
-     * 
+     *
      * @param elemento
      * @return
      */
     public int nivel(T elemento) {
+        return nivel(elemento, raiz, 0);
+    }
+
+    /**
+     * Obtiene el nivel del elemento dado, a partir de un nodo y su nivel.
+     *
+     * @param elemento
+     * @param nodo
+     * @param nivelActual
+     * @return
+     */
+    private int nivel(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
 
-        if (raiz != null) {
-            Nodo<T> nodo = buscarNodo(elemento);
-            while (nodo != null) {
-                nodo = nodo.getPadre();
-                nivel++;
+        if (nodo != null) {
+            if (nodo.getElemento().equals(elemento)) {
+                nivel = nivelActual;
+            } else {
+                nivelActual++;
+                nivel = nivel(elemento, nodo.getIzquierdo(), nivelActual);
+                if (nivel == -1) {
+                    nivel = nivel(elemento, nodo.getDerecho(), nivelActual);
+                }
             }
         }
 
@@ -215,18 +225,34 @@ public class ArbolBinario<T> {
 
     /**
      * Devuelve el elemento padre del elemento dado.
-     * 
+     *
      * @param elemento
      * @return
      */
     public T padre(T elemento) {
+        return padre(elemento, raiz, null);
+    }
+
+    /**
+     * Obtiene el padre del elemento dado, a partir de un nodo y su padre.
+     *
+     * @param elemento
+     * @param nodo
+     * @param padreActual
+     * @return
+     */
+    private T padre(T elemento, Nodo<T> nodo, T padreActual) {
         T padre = null;
 
-        if (raiz != null) {
-            Nodo<T> nodo = buscarNodo(elemento);
-            if (nodo != null) {
-                Nodo<T> nodoPadre = nodo.getPadre();
-                padre = nodoPadre == null ? null : nodoPadre.getElemento();
+        if (nodo != null) {
+            if (nodo.getElemento().equals(elemento)) {
+                padre = padreActual;
+            } else {
+                padreActual = nodo.getElemento();
+                padre = padre(elemento, nodo.getIzquierdo(), padreActual);
+                if (padre == null) {
+                    padre = padre(elemento, nodo.getDerecho(), padreActual);
+                }
             }
         }
 
@@ -235,7 +261,7 @@ public class ArbolBinario<T> {
 
     /**
      * Devuelve una lista en preorden con los elementos del árbol.
-     * 
+     *
      * @return
      */
     public Lista<T> listarPreorden() {
@@ -244,20 +270,23 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    protected void preorden(Nodo<T> nodo, Lista<T> lista) {
+    /**
+     * Inserta los elementos en preorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo
+     * @param lista
+     */
+    private void preorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
-                    hijoDerecho = nodo.getDerecho();
-
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
-            preorden(hijoIzquierdo, lista);
-            preorden(hijoDerecho, lista);
+            preorden(nodo.getIzquierdo(), lista);
+            preorden(nodo.getDerecho(), lista);
         }
     }
 
     /**
      * Devuelve una lista en inorden con los elementos del árbol.
-     * 
+     *
      * @return
      */
     public Lista<T> listarInorden() {
@@ -266,20 +295,23 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    protected void inorden(Nodo<T> nodo, Lista<T> lista) {
+    /**
+     * Inserta los elementos en inorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo
+     * @param lista
+     */
+    private void inorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
-                    hijoDerecho = nodo.getDerecho();
-
-            inorden(hijoIzquierdo, lista);
+            inorden(nodo.getIzquierdo(), lista);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
-            inorden(hijoDerecho, lista);
+            inorden(nodo.getDerecho(), lista);
         }
     }
 
     /**
      * Devuelve una lista en posorden con los elementos del árbol.
-     * 
+     *
      * @return
      */
     public Lista<T> listarPosorden() {
@@ -288,20 +320,23 @@ public class ArbolBinario<T> {
         return lista;
     }
 
-    protected void posorden(Nodo<T> nodo, Lista<T> lista) {
+    /**
+     * Inserta los elementos en posorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo
+     * @param lista
+     */
+    private void posorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
-                    hijoDerecho = nodo.getDerecho();
-
-            posorden(hijoIzquierdo, lista);
-            posorden(hijoDerecho, lista);
+            posorden(nodo.getIzquierdo(), lista);
+            posorden(nodo.getDerecho(), lista);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
         }
     }
 
     /**
      * Devuelve una lista por niveles con los elementos del árbol.
-     * 
+     *
      * @return
      */
     public Lista<T> listarNiveles() {
@@ -334,7 +369,7 @@ public class ArbolBinario<T> {
 
     /**
      * Devuelve una copia exacta del árbol.
-     * 
+     *
      * @return
      */
     public ArbolBinario<T> clonar() {
@@ -343,7 +378,7 @@ public class ArbolBinario<T> {
         return clon;
     }
 
-    protected void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
+    private void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -370,6 +405,7 @@ public class ArbolBinario<T> {
      * Devuelve la representación del árbol en forma de cadena.
      * Por defecto, éste método equivale a llamar listarNiveles.toString().
      */
+    @Override
     public String toString() {
         return listarNiveles().toString();
     }
@@ -377,7 +413,7 @@ public class ArbolBinario<T> {
     /**
      * Suma todas las ramas a partir de un nodo dado, en forma recursiva.
      * Método implementado en el 1er parcial.
-     * 
+     *
      * @param nodo
      * @param suma
      * @return
@@ -409,7 +445,7 @@ public class ArbolBinario<T> {
     /**
      * Suma todas las ramas.
      * Método implementado en el 1er parcial.
-     * 
+     *
      * @return
      */
     public int sumarRamas() {
