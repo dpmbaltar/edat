@@ -4,7 +4,7 @@ import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
 /**
- * Implementación dinámica de Árbol Binaro.
+ * Implementación de Árbol Binaro.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
@@ -26,7 +26,7 @@ public class ArbolBinario<T> {
     private Nodo<T> raiz;
 
     /**
-     * Crea y devuelve un árbol binario vacío.
+     * Constructor de árbol binario vacío.
      */
     public ArbolBinario() {
         raiz = null;
@@ -96,7 +96,17 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Busca el nodo del elemento dado a partir de un nodo en particular.
+     * Obtiene el nodo del elemento dado a partir del nodo raíz.
+     *
+     * @param elemento
+     * @return
+     */
+    private Nodo<T> obtenerNodo(T elemento) {
+        return obtenerNodo(elemento, raiz);
+    }
+
+    /**
+     * Obtiene el nodo del elemento dado a partir de un nodo en particular.
      *
      * @param elemento
      * @param nodo
@@ -117,16 +127,6 @@ public class ArbolBinario<T> {
         }
 
         return buscado;
-    }
-
-    /**
-     * Busca el nodo del elemento dado a partir del nodo raíz.
-     *
-     * @param elemento
-     * @return
-     */
-    private Nodo<T> obtenerNodo(T elemento) {
-        return obtenerNodo(elemento, raiz);
     }
 
     /**
@@ -156,7 +156,7 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Calcula la altura del sub-árbol correspondiente a un nodo en particular.
+     * Obtiene la altura del árbol correspondiente a un nodo en particular.
      *
      * @param nodo
      * @return
@@ -378,6 +378,12 @@ public class ArbolBinario<T> {
         return clon;
     }
 
+    /**
+     * Inserta los elementos en el árbol dado, a partir de un nodo.
+     *
+     * @param nodo
+     * @param arbol
+     */
     private void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
@@ -412,31 +418,50 @@ public class ArbolBinario<T> {
 
     /**
      * Suma todas las ramas a partir de un nodo dado, en forma recursiva.
-     * Método implementado en el 1er parcial.
+     * Método implementado en el 1er parcial (mal implementado; corregido).
+     *
+     * Corrección: no era necesario utilizar el parámetro auxiliar int suma, ya
+     * que al hacerlo se esta sumando de más. El método sólo debe recorrer el
+     * árbol recursivamente e ir sumando el valor de cada nodo con el valor de
+     * los nodos hijos, si es que existen.
+     * En caso de que sólo se quiera sumar los elementos de los nodos interiores
+     * (aquellos con al menos un hijo) se debe agregar la condición de que
+     * exista al menos un hijo para sumar el valor del nodo. Por ejemplo:
+     *
+     * Nodo<T> izquierdo, derecho;
+     * izquierdo = nodo.getIzquierdo();
+     * derecho = nodo.getDerecho();
+     * if (izquierdo != null || derecho != null) {
+     *     resultado += (Integer)nodo.getElemento();
+     *     resultado += sumarRamas(izquierdo);
+     *     resultado += sumarRamas(derecho);
+     * }
      *
      * @param nodo
-     * @param suma
      * @return
      */
-    private int sumarRamas(Nodo<T> nodo, int suma) {
+    private int sumarRamas(Nodo<T> nodo) {//, int suma) {
         int resultado = 0;
-        Nodo<T> izquierdo, derecho;
+//        Nodo<T> izquierdo, derecho;
 
         if (nodo != null) {
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-            suma += (Integer) nodo.getElemento();
-
-            if (izquierdo == null && derecho == null) {
-                resultado = suma;
-            } else {
-                if (izquierdo != null) {
-                    resultado += sumarRamas(izquierdo, suma);
-                }
-                if (derecho != null) {
-                    resultado += sumarRamas(derecho, suma);
-                }
-            }
+//            izquierdo = nodo.getIzquierdo();
+//            derecho = nodo.getDerecho();
+//            suma += (Integer)nodo.getElemento();
+//
+//            if (izquierdo == null && derecho == null) {
+//                resultado = suma;
+//            } else {
+//                if (izquierdo != null) {
+//                    resultado += sumarRamas(izquierdo, suma);
+//                }
+//                if (derecho != null) {
+//                    resultado += sumarRamas(derecho, suma);
+//                }
+//            }
+            resultado += (Integer)nodo.getElemento();
+            resultado += sumarRamas(nodo.getIzquierdo());
+            resultado += sumarRamas(nodo.getDerecho());
         }
 
         return resultado;
@@ -449,6 +474,6 @@ public class ArbolBinario<T> {
      * @return
      */
     public int sumarRamas() {
-        return sumarRamas(raiz, 0);
+        return sumarRamas(raiz);
     }
 }

@@ -34,6 +34,8 @@ public class PruebaArbolBinario {
         pruebaListarNiveles();
         preparar();
         pruebaClonar();
+        preparar();
+        pruebaSumarRamas();
     }
 
     protected void preparar() {
@@ -155,6 +157,14 @@ public class PruebaArbolBinario {
         ab = crearArbolBinarioCompleto();
         assert ab.toString().equals(ab.clonar().toString())
              : "Árbol debe ser igual a su clon";
+    }
+
+    /**
+     * Prueba jerarquicas.ArbolBinario.sumarRamas().
+     */
+    protected void pruebaSumarRamas() {
+        ab = crearArbolBinarioCompleto();
+        assert ab.sumarRamas() == 120 : "Suma de ramas debe ser igual a 120";
     }
 
     /**
