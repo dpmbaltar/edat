@@ -32,6 +32,8 @@ public class Prueba {
             exito();
             prueba = new pruebas.lineales.dinamicas.PruebaLista();
             exito();
+            prueba = new pruebas.jerarquicas.PruebaArbolBinario();
+            exito();
             // Fin de pruebas
             System.out.println();
             System.out.println("¡ÉXITO de prueba!");
