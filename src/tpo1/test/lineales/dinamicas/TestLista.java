@@ -24,8 +24,9 @@ public class TestLista {
      * @param args
      */
     public static void main(String[] args) {
-        int accion, longitud;
-        String digitos;
+        int accion;
+        boolean r1;
+        ListaInt l1, l2, l3;
 
         // Solicitar acción
         mostrarMenu();
@@ -34,18 +35,28 @@ public class TestLista {
         // Ejecutar acción solicitada
         switch (accion) {
             case ACCION_CONCATENAR:
-
+                l1 = leerLista();
+                System.out.println("L1 = " + l1);
+                l2 = leerLista();
+                System.out.println("L2 = " + l2);
+                l3 = concatenar(l1, l2);
+                System.out.println("concatenar(L2, L2) = " + l3);
                 break;
             case ACCION_INVERTIR:
-
+                l1 = leerLista();
+                System.out.println("L1 = " + l1);
+                l2 = invertir(l1);
+                System.out.println("invertir(L1) = " + l2);
                 break;
             case ACCION_COMPROBAR:
-
-                break;
-            case ACCION_SALIR:
-                System.out.println(">>> Finalizado <<<");
+                l1 = leerLista();
+                System.out.println("L1 = " + l1);
+                r1 = comprobar(l1);
+                //
                 break;
         }
+
+        System.out.println(">>> Finalizado <<<");
     }
 
     /**
@@ -94,7 +105,7 @@ public class TestLista {
 
         while (!validarDigitos(digitos)) {
             System.out.println("Ingrese una cadena que contenga sólo dígitos:");
-            System.out.println(">>> ");
+            System.out.print(">>> ");
             digitos = TecladoIn.readLine().trim();
         }
 
@@ -102,20 +113,30 @@ public class TestLista {
     }
 
     /**
-     * Solicita y lee una longitud válida para generar la cola.
+     * Solicita y lee una lista de enteros.
      *
      * @return
      */
-    public static int leerLongitud() {
-        int longitud = -1;
+    public static ListaInt leerLista() {
+        int i, z;
+        String entrada;
+        String[] enteros;
+        ListaInt lista = new ListaInt();
 
-        while (longitud < 0) {
-            System.out.println("Ingrese una longitud válida:");
-            System.out.println(">>> ");
-            longitud = TecladoIn.readLineInt();
+        while (lista.esVacia()) {
+            System.out.println("Ingrese una lista de enteros separados por espacios:");
+            System.out.print(">>> ");
+            entrada = TecladoIn.readLine().trim();
+            enteros = entrada.split(" ");
+            for (i = 0; i < enteros.length; i++) {
+                if (validarDigitos(enteros[i])) {
+                    z = Integer.parseInt(enteros[i]);
+                    lista.insertar(z, lista.longitud() + 1);
+                }
+            }
         }
 
-        return longitud;
+        return lista;
     }
 
     /**
@@ -128,7 +149,7 @@ public class TestLista {
 
         while (accion < 0 || accion > 3) {
             System.out.println("Ingrese una opción válida:");
-            System.out.println(">>> ");
+            System.out.print(">>> ");
             accion = TecladoIn.readLineInt();
         }
 
@@ -144,23 +165,21 @@ public class TestLista {
         System.out.println("    [2] Invertir");
         System.out.println("    [3] Comprobar");
         System.out.println("    [0] Salir");
-        System.out.println();
-        System.out.println(">>> ");
     }
 
-    public ListaInt concatenar() {
+    public static ListaInt concatenar(ListaInt l1, ListaInt l2) {
         ListaInt concatenado = new ListaInt();
 
         return concatenado;
     }
 
-    public ListaInt invertir() {
+    public static ListaInt invertir(ListaInt l1) {
         ListaInt invertido = new ListaInt();
 
         return invertido;
     }
 
-    public boolean comprobar() {
+    public static boolean comprobar(ListaInt l1) {
         boolean comprobado = false;
 
         return comprobado;
