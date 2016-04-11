@@ -204,44 +204,105 @@ public class TestLista {
         return invertido;
     }
 
-    public static boolean comprobar(ListaInt l1) {
+    public static boolean comprobar(ListaInt lista) {
         boolean comprobado = true;
-        int longitud, posicion, elemento;
+        int paso, posicion, elemento;
+        int[] longitud;
         ColaInt cola;
         PilaInt pila;
 
-        if (!l1.esVacia()) {
+        if (!lista.esVacia()) {
             cola = new ColaInt();
             pila = new PilaInt();
-            longitud = 1;
+            longitud = new int[4];
+            longitud[0] = lista.longitud();
+            paso = 1;
             posicion = 1;
-            elemento = l1.recuperar(posicion);
+            elemento = 0;
+
+            while (posicion <= longitud[0] && comprobado) {
+                elemento = lista.recuperar(posicion);
+
+                if (elemento == 0) {
+                    paso++;
+                }
+
+                switch (paso) {
+                    case 1:
+                        cola.poner(elemento);
+                        pila.apilar(elemento);
+                        longitud[1]++;
+                        break;
+                    case 2:
+                        if (!cola.esVacia()
+                                && elemento == cola.obtenerFrente()) {
+                            cola.sacar();
+                        } else {
+                            comprobado = false;
+                        }
+                        longitud[2]++;
+                        break;
+                    case 3:
+                        if (!pila.esVacia()
+                                && elemento == pila.obtenerTope()) {
+                            pila.desapilar();
+                        } else {
+                            comprobado = false;
+                        }
+                        longitud[3]++;
+                        break;
+                    default:
+                        break;
+                }
+
+                posicion++;
+            }
+        } else {
+            comprobado = false;
+        }
+
+        /*if (!l1.esVacia()) {
+            longitudL1 = l1.longitud();
 
             //Parte 1
-            while (elemento != 0) {
+            cola = new ColaInt();
+            pila = new PilaInt();
+            longitud1 = 0;
+            posicion = 1;
+            elemento = l1.recuperar(posicion);
+            while (elemento != 0 && posicion < longitudL1) {
                 cola.poner(elemento);
                 pila.apilar(elemento);
-                longitud++;
+                longitud1++;
                 posicion++;
                 elemento = l1.recuperar(posicion);
             }
 
-            posicion++;
-            elemento = l1.recuperar(posicion);
-
             //Parte 2
-            while (elemento != 0 && comprobado) {
-                if (elemento == cola.obtenerFrente()) {
-                    cola.sacar();
-                } else {
-                    comprobado = false;
-                }
-                posicion++;
+            longitud2 = 0;
+            posicion++;
+            if (posicion < longitudL1) {
                 elemento = l1.recuperar(posicion);
+                while (elemento != 0 && posicion < longitudL1 && comprobado) {
+                    if (elemento == cola.obtenerFrente()) {
+                        cola.sacar();
+                    } else {
+                        comprobado = false;
+                    }
+                    longitud2++;
+                    posicion++;
+                    elemento = l1.recuperar(posicion);
+                }
+            } else {
+                comprobado = false;
             }
 
             //Parte 3
-            while (elemento != 0 && comprobado) {
+            posicion++;
+            if (longitud1 == longitud2 && posicion < longitudL1 && comprobado) {
+
+            }
+            while (elemento != 0 && posicion <= longitudL1 && comprobado) {
                 if (elemento == pila.obtenerTope()) {
                     pila.desapilar();
                 } else {
@@ -250,7 +311,7 @@ public class TestLista {
             }
         } else {
             comprobado = false;
-        }
+        }*/
 
         return comprobado;
     }
