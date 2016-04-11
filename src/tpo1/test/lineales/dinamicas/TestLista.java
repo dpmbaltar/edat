@@ -52,7 +52,7 @@ public class TestLista {
                 l1 = leerLista();
                 System.out.println("L1 = " + l1);
                 r1 = comprobar(l1);
-                //
+                System.out.println("comprobar(L1) = " + r1);
                 break;
         }
 
@@ -205,99 +205,53 @@ public class TestLista {
     }
 
     public static boolean comprobar(ListaInt l1) {
-        boolean comprobado = false;
+        boolean comprobado = true;
+        int longitud, posicion, elemento;
+        ColaInt cola;
+        PilaInt pila;
+
+        if (!l1.esVacia()) {
+            cola = new ColaInt();
+            pila = new PilaInt();
+            longitud = 1;
+            posicion = 1;
+            elemento = l1.recuperar(posicion);
+
+            //Parte 1
+            while (elemento != 0) {
+                cola.poner(elemento);
+                pila.apilar(elemento);
+                longitud++;
+                posicion++;
+                elemento = l1.recuperar(posicion);
+            }
+
+            posicion++;
+            elemento = l1.recuperar(posicion);
+
+            //Parte 2
+            while (elemento != 0 && comprobado) {
+                if (elemento == cola.obtenerFrente()) {
+                    cola.sacar();
+                } else {
+                    comprobado = false;
+                }
+                posicion++;
+                elemento = l1.recuperar(posicion);
+            }
+
+            //Parte 3
+            while (elemento != 0 && comprobado) {
+                if (elemento == pila.obtenerTope()) {
+                    pila.desapilar();
+                } else {
+                    comprobado = false;
+                }
+            }
+        } else {
+            comprobado = false;
+        }
 
         return comprobado;
     }
-
-    /*public void pruebaInsertar() {
-        assert lista.insertar(1, 1) : "Debe insertar 1@1";
-        assert !lista.insertar(2, 0)
-             : "No debe insertar 2@0 (pos. inválida: < 1)";
-        assert !lista.insertar(3, 3)
-             : "No debe insertar 3@3 (pos. inválida: > longitud de lista + 1)";
-    }
-
-    public void pruebaRecuperar() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        assert lista.recuperar(3) == 3 : "Debe recuperar 3@3";
-    }
-
-    public void pruebaEliminar() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        assert lista.eliminar(3) : "Debe eliminar 3@3";
-        assert lista.recuperar(3) == null : "No debe recuperar 3@3 (eliminado)";
-    }
-
-    public void pruebaLocalizar() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        assert lista.localizar(2) == 2 : "Debe localizar 2@2";
-        assert lista.localizar(4) == -1 : "No debe localizar 4 (inexistente)";
-    }
-
-    public void pruebaLongitud() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        assert lista.longitud() == 3 : "Longitud de lista debe ser 3";
-        lista.eliminar(3);
-        assert lista.longitud() == 2 : "Longitud de lista debe ser 2";
-        lista.eliminar(2);
-        lista.eliminar(1);
-        assert lista.longitud() == 0 : "Longitud de lista debe ser 0";
-    }
-
-    public void pruebaEsVacia() {
-        assert lista.esVacia() : "Lista debe ser vacía";
-        lista.insertar(1, 1);
-        assert !lista.esVacia() : "Lista no debe ser vacía";
-    }
-
-    public void pruebaVaciar() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        lista.vaciar();
-        assert !lista.eliminar(1) : "No debe eliminar de lista vacía";
-        assert lista.localizar(2) == -1 : "No debe localizar 2 (lista vacía)";
-        assert lista.recuperar(3) == null : "No debe recuperar 3 (lista vacía)";
-        assert lista.longitud() == 0 : "Longitud de lista debe ser 0";
-        assert lista.esVacia() : "Lista debe ser vacía";
-    }
-
-    public void pruebaClonar() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        Lista<Integer> clon = lista.clonar();
-        assert lista.recuperar(1) == clon.recuperar(1)
-             : "Elemento @1 de lista debe ser igual al de su clon";
-        lista.eliminar(1);
-        clon.eliminar(1);
-        assert lista.recuperar(2) == clon.recuperar(2)
-             : "Elemento @2 de lista debe ser igual al de su clon";
-        lista.eliminar(1);
-        clon.eliminar(1);
-        assert lista.recuperar(3) == clon.recuperar(3)
-             : "Elemento @3 de lista debe ser igual al de su clon";
-        lista.eliminar(1);
-        clon.eliminar(1);
-        assert lista.esVacia() && clon.esVacia()
-             : "Lista y su clon deben ser vacías";
-    }
-
-    public void pruebaToString() {
-        lista.insertar(1, 1);
-        lista.insertar(2, 2);
-        lista.insertar(3, 3);
-        assert lista.toString().equals("[1, 2, 3]")
-             : "Lista con elementos 1, 2, 3 debe ser representada como "
-             + "[1, 2, 3] en forma de cadena";
-    }*/
 }
