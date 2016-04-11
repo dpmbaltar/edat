@@ -168,13 +168,38 @@ public class TestLista {
     }
 
     public static ListaInt concatenar(ListaInt l1, ListaInt l2) {
-        ListaInt concatenado = new ListaInt();
+        int posicion1 = 1;
+        int posicion2 = l1.longitud() + 1;
+        int longitud = l1.longitud() + l2.longitud();
+        ListaInt concatenado = l1.clonar();
+
+        while (posicion2 <= longitud) {
+            concatenado.insertar(l2.recuperar(posicion1), posicion2);
+            posicion1++;
+            posicion2++;
+        }
 
         return concatenado;
     }
 
     public static ListaInt invertir(ListaInt l1) {
+        int posicion = 1;
+        int longitud = l1.longitud();
         ListaInt invertido = new ListaInt();
+        PilaInt pila = new PilaInt();
+
+        while (posicion <= longitud) {
+            pila.apilar(l1.recuperar(posicion));
+            posicion++;
+        }
+
+        posicion = 1;
+
+        while (!pila.esVacia()) {
+            invertido.insertar(pila.obtenerTope(), posicion);
+            pila.desapilar();
+            posicion++;
+        }
 
         return invertido;
     }
