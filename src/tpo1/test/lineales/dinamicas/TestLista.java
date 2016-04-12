@@ -81,7 +81,7 @@ public class TestLista {
      * @param cadena
      * @return
      */
-    public static boolean validarDigitos(String cadena) {
+    public static boolean validarEntero(String cadena) {
         boolean esValida = false;
         int i, longitudCadena = cadena.length();
         char caracter;
@@ -89,6 +89,9 @@ public class TestLista {
         if (longitudCadena > 0) {
             esValida = true;
             i = 0;
+            if (cadena.charAt(0) == '+' || cadena.charAt(0) == '-') {
+                i = 1;
+            }
             while (i < longitudCadena && esValida) {
                 caracter = cadena.charAt(i);
                 if (!esDigito(caracter)) {
@@ -118,7 +121,7 @@ public class TestLista {
             entrada = TecladoIn.readLine().trim();
             enteros = entrada.split(" ");
             for (i = 0; i < enteros.length; i++) {
-                if (validarDigitos(enteros[i])) {
+                if (validarEntero(enteros[i])) {
                     z = Integer.parseInt(enteros[i]);
                     lista.insertar(z, lista.longitud() + 1);
                 }
