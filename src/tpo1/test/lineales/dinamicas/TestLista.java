@@ -262,16 +262,14 @@ public class TestLista {
                         }
                         longitud[3]++;
                         break;
-                    //Verificar longitudes finales
-                    default:
-                        if (longitud[1] != longitud[2]
-                                || longitud[1] != longitud[3]) {
-                            comprobado = false;
-                        }
-                        break;
                 }
 
                 posicion++;
+            }
+
+            //Verificar longitudes finales
+            if (longitud[1] != longitud[2] || longitud[1] != longitud[3]) {
+                comprobado = false;
             }
         } else {
             comprobado = false;
