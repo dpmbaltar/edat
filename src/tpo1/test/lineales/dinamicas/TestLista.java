@@ -218,21 +218,30 @@ public class TestLista {
             longitud[0] = lista.longitud();
             paso = 1;
             posicion = 1;
-            elemento = 0;
+            elemento = -1;
 
             while (posicion <= longitud[0] && comprobado) {
                 elemento = lista.recuperar(posicion);
 
+                //Saltar al siguiente paso y elemento cuando el elemento es cero
                 if (elemento == 0) {
                     paso++;
+                    posicion++;
+                    elemento = lista.recuperar(posicion);
                 }
 
                 switch (paso) {
+                    //Obtener los elementos hasta el primer cero;
+                    //almacenar la cantidad en longitud[1];
+                    //almacenar elementos en una cola y pila auxiliar para su
+                    //verificación en los pasos siguientes
                     case 1:
                         cola.poner(elemento);
                         pila.apilar(elemento);
                         longitud[1]++;
                         break;
+                    //Comparar los elementos a partir del primer cero con los
+                    //elementos almacenados en la cola auxiliar
                     case 2:
                         if (!cola.esVacia()
                                 && elemento == cola.obtenerFrente()) {
@@ -242,6 +251,8 @@ public class TestLista {
                         }
                         longitud[2]++;
                         break;
+                    //Comparar los elementos a partir del segundo cero con los
+                    //elementos almacenados en la pila auxiliar
                     case 3:
                         if (!pila.esVacia()
                                 && elemento == pila.obtenerTope()) {
@@ -251,7 +262,12 @@ public class TestLista {
                         }
                         longitud[3]++;
                         break;
+                    //Verificar longitudes finales
                     default:
+                        if (longitud[1] != longitud[2]
+                                || longitud[1] != longitud[3]) {
+                            comprobado = false;
+                        }
                         break;
                 }
 
@@ -260,58 +276,6 @@ public class TestLista {
         } else {
             comprobado = false;
         }
-
-        /*if (!l1.esVacia()) {
-            longitudL1 = l1.longitud();
-
-            //Parte 1
-            cola = new ColaInt();
-            pila = new PilaInt();
-            longitud1 = 0;
-            posicion = 1;
-            elemento = l1.recuperar(posicion);
-            while (elemento != 0 && posicion < longitudL1) {
-                cola.poner(elemento);
-                pila.apilar(elemento);
-                longitud1++;
-                posicion++;
-                elemento = l1.recuperar(posicion);
-            }
-
-            //Parte 2
-            longitud2 = 0;
-            posicion++;
-            if (posicion < longitudL1) {
-                elemento = l1.recuperar(posicion);
-                while (elemento != 0 && posicion < longitudL1 && comprobado) {
-                    if (elemento == cola.obtenerFrente()) {
-                        cola.sacar();
-                    } else {
-                        comprobado = false;
-                    }
-                    longitud2++;
-                    posicion++;
-                    elemento = l1.recuperar(posicion);
-                }
-            } else {
-                comprobado = false;
-            }
-
-            //Parte 3
-            posicion++;
-            if (longitud1 == longitud2 && posicion < longitudL1 && comprobado) {
-
-            }
-            while (elemento != 0 && posicion <= longitudL1 && comprobado) {
-                if (elemento == pila.obtenerTope()) {
-                    pila.desapilar();
-                } else {
-                    comprobado = false;
-                }
-            }
-        } else {
-            comprobado = false;
-        }*/
 
         return comprobado;
     }
