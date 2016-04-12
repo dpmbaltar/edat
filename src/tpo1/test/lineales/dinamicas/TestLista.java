@@ -1,7 +1,6 @@
 package tpo1.test.lineales.dinamicas;
 
 import tpo1.lineales.dinamicas.ListaInt;
-import lineales.dinamicas.Lista;
 import tpo1.lineales.dinamicas.ColaInt;
 import tpo1.lineales.dinamicas.PilaInt;
 import utiles.TecladoIn;
@@ -306,7 +305,7 @@ public class TestLista {
         pruebaLongitud();
         pruebaEsVacia();
         pruebaVaciar();
-        //pruebaClonar();
+        pruebaClonar();
     }
 
     public static void pruebaInsertar() {
@@ -408,24 +407,29 @@ public class TestLista {
                 (lista.esVacia() ? OK : ER));
     }
 
-    /*public static void pruebaClonar() {
+    public static void pruebaClonar() {
+        lista = new ListaInt();
         lista.insertar(1, 1);
         lista.insertar(2, 2);
         lista.insertar(3, 3);
-        Lista<Integer> clon = lista.clonar();
-        assert lista.recuperar(1) == clon.recuperar(1)
-             : "Elemento @1 de lista debe ser igual al de su clon";
+        ListaInt clon = lista.clonar();
+        System.out.println(
+            "Elemento @1 de lista debe ser igual al de su clon "+
+                (lista.recuperar(1) == clon.recuperar(1) ? OK : ER));
         lista.eliminar(1);
         clon.eliminar(1);
-        assert lista.recuperar(2) == clon.recuperar(2)
-             : "Elemento @2 de lista debe ser igual al de su clon";
+        System.out.println(
+            "Elemento @2 de lista debe ser igual al de su clon "+
+                (lista.recuperar(2) == clon.recuperar(2) ? OK : ER));
         lista.eliminar(1);
         clon.eliminar(1);
-        assert lista.recuperar(3) == clon.recuperar(3)
-             : "Elemento @3 de lista debe ser igual al de su clon";
+        System.out.println(
+            "Elemento @3 de lista debe ser igual al de su clon "+
+                (lista.recuperar(3) == clon.recuperar(3) ? OK : ER));
         lista.eliminar(1);
         clon.eliminar(1);
-        assert lista.esVacia() && clon.esVacia()
-             : "Lista y su clon deben ser vacías";
-    }*/
+        System.out.println(
+            "Lista y su clon deben ser vacías "+
+                (lista.esVacia() && clon.esVacia() ? OK : ER));
+    }
 }
