@@ -14,30 +14,23 @@ import utiles.TecladoIn;
 public class TestLista {
 
     private static ListaInt lista;
-
-    public static final String OK = "OK";
-    public static final String ER = "ERROR";
-
+    public static final String EXITO = "EXITO";
+    public static final String ERROR = "ERROR";
     public static final int ACCION_SALIR = 0;
     public static final int ACCION_CONCATENAR = 1;
     public static final int ACCION_INVERTIR = 2;
     public static final int ACCION_COMPROBAR = 3;
     public static final int ACCION_PROBAR = 4;
 
-    /**
-     * @param args
-     */
     public static void main(String[] args) {
         int accion;
         boolean r1;
         ListaInt l1, l2, l3;
 
-        // Solicitar acción
         mostrarMenu();
         accion = leerAccion();
 
         while (accion != ACCION_SALIR) {
-            // Ejecutar acción solicitada
             switch (accion) {
                 case ACCION_CONCATENAR:
                     l1 = leerLista();
@@ -58,7 +51,6 @@ public class TestLista {
                     System.out.println("L1 = " + l1);
                     r1 = comprobar(l1);
                     System.out.println("comprobar(L1) = " + r1);
-                    System.out.println();
                     break;
                 case ACCION_PROBAR:
                     prueba();
@@ -107,23 +99,6 @@ public class TestLista {
         }
 
         return esValida;
-    }
-
-    /**
-     * Solicita y lee una cadena de dígitos válida para generar la cola.
-     *
-     * @return
-     */
-    public static String leerDigitos() {
-        String digitos = "";
-
-        while (!validarDigitos(digitos)) {
-            System.out.println("Ingrese una cadena que contenga sólo dígitos:");
-            System.out.print(">>> ");
-            digitos = TecladoIn.readLine().trim();
-        }
-
-        return digitos;
     }
 
     /**
@@ -199,14 +174,14 @@ public class TestLista {
         return concatenado;
     }
 
-    public static ListaInt invertir(ListaInt l1) {
+    public static ListaInt invertir(ListaInt lista) {
         int posicion = 1;
-        int longitud = l1.longitud();
+        int longitud = lista.longitud();
         ListaInt invertido = new ListaInt();
         PilaInt pila = new PilaInt();
 
         while (posicion <= longitud) {
-            pila.apilar(l1.recuperar(posicion));
+            pila.apilar(lista.recuperar(posicion));
             posicion++;
         }
 
@@ -295,7 +270,7 @@ public class TestLista {
         return comprobado;
     }
 
-    //Pruebas de ListaInt
+    //Prueba de ListaInt
 
     public static void prueba() {
         pruebaInsertar();
@@ -312,13 +287,13 @@ public class TestLista {
         lista = new ListaInt();
         System.out.println(
             "Debe insertar 1 en pos. 1 "+
-                (lista.insertar(1, 1) ? OK : ER));
+                (lista.insertar(1, 1) ? EXITO : ERROR));
         System.out.println(
             "No debe insertar 2 en pos. 0 (pos. inválida: < 1) "+
-                (!lista.insertar(2, 0) ? OK : ER));
+                (!lista.insertar(2, 0) ? EXITO : ERROR));
         System.out.println(
             "No debe insertar 3 en pos. 3 (pos. inválida: > longitud de lista + 1) "+
-                (!lista.insertar(3, 3) ? OK : ER));
+                (!lista.insertar(3, 3) ? EXITO : ERROR));
     }
 
     public static void pruebaRecuperar() {
@@ -328,7 +303,7 @@ public class TestLista {
         lista.insertar(3, 3);
         System.out.println(
             "Debe recuperar 3 en la pos. 3 "+
-                ((lista.recuperar(3) == 3) ? OK : ER));
+                ((lista.recuperar(3) == 3) ? EXITO : ERROR));
     }
 
     public static void pruebaEliminar() {
@@ -338,10 +313,10 @@ public class TestLista {
         lista.insertar(3, 3);
         System.out.println(
             "Debe eliminar 3 de la pos. 3 "+
-                (lista.eliminar(3) ? OK : ER));
+                (lista.eliminar(3) ? EXITO : ERROR));
         System.out.println(
             "No debe recuperar 3 en la pos. 3 (eliminado) "+
-                (lista.recuperar(3) == 0 ? OK : ER));
+                (lista.recuperar(3) == 0 ? EXITO : ERROR));
     }
 
     public static void pruebaLocalizar() {
@@ -351,10 +326,10 @@ public class TestLista {
         lista.insertar(3, 3);
         System.out.println(
             "Debe localizar 2 en la pos. 2 "+
-                (lista.localizar(2) == 2 ? OK : ER));
+                (lista.localizar(2) == 2 ? EXITO : ERROR));
         System.out.println(
             "No debe localizar 4 (inexistente) "+
-                (lista.localizar(4) == -1 ? OK : ER));
+                (lista.localizar(4) == -1 ? EXITO : ERROR));
     }
 
     public static void pruebaLongitud() {
@@ -364,27 +339,27 @@ public class TestLista {
         lista.insertar(3, 3);
         System.out.println(
             "Longitud de lista debe ser 3 "+
-                (lista.longitud() == 3 ? OK : ER));
+                (lista.longitud() == 3 ? EXITO : ERROR));
         lista.eliminar(3);
         System.out.println(
             "Longitud de lista debe ser 2 "+
-                (lista.longitud() == 2 ? OK : ER));
+                (lista.longitud() == 2 ? EXITO : ERROR));
         lista.eliminar(2);
         lista.eliminar(1);
         System.out.println(
             "Longitud de lista debe ser 0 "+
-                (lista.longitud() == 0 ? OK : ER));
+                (lista.longitud() == 0 ? EXITO : ERROR));
     }
 
     public static void pruebaEsVacia() {
         lista = new ListaInt();
         System.out.println(
             "Lista debe ser vacía "+
-                (lista.esVacia() ? OK : ER));
+                (lista.esVacia() ? EXITO : ERROR));
         lista.insertar(1, 1);
         System.out.println(
             "Lista no debe ser vacía "+
-                (!lista.esVacia() ? OK : ER));
+                (!lista.esVacia() ? EXITO : ERROR));
     }
 
     public static void pruebaVaciar() {
@@ -395,16 +370,16 @@ public class TestLista {
         lista.vaciar();
         System.out.println(
             "No debe eliminar de lista vacía "+
-                (!lista.eliminar(1) ? OK : ER));
+                (!lista.eliminar(1) ? EXITO : ERROR));
         System.out.println(
             "No debe localizar 2 (lista vacía) "+
-                (lista.localizar(2) == -1 ? OK : ER));
+                (lista.localizar(2) == -1 ? EXITO : ERROR));
         System.out.println(
             "Longitud de lista debe ser 0 "+
-                (lista.longitud() == 0 ? OK : ER));
+                (lista.longitud() == 0 ? EXITO : ERROR));
         System.out.println(
             "Lista debe ser vacía "+
-                (lista.esVacia() ? OK : ER));
+                (lista.esVacia() ? EXITO : ERROR));
     }
 
     public static void pruebaClonar() {
@@ -414,22 +389,22 @@ public class TestLista {
         lista.insertar(3, 3);
         ListaInt clon = lista.clonar();
         System.out.println(
-            "Elemento @1 de lista debe ser igual al de su clon "+
-                (lista.recuperar(1) == clon.recuperar(1) ? OK : ER));
+            "Elemento en pos. 1 de lista debe ser igual al de su clon "+
+                (lista.recuperar(1) == clon.recuperar(1) ? EXITO : ERROR));
         lista.eliminar(1);
         clon.eliminar(1);
         System.out.println(
-            "Elemento @2 de lista debe ser igual al de su clon "+
-                (lista.recuperar(2) == clon.recuperar(2) ? OK : ER));
+            "Elemento en pos. 2 de lista debe ser igual al de su clon "+
+                (lista.recuperar(2) == clon.recuperar(2) ? EXITO : ERROR));
         lista.eliminar(1);
         clon.eliminar(1);
         System.out.println(
-            "Elemento @3 de lista debe ser igual al de su clon "+
-                (lista.recuperar(3) == clon.recuperar(3) ? OK : ER));
+            "Elemento en pos. 3 de lista debe ser igual al de su clon "+
+                (lista.recuperar(3) == clon.recuperar(3) ? EXITO : ERROR));
         lista.eliminar(1);
         clon.eliminar(1);
         System.out.println(
             "Lista y su clon deben ser vacías "+
-                (lista.esVacia() && clon.esVacia() ? OK : ER));
+                (lista.esVacia() && clon.esVacia() ? EXITO : ERROR));
     }
 }
