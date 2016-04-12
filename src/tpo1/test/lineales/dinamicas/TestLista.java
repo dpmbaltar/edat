@@ -1,6 +1,7 @@
 package tpo1.test.lineales.dinamicas;
 
 import tpo1.lineales.dinamicas.ListaInt;
+import lineales.dinamicas.Lista;
 import tpo1.lineales.dinamicas.ColaInt;
 import tpo1.lineales.dinamicas.PilaInt;
 import utiles.TecladoIn;
@@ -15,10 +16,14 @@ public class TestLista {
 
     private static ListaInt lista;
 
+    public static final String OK = "OK";
+    public static final String ER = "ERROR";
+
     public static final int ACCION_SALIR = 0;
     public static final int ACCION_CONCATENAR = 1;
     public static final int ACCION_INVERTIR = 2;
     public static final int ACCION_COMPROBAR = 3;
+    public static final int ACCION_PROBAR = 4;
 
     /**
      * @param args
@@ -32,28 +37,38 @@ public class TestLista {
         mostrarMenu();
         accion = leerAccion();
 
-        // Ejecutar acción solicitada
-        switch (accion) {
-            case ACCION_CONCATENAR:
-                l1 = leerLista();
-                System.out.println("L1 = " + l1);
-                l2 = leerLista();
-                System.out.println("L2 = " + l2);
-                l3 = concatenar(l1, l2);
-                System.out.println("concatenar(L2, L2) = " + l3);
-                break;
-            case ACCION_INVERTIR:
-                l1 = leerLista();
-                System.out.println("L1 = " + l1);
-                l2 = invertir(l1);
-                System.out.println("invertir(L1) = " + l2);
-                break;
-            case ACCION_COMPROBAR:
-                l1 = leerLista();
-                System.out.println("L1 = " + l1);
-                r1 = comprobar(l1);
-                System.out.println("comprobar(L1) = " + r1);
-                break;
+        while (accion != ACCION_SALIR) {
+            // Ejecutar acción solicitada
+            switch (accion) {
+                case ACCION_CONCATENAR:
+                    l1 = leerLista();
+                    System.out.println("L1 = " + l1);
+                    l2 = leerLista();
+                    System.out.println("L2 = " + l2);
+                    l3 = concatenar(l1, l2);
+                    System.out.println("concatenar(L2, L2) = " + l3);
+                    break;
+                case ACCION_INVERTIR:
+                    l1 = leerLista();
+                    System.out.println("L1 = " + l1);
+                    l2 = invertir(l1);
+                    System.out.println("invertir(L1) = " + l2);
+                    break;
+                case ACCION_COMPROBAR:
+                    l1 = leerLista();
+                    System.out.println("L1 = " + l1);
+                    r1 = comprobar(l1);
+                    System.out.println("comprobar(L1) = " + r1);
+                    System.out.println();
+                    break;
+                case ACCION_PROBAR:
+                    prueba();
+                    break;
+            }
+
+            System.out.println();
+            mostrarMenu();
+            accion = leerAccion();
         }
 
         System.out.println(">>> Finalizado <<<");
@@ -147,7 +162,7 @@ public class TestLista {
     public static int leerAccion() {
         int accion = -1;
 
-        while (accion < 0 || accion > 3) {
+        while (accion < 0 || accion > 4) {
             System.out.println("Ingrese una opción válida:");
             System.out.print(">>> ");
             accion = TecladoIn.readLineInt();
@@ -164,8 +179,11 @@ public class TestLista {
         System.out.println("    [1] Concatenar");
         System.out.println("    [2] Invertir");
         System.out.println("    [3] Comprobar");
+        System.out.println("    [4] Ejecutar pruebas");
         System.out.println("    [0] Salir");
     }
+
+    //Métodos TPO1
 
     public static ListaInt concatenar(ListaInt l1, ListaInt l2) {
         int posicion1 = 1;
@@ -277,4 +295,137 @@ public class TestLista {
 
         return comprobado;
     }
+
+    //Pruebas de ListaInt
+
+    public static void prueba() {
+        pruebaInsertar();
+        pruebaRecuperar();
+        pruebaEliminar();
+        pruebaLocalizar();
+        pruebaLongitud();
+        pruebaEsVacia();
+        pruebaVaciar();
+        //pruebaClonar();
+    }
+
+    public static void pruebaInsertar() {
+        lista = new ListaInt();
+        System.out.println(
+            "Debe insertar 1 en pos. 1 "+
+                (lista.insertar(1, 1) ? OK : ER));
+        System.out.println(
+            "No debe insertar 2 en pos. 0 (pos. inválida: < 1) "+
+                (!lista.insertar(2, 0) ? OK : ER));
+        System.out.println(
+            "No debe insertar 3 en pos. 3 (pos. inválida: > longitud de lista + 1) "+
+                (!lista.insertar(3, 3) ? OK : ER));
+    }
+
+    public static void pruebaRecuperar() {
+        lista = new ListaInt();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        System.out.println(
+            "Debe recuperar 3 en la pos. 3 "+
+                ((lista.recuperar(3) == 3) ? OK : ER));
+    }
+
+    public static void pruebaEliminar() {
+        lista = new ListaInt();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        System.out.println(
+            "Debe eliminar 3 de la pos. 3 "+
+                (lista.eliminar(3) ? OK : ER));
+        System.out.println(
+            "No debe recuperar 3 en la pos. 3 (eliminado) "+
+                (lista.recuperar(3) == 0 ? OK : ER));
+    }
+
+    public static void pruebaLocalizar() {
+        lista = new ListaInt();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        System.out.println(
+            "Debe localizar 2 en la pos. 2 "+
+                (lista.localizar(2) == 2 ? OK : ER));
+        System.out.println(
+            "No debe localizar 4 (inexistente) "+
+                (lista.localizar(4) == -1 ? OK : ER));
+    }
+
+    public static void pruebaLongitud() {
+        lista = new ListaInt();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        System.out.println(
+            "Longitud de lista debe ser 3 "+
+                (lista.longitud() == 3 ? OK : ER));
+        lista.eliminar(3);
+        System.out.println(
+            "Longitud de lista debe ser 2 "+
+                (lista.longitud() == 2 ? OK : ER));
+        lista.eliminar(2);
+        lista.eliminar(1);
+        System.out.println(
+            "Longitud de lista debe ser 0 "+
+                (lista.longitud() == 0 ? OK : ER));
+    }
+
+    public static void pruebaEsVacia() {
+        lista = new ListaInt();
+        System.out.println(
+            "Lista debe ser vacía "+
+                (lista.esVacia() ? OK : ER));
+        lista.insertar(1, 1);
+        System.out.println(
+            "Lista no debe ser vacía "+
+                (!lista.esVacia() ? OK : ER));
+    }
+
+    public static void pruebaVaciar() {
+        lista = new ListaInt();
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        lista.vaciar();
+        System.out.println(
+            "No debe eliminar de lista vacía "+
+                (!lista.eliminar(1) ? OK : ER));
+        System.out.println(
+            "No debe localizar 2 (lista vacía) "+
+                (lista.localizar(2) == -1 ? OK : ER));
+        System.out.println(
+            "Longitud de lista debe ser 0 "+
+                (lista.longitud() == 0 ? OK : ER));
+        System.out.println(
+            "Lista debe ser vacía "+
+                (lista.esVacia() ? OK : ER));
+    }
+
+    /*public static void pruebaClonar() {
+        lista.insertar(1, 1);
+        lista.insertar(2, 2);
+        lista.insertar(3, 3);
+        Lista<Integer> clon = lista.clonar();
+        assert lista.recuperar(1) == clon.recuperar(1)
+             : "Elemento @1 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
+        assert lista.recuperar(2) == clon.recuperar(2)
+             : "Elemento @2 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
+        assert lista.recuperar(3) == clon.recuperar(3)
+             : "Elemento @3 de lista debe ser igual al de su clon";
+        lista.eliminar(1);
+        clon.eliminar(1);
+        assert lista.esVacia() && clon.esVacia()
+             : "Lista y su clon deben ser vacías";
+    }*/
 }
