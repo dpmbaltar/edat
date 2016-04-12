@@ -38,18 +38,21 @@ public class TestLista {
                     l2 = leerLista();
                     System.out.println("L2 = " + l2);
                     l3 = concatenar(l1, l2);
+                    System.out.println();
                     System.out.println("concatenar(L2, L2) = " + l3);
                     break;
                 case ACCION_INVERTIR:
                     l1 = leerLista();
                     System.out.println("L1 = " + l1);
                     l2 = invertir(l1);
+                    System.out.println();
                     System.out.println("invertir(L1) = " + l2);
                     break;
                 case ACCION_COMPROBAR:
                     l1 = leerLista();
                     System.out.println("L1 = " + l1);
                     r1 = comprobar(l1);
+                    System.out.println();
                     System.out.println("comprobar(L1) = " + r1);
                     break;
                 case ACCION_PROBAR:
