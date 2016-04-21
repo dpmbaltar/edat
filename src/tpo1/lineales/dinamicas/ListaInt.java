@@ -1,5 +1,6 @@
 package tpo1.lineales.dinamicas;
 
+import lineales.dinamicas.Nodo;
 import tpo1.lineales.dinamicas.NodoInt;
 
 /**
@@ -244,5 +245,64 @@ public class ListaInt {
         cadena.append(']');
 
         return cadena.toString();
+    }
+
+    /**
+     * Ejercicio 1.1, Simulacro, Parcial 1
+     *
+     * @return
+     */
+    public boolean insertarPromedio() {
+        boolean exito = false;
+        int suma;
+        NodoInt nodoActual, nodoPrevio;
+
+        if (cabecera != null) {
+            suma = 0;
+            nodoActual = cabecera;
+            nodoPrevio = nodoActual;
+            while (nodoActual != null) {
+                suma+= nodoActual.getElemento();
+                nodoPrevio = nodoActual;
+                nodoActual = nodoActual.getEnlace();
+            }
+            nodoPrevio.setEnlace(new NodoInt(suma / longitud));
+            longitud++;
+            exito = true;
+        }
+
+        return exito;
+    }
+
+    /**
+     * Ejercicio 1.2, Simulacro, Parcial 1
+     *
+     * @param elemento
+     * @return
+     */
+    public boolean eliminarApariciones(int elemento) {
+        boolean exito = false;
+        int numeroApariciones;
+        NodoInt nodoActual, nodoPrevio;
+
+        if (cabecera != null) {
+            numeroApariciones = 0;
+            nodoActual = cabecera;
+            nodoPrevio = nodoActual;
+            while (nodoActual != null) {
+                if (nodoActual.getElemento() == elemento) {
+                    nodoActual = nodoActual.getEnlace();
+                    nodoPrevio.setEnlace(nodoActual);
+                    numeroApariciones++;
+                    longitud--;
+                } else {
+                    nodoPrevio = nodoActual;
+                    nodoActual = nodoActual.getEnlace();
+                }
+            }
+            exito = numeroApariciones > 0;
+        }
+
+        return exito;
     }
 }
