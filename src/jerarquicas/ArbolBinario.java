@@ -513,4 +513,33 @@ public class ArbolBinario<T> {
 
         return exito;
     }
+
+    /**
+     * Ejercicio 3.2, Simulacro, Parcial 1
+     *
+     * @return
+     */
+    public Lista<T> frontera() {
+        Lista<T> lista = new Lista<T>();
+        frontera(raiz, lista);
+        return lista;
+    }
+
+    private void frontera(Nodo<T> nodo, Lista<T> lista) {
+        Nodo<T> hijoIzquierdo, hijoDerecho;
+        if (nodo != null) {
+            hijoIzquierdo = nodo.getIzquierdo();
+            hijoDerecho = nodo.getDerecho();
+            if (hijoIzquierdo == null && hijoDerecho == null) {
+                lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+            } else {
+                if (hijoIzquierdo != null) {
+                    frontera(hijoIzquierdo, lista);
+                }
+                if (hijoDerecho != null) {
+                    frontera(hijoDerecho, lista);
+                }
+            }
+        }
+    }
 }

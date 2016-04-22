@@ -39,6 +39,8 @@ public class PruebaArbolBinario {
         pruebaSumarRamas();
         preparar();
         pruebaVerificarPatron();
+        preparar();
+        pruebaFrontera();
     }
 
     protected void preparar() {
@@ -188,6 +190,15 @@ public class PruebaArbolBinario {
         lista.vaciar();
         assert ab.verificarPatron(lista)
              : "Debe verificar que el camino vacío existe en el AB";
+    }
+
+    /**
+     * Prueba jerarquicas.ArbolBinario.frontera().
+     */
+    protected void pruebaFrontera() {
+        ab = crearArbolBinarioCompleto();
+        assert ab.frontera().toString().equals("[8, 9, 10, 11, 12, 13, 14, 15]")
+             : "La frontera debe: 8, 9, 10, 11, 12, 13, 14 y 15";
     }
 
     /**
