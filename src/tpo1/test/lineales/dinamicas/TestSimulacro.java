@@ -21,18 +21,17 @@ public class TestSimulacro {
      * @return
      */
     public static ColaInt generar(ColaInt c1) {
-        boolean terminado = false, procesar = false, c1EsVacia = c1.esVacia();
+        boolean esVacia = c1.esVacia();
         ColaInt colaAuxiliar, colaFinal = new ColaInt();
         PilaInt pilaAuxiliar;
-        int elemento, paso;
+        int elemento;
 
-        if (!c1EsVacia) {
+        if (!esVacia) {
             colaAuxiliar = new ColaInt();
             pilaAuxiliar = new PilaInt();
-            while (!c1.esVacia() || !colaAuxiliar.esVacia()) {
-                if (!c1.esVacia()) {
+            while (!esVacia || !colaAuxiliar.esVacia()) {
+                if (!esVacia) {
                     elemento = c1.obtenerFrente();
-                    c1.sacar();
                 } else {
                     elemento = 0;
                 }
@@ -45,7 +44,7 @@ public class TestSimulacro {
                         colaFinal.poner(colaAuxiliar.obtenerFrente());
                         colaAuxiliar.sacar();
                     }
-                    if (!c1.esVacia()) {
+                    if (!esVacia) {
                         colaFinal.poner(0);
                     }
                 } else {
@@ -53,6 +52,8 @@ public class TestSimulacro {
                     pilaAuxiliar.apilar(elemento);
                     colaAuxiliar.poner(elemento);
                 }
+                c1.sacar();
+                esVacia = c1.esVacia();
             }
         }
 
@@ -61,7 +62,7 @@ public class TestSimulacro {
 
     public static void pruebaGenerar() {
         ColaInt cola = new ColaInt();
-        //String esperado = "[1, 2, 3, 3, 2, 1, 1, 2, 3, 0, 5, 5, 5, 0, 4, 8, 8, 4, 4, 8]";
+        String esperado = "[1, 2, 3, 3, 2, 1, 1, 2, 3, 0, 5, 5, 5, 0, 4, 8, 8, 4, 4, 8]";
         cola.poner(1);
         cola.poner(2);
         cola.poner(3);
@@ -70,17 +71,7 @@ public class TestSimulacro {
         cola.poner(0);
         cola.poner(4);
         cola.poner(8);
-        System.out.println(cola.toString());
-        System.out.println(generar(cola).toString());
-        cola.vaciar();
-        System.out.println(cola.toString());
-        System.out.println(generar(cola).toString());
-        cola.poner(0);
-        cola.poner(0);
-        cola.poner(0);
-        System.out.println(cola.toString());
-        System.out.println(generar(cola).toString());
-        /*assert generar(cola).toString().equals(esperado)
+        assert generar(cola).toString().equals(esperado)
              : "Debe generar cola igual a la forma (toString()): "+""
              + "[1, 2, 3, 3, 2, 1, 1, 2, 3, 0, 5, 5, 5, 0, 4, 8, 8, 4, 4, 8]";
         cola.vaciar();
@@ -89,9 +80,8 @@ public class TestSimulacro {
         cola.poner(0);
         cola.poner(0);
         cola.poner(0);
-        System.out.println(generar(cola).toString());
         assert generar(cola).toString().equals("[0, 0, 0]")
-        : "Debe generar cola igual a la forma (toString()): [0, 0, 0]";*/
+        : "Debe generar cola igual a la forma (toString()): [0, 0, 0]";
     }
 
     public static void pruebaInsertarPromedio() {
