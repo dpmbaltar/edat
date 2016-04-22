@@ -41,6 +41,8 @@ public class PruebaArbolBinario {
         pruebaVerificarPatron();
         preparar();
         pruebaFrontera();
+        preparar();
+        pruebaClonarHijosInvertidos();
     }
 
     protected void preparar() {
@@ -199,6 +201,13 @@ public class PruebaArbolBinario {
         ab = crearArbolBinarioCompleto();
         assert ab.frontera().toString().equals("[8, 9, 10, 11, 12, 13, 14, 15]")
              : "La frontera debe: 8, 9, 10, 11, 12, 13, 14 y 15";
+    }
+
+    protected void pruebaClonarHijosInvertidos() {
+        ab = crearArbolBinarioCompleto();
+        assert ab.clonarHijosIntertidos().listarNiveles().toString()
+             .equals("[1, 3, 2, 7, 6, 5, 4, 15, 14, 13, 12, 11, 10, 9, 8]")
+             : "Debe clonar hijos invertidos";
     }
 
     /**

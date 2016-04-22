@@ -542,4 +542,38 @@ public class ArbolBinario<T> {
             }
         }
     }
+
+    /**
+     * Ejercicio 3.3, Simulacro, Parcial 1
+     *
+     * @return
+     */
+    public ArbolBinario<T> clonarHijosIntertidos() {
+        ArbolBinario<T> clon = new ArbolBinario<T>();
+        clonarHijosIntertidos(raiz, clon);
+        return clon;
+    }
+
+    private void clonarHijosIntertidos(Nodo<T> nodo, ArbolBinario<T> arbol) {
+        if (nodo != null) {
+            Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
+                    hijoDerecho = nodo.getDerecho();
+
+            if (arbol.esVacio()) {
+                arbol.insertarRaiz(nodo.getElemento());
+            }
+
+            if (hijoDerecho != null) {
+                arbol.insertarIzquierdo(hijoDerecho.getElemento(),
+                                        nodo.getElemento());
+                clonarHijosIntertidos(hijoDerecho, arbol);
+            }
+
+            if (hijoIzquierdo != null) {
+                arbol.insertarDerecho(hijoIzquierdo.getElemento(),
+                                      nodo.getElemento());
+                clonarHijosIntertidos(hijoIzquierdo, arbol);
+            }
+        }
+    }
 }
