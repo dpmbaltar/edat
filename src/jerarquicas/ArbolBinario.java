@@ -487,7 +487,7 @@ public class ArbolBinario<T> {
         return l1.esVacia() ? true : verificarPatron(raiz, l1, 1);
     }
 
-    public boolean verificarPatron(Nodo<T> nodo, Lista<T> l1, int posicion) {
+    private boolean verificarPatron(Nodo<T> nodo, Lista<T> l1, int posicion) {
         boolean exito = false;
         Nodo<T> hijoIzquierdo, hijoDerecho;
         T elementoNodo, elementoLista;
