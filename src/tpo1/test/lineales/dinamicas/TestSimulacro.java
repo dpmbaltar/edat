@@ -2,20 +2,79 @@ package tpo1.test.lineales.dinamicas;
 
 import tpo1.lineales.dinamicas.ColaInt;
 import tpo1.lineales.dinamicas.ListaInt;
+import tpo1.lineales.dinamicas.PilaInt;
 
 public class TestSimulacro {
     public static void main(String[] args) {
         pruebaInsertarPromedio();
         pruebaEliminarApariciones();
+        pruebaGenerar();
         System.out.println("Prueba OK");
     }
 
+    /**
+     * Ejercicio 2, Simulacro, Parcial 1
+     * Aclaración: se utiliza enteros en vez de carácteres, por lo tanto se
+     * reemplaza '#' por el 0 (cero).
+     *
+     * @param c1
+     * @return
+     */
     public static ColaInt generar(ColaInt c1) {
+        boolean c1EsVacia = c1.esVacia();
+        ColaInt colaAuxiliar, colaFinal = new ColaInt();
+        PilaInt pilaAuxiliar;
+        int elemento;
+
+        if (!c1EsVacia) {
+            colaAuxiliar = new ColaInt();
+            pilaAuxiliar = new PilaInt();
+            while (!c1EsVacia || !colaAuxiliar.esVacia()) {
+                elemento = c1.obtenerFrente();
+                c1.sacar();
+                c1EsVacia = c1.esVacia();
+                if (elemento == 0 || c1EsVacia) {
+                    if (c1EsVacia) {
+                        colaFinal.poner(elemento);
+                        pilaAuxiliar.apilar(elemento);
+                        colaAuxiliar.poner(elemento);
+                    }
+                    while (!pilaAuxiliar.esVacia()) {
+                        colaFinal.poner(pilaAuxiliar.obtenerTope());
+                        pilaAuxiliar.desapilar();
+                    }
+                    while (!colaAuxiliar.esVacia()) {
+                        colaFinal.poner(colaAuxiliar.obtenerFrente());
+                        colaAuxiliar.sacar();
+                    }
+                    if (!c1EsVacia) {
+                        colaFinal.poner(0);
+                    }
+                } else {
+                    colaFinal.poner(elemento);
+                    pilaAuxiliar.apilar(elemento);
+                    colaAuxiliar.poner(elemento);
+                }
+            }
+        }
+
+        return colaFinal;
+    }
+
+    public static void pruebaGenerar() {
         ColaInt cola = new ColaInt();
-
-
-
-        return cola;
+        String esperado = "[1, 2, 3, 3, 2, 1, 1, 2, 3, 0, 5, 5, 5, 0, 4, 8, 8, 4, 4, 8]";
+        cola.poner(1);
+        cola.poner(2);
+        cola.poner(3);
+        cola.poner(0);
+        cola.poner(5);
+        cola.poner(0);
+        cola.poner(4);
+        cola.poner(8);
+        assert generar(cola).toString().equals(esperado)
+             : "Debe generar cola igual a: "+""
+             + "[1, 2, 3, 3, 2, 1, 1, 2, 3, 0, 5, 5, 5, 0, 4, 8, 8, 4, 4, 8]";
     }
 
     public static void pruebaInsertarPromedio() {
