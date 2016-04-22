@@ -484,25 +484,24 @@ public class ArbolBinario<T> {
      * @return
      */
     public boolean verificarPatron(Lista<T> l1) {
-        return verificarPatron(raiz, l1, 1);
+        return l1.esVacia() ? true : verificarPatron(raiz, l1, 1);
     }
 
     public boolean verificarPatron(Nodo<T> nodo, Lista<T> l1, int posicion) {
         boolean exito = false;
         Nodo<T> hijoIzquierdo, hijoDerecho;
-        T elementoNodo, elementoLista = l1.recuperar(posicion);
+        T elementoNodo, elementoLista;
 
         if (nodo != null) {
-            hijoIzquierdo = nodo.getIzquierdo();
-            hijoDerecho = nodo.getDerecho();
             elementoNodo = nodo.getElemento();
-            if (elementoLista == null) {
-                exito = true;
-            } else if (elementoNodo.equals(elementoLista)) {
+            elementoLista = l1.recuperar(posicion);
+            if (elementoNodo.equals(elementoLista)) {
                 posicion++;
-                if (posicion > l1.longitud()) {
+                if (posicion > l1.longitud()) { //Camino completo
                     exito = true;
-                } else {
+                } else { //Seguir verificando camino en hijos
+                    hijoIzquierdo = nodo.getIzquierdo();
+                    hijoDerecho = nodo.getDerecho();
                     exito = verificarPatron(hijoIzquierdo, l1, posicion);
                     if (!exito) {
                         exito = verificarPatron(hijoDerecho, l1, posicion);
