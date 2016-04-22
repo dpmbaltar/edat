@@ -548,13 +548,13 @@ public class ArbolBinario<T> {
      *
      * @return
      */
-    public ArbolBinario<T> clonarHijosIntertidos() {
+    public ArbolBinario<T> clonarHijosInvertidos() {
         ArbolBinario<T> clon = new ArbolBinario<T>();
-        clonarHijosIntertidos(raiz, clon);
+        clonarHijosInvertidos(raiz, clon);
         return clon;
     }
 
-    private void clonarHijosIntertidos(Nodo<T> nodo, ArbolBinario<T> arbol) {
+    private void clonarHijosInvertidos(Nodo<T> nodo, ArbolBinario<T> arbol) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
@@ -566,13 +566,13 @@ public class ArbolBinario<T> {
             if (hijoDerecho != null) {
                 arbol.insertarIzquierdo(hijoDerecho.getElemento(),
                                         nodo.getElemento());
-                clonarHijosIntertidos(hijoDerecho, arbol);
+                clonarHijosInvertidos(hijoDerecho, arbol);
             }
 
             if (hijoIzquierdo != null) {
                 arbol.insertarDerecho(hijoIzquierdo.getElemento(),
                                       nodo.getElemento());
-                clonarHijosIntertidos(hijoIzquierdo, arbol);
+                clonarHijosInvertidos(hijoIzquierdo, arbol);
             }
         }
     }

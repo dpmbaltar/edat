@@ -205,7 +205,7 @@ public class PruebaArbolBinario {
 
     protected void pruebaClonarHijosInvertidos() {
         ab = crearArbolBinarioCompleto();
-        assert ab.clonarHijosIntertidos().listarNiveles().toString()
+        assert ab.clonarHijosInvertidos().listarNiveles().toString()
              .equals("[1, 3, 2, 7, 6, 5, 4, 15, 14, 13, 12, 11, 10, 9, 8]")
              : "Debe clonar hijos invertidos";
     }
