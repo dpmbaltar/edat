@@ -1,6 +1,7 @@
 package pruebas.jerarquicas;
 
 import jerarquicas.ArbolBinario;
+import lineales.dinamicas.Lista;
 
 /**
  * Prueba implementación de Árbol Binario (de enteros).
@@ -36,6 +37,8 @@ public class PruebaArbolBinario {
         pruebaClonar();
         preparar();
         pruebaSumarRamas();
+        preparar();
+        pruebaVerificarPatron();
     }
 
     protected void preparar() {
@@ -165,6 +168,26 @@ public class PruebaArbolBinario {
     protected void pruebaSumarRamas() {
         ab = crearArbolBinarioCompleto();
         assert ab.sumarRamas() == 120 : "Suma de ramas debe ser igual a 120";
+    }
+
+    /**
+     * Prueba jerarquicas.ArbolBinario.verificarPatron().
+     */
+    protected void pruebaVerificarPatron() {
+        ab = crearArbolBinarioCompleto();
+        Lista<Integer> lista = new Lista<Integer>();
+        lista.insertar(1, 1);
+        lista.insertar(3, 2);
+        lista.insertar(6, 3);
+        lista.insertar(13, 4);
+        assert ab.verificarPatron(lista)
+             : "Debe verificar que el camino 1-3-6-13 existe en el AB";
+        lista.insertar(16, 5);
+        assert !ab.verificarPatron(lista)
+             : "No debe verificar que el camino 1-2-5-11-16 existe en el AB";
+        lista.vaciar();
+        assert ab.verificarPatron(lista)
+             : "Debe verificar que el camino vacío existe en el AB";
     }
 
     /**

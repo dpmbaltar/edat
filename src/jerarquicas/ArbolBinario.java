@@ -476,4 +476,41 @@ public class ArbolBinario<T> {
     public int sumarRamas() {
         return sumarRamas(raiz);
     }
+
+    /**
+     * Ejercicio 3.1, Simulacro, Parcial 1
+     *
+     * @param l1
+     * @return
+     */
+    public boolean verificarPatron(Lista<T> l1) {
+        return verificarPatron(raiz, l1, 1);
+    }
+
+    public boolean verificarPatron(Nodo<T> nodo, Lista<T> l1, int posicion) {
+        boolean exito = false;
+        Nodo<T> hijoIzquierdo, hijoDerecho;
+        T elementoNodo, elementoLista = l1.recuperar(posicion);
+
+        if (nodo != null) {
+            hijoIzquierdo = nodo.getIzquierdo();
+            hijoDerecho = nodo.getDerecho();
+            elementoNodo = nodo.getElemento();
+            if (elementoLista == null) {
+                exito = true;
+            } else if (elementoNodo.equals(elementoLista)) {
+                posicion++;
+                if (posicion > l1.longitud()) {
+                    exito = true;
+                } else {
+                    exito = verificarPatron(hijoIzquierdo, l1, posicion);
+                    if (!exito) {
+                        exito = verificarPatron(hijoDerecho, l1, posicion);
+                    }
+                }
+            }
+        }
+
+        return exito;
+    }
 }
