@@ -51,9 +51,9 @@ public class ArbolBinario<T> {
             Nodo<T> nodoPadre = obtenerNodo(padre);
             if (nodoPadre != null) {
                 if (posicion == Posicion.IZQUIERDO) {
-                    nodoPadre.setIzquierdo(new Nodo<T>(elemento, nodoPadre));
+                    nodoPadre.setIzquierdo(new Nodo<T>(elemento));
                 } else if (posicion == Posicion.DERECHO) {
-                    nodoPadre.setDerecho(new Nodo<T>(elemento, nodoPadre));
+                    nodoPadre.setDerecho(new Nodo<T>(elemento));
                 }
 
                 exito = true;

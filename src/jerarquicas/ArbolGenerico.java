@@ -36,8 +36,7 @@ public class ArbolGenerico<T> {
             raiz = new Nodo<T>(elemento);
             resultado = true;
         } else if (elementoPadre != null) {
-            Busqueda<T> busqueda = buscar(elementoPadre);
-            Nodo<T> nodoPadre = busqueda != null ? busqueda.getNodo() : null;
+            Nodo<T> nodoPadre = buscarNodo(elementoPadre);
 
             if (nodoPadre != null) {
                 Nodo<T> nodoNuevo = new Nodo<T>(elemento),
@@ -73,11 +72,9 @@ public class ArbolGenerico<T> {
      * Busca un nodo en forma recursiva con el elemento dado a partir del nodo
      * raíz del árbol.
      * 
-     * @deprecated usar buscar(T)
      * @param elemento
      * @return
      */
-    @Deprecated
     private Nodo<T> buscarNodo(T elemento) {
         return buscarNodo(elemento, raiz);
     }
@@ -86,12 +83,10 @@ public class ArbolGenerico<T> {
      * Busca un nodo en forma recursiva con el elemento dado a partir de un nodo
      * específico.
      * 
-     * @deprecated usar buscar(T, Nodo<T>, Nodo<T>, int, Lista<T>)
      * @param elemento
      * @param nodo
      * @return
      */
-    @Deprecated
     private Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
 
@@ -121,132 +116,6 @@ public class ArbolGenerico<T> {
         }
 
         return buscado;
-    }
-
-    /**
-     * Busca un nodo en forma recursiva con el elemento dado a partir del nodo
-     * raíz, y devuelve información acerca de la ubicación del nodo: como el
-     * nodo padre, nivel y lista de ancestros.
-     * 
-     * @param elemento
-     * @return
-     */
-    private Busqueda<T> buscar(T elemento) {
-        return buscar(elemento, raiz, null, new Lista<T>(), 0);
-    }
-
-    /**
-     * Busca un nodo en forma recursiva con el elemento dado a partir de un nodo
-     * específico, y devuelve información acerca de la ubicación del nodo: como
-     * el nodo padre, nivel y lista de ancestros.
-     * 
-     * @param elemento
-     * @return
-     */
-    private Busqueda<T> buscar(T elemento,
-                               Nodo<T> nodo,
-                               Nodo<T> padre,
-                               Lista<T> ancestros,
-                               int nivel) {
-        Busqueda<T> busqueda = null;
-
-        if (nodo != null) {
-            if (((Object) nodo.getElemento()).equals(elemento)) {
-                busqueda = new Busqueda<T>(nivel, nodo, padre, ancestros);
-            } else {
-                ancestros.insertar(nodo.getElemento(), 1);
-
-                // Buscar en los hijos del nodo actual
-                busqueda = buscar(elemento,
-                                  nodo.getIzquierdo(),
-                                  nodo,
-                                  ancestros.clonar(),
-                                  nivel + 1);
-
-                // Si no fue encontrado, buscar en los hermanos
-                // (y en los hijos de los hermanos, en forma recursiva)
-                if (busqueda == null) {
-                    Nodo<T> hermano = nodo.getDerecho();
-                    Lista<T> ancestrosClon;
-                    ancestros.eliminar(1);
-
-                    while (hermano != null && busqueda == null) {
-                        if (((Object) hermano.getElemento()).equals(elemento)) {
-                            busqueda = new Busqueda<T>();
-                            busqueda.setNivel(nivel);
-                            busqueda.setNodo(hermano);
-                            busqueda.setPadre(padre);
-                            busqueda.setAncestros(ancestros);
-                        } else {
-                            ancestrosClon = ancestros.clonar();
-                            ancestrosClon.insertar(hermano.getElemento(), 1);
-                            busqueda = buscar(elemento,
-                                              hermano.getIzquierdo(),
-                                              hermano,
-                                              ancestrosClon,
-                                              nivel + 1);
-                            hermano = hermano.getDerecho();
-                        }
-                    }
-                }
-            }
-        }
-
-        return busqueda;
-    }
-
-    private class Busqueda<T> {
-
-        private int nivel;
-        private Nodo<T> nodo;
-        private Nodo<T> padre;
-        private Lista<T> ancestros;
-
-        public Busqueda() {
-            this(-1, null, null, null);
-        }
-
-        public Busqueda(int nivel,
-                        Nodo<T> nodo,
-                        Nodo<T> padre,
-                        Lista<T> ancestros) {
-            this.nivel = nivel;
-            this.nodo = nodo;
-            this.padre = padre;
-            this.ancestros = ancestros;
-        }
-
-        public int getNivel() {
-            return nivel;
-        }
-
-        public void setNivel(int nivel) {
-            this.nivel = nivel;
-        }
-
-        public Nodo<T> getNodo() {
-            return nodo;
-        }
-
-        public void setNodo(Nodo<T> nodo) {
-            this.nodo = nodo;
-        }
-
-        public Nodo<T> getPadre() {
-            return padre;
-        }
-
-        public void setPadre(Nodo<T> padre) {
-            this.padre = padre;
-        }
-
-        public Lista<T> getAncestros() {
-            return ancestros;
-        }
-
-        public void setAncestros(Lista<T> ancestros) {
-            this.ancestros = ancestros;
-        }
     }
 
     /**
@@ -322,19 +191,16 @@ public class ArbolGenerico<T> {
      * @return
      */
     public int nivel(T elemento) {
-        Busqueda<T> busqueda = buscar(elemento);
-        return busqueda != null ? busqueda.getNivel() : -1;
+        return nivelNodo(elemento, raiz, 0);
     }
     
     /**
      * 
-     * @deprecated usar buscar(T, Nodo<T>, Nodo<T>, int, Lista<T>)
      * @param elemento
      * @param nodo
      * @param nivelActual
      * @return
      */
-    @Deprecated
     private int nivelNodo(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
 
@@ -368,41 +234,24 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve el elemento padre de un elemento dado (si existe el elemento).
      * 
+     * @FIXME
      * @param elemento
      * @return
      */
     public T padre(T elemento) {
-        Busqueda<T> busqueda = buscar(elemento);
-        Nodo<T> nodoPadre = null;
-        T elementoPadre = null;
-
-        if (busqueda != null) {
-            nodoPadre = busqueda.getPadre();
-            if (nodoPadre != null) {
-                elementoPadre = nodoPadre.getElemento();
-            }
-        }
-
-        return elementoPadre;
+        return elemento;
     }
 
     /**
      * Devuelve una lista con los ancestros de un elemento dado, si éste
      * pertenece al árbol, de lo contrario una lista vacía.
      * 
+     * @FIXME
      * @param elemento
      * @return
      */
     public Lista<T> ancestros(T elemento) {
-        Busqueda<T> busqueda = buscar(elemento);
-        Lista<T> ancestros;
-
-        if (busqueda != null) {
-            ancestros = busqueda.getAncestros();
-        } else {
-            ancestros = new Lista<T>();
-        }
-
+        Lista<T> ancestros = new Lista<T>();
         return ancestros;
     }
 
