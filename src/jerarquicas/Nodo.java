@@ -1,17 +1,12 @@
 package jerarquicas;
 
 /**
- * Implementación de un nodo de tres enlaces: izquierdo, derecho y padre.
+ * Implementación de un nodo de dos enlaces: izquierdo y derecho.
  * 
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <E>
  */
 public class Nodo<E> {
-
-    /**
-     * La altura del nodo.
-     */
-    private int altura;
 
     /**
      * El elemento del nodo.
@@ -29,24 +24,10 @@ public class Nodo<E> {
     private Nodo<E> derecho;
 
     /**
-     * El nodo padre.
-     */
-    private Nodo<E> padre;
-
-    /**
      * Crea y devuelve un nodo sin elemento ni enlaces.
      */
     public Nodo() {
-        this(null, null, null, null);
-    }
-
-    /**
-     * Crea y devuelve un nodo con el enlace padre establecido.
-     * 
-     * @param padre
-     */
-    public Nodo(Nodo<E> padre) {
-        this(null, null, null, padre);
+        this(null, null, null);
     }
 
     /**
@@ -56,18 +37,7 @@ public class Nodo<E> {
      * @param derecho
      */
     public Nodo(Nodo<E> izquierdo, Nodo<E> derecho) {
-        this(null, izquierdo, derecho, null);
-    }
-
-    /**
-     * Crea y devuelve un nodo con los todos los enlaces establecidos.
-     * 
-     * @param izquierdo
-     * @param derecho
-     * @param padre
-     */
-    public Nodo(Nodo<E> izquierdo, Nodo<E> derecho, Nodo<E> padre) {
-        this(null, izquierdo, derecho, padre);
+        this(null, izquierdo, derecho);
     }
 
     /**
@@ -76,17 +46,7 @@ public class Nodo<E> {
      * @param elemento
      */
     public Nodo(E elemento) {
-        this(elemento, null, null, null);
-    }
-
-    /**
-     * Crea y devuelve un nodo con el elemento y el nodo padre establecidos.
-     * 
-     * @param elemento
-     * @param padre
-     */
-    public Nodo(E elemento, Nodo<E> padre) {
-        this(elemento, null, null, padre);
+        this(elemento, null, null);
     }
 
     /**
@@ -98,41 +58,9 @@ public class Nodo<E> {
      * @param derecho
      */
     public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho) {
-        this(elemento, izquierdo, derecho, null);
-    }
-
-    /**
-     * Crea y devuelve un nodo con el elemento y todos los enlaces establecidos.
-     * 
-     * @param elemento
-     * @param izquierdo
-     * @param derecho
-     * @param padre
-     */
-    public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho, Nodo<E> padre) {
         this.elemento = elemento;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
-        this.padre = padre;
-        this.altura = 0;
-    }
-
-    /**
-     * Devuelve la altura del nodo.
-     * 
-     * @return
-     */
-    public int getAltura() {
-        return altura;
-    }
-
-    /**
-     * Establece la altura del nodo.
-     * 
-     * @param altura
-     */
-    public void setAltura(int altura) {
-        this.altura = altura;
     }
 
     /**
@@ -141,7 +69,7 @@ public class Nodo<E> {
      * @return
      */
     public E getElemento() {
-        return elemento;
+        return this.elemento;
     }
 
     /**
@@ -159,7 +87,7 @@ public class Nodo<E> {
      * @return
      */
     public Nodo<E> getIzquierdo() {
-        return izquierdo;
+        return this.izquierdo;
     }
 
     /**
@@ -177,7 +105,7 @@ public class Nodo<E> {
      * @return
      */
     public Nodo<E> getDerecho() {
-        return derecho;
+        return this.derecho;
     }
 
     /**
@@ -187,23 +115,5 @@ public class Nodo<E> {
      */
     public void setDerecho(Nodo<E> derecho) {
         this.derecho = derecho;
-    }
-
-    /**
-     * Devuelve el nodo padre.
-     * 
-     * @return
-     */
-    public Nodo<E> getPadre() {
-        return padre;
-    }
-
-    /**
-     * Establece el nodo padre.
-     * 
-     * @param padre
-     */
-    public void setPadre(Nodo<E> padre) {
-        this.padre = padre;
     }
 }
