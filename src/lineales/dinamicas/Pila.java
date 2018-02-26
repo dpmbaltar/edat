@@ -22,7 +22,7 @@ public class Pila<T> {
 
     /**
      * Pone el elemento nuevoElemento en el tope de la pila. Devuelve verdadero
-     * si el elemento se pudo apilar y falso en caso contrario.
+     * siempre, ya que es una pila dinámica.
      *
      * @param nuevoElemento
      * @return

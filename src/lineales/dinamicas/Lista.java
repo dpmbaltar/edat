@@ -40,26 +40,22 @@ public class Lista<T> {
         boolean exito = false;
 
         if (1 <= posicion && posicion <= (longitud + 1)) {
-            if (longitud == 0) {
-                cabecera = new Nodo<T>(elemento);
-            } else if (longitud >= 1) {
-                Nodo<T> nuevo = new Nodo<T>(elemento);
+            Nodo<T> nuevo = new Nodo<T>(elemento);
 
-                if (posicion == 1) {
-                    nuevo.setEnlace(cabecera);
-                    cabecera = nuevo;
-                } else {
-                    int puntero = 1;
-                    Nodo<T> previo = cabecera;
+            if (posicion == 1) {
+                nuevo.setEnlace(cabecera);
+                cabecera = nuevo;
+            } else {
+                int puntero = 1;
+                Nodo<T> previo = cabecera;
 
-                    while (puntero < (posicion - 1)) {
-                        previo = previo.getEnlace();
-                        puntero++;
-                    }
-
-                    nuevo.setEnlace(previo.getEnlace());
-                    previo.setEnlace(nuevo);
+                while (puntero < (posicion - 1)) {
+                    previo = previo.getEnlace();
+                    puntero++;
                 }
+
+                nuevo.setEnlace(previo.getEnlace());
+                previo.setEnlace(nuevo);
             }
 
             longitud++;
@@ -87,14 +83,14 @@ public class Lista<T> {
                 cabecera = cabecera.getEnlace();
             } else {
                 int puntero = 1;
-                Nodo<T> nodo = cabecera;
+                Nodo<T> previo = cabecera;
 
-                while (puntero != (posicion - 1)) {
-                    nodo = nodo.getEnlace();
+                while (puntero < (posicion - 1)) {
+                    previo = previo.getEnlace();
                     puntero++;
                 }
 
-                nodo.setEnlace(nodo.getEnlace().getEnlace());
+                previo.setEnlace(previo.getEnlace().getEnlace());
             }
 
             longitud--;
@@ -118,7 +114,7 @@ public class Lista<T> {
             int puntero = 1;
             Nodo<T> nodo = cabecera;
 
-            while (puntero != posicion) {
+            while (puntero < posicion) {
                 nodo = nodo.getEnlace();
                 puntero++;
             }
@@ -164,6 +160,7 @@ public class Lista<T> {
      * @return
      */
     public int longitud() {
+        // Optimización: O(n) -> O(1)
         //int longitud = 0;
         //Nodo<T> nodo = cabecera;
         //
