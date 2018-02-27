@@ -158,10 +158,12 @@ public class ArbolGenerico<T> {
      * @return
      */
     private int alturaNodo(Nodo<T> nodo) {
-        int altura = 0, maxima = 0;
+        int altura = 0,
+            maxima = 0;
 
         if (nodo != null) {
-            Nodo<T> hijo = nodo.getIzquierdo(), hermano = nodo.getDerecho();
+            Nodo<T> hijo = nodo.getIzquierdo(),
+                    hermano = nodo.getDerecho();
 
             // Calcular la altura del sub-árbol correspondiente al primer hijo
             if (hijo != null) {
@@ -224,8 +226,8 @@ public class ArbolGenerico<T> {
                         nivel = nivelActual;
                     } else {
                         nivel = nivelNodo(elemento,
-                                            hermano.getIzquierdo(),
-                                            nivelActual + 1);
+                                          hermano.getIzquierdo(),
+                                          nivelActual + 1);
                         hermano = hermano.getDerecho();
                     }
                 }
@@ -238,12 +240,46 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve el elemento padre de un elemento dado (si existe el elemento).
      *
-     * @FIXME
      * @param elemento
      * @return
      */
     public T padre(T elemento) {
-        return elemento;
+        Nodo<T> padre = padre(elemento, raiz, null);
+        return padre == null ? null : padre.getElemento();
+    }
+
+    private Nodo<T> padre(T elemento, Nodo<T> nodo, Nodo<T> padre) {
+        Nodo<T> buscado = null;
+
+        if (nodo != null) {
+            if (((Object)nodo.getElemento()).equals(elemento)) {
+                buscado = padre;
+            } else {
+                Nodo<T> hijo = nodo.getIzquierdo(),
+                        hermano = nodo.getDerecho();
+
+                if (hijo != null) {
+                    buscado = padre(elemento, hijo, nodo);
+                }
+
+                while (hermano != null && buscado == null) {
+                    // Búsqueda recursiva en los hermanos del nodo
+                    buscado = padre(elemento, hermano, padre);
+                    hermano = hermano.getDerecho();
+                    // Búsqueda iterativa en los hermanos del nodo
+                    /*if (((Object)hermano.getElemento()).equals(elemento)) {
+                        buscado = padre;
+                    } else {
+                        buscado = padre(elemento,
+                                        hermano.getIzquierdo(),
+                                        hermano);
+                        hermano = hermano.getDerecho();
+                    }*/
+                }
+            }
+        }
+
+        return buscado;
     }
 
     /**

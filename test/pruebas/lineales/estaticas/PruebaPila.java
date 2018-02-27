@@ -1,6 +1,7 @@
 package pruebas.lineales.estaticas;
 
 import lineales.estaticas.Pila;
+//import lineales.dinamicas.Pila;
 
 /**
  * Prueba implementación de Pila estática (de enteros).

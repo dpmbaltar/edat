@@ -30,8 +30,8 @@ public class PruebaArbolGenerico {
         assert ag.insertar('b', 'a') : "Debe insertar 'b' como hijo de 'a'";
         assert ag.insertar('c', 'a') : "Debe insertar 'c' como hijo de 'a'";
         assert ag.insertar('d', 'b') : "Debe insertar 'd' como hijo de 'b'";
-        assert ag.insertar('e', 'c') : "Debe insertar 'd' como hijo de 'b'";
-        assert ag.insertar('f', 'c') : "Debe insertar 'd' como hijo de 'b'";
+        assert ag.insertar('e', 'c') : "Debe insertar 'e' como hijo de 'c'";
+        assert ag.insertar('f', 'c') : "Debe insertar 'f' como hijo de 'c'";
         assert ag.insertar('h', 'g') == false : "No debe insertar 'h' (padre 'g' inexistente)";
     }
 
@@ -45,15 +45,15 @@ public class PruebaArbolGenerico {
     protected static void pruebaPertenece() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.pertenece('a') : "'a' debe pertenecer al árbol";
-        assert ag.pertenece('b') : "'b' debe pertenecer al árbol";
         assert ag.pertenece('g') : "'g' debe pertenecer al árbol";
         assert ag.pertenece('k') : "'k' debe pertenecer al árbol";
-        assert ag.pertenece('m') : "'m' debe pertenecer al árbol";
         assert ag.pertenece('o') == false : "'o' no debe pertenecer al árbol";
     }
 
     protected static void pruebaAltura() {
-        ArbolGenerico<Character> ag = crearArbolPrueba();
+        ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
+        assert ag.altura() == 0 : "Altura debe ser 0";
+        ag = crearArbolPrueba();
         assert ag.altura() == 4 : "Altura debe ser 4";
     }
 

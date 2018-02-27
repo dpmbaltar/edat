@@ -15,7 +15,7 @@ public class Prueba {
                 assert false;
                 System.out.println(
                     "ERROR: las pruebas deben ser ejecutadas con el parámetro "+
-                    "-enableassertions (ó -ea). Leer README.md!"
+                    "de JVM -enableassertions (ó -ea). Leer README.md!"
                 );
                 System.exit(0);
             } catch (AssertionError e) {
@@ -33,6 +33,14 @@ public class Prueba {
             prueba = new pruebas.lineales.dinamicas.PruebaLista();
             exito();
             prueba = new pruebas.jerarquicas.PruebaArbolBinario();
+            exito();
+            prueba = new pruebas.jerarquicas.PruebaArbolGenerico();
+            exito();
+            prueba = new pruebas.conjuntistas.PruebaHeapMaximo();
+            exito();
+            prueba = new pruebas.conjuntistas.PruebaHeapMinimo();
+            exito();
+            prueba = new pruebas.conjuntistas.PruebaArbolBB();
             exito();
             // Fin de pruebas
             System.out.println();

@@ -1,6 +1,7 @@
 package pruebas.lineales.dinamicas;
 
 import lineales.dinamicas.Pila;
+//import lineales.estaticas.Pila;
 
 /**
  * Prueba implementación de Pila dinámica (de cadenas).
