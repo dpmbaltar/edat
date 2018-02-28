@@ -248,6 +248,14 @@ public class ArbolGenerico<T> {
         return padre == null ? null : padre.getElemento();
     }
 
+    /**
+     * Devuelve el nodo padre de un elemento dado (si existe el elemento).
+     *
+     * @param elemento
+     * @param nodo
+     * @param padre
+     * @return
+     */
     private Nodo<T> padre(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         Nodo<T> buscado = null;
 
@@ -292,7 +300,33 @@ public class ArbolGenerico<T> {
      */
     public Lista<T> ancestros(T elemento) {
         Lista<T> ancestros = new Lista<T>();
+        ancestros(elemento, raiz, ancestros);
         return ancestros;
+    }
+
+    private boolean ancestros(T elemento, Nodo<T> nodo, Lista<T> lista) {
+        boolean encontrado = false;
+
+        if (nodo != null) {
+            T elementoNodo = nodo.getElemento();
+            if (((Object)elementoNodo).equals(elemento)) {
+                encontrado = true;
+            } else {
+                encontrado = ancestros(elemento, nodo.getIzquierdo(), lista);
+
+                if (encontrado) {
+                    lista.insertar(elementoNodo, 1);
+                } else {
+                    Nodo<T> hermano = nodo.getDerecho();
+                    while (hermano != null && !encontrado) {
+                        encontrado = ancestros(elemento, hermano, lista);
+                        hermano = hermano.getDerecho();
+                    }
+                }
+            }
+        }
+
+        return encontrado;
     }
 
     /**

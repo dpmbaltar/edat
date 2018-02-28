@@ -1,6 +1,7 @@
 package pruebas.jerarquicas;
 
 import jerarquicas.ArbolGenerico;
+import lineales.dinamicas.Lista;
 
 /**
  * Prueba implementación de Árbol Genérico.
@@ -79,38 +80,59 @@ public class PruebaArbolGenerico {
 
     protected static void pruebaAncestros() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
-        assert ag.ancestros('a').toString().equals("[]") : "'a' no debe tener ancestros";
-        assert ag.ancestros('f').toString().equals("[b a]") : "Los ancestros de 'f' deben ser: c a";
-        assert ag.ancestros('m').toString().equals("[l h d a]") : "Los ancestros de 'm' deben ser: l h d a";
+        Lista<Character> lc;
+        assert ag.ancestros('a').toString().equals("[]")
+                : "'a' no debe tener ancestros";
+        assert ag.ancestros('f').toString().equals("[a, b]")
+                : "Los ancestros de 'f' deben ser: [a, b]";
+        assert ag.ancestros('g').toString().equals("[a, c]")
+                : "Los ancestros de 'g' deben ser: [a, c]";
+        assert ag.ancestros('l').toString().equals("[a, d, h]")
+                : "Los ancestros de 'l' deben ser: [a, d, h]";
+        assert ag.ancestros('m').toString().equals("[a, d, h, l]")
+                : "Los ancestros de 'm' deben ser: [a, d, h, l]";
+        assert ag.ancestros('e').toString().equals(ag.ancestros('f').toString())
+                : "Los ancestros de 'e' deben ser igual a los de 'f'";
+        assert ag.ancestros('h').toString().equals(ag.ancestros('i').toString())
+                : "Los ancestros de 'h' deben ser igual a los de 'i'";
+        lc = ag.ancestros('n');
+        lc.eliminar(4);
+        assert lc.toString().equals(ag.ancestros('k').toString())
+                : "Los ancestros de 'n' menos el último, deben ser igual a los de 'k'";
     }
 
     protected static void pruebaListarPreorden() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.listarPreorden().toString()
-                 .equals("[a b e f c g d h j k l m n i]") : "Listado en preorden debe ser: a b e f c g d h j k l m n i";
+                 .equals("[a, b, e, f, c, g, d, h, j, k, l, m, n, i]")
+                : "Listado en preorden debe ser: [a, b, e, f, c, g, d, h, j, k, l, m, n, i]";
     }
 
     protected static void pruebaListarInorden() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.listarInorden().toString()
-                 .equals("[e b f a g c j h k m l n d i]") : "Listado en inorden debe ser: e b f a g c j h k m l n d i";
+                 .equals("[e, b, f, a, g, c, j, h, k, m, l, n, d, i]")
+                : "Listado en inorden debe ser: [e, b, f, a, g, c, j, h, k, m, l, n, d, i]";
     }
 
     protected static void pruebaListarPosorden() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.listarPosorden().toString()
-                 .equals("[e f b g c j k m n l h i d a]") : "Listado en posorden debe ser: e f b g c j k m n l h i d a";
+                 .equals("[e, f, b, g, c, j, k, m, n, l, h, i, d, a]")
+                : "Listado en posorden debe ser: [e, f, b, g, c, j, k, m, n, l, h, i, d, a]";
     }
 
     protected static void pruebaListarNiveles() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
         assert ag.listarNiveles().toString()
-                 .equals("[a b c d e f g h i j k l m n]") : "Listado por niveles debe ser: a b c d e f g h i j k l m n";
+                 .equals("[a, b, c, d, e, f, g, h, i, j, k, l, m, n]")
+                : "Listado por niveles debe ser: [a, b, c, d, e, f, g, h, i, j, k, l, m, n]";
     }
 
     protected static void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolPrueba();
-        assert ag.toString().equals(ag.clonar().toString()) : "Árbol debe ser igual a su clon";
+        assert ag.toString().equals(ag.clonar().toString())
+                : "Árbol debe ser igual a su clon";
     }
 
     /**
