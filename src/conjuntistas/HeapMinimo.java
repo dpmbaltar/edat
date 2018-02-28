@@ -2,7 +2,7 @@ package conjuntistas;
 
 /**
  * Implementación de Heap Mínimo.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
  */
@@ -32,7 +32,7 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Crea y devuelve un heap vacío con capacidad especificada (debe ser > 0).
-     * 
+     *
      * @param capacidad
      */
     public HeapMinimo(int capacidad) {
@@ -42,7 +42,7 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Inserta un nuevo elemento al Heap.
-     * 
+     *
      * @param elemento
      * @return
      */
@@ -119,7 +119,7 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Elimina el elemento de la cima del Heap.
-     * 
+     *
      * @return
      */
     public boolean eliminarCima() {
@@ -138,7 +138,7 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Devuelve el elemento de la cima del Heap.
-     * 
+     *
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -149,7 +149,7 @@ public class HeapMinimo<T extends Comparable<T>> {
     /**
      * Devuelve verdadero si el Heap no tiene elementos, o falso en caso
      * contrario.
-     * 
+     *
      * @return
      */
     public boolean esVacio() {
@@ -168,6 +168,7 @@ public class HeapMinimo<T extends Comparable<T>> {
     /**
      * Devuelve la representación en forma de cadena de carácteres del Heap.
      */
+    @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
 
@@ -175,7 +176,7 @@ public class HeapMinimo<T extends Comparable<T>> {
             for (int i = 0; i < ultimo; i++) {
                 cadena.append(heap[i]);
                 if ((i + 1) < ultimo) {
-                    cadena.append(' ');
+                    cadena.append(", ");
                 }
             }
         }

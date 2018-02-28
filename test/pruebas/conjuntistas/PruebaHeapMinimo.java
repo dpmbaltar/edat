@@ -4,27 +4,18 @@ import conjuntistas.HeapMinimo;
 
 /**
  * Prueba implementación de Heap Mínimo.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaHeapMinimo {
 
-    public static void main(String[] args) {
-        try {
-            // Inicio de pruebas
-            pruebaInsertar();
-            pruebaRecuperarCima();
-            pruebaEliminarCima();
-            pruebaEsVacio();
-            pruebaVaciar();
-            pruebaToString();
-            // Fin de pruebas
-            System.out.println("Prueba OK");
-        } catch (AssertionError e) {
-            System.out.println("Error de prueba: " + e.getMessage());
-            System.out.println("Detalles:");
-            e.printStackTrace();
-        }
+    public PruebaHeapMinimo() {
+        pruebaInsertar();
+        pruebaRecuperarCima();
+        pruebaEliminarCima();
+        pruebaEsVacio();
+        pruebaVaciar();
+        pruebaToString();
     }
 
     protected static void pruebaInsertar() {
@@ -59,7 +50,8 @@ public class PruebaHeapMinimo {
 
     protected static void pruebaToString() {
         HeapMinimo<Integer> heap = crearHeapDePrueba();
-        assert heap.toString().equals("[1 2 8 16 4 15 63 31]") : "Debe devolver los elementos del Heap de izquierda a derecha por niveles";
+        assert heap.toString().equals("[1, 2, 8, 16, 4, 15, 63, 31]")
+                : "Debe ser los elementos del Heap de izq. a der. por niveles";
     }
 
     protected static HeapMinimo<Integer> crearHeapDePrueba() {

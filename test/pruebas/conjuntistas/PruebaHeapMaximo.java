@@ -4,27 +4,18 @@ import conjuntistas.HeapMaximo;
 
 /**
  * Prueba implementación de Heap Máximo.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
 public class PruebaHeapMaximo {
 
-    public static void main(String[] args) {
-        try {
-            // Inicio de pruebas
-            pruebaInsertar();
-            pruebaRecuperarCima();
-            pruebaEliminarCima();
-            pruebaEsVacio();
-            pruebaVaciar();
-            pruebaToString();
-            // Fin de pruebas
-            System.out.println("Prueba OK");
-        } catch (AssertionError e) {
-            System.out.println("Error de prueba: " + e.getMessage());
-            System.out.println("Detalles:");
-            e.printStackTrace();
-        }
+    public PruebaHeapMaximo() {
+        pruebaInsertar();
+        pruebaRecuperarCima();
+        pruebaEliminarCima();
+        pruebaEsVacio();
+        pruebaVaciar();
+        pruebaToString();
     }
 
     protected static void pruebaInsertar() {
@@ -59,7 +50,8 @@ public class PruebaHeapMaximo {
 
     protected static void pruebaToString() {
         HeapMaximo<Integer> heap = crearHeapDePrueba();
-        assert heap.toString().equals("[63 31 16 8 1 4 15 2]") : "Debe devolver los elementos del Heap de izquierda a derecha por niveles";
+        assert heap.toString().equals("[63, 31, 16, 8, 1, 4, 15, 2]")
+                : "Debe ser los elementos del Heap de izq. a der. por niveles";
     }
 
     protected static HeapMaximo<Integer> crearHeapDePrueba() {
