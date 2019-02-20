@@ -89,4 +89,5 @@ public class Nodo<E> {
     public void setEnlace(Nodo<E> enlace) {
         this.enlace = enlace;
     }
+
 }

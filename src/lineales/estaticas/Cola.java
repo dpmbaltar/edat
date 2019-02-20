@@ -32,9 +32,9 @@ public class Cola<T> {
      * Crea y devuelve la cola vacía.
      */
     public Cola() {
-        this.cola = new Object[TAM];
-        this.frente = 0;
-        this.ultimo = 0;
+        cola = new Object[TAM];
+        frente = 0;
+        ultimo = 0;
     }
 
     /**
@@ -45,16 +45,16 @@ public class Cola<T> {
      * @return
      */
     public boolean poner(T nuevoElemento) {
-        boolean exito = false;
+        boolean resultado = false;
         int nuevo = (ultimo + 1) % cola.length;
 
         if (frente == ultimo || nuevo != frente) {
             cola[ultimo] = nuevoElemento;
             ultimo = nuevo;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
@@ -65,26 +65,26 @@ public class Cola<T> {
      * @return
      */
     public boolean sacar() {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (frente != ultimo) {
             cola[frente] = null;
             frente = (frente + 1) % cola.length;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
-     * Devuelve el elemento que está en el frente. Precondición: la cola no
-     * está vacía.
+     * Devuelve el elemento que está en el frente. Precondición: la cola no está
+     * vacía.
      *
      * @return
      */
     @SuppressWarnings("unchecked")
     public T obtenerFrente() {
-        return (T)cola[frente];
+        return (T) cola[frente];
     }
 
     /**
@@ -114,10 +114,10 @@ public class Cola<T> {
     @SuppressWarnings("unchecked")
     public Cola<T> clonar() {
         Cola<T> clon = new Cola<T>();
-        int indice;
+        int i;
 
-        for (indice = frente; (indice % cola.length) != ultimo; indice++) {
-            clon.poner((T)cola[indice]);
+        for (i = frente; (i % cola.length) != ultimo; i++) {
+            clon.poner((T) cola[i]);
         }
 
         return clon;
@@ -131,11 +131,11 @@ public class Cola<T> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
-        int indice;
+        int i;
 
-        for (indice = frente; (indice % cola.length) != ultimo; indice++) {
-            cadena.append(String.valueOf(cola[indice]));
-            if (((indice + 1) % cola.length) != ultimo) {
+        for (i = frente; (i % cola.length) != ultimo; i++) {
+            cadena.append(String.valueOf(cola[i]));
+            if (((i + 1) % cola.length) != ultimo) {
                 cadena.append(", ");
             }
         }
@@ -144,4 +144,5 @@ public class Cola<T> {
 
         return cadena.toString();
     }
+
 }

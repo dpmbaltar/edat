@@ -40,19 +40,19 @@ public class Pila<T> {
      * @return
      */
     public boolean desapilar() {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (tope != null) {
             tope = tope.getEnlace();
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
-     * Devuelve el elemento en el tope de la pila.
-     * Precondición: la pila no está vacía.
+     * Devuelve el elemento en el tope de la pila. Precondición: la pila no está
+     * vacía.
      *
      * @return
      */
@@ -127,4 +127,5 @@ public class Pila<T> {
 
         return cadena.toString();
     }
+
 }

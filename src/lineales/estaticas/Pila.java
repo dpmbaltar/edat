@@ -27,8 +27,8 @@ public class Pila<T> {
      * Crea y devuelve la pila vacía.
      */
     public Pila() {
-        this.pila = new Object[TAM];
-        this.tope = -1;
+        pila = new Object[TAM];
+        tope = -1;
     }
 
     /**
@@ -39,15 +39,15 @@ public class Pila<T> {
      * @return
      */
     public boolean apilar(T nuevoElemento) {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (tope < (pila.length - 1)) {
             tope++;
             pila[tope] = nuevoElemento;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
@@ -58,26 +58,26 @@ public class Pila<T> {
      * @return
      */
     public boolean desapilar() {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (tope > -1) {
             pila[tope] = null;
             tope--;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
-     * Devuelve el elemento en el tope de la pila.
-     * Precondición: la pila no está vacía.
+     * Devuelve el elemento en el tope de la pila. Precondición: la pila no está
+     * vacía.
      *
      * @return
      */
     @SuppressWarnings("unchecked")
     public T obtenerTope() {
-        return tope > -1 ? (T)pila[tope] : null;
+        return tope > -1 ? (T) pila[tope] : null;
     }
 
     /**
@@ -106,10 +106,10 @@ public class Pila<T> {
     @SuppressWarnings("unchecked")
     public Pila<T> clonar() {
         Pila<T> clon = new Pila<T>();
-        int posicion;
+        int pos;
 
-        for (posicion = 0; posicion <= tope; posicion++) {
-            clon.apilar((T)pila[posicion]);
+        for (pos = 0; pos <= tope; pos++) {
+            clon.apilar((T) pila[pos]);
         }
 
         return clon;
@@ -123,11 +123,11 @@ public class Pila<T> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
-        int posicion;
+        int pos;
 
-        for (posicion = tope; posicion > -1; posicion--) {
-            cadena.append(String.valueOf(pila[posicion]));
-            if ((posicion - 1) > -1) {
+        for (pos = tope; pos > -1; pos--) {
+            cadena.append(String.valueOf(pila[pos]));
+            if ((pos - 1) > -1) {
                 cadena.append(", ");
             }
         }
@@ -136,4 +136,5 @@ public class Pila<T> {
 
         return cadena.toString();
     }
+
 }

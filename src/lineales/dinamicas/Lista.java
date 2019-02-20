@@ -22,6 +22,7 @@ public class Lista<T> {
      * Crea y devuelve una lista vacía.
      */
     public Lista() {
+        cabecera = null;
         longitud = 0;
     }
 
@@ -37,7 +38,7 @@ public class Lista<T> {
      * @return
      */
     public boolean insertar(T elemento, int posicion) {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (1 <= posicion && posicion <= (longitud + 1)) {
             Nodo<T> nuevo = new Nodo<T>(elemento);
@@ -46,23 +47,23 @@ public class Lista<T> {
                 nuevo.setEnlace(cabecera);
                 cabecera = nuevo;
             } else {
-                int puntero = 1;
-                Nodo<T> previo = cabecera;
+                int pos = 1;
+                Nodo<T> aux = cabecera;
 
-                while (puntero < (posicion - 1)) {
-                    previo = previo.getEnlace();
-                    puntero++;
+                while (pos < (posicion - 1)) {
+                    aux = aux.getEnlace();
+                    pos++;
                 }
 
-                nuevo.setEnlace(previo.getEnlace());
-                previo.setEnlace(nuevo);
+                nuevo.setEnlace(aux.getEnlace());
+                aux.setEnlace(nuevo);
             }
 
             longitud++;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
@@ -76,28 +77,28 @@ public class Lista<T> {
      * @return
      */
     public boolean eliminar(int posicion) {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (1 <= posicion && posicion <= longitud) {
             if (posicion == 1) {
                 cabecera = cabecera.getEnlace();
             } else {
-                int puntero = 1;
-                Nodo<T> previo = cabecera;
+                int pos = 1;
+                Nodo<T> aux = cabecera;
 
-                while (puntero < (posicion - 1)) {
-                    previo = previo.getEnlace();
-                    puntero++;
+                while (pos < (posicion - 1)) {
+                    aux = aux.getEnlace();
+                    pos++;
                 }
 
-                previo.setEnlace(previo.getEnlace().getEnlace());
+                aux.setEnlace(aux.getEnlace().getEnlace());
             }
 
             longitud--;
-            exito = true;
+            resultado = true;
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
@@ -111,12 +112,12 @@ public class Lista<T> {
         T elemento = null;
 
         if (1 <= posicion && posicion <= longitud) {
-            int puntero = 1;
+            int pos = 1;
             Nodo<T> nodo = cabecera;
 
-            while (puntero < posicion) {
+            while (pos < posicion) {
                 nodo = nodo.getEnlace();
-                puntero++;
+                pos++;
             }
 
             elemento = nodo.getElemento();
@@ -134,22 +135,22 @@ public class Lista<T> {
      */
     public int localizar(T elemento) {
         int posicion = -1;
-        int puntero = 1;
+        int i = 1;
         Nodo<T> nodo = cabecera;
         T actual = null;
 
         // No utilizar "if": "while" verificará si el nodo cabecera es nulo
-        //if (cabecera != null) {
+        // if (cabecera != null) {
         while (nodo != null && posicion < 0) {
             actual = nodo.getElemento();
             if (actual != null && actual.equals(elemento)) {
-                posicion = puntero;
+                posicion = i;
             } else {
                 nodo = nodo.getEnlace();
-                puntero++;
+                i++;
             }
         }
-        //}
+        // }
 
         return posicion;
     }
@@ -161,15 +162,15 @@ public class Lista<T> {
      */
     public int longitud() {
         // Optimización: O(n) -> O(1)
-        //int longitud = 0;
-        //Nodo<T> nodo = cabecera;
+        // int longitud = 0;
+        // Nodo<T> nodo = cabecera;
         //
-        //while (nodo != null) {
-        //    nodo = nodo.getEnlace();
-        //    longitud++;
-        //}
+        // while (nodo != null) {
+        // nodo = nodo.getEnlace();
+        // longitud++;
+        // }
         //
-        //return longitud;
+        // return longitud;
         return longitud;
     }
 
@@ -198,17 +199,17 @@ public class Lista<T> {
      * @return
      */
     public Lista<T> clonar() {
-        int posicion = 1;
+        int pos = 1;
         Lista<T> clon = new Lista<T>();
         Nodo<T> nodo = cabecera;
 
         // No utilizar "if": "while" verificará si el nodo cabecera es nulo
-        //if (cabecera != null) {
+        // if (cabecera != null) {
         while (nodo != null) {
-            clon.insertar(nodo.getElemento(), posicion++);
+            clon.insertar(nodo.getElemento(), pos++);
             nodo = nodo.getEnlace();
         }
-        //}
+        // }
 
         return clon;
     }
@@ -224,7 +225,7 @@ public class Lista<T> {
         Nodo<T> nodo = cabecera;
 
         // No utilizar "if": "while" verificará si el nodo cabecera es nulo
-        //if (cabecera != null) {
+        // if (cabecera != null) {
         while (nodo != null) {
             cadena.append(String.valueOf(nodo.getElemento()));
             nodo = nodo.getEnlace();
@@ -232,10 +233,11 @@ public class Lista<T> {
                 cadena.append(", ");
             }
         }
-        //}
+        // }
 
         cadena.append(']');
 
         return cadena.toString();
     }
+
 }

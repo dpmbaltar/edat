@@ -71,8 +71,8 @@ public class Cola<T> {
     }
 
     /**
-     * Devuelve el elemento que está en el frente. Precondición: la cola no
-     * está vacía.
+     * Devuelve el elemento que está en el frente. Precondición: la cola no está
+     * vacía.
      *
      * @return
      */
@@ -142,4 +142,5 @@ public class Cola<T> {
 
         return cadena.toString();
     }
+
 }
