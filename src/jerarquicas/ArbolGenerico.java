@@ -45,11 +45,11 @@ public class ArbolGenerico<T> {
                 // Agregar nuevo nodo al principio
                 // Desventaja: mantiene un orden menos coherente de los hijos
                 // Ventaja: más eficiente, enlaza con el primer hijo
-                /*if (nodoHermano != null) {
-                    nodoNuevo.setDerecho(nodoHermano);
-                }
-
-                nodoPadre.setIzquierdo(nodoNuevo);*/
+//                if (nodoHermano != null) {
+//                    nodoNuevo.setDerecho(nodoHermano);
+//                }
+//
+//                nodoPadre.setIzquierdo(nodoNuevo);
 
                 // Agregar nuevo nodo al final
                 // Desventaja: menos eficiente, ya que recorre todos los hijos
@@ -111,7 +111,7 @@ public class ArbolGenerico<T> {
                             buscado = hermano;
                         } else {
                             buscado = buscarNodo(elemento,
-                                                 hermano.getIzquierdo());
+                                    hermano.getIzquierdo());
                             hermano = hermano.getDerecho();
                         }
                     }
@@ -148,7 +148,7 @@ public class ArbolGenerico<T> {
      * @return
      */
     public int altura() {
-        return alturaNodo(raiz);
+        return altura(raiz);
     }
 
     /**
@@ -157,17 +157,15 @@ public class ArbolGenerico<T> {
      * @param nodo
      * @return
      */
-    private int alturaNodo(Nodo<T> nodo) {
-        int altura = 0,
-            maxima = 0;
+    private int altura(Nodo<T> nodo) {
+        int altura = 0, maxima = 0;
 
         if (nodo != null) {
-            Nodo<T> hijo = nodo.getIzquierdo(),
-                    hermano = nodo.getDerecho();
+            Nodo<T> hijo = nodo.getIzquierdo(), hermano = nodo.getDerecho();
 
             // Calcular la altura del sub-árbol correspondiente al primer hijo
             if (hijo != null) {
-                altura = 1 + alturaNodo(hijo);
+                altura = 1 + altura(hijo);
                 maxima = altura;
             }
 
@@ -177,7 +175,7 @@ public class ArbolGenerico<T> {
             while (hermano != null) {
                 hijo = hermano.getIzquierdo();
                 if (hijo != null) {
-                    altura = 1 + alturaNodo(hijo);
+                    altura = 1 + altura(hijo);
                     if (altura > maxima) {
                         maxima = altura;
                     }
@@ -197,7 +195,7 @@ public class ArbolGenerico<T> {
      * @return
      */
     public int nivel(T elemento) {
-        return nivelNodo(elemento, raiz, 0);
+        return nivel(elemento, raiz, 0);
     }
 
     /**
@@ -207,27 +205,25 @@ public class ArbolGenerico<T> {
      * @param nivelActual
      * @return
      */
-    private int nivelNodo(T elemento, Nodo<T> nodo, int nivelActual) {
+    private int nivel(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
 
         if (nodo != null) {
-            if (((Object)nodo.getElemento()).equals(elemento)) {
+            if (((Object) nodo.getElemento()).equals(elemento)) {
                 nivel = nivelActual;
             } else {
-                Nodo<T> hijo = nodo.getIzquierdo(),
-                        hermano = nodo.getDerecho();
+                Nodo<T> hijo = nodo.getIzquierdo(), hermano = nodo.getDerecho();
 
                 if (hijo != null) {
-                    nivel = nivelNodo(elemento, hijo, nivelActual + 1);
+                    nivel = nivel(elemento, hijo, nivelActual + 1);
                 }
 
                 while (hermano != null && nivel < 0) {
-                    if (((Object)hermano.getElemento()).equals(elemento)) {
+                    if (((Object) hermano.getElemento()).equals(elemento)) {
                         nivel = nivelActual;
                     } else {
-                        nivel = nivelNodo(elemento,
-                                          hermano.getIzquierdo(),
-                                          nivelActual + 1);
+                        nivel = nivel(elemento, hermano.getIzquierdo(),
+                                nivelActual + 1);
                         hermano = hermano.getDerecho();
                     }
                 }
@@ -260,11 +256,10 @@ public class ArbolGenerico<T> {
         Nodo<T> buscado = null;
 
         if (nodo != null) {
-            if (((Object)nodo.getElemento()).equals(elemento)) {
+            if (((Object) nodo.getElemento()).equals(elemento)) {
                 buscado = padre;
             } else {
-                Nodo<T> hijo = nodo.getIzquierdo(),
-                        hermano = nodo.getDerecho();
+                Nodo<T> hijo = nodo.getIzquierdo(), hermano = nodo.getDerecho();
 
                 if (hijo != null) {
                     buscado = padre(elemento, hijo, nodo);
@@ -275,14 +270,14 @@ public class ArbolGenerico<T> {
                     buscado = padre(elemento, hermano, padre);
                     hermano = hermano.getDerecho();
                     // Búsqueda iterativa en los hermanos del nodo
-                    /*if (((Object)hermano.getElemento()).equals(elemento)) {
-                        buscado = padre;
-                    } else {
-                        buscado = padre(elemento,
-                                        hermano.getIzquierdo(),
-                                        hermano);
-                        hermano = hermano.getDerecho();
-                    }*/
+//                    if (((Object)hermano.getElemento()).equals(elemento)) {
+//                        buscado = padre;
+//                    } else {
+//                        buscado = padre(elemento,
+//                                        hermano.getIzquierdo(),
+//                                        hermano);
+//                        hermano = hermano.getDerecho();
+//                    }
                 }
             }
         }
@@ -294,7 +289,6 @@ public class ArbolGenerico<T> {
      * Devuelve una lista con los ancestros de un elemento dado, si éste
      * pertenece al árbol, de lo contrario una lista vacía.
      *
-     * @FIXME
      * @param elemento
      * @return
      */
@@ -309,7 +303,7 @@ public class ArbolGenerico<T> {
 
         if (nodo != null) {
             T elementoNodo = nodo.getElemento();
-            if (((Object)elementoNodo).equals(elemento)) {
+            if (((Object) elementoNodo).equals(elemento)) {
                 encontrado = true;
             } else {
                 encontrado = ancestros(elemento, nodo.getIzquierdo(), lista);
@@ -342,19 +336,12 @@ public class ArbolGenerico<T> {
 
     private void preorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> primerHijo = nodo.getIzquierdo(),
-                    hijoSiguiente = null;
-
+            Nodo<T> hijo = nodo.getIzquierdo();
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
 
-            if (primerHijo != null) {
-                preorden(primerHijo, lista);
-                hijoSiguiente = primerHijo.getDerecho();
-            }
-
-            while (hijoSiguiente != null) {
-                preorden(hijoSiguiente, lista);
-                hijoSiguiente = hijoSiguiente.getDerecho();
+            while (hijo != null) {
+                preorden(hijo, lista);
+                hijo = hijo.getDerecho();
             }
         }
     }
@@ -372,19 +359,18 @@ public class ArbolGenerico<T> {
 
     private void inorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> primerHijo = nodo.getIzquierdo(),
-                    hijoSiguiente = null;
+            Nodo<T> hijo = nodo.getIzquierdo();
 
-            if (primerHijo != null) {
-                inorden(primerHijo, lista);
-                hijoSiguiente = primerHijo.getDerecho();
+            if (hijo != null) {
+                inorden(hijo, lista);
+                hijo = hijo.getDerecho();
             }
 
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
 
-            while (hijoSiguiente != null) {
-                inorden(hijoSiguiente, lista);
-                hijoSiguiente = hijoSiguiente.getDerecho();
+            while (hijo != null) {
+                inorden(hijo, lista);
+                hijo = hijo.getDerecho();
             }
         }
     }
@@ -402,17 +388,11 @@ public class ArbolGenerico<T> {
 
     private void posorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            Nodo<T> primerHijo = nodo.getIzquierdo(),
-                    hijoSiguiente = null;
+            Nodo<T> hijo = nodo.getIzquierdo();
 
-            if (primerHijo != null) {
-                posorden(primerHijo, lista);
-                hijoSiguiente = primerHijo.getDerecho();
-            }
-
-            while (hijoSiguiente != null) {
-                posorden(hijoSiguiente, lista);
-                hijoSiguiente = hijoSiguiente.getDerecho();
+            while (hijo != null) {
+                posorden(hijo, lista);
+                hijo = hijo.getDerecho();
             }
 
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
@@ -468,15 +448,15 @@ public class ArbolGenerico<T> {
     private void clonar(Nodo<T> hijo, Nodo<T> padre, ArbolGenerico<T> arbol) {
         while (hijo != null) {
             arbol.insertar(hijo.getElemento(),
-                           padre == null ? null : padre.getElemento());
+                    padre == null ? null : padre.getElemento());
             clonar(hijo.getIzquierdo(), hijo, arbol);
             hijo = hijo.getDerecho();
         }
     }
 
     /**
-     * Devuelve la representación del árbol en forma de cadena.
-     * Por defecto, éste método equivale a llamar listarNiveles.toString().
+     * Devuelve la representación del árbol en forma de cadena. Por defecto,
+     * éste método equivale a llamar listarNiveles.toString().
      */
     @Override
     public String toString() {

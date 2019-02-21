@@ -69,7 +69,7 @@ public class Nodo<E> {
      * @return
      */
     public E getElemento() {
-        return this.elemento;
+        return elemento;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Nodo<E> {
      * @return
      */
     public Nodo<E> getIzquierdo() {
-        return this.izquierdo;
+        return izquierdo;
     }
 
     /**
@@ -105,7 +105,7 @@ public class Nodo<E> {
      * @return
      */
     public Nodo<E> getDerecho() {
-        return this.derecho;
+        return derecho;
     }
 
     /**
@@ -116,4 +116,5 @@ public class Nodo<E> {
     public void setDerecho(Nodo<E> derecho) {
         this.derecho = derecho;
     }
+
 }

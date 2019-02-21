@@ -15,9 +15,7 @@ public class ArbolBinario<T> {
      * Enumeración de posibles posiciones al insertar un elemento.
      */
     public enum Posicion {
-        IZQUIERDO,
-        DERECHO,
-        RAIZ
+        IZQUIERDO, DERECHO, RAIZ
     }
 
     /**
@@ -42,13 +40,13 @@ public class ArbolBinario<T> {
      * @return
      */
     public boolean insertar(T elemento, T padre, Posicion posicion) {
-        boolean exito = false;
+        boolean resultado = false;
 
         if (raiz == null && posicion == Posicion.RAIZ) {
             raiz = new Nodo<T>(elemento);
-            exito = true;
+            resultado = true;
         } else {
-            Nodo<T> nodoPadre = obtenerNodo(padre);
+            Nodo<T> nodoPadre = buscarNodo(padre);
             if (nodoPadre != null) {
                 if (posicion == Posicion.IZQUIERDO) {
                     nodoPadre.setIzquierdo(new Nodo<T>(elemento));
@@ -56,11 +54,11 @@ public class ArbolBinario<T> {
                     nodoPadre.setDerecho(new Nodo<T>(elemento));
                 }
 
-                exito = true;
+                resultado = true;
             }
         }
 
-        return exito;
+        return resultado;
     }
 
     /**
@@ -96,32 +94,32 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Obtiene el nodo del elemento dado a partir del nodo raíz.
+     * Busca el nodo del elemento dado a partir del nodo raíz.
      *
      * @param elemento
      * @return
      */
-    private Nodo<T> obtenerNodo(T elemento) {
-        return obtenerNodo(elemento, raiz);
+    private Nodo<T> buscarNodo(T elemento) {
+        return buscarNodo(elemento, raiz);
     }
 
     /**
-     * Obtiene el nodo del elemento dado a partir de un nodo en particular.
+     * Busca el nodo del elemento dado a partir de un nodo en particular.
      *
      * @param elemento
      * @param nodo
      * @return
      */
-    private Nodo<T> obtenerNodo(T elemento, Nodo<T> nodo) {
+    private Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
 
         if (nodo != null) {
             if (nodo.getElemento().equals(elemento)) {
                 buscado = nodo;
             } else {
-                buscado = obtenerNodo(elemento, nodo.getIzquierdo());
+                buscado = buscarNodo(elemento, nodo.getIzquierdo());
                 if (buscado == null) {
-                    buscado = obtenerNodo(elemento, nodo.getDerecho());
+                    buscado = buscarNodo(elemento, nodo.getDerecho());
                 }
             }
         }
@@ -162,8 +160,7 @@ public class ArbolBinario<T> {
      * @return
      */
     private int altura(Nodo<T> nodo) {
-        int altura = 0,
-            maxima = 0;
+        int altura = 0, maxima = 0;
 
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
@@ -395,21 +392,21 @@ public class ArbolBinario<T> {
 
             if (hijoIzquierdo != null) {
                 arbol.insertarIzquierdo(hijoIzquierdo.getElemento(),
-                                        nodo.getElemento());
+                        nodo.getElemento());
                 clonar(hijoIzquierdo, arbol);
             }
 
             if (hijoDerecho != null) {
                 arbol.insertarDerecho(hijoDerecho.getElemento(),
-                                      nodo.getElemento());
+                        nodo.getElemento());
                 clonar(hijoDerecho, arbol);
             }
         }
     }
 
     /**
-     * Devuelve la representación del árbol en forma de cadena.
-     * Por defecto, éste método equivale a llamar listarNiveles.toString().
+     * Devuelve la representación del árbol en forma de cadena. Por defecto,
+     * éste método equivale a llamar listarNiveles.toString().
      */
     @Override
     public String toString() {
@@ -417,22 +414,22 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Suma todas las ramas a partir de un nodo dado, en forma recursiva.
-     * Método implementado en el 1er parcial (mal implementado; corregido).
+     * Suma todas las ramas a partir de un nodo dado, en forma recursiva. Método
+     * implementado en el 1er parcial (mal implementado; corregido).
      *
      * Corrección: no era necesario utilizar el parámetro auxiliar int suma, ya
      * que al hacerlo se esta sumando de más. El método sólo debe recorrer el
      * árbol recursivamente e ir sumando el valor de cada nodo con el valor de
-     * los nodos hijos, si es que existen.
-     * En caso de que sólo se quiera sumar los elementos de los nodos interiores
-     * (aquellos con al menos un hijo) se debe agregar la condición de que
-     * exista al menos un hijo para sumar el valor del nodo. Por ejemplo:
+     * los nodos hijos, si es que existen. En caso de que sólo se quiera sumar
+     * los elementos de los nodos interiores (aquellos con al menos un hijo) se
+     * debe agregar la condición de que exista al menos un hijo para sumar el
+     * valor del nodo. Por ejemplo:
      *
      * Nodo<T> izquierdo, derecho;
      * izquierdo = nodo.getIzquierdo();
      * derecho = nodo.getDerecho();
      * if (izquierdo != null || derecho != null) {
-     *     resultado += (Integer)nodo.getElemento();
+     *     resultado += (Integer) nodo.getElemento();
      *     resultado += sumarRamas(izquierdo);
      *     resultado += sumarRamas(derecho);
      * }
@@ -440,7 +437,7 @@ public class ArbolBinario<T> {
      * @param nodo
      * @return
      */
-    private int sumarRamas(Nodo<T> nodo) {//, int suma) {
+    private int sumarRamas(Nodo<T> nodo) {// , int suma) {
         int resultado = 0;
 //        Nodo<T> izquierdo, derecho;
 
@@ -459,7 +456,7 @@ public class ArbolBinario<T> {
 //                    resultado += sumarRamas(derecho, suma);
 //                }
 //            }
-            resultado += (Integer)nodo.getElemento();
+            resultado += (Integer) nodo.getElemento();
             resultado += sumarRamas(nodo.getIzquierdo());
             resultado += sumarRamas(nodo.getDerecho());
         }
@@ -468,8 +465,7 @@ public class ArbolBinario<T> {
     }
 
     /**
-     * Suma todas las ramas.
-     * Método implementado en el 1er parcial.
+     * Suma todas las ramas. Método implementado en el 1er parcial.
      *
      * @return
      */
@@ -497,9 +493,9 @@ public class ArbolBinario<T> {
             elementoLista = l1.recuperar(posicion);
             if (elementoNodo.equals(elementoLista)) {
                 posicion++;
-                if (posicion > l1.longitud()) { //Camino completo
+                if (posicion > l1.longitud()) { // Camino completo
                     exito = true;
-                } else { //Seguir verificando camino en hijos
+                } else { // Seguir verificando camino en hijos
                     hijoIzquierdo = nodo.getIzquierdo();
                     hijoDerecho = nodo.getDerecho();
                     exito = verificarPatron(hijoIzquierdo, l1, posicion);
@@ -564,15 +560,16 @@ public class ArbolBinario<T> {
 
             if (hijoDerecho != null) {
                 arbol.insertarIzquierdo(hijoDerecho.getElemento(),
-                                        nodo.getElemento());
+                        nodo.getElemento());
                 clonarHijosInvertidos(hijoDerecho, arbol);
             }
 
             if (hijoIzquierdo != null) {
                 arbol.insertarDerecho(hijoIzquierdo.getElemento(),
-                                      nodo.getElemento());
+                        nodo.getElemento());
                 clonarHijosInvertidos(hijoIzquierdo, arbol);
             }
         }
     }
+
 }
