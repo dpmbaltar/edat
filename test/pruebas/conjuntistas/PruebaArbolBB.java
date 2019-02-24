@@ -25,7 +25,8 @@ public class PruebaArbolBB {
     private static void pruebaInsertar() {
         ArbolBB<Integer> abb = new ArbolBB<Integer>();
         assert abb.insertar(8) : "Debe insertar 8 al árbol";
-        assert !abb.insertar(8) : "No debe insertar 8 al árbol (elemento existente)";
+        assert !abb.insertar(8)
+                : "No debe insertar 8 al árbol (elemento existente)";
     }
 
     private static void pruebaEliminar() {
@@ -35,13 +36,15 @@ public class PruebaArbolBB {
         assert abb.eliminar(15) : "Debe eliminar 15 del árbol";
         assert abb.eliminar(11) : "Debe eliminar 11 del árbol";
         assert abb.eliminar(8) : "Debe eliminar 8 del árbol";
-        assert !abb.eliminar(8) : "No debe eliminar 8 del árbol (elemento inexistente)";
+        assert !abb.eliminar(8)
+                : "No debe eliminar 8 del árbol (elemento inexistente)";
     }
 
     private static void pruebaPertenece() {
         ArbolBB<Integer> abb = crearArbolBBDePrueba();
         assert abb.pertenece(8) : "8 debe pertenecer al árbol";
-        assert !abb.pertenece(16) : "16 no debe pertenecer al árbol (elemento inexistente)";
+        assert !abb.pertenece(16)
+                : "16 no debe pertenecer al árbol (elemento inexistente)";
     }
 
     private static void pruebaMaximo() {
@@ -73,20 +76,22 @@ public class PruebaArbolBB {
 
     private static void pruebaListar() {
         ArbolBB<Integer> abb = crearArbolBBDePrueba();
-        assert abb.listar().toString()
-                  .equals("[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]") : "Debe listar la secuencia de enteros del 1 al 15";
+        assert abb.listar().toString().equals(
+                "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]")
+                : "Debe listar la secuencia de enteros del 1 al 15";
     }
 
     private static void pruebaListarRango() {
         ArbolBB<Integer> abb = crearArbolBBDePrueba();
-        assert abb.listarRango(8, 13).toString()
-                  .equals("[8 9 10 11 12 13]") : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
+        assert abb.listarRango(8, 13).toString().equals(
+                "[8, 9, 10, 11, 12, 13]")
+                : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
     }
 
     private static void pruebaClonar() {
-        ArbolBB<Integer> abb = crearArbolBBDePrueba(),
-                         clon = abb.clonar();
-        assert abb.toString().equals(clon.toString()) : "Clon del árbol debe ser una copia exacta del original";
+        ArbolBB<Integer> abb = crearArbolBBDePrueba(), clon = abb.clonar();
+        assert abb.toString().equals(clon.toString())
+                : "Clon del árbol debe ser una copia exacta del original";
     }
 
     private static ArbolBB<Integer> crearArbolBBDePrueba() {
