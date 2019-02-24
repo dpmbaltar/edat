@@ -37,7 +37,6 @@ public class ArbolGenerico<T> {
             resultado = true;
         } else if (elementoPadre != null) {
             Nodo<T> nodoPadre = buscarNodo(elementoPadre);
-
             if (nodoPadre != null) {
                 Nodo<T> nodoNuevo = new Nodo<T>(elemento),
                         nodoHermano = nodoPadre.getIzquierdo();
@@ -93,7 +92,6 @@ public class ArbolGenerico<T> {
      */
     private Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
-
         if (nodo != null) {
             if (((Object) nodo.getElemento()).equals(elemento)) {
                 buscado = nodo;
@@ -105,7 +103,6 @@ public class ArbolGenerico<T> {
                 // (y en los hijos de los hermanos, en forma recursiva)
                 if (buscado == null) {
                     Nodo<T> hermano = nodo.getDerecho();
-
                     while (hermano != null && buscado == null) {
                         if (((Object) hermano.getElemento()).equals(elemento)) {
                             buscado = hermano;

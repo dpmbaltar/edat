@@ -15,7 +15,7 @@ public class ArbolBinario<T> {
      * Enumeración de posibles posiciones al insertar un elemento.
      */
     public enum Posicion {
-        IZQUIERDO, DERECHO, RAIZ
+        IZQUIERDO, DERECHO
     }
 
     /**
@@ -42,19 +42,21 @@ public class ArbolBinario<T> {
     public boolean insertar(T elemento, T padre, Posicion posicion) {
         boolean resultado = false;
 
-        if (raiz == null && posicion == Posicion.RAIZ) {
+        if (raiz == null) {
             raiz = new Nodo<T>(elemento);
             resultado = true;
         } else {
             Nodo<T> nodoPadre = buscarNodo(padre);
             if (nodoPadre != null) {
-                if (posicion == Posicion.IZQUIERDO) {
+                if (posicion == Posicion.IZQUIERDO
+                        && nodoPadre.getIzquierdo() == null) {
                     nodoPadre.setIzquierdo(new Nodo<T>(elemento));
-                } else if (posicion == Posicion.DERECHO) {
+                    resultado = true;
+                } else if (posicion == Posicion.DERECHO
+                        && nodoPadre.getDerecho() == null) {
                     nodoPadre.setDerecho(new Nodo<T>(elemento));
+                    resultado = true;
                 }
-
-                resultado = true;
             }
         }
 
@@ -68,7 +70,7 @@ public class ArbolBinario<T> {
      * @return
      */
     public boolean insertarRaiz(T elemento) {
-        return insertar(elemento, null, Posicion.RAIZ);
+        return insertar(elemento, null, null);
     }
 
     /**
@@ -425,14 +427,10 @@ public class ArbolBinario<T> {
      * debe agregar la condición de que exista al menos un hijo para sumar el
      * valor del nodo. Por ejemplo:
      *
-     * Nodo<T> izquierdo, derecho;
-     * izquierdo = nodo.getIzquierdo();
-     * derecho = nodo.getDerecho();
-     * if (izquierdo != null || derecho != null) {
-     *     resultado += (Integer) nodo.getElemento();
-     *     resultado += sumarRamas(izquierdo);
-     *     resultado += sumarRamas(derecho);
-     * }
+     * Nodo<T> izquierdo, derecho; izquierdo = nodo.getIzquierdo(); derecho =
+     * nodo.getDerecho(); if (izquierdo != null || derecho != null) { resultado
+     * += (Integer) nodo.getElemento(); resultado += sumarRamas(izquierdo);
+     * resultado += sumarRamas(derecho); }
      *
      * @param nodo
      * @return
