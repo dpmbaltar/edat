@@ -69,16 +69,16 @@ public class HeapMinimo<T extends Comparable<T>> {
     private void hacerSubir() {
         if (ultimo > 1) {
             boolean subir = true;
-            int posPadre = ultimo / 2, posElemento = ultimo;
-            T elemento = (T) heap[posElemento - 1];
+            int posPadre = ultimo / 2, posElem = ultimo;
+            T ultimoElem = (T) heap[posElem - 1];
 
             while (subir && posPadre > 0) {
                 T padre = (T) heap[posPadre - 1];
-                if (padre != null && elemento.compareTo(padre) < 0) {
-                    heap[posElemento - 1] = padre;
-                    heap[posPadre - 1] = elemento;
-                    posElemento = posPadre;
-                    posPadre = posElemento / 2;
+                if (padre != null && ultimoElem.compareTo(padre) < 0) {
+                    heap[posElem - 1] = padre;
+                    heap[posPadre - 1] = ultimoElem;
+                    posElem = posPadre;
+                    posPadre = posElem / 2;
                 } else {
                     subir = false;
                 }

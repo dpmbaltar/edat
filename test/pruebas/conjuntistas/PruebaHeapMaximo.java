@@ -1,6 +1,7 @@
 package pruebas.conjuntistas;
 
 import conjuntistas.HeapMaximo;
+import conjuntistas.HeapMinimo;
 
 /**
  * Prueba implementación de Heap Máximo.
@@ -16,6 +17,7 @@ public class PruebaHeapMaximo {
         pruebaEsVacio();
         pruebaVaciar();
         pruebaToString();
+        pruebaHeapMaximo();
     }
 
     protected static void pruebaInsertar() {
@@ -52,6 +54,19 @@ public class PruebaHeapMaximo {
         HeapMaximo<Integer> heap = crearHeapDePrueba();
         assert heap.toString().equals("[63, 31, 16, 8, 1, 4, 15, 2]")
                 : "Debe ser los elementos del Heap de izq. a der. por niveles";
+    }
+    
+    protected static void pruebaHeapMaximo() {
+        HeapMaximo<Integer> heap = new HeapMaximo<Integer>();
+        assert heap.insertar(5) : "Debe insertar 5 en el heap";
+        heap.insertar(4);
+        heap.insertar(3);
+        heap.insertar(7);
+        assert heap.toString().equals("[7, 5, 3, 4]")
+                : "Debe ser los elementos del Heap por niveles [7, 5, 3, 4]";
+        heap.eliminarCima();
+        assert heap.toString().equals("[5, 4, 3]")
+                : "Debe ser los elementos del Heap por niveles [5, 4, 3]";
     }
 
     protected static HeapMaximo<Integer> crearHeapDePrueba() {
