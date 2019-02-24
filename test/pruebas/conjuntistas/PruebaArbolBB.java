@@ -9,26 +9,17 @@ import conjuntistas.ArbolBB;
  */
 public class PruebaArbolBB {
 
-    public static void main(String[] args) {
-        try {
-            // Inicio de pruebas
-            pruebaInsertar();
-            pruebaEliminar();
-            pruebaPertenece();
-            pruebaMaximo();
-            pruebaMinimo();
-            pruebaVacio();
-            pruebaVaciar();
-            pruebaListar();
-            pruebaListarRango();
-            pruebaClonar();
-            // Fin de pruebas
-            System.out.println("Prueba OK");
-        } catch (AssertionError e) {
-            System.out.println("Error de prueba: " + e.getMessage());
-            System.out.println("Detalles:");
-            e.printStackTrace();
-        }
+    public PruebaArbolBB() {
+        pruebaInsertar();
+        pruebaEliminar();
+        pruebaPertenece();
+        pruebaMaximo();
+        pruebaMinimo();
+        pruebaVacio();
+        pruebaVaciar();
+        pruebaListar();
+        pruebaListarRango();
+        pruebaClonar();
     }
 
     private static void pruebaInsertar() {

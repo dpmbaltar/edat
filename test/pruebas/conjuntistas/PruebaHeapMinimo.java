@@ -16,6 +16,7 @@ public class PruebaHeapMinimo {
         pruebaEsVacio();
         pruebaVaciar();
         pruebaToString();
+        pruebaHeapMinimo();
     }
 
     protected static void pruebaInsertar() {
@@ -52,6 +53,19 @@ public class PruebaHeapMinimo {
         HeapMinimo<Integer> heap = crearHeapDePrueba();
         assert heap.toString().equals("[1, 2, 8, 16, 4, 15, 63, 31]")
                 : "Debe ser los elementos del Heap de izq. a der. por niveles";
+    }
+    
+    protected static void pruebaHeapMinimo() {
+        HeapMinimo<Integer> heap = new HeapMinimo<Integer>();
+        assert heap.insertar(7) : "Debe insertar 7 en el heap";
+        heap.insertar(3);
+        heap.insertar(4);
+        heap.insertar(5);
+        assert heap.toString().equals("[3, 5, 4, 7]")
+                : "Debe ser los elementos del Heap por niveles [3, 5, 4, 7]";
+        heap.eliminarCima();
+        assert heap.toString().equals("[4, 5, 7]")
+                : "Debe ser los elementos del Heap por niveles [4, 5, 7]";
     }
 
     protected static HeapMinimo<Integer> crearHeapDePrueba() {

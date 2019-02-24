@@ -9,9 +9,9 @@ package conjuntistas;
 public class HeapMinimo<T extends Comparable<T>> {
 
     /**
-     * Indica la capacidad de elementos del Heap por defecto (1F).
+     * Indica la capacidad de elementos del Heap por defecto (31).
      */
-    private static final int TAM = 0x1F;
+    private static final int TAM = 31;
 
     /**
      * El índice del último elemento insertado al Heap.
@@ -50,8 +50,8 @@ public class HeapMinimo<T extends Comparable<T>> {
         boolean resultado = false;
 
         if (ultimo < heap.length) {
+            heap[ultimo] = elemento;
             ultimo++;
-            heap[ultimo - 1] = elemento;
             hacerSubir();
             resultado = true;
         }
@@ -61,23 +61,24 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Asegura que luego de insertar un elemento, la cima del Heap sea el
-     * elemento correcto (el mínimo).
+     * elemento correcto (el mínimo). Se calculan las posiciones como si las
+     * posiciones del arreglo comenzaran en 1, pero se accede a los elementos
+     * iniciando desde 0, es decir, se resta 1.
      */
     @SuppressWarnings("unchecked")
     private void hacerSubir() {
         if (ultimo > 1) {
             boolean subir = true;
-            int posicionPadre = ultimo / 2,
-                posicionElemento = ultimo;
-            T elemento = (T) heap[posicionElemento - 1];
+            int posPadre = ultimo / 2, posElemento = ultimo;
+            T elemento = (T) heap[posElemento - 1];
 
-            while (subir && posicionPadre > 0) {
-                T padre = (T) heap[posicionPadre - 1];
+            while (subir && posPadre > 0) {
+                T padre = (T) heap[posPadre - 1];
                 if (padre != null && elemento.compareTo(padre) < 0) {
-                    heap[posicionElemento - 1] = padre;
-                    heap[posicionPadre - 1] = elemento;
-                    posicionElemento = posicionPadre;
-                    posicionPadre = posicionElemento / 2;
+                    heap[posElemento - 1] = padre;
+                    heap[posPadre - 1] = elemento;
+                    posElemento = posPadre;
+                    posPadre = posElemento / 2;
                 } else {
                     subir = false;
                 }
@@ -87,31 +88,47 @@ public class HeapMinimo<T extends Comparable<T>> {
 
     /**
      * Asegura que luego de borrar la cima, la nueva cima del Heap sea el
-     * elemento correcto (el mínimo).
+     * elemento correcto (el mínimo). Se calculan las posiciones como si las
+     * posiciones del arreglo comenzaran en 1, pero se accede a los elementos
+     * iniciando desde 0, es decir, se resta 1.
      */
     @SuppressWarnings("unchecked")
     private void hacerBajar() {
         if (ultimo > 1) {
             boolean bajar = true;
-            int posicionPadre = 1;
-            T elemento = (T) heap[0];
+            int posPadre = 1, posHijoMenor = -1, posIzquierdo, posDerecho;
+            T ultimoElem = (T) heap[0], hijoMenor, izquierdo, derecho;
 
-            while (bajar && ((posicionPadre * 2) + 1 <= heap.length)) {
-                int posicionIzquierdo = 2 * posicionPadre,
-                    posicionDerecho = (2 * posicionPadre) + 1;
-                T izquierdo = (T) heap[posicionIzquierdo - 1],
-                  derecho = (T) heap[posicionDerecho - 1];
+            while (bajar && ((posPadre * 2) + 1 <= heap.length)) {
+                posIzquierdo = 2 * posPadre;
+                posDerecho = (2 * posPadre) + 1;
+                izquierdo = (T) heap[posIzquierdo - 1];
+                derecho = (T) heap[posDerecho - 1];
 
-                if (izquierdo != null && elemento.compareTo(izquierdo) > 0) {
-                    heap[posicionPadre - 1] = izquierdo;
-                    heap[posicionIzquierdo - 1] = elemento;
-                    posicionPadre = posicionIzquierdo;
-                } else if (derecho != null && elemento.compareTo(derecho) > 0) {
-                    heap[posicionPadre - 1] = derecho;
-                    heap[posicionDerecho - 1] = elemento;
-                    posicionPadre = posicionDerecho;
+                // Si tiene ambos hijos, tomar el menor
+                if (izquierdo != null && derecho != null) {
+                    if (izquierdo.compareTo(derecho) < 0) {
+                        posHijoMenor = posIzquierdo;
+                    } else {
+                        posHijoMenor = posDerecho;
+                    }
+                } else if (izquierdo != null) {
+                    posHijoMenor = posIzquierdo;
                 } else {
                     bajar = false;
+                }
+                
+                // Intercambiar con el hijo menor, si existe
+                if (posHijoMenor > 0) {
+                    hijoMenor = (T) heap[posHijoMenor - 1];
+                    if (ultimoElem.compareTo(hijoMenor) > 0) {
+                        heap[posPadre - 1] = hijoMenor;
+                        heap[posHijoMenor - 1] = ultimoElem;
+                        posPadre = posHijoMenor;
+                        posHijoMenor = -1;
+                    } else {
+                        bajar = false;
+                    }
                 }
             }
         }
@@ -126,9 +143,9 @@ public class HeapMinimo<T extends Comparable<T>> {
         boolean resultado = false;
 
         if (ultimo > 0) {
-            heap[0] = heap[ultimo - 1];
-            heap[ultimo - 1] = null;
             ultimo--;
+            heap[0] = heap[ultimo];
+            heap[ultimo] = null;
             hacerBajar();
             resultado = true;
         }
@@ -153,16 +170,16 @@ public class HeapMinimo<T extends Comparable<T>> {
      * @return
      */
     public boolean esVacio() {
-        return ultimo < 1;
+        return ultimo == 0;
     }
 
     /**
      * Elimina todos los elementos del Heap.
      */
     public void vaciar() {
-        for (; ultimo > 0; ultimo--) {
-            heap[ultimo - 1] = null;
-        }
+        for (int i = ultimo - 1; i >= 0; i--)
+            heap[i] = null;
+        ultimo = 0;
     }
 
     /**
