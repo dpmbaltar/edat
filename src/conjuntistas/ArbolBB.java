@@ -323,20 +323,14 @@ public class ArbolBB<T extends Comparable<T>> {
         if (nodo != null) {
             Nodo<T> izquierdo, derecho;
             T elemento;
-            boolean esMayorIgualQueMinimo, esMenorIgualQueMaximo;
-
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
             elemento = nodo.getElemento();
-            esMayorIgualQueMinimo = elemento.compareTo(minimo) >= 0;
-            esMenorIgualQueMaximo = elemento.compareTo(maximo) <= 0;
 
             listarRango(minimo, maximo, lista, izquierdo);
-
-            if (esMayorIgualQueMinimo && esMenorIgualQueMaximo) {
+            if (elemento.compareTo(minimo) >= 0
+                    && elemento.compareTo(maximo) <= 0)
                 lista.insertar(elemento, lista.longitud() + 1);
-            }
-
             listarRango(minimo, maximo, lista, derecho);
         }
     }
