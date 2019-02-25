@@ -24,20 +24,15 @@ public class Nodo<E> {
     private Nodo<E> derecho;
 
     /**
+     * La altura del nodo.
+     */
+    private int altura;
+
+    /**
      * Crea y devuelve un nodo sin elemento ni enlaces.
      */
     public Nodo() {
-        this(null, null, null);
-    }
-
-    /**
-     * Crea y devuelve un nodo con los enlaces izquierdo y derecho establecidos.
-     * 
-     * @param izquierdo
-     * @param derecho
-     */
-    public Nodo(Nodo<E> izquierdo, Nodo<E> derecho) {
-        this(null, izquierdo, derecho);
+        this(null, null, null, -1);
     }
 
     /**
@@ -46,7 +41,7 @@ public class Nodo<E> {
      * @param elemento
      */
     public Nodo(E elemento) {
-        this(elemento, null, null);
+        this(elemento, null, null, 0);
     }
 
     /**
@@ -58,9 +53,24 @@ public class Nodo<E> {
      * @param derecho
      */
     public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho) {
+        this(elemento, izquierdo, derecho,
+                Math.max(izquierdo.getAltura(), derecho.getAltura()) + 1);
+    }
+
+    /**
+     * Crea y devuelve un nodo con el elemento, los enlaces izquierdo y derecho
+     * establecidos y su altura.
+     * 
+     * @param elemento
+     * @param izquierdo
+     * @param derecho
+     * @param altura
+     */
+    public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho, int altura) {
         this.elemento = elemento;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
+        this.altura = altura;
     }
 
     /**
@@ -115,6 +125,24 @@ public class Nodo<E> {
      */
     public void setDerecho(Nodo<E> derecho) {
         this.derecho = derecho;
+    }
+
+    /**
+     * Devuelve la altura del nodo.
+     * 
+     * @return
+     */
+    public int getAltura() {
+        return altura;
+    }
+
+    /**
+     * Establece la altura del nodo.
+     * 
+     * @param altura
+     */
+    public void setAltura(int altura) {
+        this.altura = altura;
     }
 
 }

@@ -27,13 +27,14 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * 
      * @param elemento
      * @param nodo
+     * @param padre
      * @return
      */
-    @Override
-    protected boolean insertar(T elemento, Nodo<T> nodo) {
+    protected boolean insertar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean insertado = false;
 
         if (nodo != null) {
+            boolean actualizarAltura = false;
             Nodo<T> izquierdo, derecho, nuevo;
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
@@ -46,17 +47,83 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 if (izquierdo == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setIzquierdo(nuevo);
+                    if (derecho == null) {
+                        nodo.setAltura(1);
+                        actualizarAltura = true;
+                    }
                     insertado = true;
                 } else {
-                    insertado = insertar(elemento, izquierdo);
+                    insertado = insertar(elemento, izquierdo, nodo);
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setDerecho(nuevo);
+                    if (izquierdo == null) {
+                        nodo.setAltura(1);
+                        actualizarAltura = true;
+                    }
                     insertado = true;
                 } else {
-                    insertado = insertar(elemento, derecho);
+                    insertado = insertar(elemento, derecho, nodo);
+                }
+            }
+
+            // Balancear si es necesario
+            if (insertado) {
+                Nodo<T> rotado = null;
+                boolean balanceado = false;
+                int alturaIzquierdo, alturaDerecho, balance, balanceHijo;
+                alturaIzquierdo = alturaDerecho = -1;
+
+                if (izquierdo != null)
+                    alturaIzquierdo = izquierdo.getAltura();
+                if (derecho != null)
+                    alturaDerecho = derecho.getAltura();
+                if (actualizarAltura)
+                    nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho));
+
+                balance = alturaIzquierdo - alturaDerecho;
+
+                // Aplicar rotaciones, según corresponda
+                if (balance == 2) {
+                    balanceHijo = balance(izquierdo);
+                    if (balanceHijo == 1)
+                        rotado = rotarDerecha(nodo);
+                    else if (balanceHijo == -1)
+                        rotado = rotarIzquierdaDerecha(nodo);
+                    balanceado = true;
+                } else if (balance == -2) {
+                    balanceHijo = balance(derecho);
+                    if (balanceHijo == -1)
+                        rotado = rotarIzquierda(nodo);
+                    else if (balanceHijo == 1)
+                        rotado = rotarDerechaIzquierda(nodo);
+                    balanceado = true;
+                }
+
+                // Actualizar enlace del padre al nodo rotado, si corresponde
+                if (balanceado) {
+                    if (padre == null) {
+                        raiz = rotado;
+                    } else {
+                        Nodo<T> hermano = null;
+                        T elementoPadre = padre.getElemento();
+                        if (elemento.compareTo(elementoPadre) < 0) {
+                            padre.setIzquierdo(rotado);
+                            hermano = padre.getDerecho();
+                        } else if (elemento.compareTo(elementoPadre) > 0) {
+                            padre.setDerecho(rotado);
+                            hermano = padre.getIzquierdo();
+                        }
+
+//                        // Actualizar altura del padre
+//                        if (hermano == null)
+//                            padre.setAltura(rotado.getAltura() + 1);
+//                        else
+//                            padre.setAltura(Math.max(rotado.getAltura(),
+//                                    hermano.getAltura()) + 1);
+                    }
                 }
             }
         }
@@ -156,7 +223,19 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected int balance(Nodo<T> nodo) {
-        return altura(nodo.getIzquierdo()) - altura(nodo.getDerecho());
+        int alturaIzquierdo, alturaDerecho;
+        Nodo<T> izquierdo, derecho;
+
+        alturaIzquierdo = alturaDerecho = -1;
+        izquierdo = nodo.getIzquierdo();
+        derecho = nodo.getDerecho();
+
+        if (izquierdo != null)
+            alturaIzquierdo = izquierdo.getAltura();
+        if (derecho != null)
+            alturaDerecho = derecho.getAltura();
+
+        return alturaIzquierdo - alturaDerecho;
     }
 
     /**
@@ -269,5 +348,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             clonar(izquierdo, arbol);
             clonar(derecho, arbol);
         }
+    }
+
+    public void mostrarArbol() {
+
     }
 }
