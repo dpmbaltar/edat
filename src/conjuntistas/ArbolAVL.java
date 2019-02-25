@@ -10,12 +10,55 @@ import jerarquicas.Nodo;
  */
 public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
+    /**
+     * Inserta un elemento en el árbol.
+     */
     @Override
     public boolean insertar(T elemento) {
         boolean insertado = super.insertar(elemento);
-
-        if (insertado) {
+        if (insertado)
             balancear();
+
+        return insertado;
+    }
+
+    /**
+     * Inserta un elemento al sub-árbol correspondiente al nodo dado.
+     * 
+     * @param elemento
+     * @param nodo
+     * @return
+     */
+    @Override
+    protected boolean insertar(T elemento, Nodo<T> nodo) {
+        boolean insertado = false;
+
+        if (nodo != null) {
+            Nodo<T> izquierdo, derecho, nuevo;
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+
+            // Si el elemento es menor al del nodo, insertar en el sub-árbol
+            // izquierdo. Si el elemento es mayor al del nodo, insertar en el
+            // sub-árbol derecho. Si el elemento es igual al del nodo, el
+            // resultado será falso y no continuará hacia los nodos hijos.
+            if (elemento.compareTo(nodo.getElemento()) < 0) {
+                if (izquierdo == null) {
+                    nuevo = new Nodo<T>(elemento);
+                    nodo.setIzquierdo(nuevo);
+                    insertado = true;
+                } else {
+                    insertado = insertar(elemento, izquierdo);
+                }
+            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
+                if (derecho == null) {
+                    nuevo = new Nodo<T>(elemento);
+                    nodo.setDerecho(nuevo);
+                    insertado = true;
+                } else {
+                    insertado = insertar(elemento, derecho);
+                }
+            }
         }
 
         return insertado;
@@ -24,10 +67,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     @Override
     public boolean eliminar(T elemento) {
         boolean eliminado = super.eliminar(elemento);
-
-        if (eliminado) {
+        if (eliminado)
             balancear();
-        }
 
         return eliminado;
     }
@@ -88,17 +129,13 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 balancear(nodo.getDerecho(), nodo);
             } else if (reemplazo != null) {
                 if (padre == null) {
-                    reemplazo.setPadre(null);
                     raiz = reemplazo;
                 } else {
-                    int alturaHermano, alturaReemplazo;
                     Nodo<T> hermano = null;
                     T elementoPadre, elementoReemplazo;
 
-                    alturaReemplazo = reemplazo.getAltura();
                     elementoPadre = padre.getElemento();
                     elementoReemplazo = reemplazo.getElemento();
-                    reemplazo.setPadre(padre);
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
@@ -106,14 +143,6 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     } else if (elementoReemplazo.compareTo(elementoPadre) > 0) {
                         padre.setDerecho(reemplazo);
                         hermano = padre.getIzquierdo();
-                    }
-
-                    // Recalcular altura del nodo
-                    alturaHermano = hermano == null ? -1 : hermano.getAltura();
-                    if (alturaReemplazo > alturaHermano) {
-                        padre.setAltura(alturaReemplazo + 1);
-                    } else {
-                        padre.setAltura(alturaHermano + 1);
                     }
                 }
             }
@@ -127,99 +156,68 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected int balance(Nodo<T> nodo) {
-        Nodo<T> izquierdo, derecho;
-        int alturaIzquierdo, alturaDerecho;
-
-        izquierdo = nodo.getIzquierdo();
-        derecho = nodo.getDerecho();
-        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
-        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
-
-        return alturaIzquierdo - alturaDerecho;
+        return altura(nodo.getIzquierdo()) - altura(nodo.getDerecho());
     }
 
     /**
-     * Aplica una rotación simple a la derecha al sub-árbol correspondiente
-     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Devuelve la altura de un nodo.
+     * 
+     * @param nodo
+     * @return
+     */
+    protected int altura(Nodo<T> nodo) {
+        int altura = -1;
+
+        if (nodo != null) {
+            int alturaIzquierdo, alturaDerecho;
+            Nodo<T> hijoIzquierdo, hijoDerecho;
+            hijoIzquierdo = nodo.getIzquierdo();
+            hijoDerecho = nodo.getDerecho();
+            alturaIzquierdo = altura(hijoIzquierdo);
+            alturaDerecho = altura(hijoDerecho);
+            altura++;
+
+            if (alturaIzquierdo > alturaDerecho)
+                altura += alturaIzquierdo;
+            else
+                altura += alturaDerecho;
+        }
+
+        return altura;
+    }
+
+    /**
+     * Aplica una rotación simple a la derecha al sub-árbol correspondiente al
+     * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
      * 
      * @param nodo
      * @return
      */
     protected Nodo<T> rotarDerecha(Nodo<T> nodo) {
-        Nodo<T> izquierdo, derecho, auxiliar1, auxiliar2;
-        int alturaDerecho, alturaAuxiliar1, alturaAuxiliar2;
+        Nodo<T> izquierdo, izquierdoHD;
 
         izquierdo = nodo.getIzquierdo();
-        derecho = nodo.getDerecho();
-        auxiliar1 = izquierdo == null ? null : izquierdo.getDerecho();
-        auxiliar2 = izquierdo == null ? null : izquierdo.getIzquierdo();
-        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
-        alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura();
-        alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
-
+        izquierdoHD = izquierdo == null ? null : izquierdo.getDerecho();
         izquierdo.setDerecho(nodo);
-        nodo.setPadre(izquierdo);
-        nodo.setIzquierdo(auxiliar1);
-        if (auxiliar1 != null) {
-            auxiliar1.setPadre(nodo);
-        }
-
-        // Recalcular altura del nodo
-        if (alturaDerecho > alturaAuxiliar1) {
-            nodo.setAltura(alturaDerecho + 1);
-        } else {
-            nodo.setAltura(alturaAuxiliar1 + 1);
-        }
-
-        // Recalcular altura del reemplazo
-        if (alturaAuxiliar2 > nodo.getAltura()) {
-            izquierdo.setAltura(alturaAuxiliar2 + 1);
-        } else {
-            izquierdo.setAltura(nodo.getAltura() + 1);
-        }
+        nodo.setIzquierdo(izquierdoHD);
 
         return izquierdo;
     }
 
     /**
-     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente
-     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente al
+     * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
      * 
      * @param nodo
      * @return
      */
     protected Nodo<T> rotarIzquierda(Nodo<T> nodo) {
-        Nodo<T> derecho, izquierdo, auxiliar1, auxiliar2;
-        int alturaIzquierdo, alturaAuxiliar1, alturaAuxiliar2;
+        Nodo<T> derecho, derechoHI;
 
         derecho = nodo.getDerecho();
-        izquierdo = nodo.getIzquierdo();
-        auxiliar1 = derecho == null ? null : derecho.getIzquierdo();
-        auxiliar2 = derecho == null ? null : derecho.getDerecho();
-        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
-        alturaAuxiliar1 = auxiliar1 == null ? -1 : auxiliar1.getAltura();
-        alturaAuxiliar2 = auxiliar2 == null ? -1 : auxiliar2.getAltura();
-
+        derechoHI = derecho == null ? null : derecho.getIzquierdo();
         derecho.setIzquierdo(nodo);
-        nodo.setPadre(derecho);
-        nodo.setDerecho(auxiliar1);
-        if (auxiliar1 != null) {
-            auxiliar1.setPadre(nodo);
-        }
-
-        // Recalcular altura del nodo
-        if (alturaIzquierdo > alturaAuxiliar1) {
-            nodo.setAltura(alturaIzquierdo + 1);
-        } else {
-            nodo.setAltura(alturaAuxiliar1 + 1);
-        }
-
-        // Recalcular altura del reemplazo
-        if (alturaAuxiliar2 > nodo.getAltura()) {
-            derecho.setAltura(alturaAuxiliar2 + 1);
-        } else {
-            derecho.setAltura(nodo.getAltura() + 1);
-        }
+        nodo.setDerecho(derechoHI);
 
         return derecho;
     }
@@ -232,25 +230,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
-        Nodo<T> derecho, izquierdo, rotado;
-        int alturaIzquierdo, alturaRotado;
-
-        derecho = nodo.getDerecho();
-        izquierdo = nodo.getIzquierdo();
-        rotado = rotarDerecha(derecho);
-        alturaIzquierdo = izquierdo == null ? -1 : izquierdo.getAltura();
-        alturaRotado = rotado == null ? -1 : rotado.getAltura();
-
-        // Reemplazar nodo previo
+        Nodo<T> rotado = rotarDerecha(nodo.getDerecho());
         nodo.setDerecho(rotado);
-        rotado.setPadre(nodo);
-
-        // Recalcular altura del nodo
-        if (alturaIzquierdo > alturaRotado) {
-            nodo.setAltura(alturaIzquierdo + 1);
-        } else {
-            nodo.setAltura(alturaRotado + 1);
-        }
 
         return rotarIzquierda(nodo);
     }
@@ -263,25 +244,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @return
      */
     protected Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
-        Nodo<T> izquierdo, derecho, rotado;
-        int alturaDerecho, alturaRotado;
-
-        izquierdo = nodo.getIzquierdo();
-        derecho = nodo.getDerecho();
-        rotado = rotarIzquierda(izquierdo);
-        alturaDerecho = derecho == null ? -1 : derecho.getAltura();
-        alturaRotado = rotado == null ? -1 : rotado.getAltura();
-
-        // Reemplazar nodo previo
+        Nodo<T> rotado = rotarIzquierda(nodo.getIzquierdo());
         nodo.setIzquierdo(rotado);
-        rotado.setPadre(nodo);
-
-        // Recalcular altura del nodo
-        if (alturaDerecho > alturaRotado) {
-            nodo.setAltura(alturaDerecho + 1);
-        } else {
-            nodo.setAltura(alturaRotado + 1);
-        }
 
         return rotarDerecha(nodo);
     }

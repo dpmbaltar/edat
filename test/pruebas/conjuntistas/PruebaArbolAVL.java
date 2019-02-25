@@ -9,32 +9,23 @@ import conjuntistas.ArbolAVL;
  */
 public class PruebaArbolAVL {
 
-    public static void main(String[] args) {
-        try {
-            // Inicio de pruebas
-            pruebaInsertar();
-            pruebaEliminar();
-            pruebaPertenece();
-            pruebaMaximo();
-            pruebaMinimo();
-            pruebaVacio();
-            pruebaVaciar();
-            pruebaListar();
-            pruebaListarRango();
-            pruebaClonar();
-            // Fin de pruebas
-            System.out.println("Prueba OK");
-        } catch (AssertionError e) {
-            System.out.println("Error de prueba: " + e.getMessage());
-            System.out.println("Detalles:");
-            e.printStackTrace();
-        }
+    public PruebaArbolAVL() {
+        pruebaInsertar();
+        pruebaEliminar();
+        pruebaPertenece();
+        pruebaMaximo();
+        pruebaMinimo();
+        pruebaVacio();
+        pruebaVaciar();
+        pruebaListar();
+        pruebaListarRango();
+        pruebaClonar();
     }
 
     private static void pruebaInsertar() {
         ArbolAVL<Integer> avl = new ArbolAVL<Integer>();
         assert avl.insertar(8) : "Debe insertar 8 al árbol";
-        assert !avl.insertar(8) : "No debe insertar 8 al árbol (elemento existente)";
+        assert !avl.insertar(8) : "No debe insertar 8 al árbol (ya existe)";
     }
 
     private static void pruebaEliminar() {
@@ -44,13 +35,14 @@ public class PruebaArbolAVL {
         assert avl.eliminar(15) : "Debe eliminar 15 del árbol";
         assert avl.eliminar(11) : "Debe eliminar 11 del árbol";
         assert avl.eliminar(8) : "Debe eliminar 8 del árbol";
-        assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (elemento inexistente)";
+        assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
     }
 
     private static void pruebaPertenece() {
         ArbolAVL<Integer> avl = crearArbolAVLDePrueba();
         assert avl.pertenece(8) : "8 debe pertenecer al árbol";
-        assert !avl.pertenece(16) : "16 no debe pertenecer al árbol (elemento inexistente)";
+        assert !avl.pertenece(16)
+                : "16 no debe pertenecer al árbol (inexistente)";
     }
 
     private static void pruebaMaximo() {
@@ -83,19 +75,22 @@ public class PruebaArbolAVL {
     private static void pruebaListar() {
         ArbolAVL<Integer> avl = crearArbolAVLDePrueba();
         assert avl.listar().toString()
-                  .equals("[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]") : "Debe listar la secuencia de enteros del 1 al 15";
+              .equals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]")
+              : "Debe listar la secuencia de enteros del 1 al 15";
     }
 
     private static void pruebaListarRango() {
         ArbolAVL<Integer> avl = crearArbolAVLDePrueba();
         assert avl.listarRango(8, 13).toString()
-                  .equals("[8 9 10 11 12 13]") : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
+              .equals("[8, 9, 10, 11, 12, 13]")
+              : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
     }
 
     private static void pruebaClonar() {
         ArbolAVL<Integer> avl = crearArbolAVLDePrueba(),
                           clon = avl.clonar();
-        assert avl.toString().equals(clon.toString()) : "Clon del árbol debe ser una copia exacta del original";
+        assert avl.toString().equals(clon.toString())
+                : "Clon del árbol debe ser una copia exacta del original";
     }
 
     private static ArbolAVL<Integer> crearArbolAVLDePrueba() {

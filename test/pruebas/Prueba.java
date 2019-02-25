@@ -42,6 +42,8 @@ public class Prueba {
             exito();
             prueba = new pruebas.conjuntistas.PruebaArbolBB();
             exito();
+            prueba = new pruebas.conjuntistas.PruebaArbolAVL();
+            exito();
             // Fin de pruebas
             System.out.println();
             System.out.println("¡ÉXITO de prueba!");
