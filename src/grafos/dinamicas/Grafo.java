@@ -41,20 +41,38 @@ public class Grafo<T> {
     }
 
     /**
+     * Busca un nodo adyacente a partir del nodo vértice dado.
+     *
+     * @param vertice el nodo vértice
+     * @param destino el elemento destino
+     * @return
+     */
+    private NodoAdyacente<T> buscarAdyacente(NodoVertice<T> vertice, T destino) {
+        NodoAdyacente<T> adyacente = null;
+        if (vertice != null) {
+            adyacente = vertice.getPrimerAdyacente();
+            while (adyacente != null && !adyacente.getVertice().getElemento().equals(destino)) {
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+        }
+
+        return adyacente;
+    }
+
+    /**
      * Busca un nodo vértice a partir del elemento dado.
      *
      * @param elemento el elemento a buscar
      * @return
      */
     private NodoVertice<T> buscarVertice(T elemento) {
-        NodoVertice<T> siguiente = inicio;
-        while (siguiente != null && siguiente.getElemento().equals(elemento)) {
-            siguiente = siguiente.getSiguienteVertice();
+        NodoVertice<T> vertice = inicio;
+        while (vertice != null && !vertice.getElemento().equals(elemento)) {
+            vertice = vertice.getSiguienteVertice();
         }
 
-        return siguiente;
+        return vertice;
     }
-
 
     /**
      * Dado un elemento de tipo T se lo quita de la estructura. Si se encuentra el vértice, también  deben eliminarse
@@ -78,16 +96,16 @@ public class Grafo<T> {
      */
     public boolean insertarArco(T origen, T destino) {
         boolean exito = false;
-        NodoVertice<T> nodoOrigen = buscarVertice(origen);
+        NodoVertice<T> verticeOrigen = buscarVertice(origen);
 
-        if (nodoOrigen != null) {
-            NodoVertice<T> nodoDestino = buscarVertice(destino);
-            if (nodoDestino != null) {
+        if (verticeOrigen != null) {
+            NodoVertice<T> verticeDestino = buscarVertice(destino);
+            if (verticeDestino != null) {
                 NodoAdyacente<T> adyacenteDeOrigen, adyacenteDeDestino;
-                adyacenteDeOrigen = new NodoAdyacente<T>(nodoDestino, nodoOrigen.getPrimerAdyacente());
-                nodoOrigen.setPrimerAdyacente(adyacenteDeOrigen);
-                adyacenteDeDestino = new NodoAdyacente<T>(nodoOrigen, nodoDestino.getPrimerAdyacente());
-                nodoDestino.setPrimerAdyacente(adyacenteDeDestino);
+                adyacenteDeOrigen = new NodoAdyacente<T>(verticeDestino, verticeOrigen.getPrimerAdyacente());
+                verticeOrigen.setPrimerAdyacente(adyacenteDeOrigen);
+                adyacenteDeDestino = new NodoAdyacente<T>(verticeOrigen, verticeDestino.getPrimerAdyacente());
+                verticeDestino.setPrimerAdyacente(adyacenteDeDestino);
                 exito = true;
             }
         }
@@ -104,7 +122,62 @@ public class Grafo<T> {
      * @return
      */
     public boolean eliminarArco(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.eliminarArco() no implementado");
+        return eliminarArco(origen, destino, true);
+    }
+
+    /**
+     * Elimina el arco desde destino a origen, recíprocamente si es especificado.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @param reciproco si también se debe borrar el arco de destino a origen
+     * @return
+     */
+    private boolean eliminarArco(T origen, T destino, boolean reciproco) {
+        boolean exito = false;
+        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+
+        if (verticeOrigen != null) {
+            NodoAdyacente<T> eliminado = eliminarAdyacente(verticeOrigen, destino);
+            if (reciproco && eliminado != null) {
+                eliminado = eliminarAdyacente(eliminado.getVertice(), origen);
+            }
+
+            exito = eliminado != null;
+        }
+
+        return exito;
+    }
+
+    /**
+     * Eliminar un nodo adyacente a partir del nodo vértice dado.
+     *
+     * @param vertice el nodo vértice
+     * @param destino el elemento destino
+     * @return el adyacente eliminado
+     */
+    private NodoAdyacente<T> eliminarAdyacente(NodoVertice<T> vertice, T destino) {
+        NodoAdyacente<T> adyacenteAnterior, adyacenteActual = null;
+        if (vertice != null) {
+            adyacenteAnterior = null;
+            adyacenteActual = vertice.getPrimerAdyacente();
+
+            while (adyacenteActual != null && !adyacenteActual.getVertice().getElemento().equals(destino)) {
+                adyacenteAnterior = adyacenteActual;
+                adyacenteActual = adyacenteActual.getSiguienteAdyacente();
+            }
+
+            // Eliminar adyacente destino si fue encontrado
+            if (adyacenteActual != null) {
+                if (adyacenteAnterior == null) {
+                    vertice.setPrimerAdyacente(adyacenteActual.getSiguienteAdyacente());
+                } else {
+                    adyacenteAnterior.setSiguienteAdyacente(adyacenteActual.getSiguienteAdyacente());
+                }
+            }
+        }
+
+        return adyacenteActual;
     }
 
     /**
