@@ -12,6 +12,11 @@ public class NodoVertice<T> {
     private NodoAdyacente<T> primerAdyacente;
     private NodoVertice<T> siguienteVertice;
 
+    public NodoVertice(T elemento, NodoVertice<T> siguienteVertice) {
+        this.elemento = elemento;
+        this.siguienteVertice = siguienteVertice;
+    }
+
     public T getElemento() {
         return elemento;
     }
