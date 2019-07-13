@@ -10,16 +10,16 @@ import lineales.dinamicas.Lista;
  */
 public class Grafo<T> {
 
-	/**
-	 * El vértice de inicio del grafo.
-	 */
+    /**
+     * El vértice de inicio del grafo.
+     */
     private NodoVertice<T> inicio;
 
     /**
      * Crea un grafo vacío.
      */
     public Grafo() {
-    	inicio = null;
+        inicio = null;
     }
 
     /**
@@ -31,13 +31,13 @@ public class Grafo<T> {
      */
     public boolean insertarVertice(T elemento) {
         boolean exito = false;
-    	NodoVertice<T> nodoVertice = buscarVertice(elemento);
-    	if (nodoVertice == null) {
-    	    inicio = new NodoVertice<T>(elemento, inicio);
-    	    exito = true;
-    	}
+        NodoVertice<T> nodoVertice = buscarVertice(elemento);
+        if (nodoVertice == null) {
+            inicio = new NodoVertice<T>(elemento, inicio);
+            exito = true;
+        }
 
-    	return exito;
+        return exito;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean eliminarVertice(T vertice) {
-    	throw new UnsupportedOperationException("Grafo.eliminarVertice() no implementado");
+        throw new UnsupportedOperationException("Grafo.eliminarVertice() no implementado");
     }
 
     /**
@@ -187,7 +187,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean existeVertice(T elemento) {
-    	return buscarVertice(elemento) != null;
+        return buscarVertice(elemento) != null;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean existeArco(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.existeArco() no implementado");
+        throw new UnsupportedOperationException("Grafo.existeArco() no implementado");
     }
 
     /**
@@ -211,7 +211,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean existeCamino(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.existeCamino() no implementado");
+        throw new UnsupportedOperationException("Grafo.existeCamino() no implementado");
     }
 
     /**
@@ -225,7 +225,7 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> caminoMasCorto(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.caminoMasCorto() no implementado");
+        throw new UnsupportedOperationException("Grafo.caminoMasCorto() no implementado");
     }
 
     /**
@@ -239,7 +239,7 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> caminoMasLargo(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.caminoMasLargo() no implementado");
+        throw new UnsupportedOperationException("Grafo.caminoMasLargo() no implementado");
     }
 
     /**
@@ -248,7 +248,7 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> listarEnProfundidad() {
-    	throw new UnsupportedOperationException("Grafo.listarEnProfundidad() no implementado");
+        throw new UnsupportedOperationException("Grafo.listarEnProfundidad() no implementado");
     }
 
     /**
@@ -257,7 +257,7 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> listarEnAnchura() {
-    	throw new UnsupportedOperationException("Grafo.listarEnAnchura() no implementado");
+        throw new UnsupportedOperationException("Grafo.listarEnAnchura() no implementado");
     }
 
     /**
@@ -266,7 +266,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean esVacio() {
-    	throw new UnsupportedOperationException("Grafo.esVacio() no implementado");
+        throw new UnsupportedOperationException("Grafo.esVacio() no implementado");
     }
 
     /**
@@ -275,7 +275,7 @@ public class Grafo<T> {
      * @return
      */
     public Grafo<T> clonar() {
-    	throw new UnsupportedOperationException("Grafo.clonar() no implementado");
+        throw new UnsupportedOperationException("Grafo.clonar() no implementado");
     }
 
     /**
@@ -283,7 +283,34 @@ public class Grafo<T> {
      * uno de ellos.
      */
     @Override
-	public String toString() {
-    	throw new UnsupportedOperationException("Grafo.toString() no implementado");
+    public String toString() {
+        StringBuilder cadena = new StringBuilder();
+        NodoVertice<T> vertice = inicio;
+        NodoAdyacente<T> adyacente;
+
+        // Se forma la cadena recorriendo en forma inversa los vértices y sus adyacentes, para visualizar en el mismo
+        // orden en el que los elementos fueron agregados
+        while (vertice != null) {
+            cadena.insert(0, "]");
+            adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                cadena.insert(0, String.valueOf(adyacente.getVertice().getElemento()));
+                adyacente = adyacente.getSiguienteAdyacente();
+                if (adyacente != null) {
+                    cadena.insert(0, ", ");
+                }
+            }
+
+            cadena.insert(0, ": [");
+            cadena.insert(0, String.valueOf(vertice.getElemento()));
+            vertice = vertice.getSiguienteVertice();
+
+            if (vertice != null) {
+                cadena.insert(0, "\r\n");
+            }
+        }
+
+        return cadena.toString();
     }
 }
