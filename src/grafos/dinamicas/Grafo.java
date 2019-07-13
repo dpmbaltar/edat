@@ -95,11 +95,11 @@ public class Grafo<T> {
     /**
      * Dado un elemento, devuelve verdadero si está en la estructura y falso en caso contrario.
      *
-     * @param vertice
+     * @param elemento el elemento del vértice a buscar
      * @return
      */
-    public boolean existeVertice(T vertice) {
-    	throw new UnsupportedOperationException("Grafo.existeVertice() no implementado");
+    public boolean existeVertice(T elemento) {
+    	return buscarVertice(elemento) != null;
     }
 
     /**
