@@ -77,7 +77,19 @@ public class Grafo<T> {
      * @return
      */
     public boolean insertarArco(T origen, T destino) {
-    	throw new UnsupportedOperationException("Grafo.insertarArco() no implementado");
+        boolean exito = false;
+        NodoVertice<T> nodoOrigen = buscarVertice(origen);
+
+        if (nodoOrigen != null) {
+            NodoVertice<T> nodoDestino = buscarVertice(destino);
+            if (nodoDestino != null) {
+                NodoAdyacente<T> nuevoAdyacente = new NodoAdyacente<T>(nodoDestino, nodoOrigen.getPrimerAdyacente());
+                nodoOrigen.setPrimerAdyacente(nuevoAdyacente);
+                exito = true;
+            }
+        }
+
+        return exito;
     }
 
     /**
