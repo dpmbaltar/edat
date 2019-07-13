@@ -35,11 +35,16 @@ public class PruebaGrafo {
     }
 
     private void pruebaEliminarVertice() {
-
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.eliminarVertice("A") : "Debe eliminar A";
+        assert !grafo.eliminarVertice("A") : "No debe eliminar A (no existe)";
     }
 
     private void pruebaEliminarArco() {
-
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.eliminarArco("A", "B") : "Debe eliminar arco A-B";
+        assert !grafo.eliminarArco("A", "B") : "No debe eliminar arco A-B (no existe)";
+        assert !grafo.eliminarArco("B", "A") : "No debe eliminar arco B-A (no existe)";
     }
 
     private void pruebaExisteVertice() {
