@@ -266,7 +266,7 @@ public class Grafo<T> {
      * @return
      */
     public boolean esVacio() {
-        throw new UnsupportedOperationException("Grafo.esVacio() no implementado");
+        return inicio == null;
     }
 
     /**
