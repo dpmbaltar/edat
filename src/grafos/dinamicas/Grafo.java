@@ -3,7 +3,7 @@ package grafos.dinamicas;
 import lineales.dinamicas.Lista;
 
 /**
- * Implementación de Árbol AVL.
+ * Implementación de Grafo no dirigido.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
@@ -83,8 +83,11 @@ public class Grafo<T> {
         if (nodoOrigen != null) {
             NodoVertice<T> nodoDestino = buscarVertice(destino);
             if (nodoDestino != null) {
-                NodoAdyacente<T> nuevoAdyacente = new NodoAdyacente<T>(nodoDestino, nodoOrigen.getPrimerAdyacente());
-                nodoOrigen.setPrimerAdyacente(nuevoAdyacente);
+                NodoAdyacente<T> adyacenteDeOrigen, adyacenteDeDestino;
+                adyacenteDeOrigen = new NodoAdyacente<T>(nodoDestino, nodoOrigen.getPrimerAdyacente());
+                nodoOrigen.setPrimerAdyacente(adyacenteDeOrigen);
+                adyacenteDeDestino = new NodoAdyacente<T>(nodoOrigen, nodoDestino.getPrimerAdyacente());
+                nodoDestino.setPrimerAdyacente(adyacenteDeDestino);
                 exito = true;
             }
         }
