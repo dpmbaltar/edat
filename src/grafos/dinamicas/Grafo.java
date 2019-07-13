@@ -19,18 +19,40 @@ public class Grafo<T> {
      * Crea un grafo vacío.
      */
     public Grafo() {
-    	// Constructor vacío
+    	inicio = null;
     }
 
     /**
      * Dado un elemento de tipo T se lo agrega a la estructura controlando que no se inserten vértices repetidos.
      * Si puede realizar la inserción devuelve verdadero, en caso contrario devuelve falso.
      *
-     * @param vertice
+     * @param elemento el elemento a insertar
      * @return
      */
-    public boolean insertarVertice(T vertice) {
-    	throw new UnsupportedOperationException("Grafo.insertarVertice() no implementado");
+    public boolean insertarVertice(T elemento) {
+        boolean exito = false;
+    	NodoVertice<T> nodoVertice = buscarVertice(elemento);
+    	if (nodoVertice == null) {
+    	    inicio = new NodoVertice<T>(elemento, inicio);
+    	    exito = true;
+    	}
+
+    	return exito;
+    }
+
+    /**
+     * Busca un nodo vértice a partir del elemento dado.
+     *
+     * @param elemento el elemento a buscar
+     * @return
+     */
+    private NodoVertice<T> buscarVertice(T elemento) {
+        NodoVertice<T> siguiente = inicio;
+        while (siguiente != null && siguiente.getElemento().equals(elemento)) {
+            siguiente = siguiente.getSiguienteVertice();
+        }
+
+        return siguiente;
     }
 
 
