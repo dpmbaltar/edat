@@ -1,6 +1,8 @@
 package conjuntistas;
 
 import jerarquicas.Nodo;
+import lineales.dinamicas.Cola;
+import lineales.dinamicas.Lista;
 
 /**
  * Implementación de Árbol AVL.
@@ -15,9 +17,14 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      */
     @Override
     public boolean insertar(T elemento) {
-        boolean insertado = super.insertar(elemento);
-        if (insertado)
-            balancear();
+        boolean insertado = false;
+
+        if (raiz == null) {
+            raiz = new Nodo<T>(elemento);
+            insertado = true;
+        } else {
+            insertado = insertar(elemento, raiz, null);
+        }
 
         return insertado;
     }
@@ -34,7 +41,6 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         boolean insertado = false;
 
         if (nodo != null) {
-            boolean actualizarAltura = false;
             Nodo<T> izquierdo, derecho, nuevo;
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
@@ -47,10 +53,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 if (izquierdo == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setIzquierdo(nuevo);
-                    if (derecho == null) {
+                    if (derecho == null)
                         nodo.setAltura(1);
-                        actualizarAltura = true;
-                    }
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, izquierdo, nodo);
@@ -59,10 +63,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 if (derecho == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setDerecho(nuevo);
-                    if (izquierdo == null) {
+                    if (izquierdo == null)
                         nodo.setAltura(1);
-                        actualizarAltura = true;
-                    }
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, derecho, nodo);
@@ -75,16 +77,18 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 boolean balanceado = false;
                 int alturaIzquierdo, alturaDerecho, balance, balanceHijo;
                 alturaIzquierdo = alturaDerecho = -1;
+                izquierdo = nodo.getIzquierdo();
+                derecho = nodo.getDerecho();
 
                 if (izquierdo != null)
                     alturaIzquierdo = izquierdo.getAltura();
                 if (derecho != null)
                     alturaDerecho = derecho.getAltura();
-                if (actualizarAltura)
-                    nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho));
+                nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
 
                 balance = alturaIzquierdo - alturaDerecho;
-
+                // System.out.println("nodo: "+nodo.getElemento()+" balance:
+                // "+balance);
                 // Aplicar rotaciones, según corresponda
                 if (balance == 2) {
                     balanceHijo = balance(izquierdo);
@@ -329,6 +333,53 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         return rotarDerecha(nodo);
     }
 
+    /**
+     * Devuelve una lista por niveles con los elementos del árbol.
+     */
+    public Lista<T> listarNiveles() {
+        return listarNiveles(false);
+    }
+
+    /**
+     * 
+     * @param verNulos
+     * @return
+     */
+    public Lista<T> listarNiveles(boolean verNulos) {
+        Lista<T> lista = new Lista<T>();
+
+        if (raiz != null) {
+            Nodo<T> nodo, hijoIzquierdo, hijoDerecho;
+            Cola<Nodo<T>> cola = new Cola<Nodo<T>>();
+            cola.poner(raiz);
+
+            while (!cola.esVacia()) {
+                nodo = cola.obtenerFrente();
+
+                if (nodo != null) {
+                    lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+                    hijoIzquierdo = nodo.getIzquierdo();
+                    hijoDerecho = nodo.getDerecho();
+                    if (verNulos) {
+                        cola.poner(hijoIzquierdo);
+                        cola.poner(hijoDerecho);
+                    } else {
+                        if (hijoIzquierdo != null)
+                            cola.poner(hijoIzquierdo);
+                        if (hijoDerecho != null)
+                            cola.poner(hijoDerecho);
+                    }
+                } else {
+                    lista.insertar(null, lista.longitud() + 1);
+                }
+
+                cola.sacar();
+            }
+        }
+
+        return lista;
+    }
+
     @Override
     public ArbolAVL<T> clonar() {
         ArbolAVL<T> clon = new ArbolAVL<T>();
@@ -350,7 +401,4 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         }
     }
 
-    public void mostrarArbol() {
-
-    }
 }

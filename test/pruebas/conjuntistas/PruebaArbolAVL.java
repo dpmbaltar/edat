@@ -20,6 +20,7 @@ public class PruebaArbolAVL {
         pruebaListar();
         pruebaListarRango();
         pruebaClonar();
+        pruebaArbolAVL();
     }
 
     private static void pruebaInsertar() {
@@ -91,6 +92,57 @@ public class PruebaArbolAVL {
                           clon = avl.clonar();
         assert avl.toString().equals(clon.toString())
                 : "Clon del árbol debe ser una copia exacta del original";
+    }
+    
+    protected void pruebaArbolAVL() {
+        ArbolAVL<Integer> avl;
+        
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(10);
+        avl.insertar(5);
+        avl.insertar(3);
+        assert avl.listarNiveles(true).toString().equals("[5, 3, 10, null, null, null, null]")
+                : "Debe listar [5, 3, 10, null, null, null, null]";
+        // Rotación izquierda
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(8);
+        avl.insertar(5);
+        avl.insertar(15);
+        avl.insertar(13);
+        avl.insertar(20);
+        avl.insertar(29);
+        assert avl.listarNiveles(true).toString().equals("[15, 8, 20, 5, 13, null, 29, null, null, null, null, null, null]")
+                : "Debe listar [15, 8, 20, 5, 13, null, 29, null, null, null, null, null, null]";
+        // Rotación derecha
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(10);
+        avl.insertar(5);
+        avl.insertar(15);
+        avl.insertar(3);
+        avl.insertar(7);
+        avl.insertar(4);
+        assert avl.listarNiveles(true).toString().equals("[5, 3, 10, null, 4, 7, 15, null, null, null, null, null, null]")
+                : "Debe listar [5, 3, 10, null, 4, 7, 15, null, null, null, null, null, null]";
+        // Rotación derecha-izquierda
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(10);
+        avl.insertar(5);
+        avl.insertar(15);
+        avl.insertar(12);
+        avl.insertar(17);
+        avl.insertar(13);
+        assert avl.listarNiveles(true).toString().equals("[12, 10, 15, 5, null, 13, 17, null, null, null, null, null, null]")
+                : "Debe listar [12, 10, 15, 5, null, 13, 17, null, null, null, null, null, null]";
+        // Rotación izquierda-derecha
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(12);
+        avl.insertar(5);
+        avl.insertar(23);
+        avl.insertar(3);
+        avl.insertar(8);
+        avl.insertar(10);
+        assert avl.listarNiveles(true).toString().equals("[8, 5, 12, 3, null, 10, 23, null, null, null, null, null, null]")
+                : "Debe listar [8, 5, 12, 3, null, 10, 23, null, null, null, null, null, null]";
     }
 
     private static ArbolAVL<Integer> crearArbolAVLDePrueba() {
