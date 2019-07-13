@@ -8,22 +8,22 @@ package grafos.dinamicas;
  */
 public class NodoAdyacente<T> {
 
-    private NodoAdyacente<T> vertice;
-    private NodoVertice<T> siguienteAdyacente;
+    private NodoVertice<T> vertice;
+    private NodoAdyacente<T> siguienteAdyacente;
 
-    public NodoAdyacente<T> getVertice() {
+    public NodoVertice<T> getVertice() {
         return vertice;
     }
 
-    public void setVertice(NodoAdyacente<T> vertice) {
+    public void setVertice(NodoVertice<T> vertice) {
         this.vertice = vertice;
     }
 
-    public NodoVertice<T> getSiguienteAdyacente() {
+    public NodoAdyacente<T> getSiguienteAdyacente() {
         return siguienteAdyacente;
     }
 
-    public void setSiguienteAdyacente(NodoVertice<T> siguienteAdyacente) {
+    public void setSiguienteAdyacente(NodoAdyacente<T> siguienteAdyacente) {
         this.siguienteAdyacente = siguienteAdyacente;
     }
 }
