@@ -194,12 +194,12 @@ public class Grafo<T> {
      * Dados dos elementos de tipo T (origen y destino), devuelve verdadero si existe un arco en la estructura que los
      * une y falso en caso contrario.
 
-     * @param origen
-     * @param destino
-     * @return
+     * @param origen el elemento del vértice origen
+     * @param destino el elemento del vértice destino
+     * @return verdadero si el arco existe, falso en caso contrario
      */
     public boolean existeArco(T origen, T destino) {
-        throw new UnsupportedOperationException("Grafo.existeArco() no implementado");
+        return buscarAdyacente(buscarVertice(origen), destino) != null;
     }
 
     /**
