@@ -233,12 +233,51 @@ public class Grafo<T> {
      * Dados dos elementos de tipo T (origen y destino), devuelve verdadero si existe al menos un camino que permite
      * llegar del vértice origen al vértice destino y falso en caso contrario.
      *
-     * @param origen
-     * @param destino
-     * @return
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return verdadero si existe un camino de origen a destino, falso en caso contrario
      */
     public boolean existeCamino(T origen, T destino) {
-        throw new UnsupportedOperationException("Grafo.existeCamino() no implementado");
+        boolean existe = false;
+        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+        NodoVertice<T> verticeDestino = buscarVertice(destino);
+
+        if (verticeOrigen != null && verticeDestino != null) {
+            existe = existeCamino(verticeOrigen, destino, new Lista<T>());
+        }
+
+        return existe;
+    }
+
+    /**
+     * Verifica si hay un camino desde el vértice dado al destino en forma recursiva, evitando vértices ya visitados.
+     *
+     * @param vertice el vértice a visitar
+     * @param destino el elemento destino
+     * @param visitados lista de vértices visitados
+     * @return verdadero si existe un camino del vértice actual a destino, falso en caso contrario
+     */
+    private boolean existeCamino(NodoVertice<T> vertice, T destino, Lista<T> visitados) {
+        boolean existe = false;
+
+        if (vertice != null) {
+            if (vertice.getElemento().equals(destino)) {
+                existe = true;
+            } else {
+                visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
+                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+
+                while (!existe && adyacente != null) {
+                    if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
+                        existe = existeCamino(adyacente.getVertice(), destino, visitados);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+        }
+
+        return existe;
     }
 
     /**
