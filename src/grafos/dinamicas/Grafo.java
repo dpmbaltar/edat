@@ -382,7 +382,7 @@ public class Grafo<T> {
 
         // Se forma la cadena recorriendo en forma inversa los vértices y sus adyacentes, para visualizar en el mismo
         // orden en el que los elementos fueron agregados
-        while (vertice != null) {
+        /*while (vertice != null) {
             cadena.insert(0, "]");
             adyacente = vertice.getPrimerAdyacente();
 
@@ -400,6 +400,27 @@ public class Grafo<T> {
 
             if (vertice != null) {
                 cadena.insert(0, "\r\n");
+            }
+        }*/
+
+        // Se forma la cadena recorriendo en orden inverso del cual fueron agregados los vértices de acorde al modelo
+        while (vertice != null) {
+            cadena.append(String.valueOf(vertice.getElemento())).append(": [");
+            adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                cadena.append(String.valueOf(adyacente.getVertice().getElemento()));
+                adyacente = adyacente.getSiguienteAdyacente();
+                if (adyacente != null) {
+                    cadena.append(", ");
+                }
+            }
+
+            cadena.append("]");
+            vertice = vertice.getSiguienteVertice();
+
+            if (vertice != null) {
+                cadena.append("\r\n");
             }
         }
 

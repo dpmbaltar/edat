@@ -17,7 +17,12 @@ public class PruebaGrafo {
         pruebaExisteVertice();
         pruebaExisteArco();
         pruebaExisteCamino();
+        //pruebaCaminoMasCorto();
+        //pruebaCaminoMasLargo();
+        pruebaListarEnProfundidad();
+        //pruebaListarEnAnchura();
         pruebaEsVacio();
+        //pruebaClonar();
     }
 
     private void pruebaInsertarVertice() {
@@ -83,6 +88,12 @@ public class PruebaGrafo {
         assert !grafo.existeCamino("H", "E") : "No debe existir camino H..E";
     }
 
+    private void pruebaListarEnProfundidad() {
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, C, D, G, H, J]")
+                : "Debe listar: [A, B, F, E, I, C, D, G, H, J]";
+    }
+
     private void pruebaEsVacio() {
         Grafo<String> grafo = new Grafo<>();
         assert grafo.esVacio() : "Debe ser vacío";
@@ -106,30 +117,30 @@ public class PruebaGrafo {
      */
     private Grafo<String> crearGrafo() {
         Grafo<String> grafo = new Grafo<>();
-        grafo.insertarVertice("A");
-        grafo.insertarVertice("B");
-        grafo.insertarVertice("C");
-        grafo.insertarVertice("D");
-        grafo.insertarVertice("E");
-        grafo.insertarVertice("F");
-        grafo.insertarVertice("G");
-        grafo.insertarVertice("H");
-        grafo.insertarVertice("I");
         grafo.insertarVertice("J");
-        grafo.insertarArco("A", "B");
-        grafo.insertarArco("A", "E");
-        grafo.insertarArco("A", "F");
-        grafo.insertarArco("B", "F");
-        grafo.insertarArco("B", "C");
-        grafo.insertarArco("C", "D");
-        grafo.insertarArco("C", "G");
-        grafo.insertarArco("C", "H");
-        grafo.insertarArco("D", "G");
-        grafo.insertarArco("E", "F");
-        grafo.insertarArco("E", "I");
-        grafo.insertarArco("F", "I");
-        grafo.insertarArco("G", "H");
+        grafo.insertarVertice("I");
+        grafo.insertarVertice("H");
+        grafo.insertarVertice("G");
+        grafo.insertarVertice("F");
+        grafo.insertarVertice("E");
+        grafo.insertarVertice("D");
+        grafo.insertarVertice("C");
+        grafo.insertarVertice("B");
+        grafo.insertarVertice("A");
         grafo.insertarArco("H", "J");
+        grafo.insertarArco("G", "H");
+        grafo.insertarArco("F", "I");
+        grafo.insertarArco("E", "I");
+        grafo.insertarArco("E", "F");
+        grafo.insertarArco("D", "G");
+        grafo.insertarArco("C", "H");
+        grafo.insertarArco("C", "G");
+        grafo.insertarArco("C", "D");
+        grafo.insertarArco("B", "C");
+        grafo.insertarArco("B", "F");
+        grafo.insertarArco("A", "F");
+        grafo.insertarArco("A", "E");
+        grafo.insertarArco("A", "B");
 
         return grafo;
     }
