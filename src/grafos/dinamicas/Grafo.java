@@ -79,11 +79,38 @@ public class Grafo<T> {
      * todos los arcos que lo tengan como origen o destino. Si se puede realizar la eliminación con éxito
      * devuelve verdadero, en caso contrario devuelve falso.
      *
-     * @param vertice
+     * @param vertice el elemento del vértice a eliminar
      * @return
      */
     public boolean eliminarVertice(T vertice) {
-        throw new UnsupportedOperationException("Grafo.eliminarVertice() no implementado");
+        boolean eliminado = false;
+        NodoVertice<T> verticeAnterior = null, verticeActual = inicio;
+        NodoAdyacente<T> adyacente;
+
+        while (verticeActual != null && !verticeActual.getElemento().equals(vertice)) {
+            verticeAnterior = verticeActual;
+            verticeActual = verticeActual.getSiguienteVertice();
+        }
+
+        // Eliminar vertice si fue encontrado
+        if (verticeActual != null) {
+            if (verticeAnterior == null) {
+                inicio = verticeActual.getSiguienteVertice();
+            } else {
+                verticeAnterior.setSiguienteVertice(verticeActual.getSiguienteVertice());
+            }
+
+            // Eliminar referencias al vértice como destino
+            adyacente = verticeActual.getPrimerAdyacente();
+            while (adyacente != null) {
+                eliminarAdyacente(adyacente.getVertice(), vertice);
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+
+            eliminado = true;
+        }
+
+        return eliminado;
     }
 
     /**
