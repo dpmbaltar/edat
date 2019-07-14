@@ -16,6 +16,7 @@ public class PruebaGrafo {
         pruebaEliminarArco();
         pruebaExisteVertice();
         pruebaExisteArco();
+        pruebaExisteCamino();
         pruebaEsVacio();
     }
 
@@ -60,6 +61,26 @@ public class PruebaGrafo {
         assert grafo.existeArco("B", "C") : "Debe existir arco B-C";
         assert grafo.existeArco("C", "B") : "Debe existir arco C-B";
         assert !grafo.existeArco("C", "A") : "No debe existir arco C-A";
+    }
+
+    private void pruebaExisteCamino() {
+        Grafo<String> grafo = crearGrafo();
+        String[] vertices = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+
+        // Deben existir caminos entre todos los vértices (grafo conectado)
+        for (int i = 0; i < vertices.length; i++) {
+            for (int j = 0; j < vertices.length; j++) {
+                assert grafo.existeCamino(vertices[i], vertices[j])
+                        : String.format("Debe existir camino %s..%s", vertices[i], vertices[j]);
+            }
+        }
+
+        // Ahora no deben existir algunos caminos (grafo no conectado)
+        grafo.eliminarVertice("B");
+        assert !grafo.existeCamino("A", "D") : "No debe existir camino A..C";
+        assert !grafo.existeCamino("G", "F") : "No debe existir camino G..F";
+        assert !grafo.existeCamino("I", "J") : "No debe existir camino I..J";
+        assert !grafo.existeCamino("H", "E") : "No debe existir camino H..E";
     }
 
     private void pruebaEsVacio() {
