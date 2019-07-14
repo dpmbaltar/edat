@@ -367,7 +367,45 @@ public class Grafo<T> {
      * @return
      */
     public Grafo<T> clonar() {
-        throw new UnsupportedOperationException("Grafo.clonar() no implementado");
+        Grafo<T> clon = new Grafo<>();
+        NodoVertice<T> inicioClon = null;
+        NodoVertice<T> vertice = inicio;
+        NodoAdyacente<T> adyacente = null;
+
+        while (vertice != null) {
+            inicioClon = new NodoVertice<T>(vertice.getElemento(), inicioClon);
+            adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                inicioClon.setPrimerAdyacente(
+                        new NodoAdyacente<T>(adyacente.getVertice(), inicioClon.getPrimerAdyacente()));
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        // Insertar todos los vértices
+        vertice = inicioClon;
+        while (vertice != null) {
+            clon.insertarVertice(vertice.getElemento());
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        // Insertar todos los arcos
+        vertice = inicioClon;
+        while (vertice != null) {
+            adyacente = vertice.getPrimerAdyacente();
+            while (adyacente != null) {
+                //FIXME: la estructura interna de arcos queda duplicada
+                clon.insertarArco(vertice.getElemento(), adyacente.getVertice().getElemento());
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return clon;
     }
 
     /**

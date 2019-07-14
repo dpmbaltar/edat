@@ -22,7 +22,7 @@ public class PruebaGrafo {
         pruebaListarEnProfundidad();
         //pruebaListarEnAnchura();
         pruebaEsVacio();
-        //pruebaClonar();
+        pruebaClonar();
     }
 
     private void pruebaInsertarVertice() {
@@ -99,6 +99,12 @@ public class PruebaGrafo {
         assert grafo.esVacio() : "Debe ser vacío";
         grafo = crearGrafo();
         assert !grafo.esVacio() : "No debe ser vacío";
+    }
+
+    private void pruebaClonar() {
+        Grafo<String> grafo = crearGrafo();
+        Grafo<String> clon = grafo.clonar();
+        //assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
     }
 
     /**
