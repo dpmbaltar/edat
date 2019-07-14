@@ -314,7 +314,33 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> listarEnProfundidad() {
-        throw new UnsupportedOperationException("Grafo.listarEnProfundidad() no implementado");
+        Lista<T> visitados = new Lista<>();
+        NodoVertice<T> vertice = inicio;
+
+        while (vertice != null) {
+            if (visitados.localizar(vertice.getElemento()) < 0) {
+                listarEnProfundidad(vertice, visitados);
+            }
+
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return visitados;
+    }
+
+    private void listarEnProfundidad(NodoVertice<T> vertice, Lista<T> visitados) {
+        if (vertice != null) {
+            visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
+            NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
+                    listarEnProfundidad(adyacente.getVertice(), visitados);
+                }
+
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+        }
     }
 
     /**
