@@ -88,6 +88,26 @@ public class PruebaGrafo {
         assert !grafo.existeCamino("H", "E") : "No debe existir camino H..E";
     }
 
+    private void pruebaCaminoMasCorto() {
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.caminoMasLargo("A", "D").toString().equals("[A, B, C, D]")
+                : "Camino más corto A..D debe ser [A, B, C, D]";
+        assert grafo.caminoMasLargo("A", "J").toString().equals("[A, B, C, H, J]")
+                : "Camino más corto A..J debe ser [A, B, C, H, J]";
+        assert grafo.caminoMasLargo("F", "G").toString().equals("[G, D, C, B, A, E, I, F]")
+                : "Camino más corto F..G debe ser [G, D, C, B, A, E, I, F]";
+    }
+
+    private void pruebaCaminoMasLargo() {
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.caminoMasLargo("A", "D").toString().equals("[A, E, I, F, B, C, G, D]")
+                : "Camino más largo A..D debe ser [A, E, I, F, B, C, G, D]";
+        assert grafo.caminoMasLargo("A", "J").toString().equals("[A, E, I, F, B, C, D, G, H, J]")
+                : "Camino más largo A..J debe ser [A, E, I, F, B, C, D, G, H, J]";
+        assert grafo.caminoMasLargo("F", "G").toString().equals("[G, C, B, F]")
+                : "Camino más largo F..G debe ser [G, C, B, F]";
+    }
+
     private void pruebaListarEnProfundidad() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, C, D, G, H, J]")
