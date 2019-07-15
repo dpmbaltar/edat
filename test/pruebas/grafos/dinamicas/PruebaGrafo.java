@@ -20,9 +20,9 @@ public class PruebaGrafo {
         //pruebaCaminoMasCorto();
         //pruebaCaminoMasLargo();
         pruebaListarEnProfundidad();
-        //pruebaListarEnAnchura();
+        pruebaListarEnAnchura();
         pruebaEsVacio();
-        pruebaClonar();
+        //pruebaClonar();
     }
 
     private void pruebaInsertarVertice() {
@@ -94,6 +94,12 @@ public class PruebaGrafo {
                 : "Debe listar: [A, B, F, E, I, C, D, G, H, J]";
     }
 
+    private void pruebaListarEnAnchura() {
+        Grafo<String> grafo = crearGrafo();
+        assert grafo.listarEnAnchura().toString().equals("[B, E, F, A, C, I, D, G, H, J]")
+                : "Debe listar: [B, E, F, A, C, I, D, G, H, J]";
+    }
+
     private void pruebaEsVacio() {
         Grafo<String> grafo = new Grafo<>();
         assert grafo.esVacio() : "Debe ser vacío";
@@ -103,8 +109,10 @@ public class PruebaGrafo {
 
     private void pruebaClonar() {
         Grafo<String> grafo = crearGrafo();
+        grafo.insertarArco("A", "A");
+        grafo.insertarArco("H", "J");
         Grafo<String> clon = grafo.clonar();
-        //assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
+        assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
     }
 
     /**

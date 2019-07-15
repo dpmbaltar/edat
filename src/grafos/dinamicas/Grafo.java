@@ -1,5 +1,6 @@
 package grafos.dinamicas;
 
+import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
 /**
@@ -319,7 +320,7 @@ public class Grafo<T> {
 
         while (vertice != null) {
             if (visitados.localizar(vertice.getElemento()) < 0) {
-                listarEnProfundidad(vertice, visitados);
+                listarEnProfundidadDesde(vertice, visitados);
             }
 
             vertice = vertice.getSiguienteVertice();
@@ -328,14 +329,14 @@ public class Grafo<T> {
         return visitados;
     }
 
-    private void listarEnProfundidad(NodoVertice<T> vertice, Lista<T> visitados) {
+    private void listarEnProfundidadDesde(NodoVertice<T> vertice, Lista<T> visitados) {
         if (vertice != null) {
             visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
             NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
 
             while (adyacente != null) {
                 if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
-                    listarEnProfundidad(adyacente.getVertice(), visitados);
+                    listarEnProfundidadDesde(adyacente.getVertice(), visitados);
                 }
 
                 adyacente = adyacente.getSiguienteAdyacente();
@@ -349,7 +350,43 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> listarEnAnchura() {
-        throw new UnsupportedOperationException("Grafo.listarEnAnchura() no implementado");
+        Lista<T> visitados = new Lista<>();
+        NodoVertice<T> vertice = inicio;
+
+        while (vertice != null) {
+            if (visitados.localizar(vertice.getElemento()) < 0) {
+                listarEnAnchuraDesde(vertice, visitados);
+            }
+
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return visitados;
+    }
+
+    private void listarEnAnchuraDesde(NodoVertice<T> vertice, Lista<T> visitados) {
+        if (vertice != null) {
+            NodoVertice<T> verticeFrente;
+            NodoAdyacente<T> adyacente;
+            Cola<NodoVertice<T>> colaVertices = new Cola<>();
+            colaVertices.poner(vertice);
+
+            while (!colaVertices.esVacia()) {
+                verticeFrente = colaVertices.obtenerFrente();
+                colaVertices.sacar();
+                //visitados.insertar(verticeFrente.getElemento(), visitados.longitud() + 1);
+                adyacente = verticeFrente.getPrimerAdyacente();
+
+                while (adyacente != null) {
+                    if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
+                        colaVertices.poner(adyacente.getVertice());
+                        visitados.insertar(adyacente.getVertice().getElemento(), visitados.longitud() + 1);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+        }
     }
 
     /**
@@ -371,14 +408,27 @@ public class Grafo<T> {
         NodoVertice<T> inicioClon = null;
         NodoVertice<T> vertice = inicio;
         NodoAdyacente<T> adyacente = null;
+        Lista<String> listaArcos = new Lista<>();
+        String arco;
+        int posArco;
 
         while (vertice != null) {
             inicioClon = new NodoVertice<T>(vertice.getElemento(), inicioClon);
             adyacente = vertice.getPrimerAdyacente();
 
             while (adyacente != null) {
-                inicioClon.setPrimerAdyacente(
-                        new NodoAdyacente<T>(adyacente.getVertice(), inicioClon.getPrimerAdyacente()));
+                arco = adyacente.getVertice().getElemento().toString()+"-"+vertice.getElemento().toString();
+                posArco = listaArcos.localizar(arco);
+
+                if (posArco >= 0) {
+                    listaArcos.eliminar(posArco);
+                } else {
+                    arco = vertice.getElemento().toString()+"-"+adyacente.getVertice().getElemento().toString();
+                    listaArcos.insertar(arco, listaArcos.longitud() + 1);
+                    inicioClon.setPrimerAdyacente(
+                            new NodoAdyacente<T>(adyacente.getVertice(), inicioClon.getPrimerAdyacente()));
+                }
+
                 adyacente = adyacente.getSiguienteAdyacente();
             }
 
@@ -397,7 +447,7 @@ public class Grafo<T> {
         while (vertice != null) {
             adyacente = vertice.getPrimerAdyacente();
             while (adyacente != null) {
-                //FIXME: la estructura interna de arcos queda duplicada
+                //FIXME: la estructura interna de arcos queda distinta en algunos casos, pero equivalente
                 clon.insertarArco(vertice.getElemento(), adyacente.getVertice().getElemento());
                 adyacente = adyacente.getSiguienteAdyacente();
             }
