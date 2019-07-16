@@ -244,7 +244,7 @@ public class Grafo<T> {
         NodoVertice<T> verticeDestino = buscarVertice(destino);
 
         if (verticeOrigen != null && verticeDestino != null) {
-            existe = existeCamino(verticeOrigen, destino, new Lista<T>());
+            existe = existeCaminoDesde(verticeOrigen, destino, new Lista<T>());
         }
 
         return existe;
@@ -258,7 +258,7 @@ public class Grafo<T> {
      * @param visitados lista de vértices visitados
      * @return verdadero si existe un camino del vértice actual a destino, falso en caso contrario
      */
-    private boolean existeCamino(NodoVertice<T> vertice, T destino, Lista<T> visitados) {
+    private boolean existeCaminoDesde(NodoVertice<T> vertice, T destino, Lista<T> visitados) {
         boolean existe = false;
 
         if (vertice != null) {
@@ -270,7 +270,7 @@ public class Grafo<T> {
 
                 while (!existe && adyacente != null) {
                     if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
-                        existe = existeCamino(adyacente.getVertice(), destino, visitados);
+                        existe = existeCaminoDesde(adyacente.getVertice(), destino, visitados);
                     }
 
                     adyacente = adyacente.getSiguienteAdyacente();
