@@ -2,6 +2,7 @@ package grafos.dinamicas;
 
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
+import utiles.Valor;
 
 /**
  * Implementación de Grafo no dirigido.
@@ -292,7 +293,58 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> caminoMasCorto(T origen, T destino) {
-        throw new UnsupportedOperationException("Grafo.caminoMasCorto() no implementado");
+        Valor<Lista<T>> camino = new Valor<>(new Lista<>());
+        NodoVertice<T> vertice = buscarVertice(origen);
+
+        if (vertice != null) {
+            caminoMasCortoDesde(vertice, destino, new Lista<>(), camino, new Valor<Integer>(Integer.MAX_VALUE));
+        }
+
+        return camino.getValor();
+    }
+
+    /**
+     * Busca recursivamente el camino mas corto desde el vértice dado al elemento destino. Si el elemento del vértice
+     * dado es el destino, entonces se ha encontrado un camino. Luego, si el camino encontrado es de menor longitud
+     * que minimaLongitud, entonces se guardia el camino en el contenedor caminoMin.
+     *
+     * @param vertice el vertice de origen
+     * @param destino el elemento destino
+     * @param camino el camino actual
+     * @param caminoMin el camino mínimo encontrado
+     * @param minimaLongitud la longitud del camino mínimo encontrado
+     */
+    private void caminoMasCortoDesde(
+            NodoVertice<T> vertice,
+            T destino,
+            Lista<T> camino,
+            Valor<Lista<T>> caminoMin,
+            Valor<Integer> minimaLongitud) {
+        int nuevaLongitud = camino.longitud() + 1;
+
+        // Continuar la búsqueda en el vértice sólo si la longitud del camino actual es menor a la mínima encontrada
+        if (nuevaLongitud < minimaLongitud.getValor() && vertice != null) {
+            camino.insertar(vertice.getElemento(), nuevaLongitud);
+            if (vertice.getElemento().equals(destino)) {
+                // Destino encontrado
+                if (camino.longitud() < minimaLongitud.getValor()) {
+                    caminoMin.setValor(camino.clonar());
+                    minimaLongitud.setValor(caminoMin.getValor().longitud());
+                }
+            } else {
+                // Destino no encontrado; buscar en los adyacentes
+                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+                while (adyacente != null) {
+                    if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
+                        caminoMasCortoDesde(adyacente.getVertice(), destino, camino, caminoMin, minimaLongitud);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            camino.eliminar(nuevaLongitud);
+        }
     }
 
     /**
