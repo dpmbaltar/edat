@@ -17,7 +17,7 @@ public class PruebaGrafo {
         pruebaExisteVertice();
         pruebaExisteArco();
         pruebaExisteCamino();
-        //pruebaCaminoMasCorto();
+        pruebaCaminoMasCorto();
         //pruebaCaminoMasLargo();
         pruebaListarEnProfundidad();
         pruebaListarEnAnchura();
@@ -90,12 +90,12 @@ public class PruebaGrafo {
 
     private void pruebaCaminoMasCorto() {
         Grafo<String> grafo = crearGrafo();
-        assert grafo.caminoMasLargo("A", "D").toString().equals("[A, B, C, D]")
+        assert grafo.caminoMasCorto("A", "D").toString().equals("[A, B, C, D]")
                 : "Camino más corto A..D debe ser [A, B, C, D]";
-        assert grafo.caminoMasLargo("A", "J").toString().equals("[A, B, C, H, J]")
+        assert grafo.caminoMasCorto("A", "J").toString().equals("[A, B, C, H, J]")
                 : "Camino más corto A..J debe ser [A, B, C, H, J]";
-        assert grafo.caminoMasLargo("F", "G").toString().equals("[G, D, C, B, A, E, I, F]")
-                : "Camino más corto F..G debe ser [G, D, C, B, A, E, I, F]";
+        assert grafo.caminoMasCorto("F", "G").toString().equals("[F, B, C, G]")
+                : "Camino más corto F..G debe ser [F, B, C, G]";
     }
 
     private void pruebaCaminoMasLargo() {
