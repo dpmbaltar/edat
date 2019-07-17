@@ -306,7 +306,7 @@ public class Grafo<T> {
     /**
      * Busca recursivamente el camino mas corto desde el vértice dado al elemento destino. Si el elemento del vértice
      * dado es el destino, entonces se ha encontrado un camino. Luego, si el camino encontrado es de menor longitud
-     * que minimaLongitud, entonces se guardia el camino en el contenedor caminoMin.
+     * que minimaLongitud, entonces se guarda el camino en el contenedor caminoMin.
      *
      * @param vertice el vertice de origen
      * @param destino el elemento destino
@@ -358,7 +358,57 @@ public class Grafo<T> {
      * @return
      */
     public Lista<T> caminoMasLargo(T origen, T destino) {
-        throw new UnsupportedOperationException("Grafo.caminoMasLargo() no implementado");
+        Valor<Lista<T>> camino = new Valor<>(new Lista<>());
+        NodoVertice<T> vertice = buscarVertice(origen);
+
+        if (vertice != null) {
+            caminoMasLargoDesde(vertice, destino, new Lista<>(), camino, new Valor<Integer>(-1));
+        }
+
+        return camino.getValor();
+    }
+
+    /**
+     * Busca recursivamente el camino más largo desde el vértice dado al elemento destino. Si el elemento del vértice
+     * dado es el destino, entonces se ha encontrado un camino. Luego, si el camino encontrado es de mayor longitud
+     * que maximaLongitud, entonces se guarda el camino en el contenedor caminoMax.
+     *
+     * @param vertice el vertice de origen
+     * @param destino el elemento destino
+     * @param camino el camino actual
+     * @param caminoMax el camino máximo encontrado
+     * @param maximaLongitud la longitud del camino máximo encontrado
+     */
+    private void caminoMasLargoDesde(
+            NodoVertice<T> vertice,
+            T destino,
+            Lista<T> camino,
+            Valor<Lista<T>> caminoMax,
+            Valor<Integer> maximaLongitud) {
+        int nuevaLongitud = camino.longitud() + 1;
+
+        if (vertice != null) {
+            camino.insertar(vertice.getElemento(), nuevaLongitud);
+            if (vertice.getElemento().equals(destino)) {
+                // Destino encontrado
+                if (camino.longitud() > maximaLongitud.getValor()) {
+                    caminoMax.setValor(camino.clonar());
+                    maximaLongitud.setValor(caminoMax.getValor().longitud());
+                }
+            } else {
+                // Destino no encontrado; buscar en los adyacentes
+                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+                while (adyacente != null) {
+                    if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
+                        caminoMasLargoDesde(adyacente.getVertice(), destino, camino, caminoMax, maximaLongitud);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            camino.eliminar(nuevaLongitud);
+        }
     }
 
     /**
