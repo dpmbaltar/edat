@@ -241,25 +241,27 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Devuelve la altura de un nodo.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo a calcular su altura
+     * @return la altura del nodo
      */
-    protected int altura(Nodo<T> nodo) {
+    private int altura(Nodo<T> nodo) {
         int altura = -1;
 
         if (nodo != null) {
             int alturaIzquierdo, alturaDerecho;
             Nodo<T> hijoIzquierdo, hijoDerecho;
+
             hijoIzquierdo = nodo.getIzquierdo();
             hijoDerecho = nodo.getDerecho();
             alturaIzquierdo = altura(hijoIzquierdo);
             alturaDerecho = altura(hijoDerecho);
-            altura++;
+            altura = 0;
 
-            if (alturaIzquierdo > alturaDerecho)
+            if (alturaIzquierdo > alturaDerecho) {
                 altura += alturaIzquierdo;
-            else
+            } else {
                 altura += alturaDerecho;
+            }
         }
 
         return altura;
