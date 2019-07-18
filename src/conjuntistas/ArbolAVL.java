@@ -390,13 +390,10 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         return clon;
     }
 
-    protected void clonar(Nodo<T> nodo, ArbolAVL<T> arbol) {
+    private void clonar(Nodo<T> nodo, ArbolAVL<T> arbol) {
         if (nodo != null) {
-            Nodo<T> izquierdo, derecho;
-
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-
+            Nodo<T> izquierdo = nodo.getIzquierdo();
+            Nodo<T> derecho = nodo.getDerecho();
             arbol.insertar(nodo.getElemento());
             clonar(izquierdo, arbol);
             clonar(derecho, arbol);
