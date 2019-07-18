@@ -6,7 +6,7 @@ import lineales.dinamicas.Lista;
 
 /**
  * Implementación de Árbol AVL.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
  */
@@ -31,7 +31,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     /**
      * Inserta un elemento al sub-árbol correspondiente al nodo dado.
-     * 
+     *
      * @param elemento
      * @param nodo
      * @param padre
@@ -153,7 +153,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     /**
      * Balancea el sub-árbol correspondiente al nodo dado.
-     * 
+     *
      * @param nodo
      * @param padre
      */
@@ -222,29 +222,25 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     /**
      * Devuelve el balance del nodo dado.
-     * 
-     * @param nodo
-     * @return
+     *
+     * @param nodo el nodo a calcular su balance
+     * @return el balance del nodo
      */
-    protected int balance(Nodo<T> nodo) {
+    private int balance(Nodo<T> nodo) {
         int alturaIzquierdo, alturaDerecho;
         Nodo<T> izquierdo, derecho;
 
-        alturaIzquierdo = alturaDerecho = -1;
         izquierdo = nodo.getIzquierdo();
         derecho = nodo.getDerecho();
-
-        if (izquierdo != null)
-            alturaIzquierdo = izquierdo.getAltura();
-        if (derecho != null)
-            alturaDerecho = derecho.getAltura();
+        alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+        alturaDerecho = derecho != null ? derecho.getAltura() : -1;
 
         return alturaIzquierdo - alturaDerecho;
     }
 
     /**
      * Devuelve la altura de un nodo.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -272,7 +268,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Aplica una rotación simple a la derecha al sub-árbol correspondiente al
      * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -290,7 +286,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Aplica una rotación simple a la izquierda al sub-árbol correspondiente al
      * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -308,7 +304,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Aplica una rotación doble derecha-izquierda al sub-árbol correspondiente
      * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -322,7 +318,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Aplica una rotación doble izquierda-derecha al sub-árbol correspondiente
      * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -341,7 +337,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * 
+     *
      * @param verNulos
      * @return
      */
