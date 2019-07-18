@@ -241,9 +241,13 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Devuelve la altura de un nodo.
      *
+     * @deprecated
+     * Utilizar jerarquicas.Nodo<T>.getAltura()
+     *
      * @param nodo el nodo a calcular su altura
      * @return la altura del nodo
      */
+    @Deprecated
     private int altura(Nodo<T> nodo) {
         int altura = -1;
 
