@@ -37,7 +37,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param padre
      * @return
      */
-    protected boolean insertar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
+    private boolean insertar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean insertado = false;
 
         if (nodo != null) {
@@ -147,7 +147,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Balancea el árbol.
      */
-    protected void balancear() {
+    private void balancear() {
         balancear(raiz, null);
     }
 
@@ -157,7 +157,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @param padre
      */
-    protected void balancear(Nodo<T> nodo, Nodo<T> padre) {
+    private void balancear(Nodo<T> nodo, Nodo<T> padre) {
         if (nodo != null) {
             boolean balanceado = false;
             Nodo<T> nodoHijo, reemplazo = null;
@@ -278,7 +278,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @return
      */
-    protected Nodo<T> rotarDerecha(Nodo<T> nodo) {
+    private Nodo<T> rotarDerecha(Nodo<T> nodo) {
         Nodo<T> izquierdo, izquierdoHD;
 
         izquierdo = nodo.getIzquierdo();
@@ -296,7 +296,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @return
      */
-    protected Nodo<T> rotarIzquierda(Nodo<T> nodo) {
+    private Nodo<T> rotarIzquierda(Nodo<T> nodo) {
         Nodo<T> derecho, derechoHI;
 
         derecho = nodo.getDerecho();
@@ -314,7 +314,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @return
      */
-    protected Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
+    private Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
         Nodo<T> rotado = rotarDerecha(nodo.getDerecho());
         nodo.setDerecho(rotado);
 
@@ -328,7 +328,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo
      * @return
      */
-    protected Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
+    private Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
         Nodo<T> rotado = rotarIzquierda(nodo.getIzquierdo());
         nodo.setIzquierdo(rotado);
 
