@@ -73,7 +73,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
             // Balancear si es necesario
             if (insertado) {
-                Nodo<T> rotado = null;
+                actualizarAltura(padre);
+                balancear(nodo, padre);
+                /*Nodo<T> rotado = null;
                 boolean balanceado = false;
                 int alturaIzquierdo, alturaDerecho, balance, balanceHijo;
                 alturaIzquierdo = alturaDerecho = -1;
@@ -103,11 +105,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                         rotado = rotarIzquierda(nodo);
                     else if (balanceHijo == 1)
                         rotado = rotarDerechaIzquierda(nodo);
-                    balanceado = true;
+                    balanceado = true;*/
                 }
 
                 // Actualizar enlace del padre al nodo rotado, si corresponde
-                if (balanceado) {
+                /*if (balanceado) {
                     if (padre == null) {
                         raiz = rotado;
                     } else {
@@ -128,11 +130,20 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 //                            padre.setAltura(Math.max(rotado.getAltura(),
 //                                    hermano.getAltura()) + 1);
                     }
-                }
+                }*/
             }
-        }
 
         return insertado;
+    }
+
+    private void actualizarAltura(Nodo<T> nodo) {
+        if (nodo != null) {
+            Nodo<T> izquierdo = nodo.getIzquierdo();
+            Nodo<T> derecho = nodo.getDerecho();
+            int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+            int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
+            nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
+        }
     }
 
     @Override
@@ -173,9 +184,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     reemplazo = rotarDerecha(nodo);
                 } else if (balanceHijo == -1) {
                     reemplazo = rotarIzquierdaDerecha(nodo);
-                } else if (balanceHijo > 1 || balanceHijo < -1) {
+                }/* else if (balanceHijo > 1 || balanceHijo < -1) {
                     balancear(nodoHijo, nodo);
-                }
+                }*/
 
                 balanceado = true;
             } else if (balanceNodo == -2) {
@@ -186,35 +197,34 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     reemplazo = rotarDerechaIzquierda(nodo);
                 } else if (balanceHijo == -1) {
                     reemplazo = rotarIzquierda(nodo);
-                } else if (balanceHijo > 1 || balanceHijo < -1) {
+                }/* else if (balanceHijo > 1 || balanceHijo < -1) {
                     balancear(nodoHijo, nodo);
-                }
+                }*/
 
                 balanceado = true;
             }
 
             // Reemplazar el nodo correspondiente al padre, si ha sido rotado
-            if (!balanceado) {
+            /*if (!balanceado) {
                 // Balancear nodos hijos
                 balancear(nodo.getIzquierdo(), nodo);
                 balancear(nodo.getDerecho(), nodo);
-            } else if (reemplazo != null) {
+            } else if (reemplazo != null) {*/
+            if (balanceado) {
                 if (padre == null) {
                     raiz = reemplazo;
                 } else {
-                    Nodo<T> hermano = null;
                     T elementoPadre, elementoReemplazo;
-
                     elementoPadre = padre.getElemento();
                     elementoReemplazo = reemplazo.getElemento();
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
-                        hermano = padre.getDerecho();
                     } else if (elementoReemplazo.compareTo(elementoPadre) > 0) {
                         padre.setDerecho(reemplazo);
-                        hermano = padre.getIzquierdo();
                     }
+
+                    actualizarAltura(padre);
                 }
             }
         }
@@ -285,6 +295,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         izquierdoHD = izquierdo == null ? null : izquierdo.getDerecho();
         izquierdo.setDerecho(nodo);
         nodo.setIzquierdo(izquierdoHD);
+        actualizarAltura(nodo);
+        actualizarAltura(izquierdo);
 
         return izquierdo;
     }
@@ -303,6 +315,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         derechoHI = derecho == null ? null : derecho.getIzquierdo();
         derecho.setIzquierdo(nodo);
         nodo.setDerecho(derechoHI);
+        actualizarAltura(nodo);
+        actualizarAltura(derecho);
 
         return derecho;
     }
@@ -337,17 +351,10 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
     /**
      * Devuelve una lista por niveles con los elementos del árbol.
-     */
-    public Lista<T> listarNiveles() {
-        return listarNiveles(false);
-    }
-
-    /**
      *
-     * @param verNulos
      * @return
      */
-    public Lista<T> listarNiveles(boolean verNulos) {
+    public Lista<T> listarNiveles() {
         Lista<T> lista = new Lista<T>();
 
         if (raiz != null) {
@@ -362,20 +369,53 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     lista.insertar(nodo.getElemento(), lista.longitud() + 1);
                     hijoIzquierdo = nodo.getIzquierdo();
                     hijoDerecho = nodo.getDerecho();
-                    if (verNulos) {
+                    if (hijoIzquierdo != null)
                         cola.poner(hijoIzquierdo);
+                    if (hijoDerecho != null)
                         cola.poner(hijoDerecho);
-                    } else {
-                        if (hijoIzquierdo != null)
-                            cola.poner(hijoIzquierdo);
-                        if (hijoDerecho != null)
-                            cola.poner(hijoDerecho);
-                    }
                 } else {
                     lista.insertar(null, lista.longitud() + 1);
                 }
 
                 cola.sacar();
+            }
+        }
+
+        return lista;
+    }
+
+    /**
+     * Devuelve una lista de listas por niveles con los elementos del árbol, incluyendo nulos.
+     *
+     * @return
+     */
+    public Lista<Lista<T>> listarNiveles2() {
+        Lista<Lista<T>> lista = new Lista<>();
+
+        if (raiz != null) {
+            int nivelMaxElementos = 1;
+            Nodo<T> nodo;
+            Lista<T> nivel = new Lista<T>();
+            Cola<Nodo<T>> cola = new Cola<Nodo<T>>();
+            cola.poner(raiz);
+
+            while (!cola.esVacia()) {
+                nodo = cola.obtenerFrente();
+                cola.sacar();
+
+                if (nodo != null) {
+                    nivel.insertar(nodo.getElemento(), nivel.longitud() + 1);
+                    cola.poner(nodo.getIzquierdo());
+                    cola.poner(nodo.getDerecho());
+                } else {
+                    nivel.insertar(null, nivel.longitud() + 1);
+                }
+
+                if (nivel.longitud() == nivelMaxElementos) {
+                    lista.insertar(nivel, lista.longitud() + 1);
+                    nivel = new Lista<>();
+                    nivelMaxElementos*= 2;
+                }
             }
         }
 

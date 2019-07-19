@@ -42,8 +42,8 @@ public class Prueba {
             exito();
             prueba = new pruebas.conjuntistas.PruebaArbolBB();
             exito();
-            //prueba = new pruebas.conjuntistas.PruebaArbolAVL();
-            //exito();
+            prueba = new pruebas.conjuntistas.PruebaArbolAVL();
+            exito();
             prueba = new pruebas.grafos.dinamicas.PruebaGrafo();
             exito();
             // Fin de pruebas

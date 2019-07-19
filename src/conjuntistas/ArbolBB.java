@@ -5,7 +5,7 @@ import lineales.dinamicas.Lista;
 
 /**
  * Implementación de Árbol Binario de Búsqueda.
- * 
+ *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
  */
@@ -25,7 +25,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Inserta un elemento al árbol.
-     * 
+     *
      * @param elemento
      * @return
      */
@@ -44,7 +44,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Inserta un elemento al sub-árbol correspondiente al nodo dado.
-     * 
+     *
      * @param elemento
      * @param nodo
      * @return
@@ -85,7 +85,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Elimina el elemento del árbol.
-     * 
+     *
      * @param elemento
      * @return
      */
@@ -95,7 +95,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Elimina un elemento del sub-árbol correspondiente al nodo dado.
-     * 
+     *
      * @param elemento
      * @param nodo
      * @return
@@ -155,7 +155,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve verdadero si el elemento dado pertenece al árbol, o falso en
      * caso contrario.
-     * 
+     *
      * @param elemento
      * @return
      */
@@ -166,7 +166,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve verdadero si el elemento dado pertenece al sub-árbol
      * correspondiente al nodo dado, o falso en caso contrario.
-     * 
+     *
      * @param elemento
      * @param nodo
      * @return
@@ -193,7 +193,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve el elemento máximo del árbol.
-     * 
+     *
      * @return
      */
     public T maximo() {
@@ -202,7 +202,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve el elemento máximo a partir de un nodo.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -219,7 +219,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve el elemento mínimo del árbol.
-     * 
+     *
      * @return
      */
     public T minimo() {
@@ -228,7 +228,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve el elemento mínimo a partir de un nodo.
-     * 
+     *
      * @param nodo
      * @return
      */
@@ -245,7 +245,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve verdadero si el árbol está vacío, o falso en caso contrario.
-     * 
+     *
      * @return
      */
     public boolean vacio() {
@@ -262,7 +262,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve una lista con los elementos del árbol - ordenados de menor a
      * mayor -.
-     * 
+     *
      * @return
      */
     public Lista<T> listar() {
@@ -275,7 +275,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Inserta los elementos del árbol - ordenados de menor a mayor - en la
      * lista dada, del sub-árbol correspondiente al nodo dado.
-     * 
+     *
      * @param lista
      * @param nodo
      */
@@ -295,7 +295,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * Devuelve una lista con los elementos del árbol - ordenados de menor a
      * mayor - mientras que el elemento se encuentre dentro del rango mínimo y
      * máximo especificado.
-     * 
+     *
      * @param minimo
      * @param maximo
      * @return
@@ -312,7 +312,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * que el elemento se encuentre dentro del rango mínimo y máximo
      * especificado, en la lista dada, del sub-árbol correspondiente al nodo
      * dado.
-     * 
+     *
      * @param minimo
      * @param maximo
      * @param lista
@@ -337,7 +337,7 @@ public class ArbolBB<T extends Comparable<T>> {
 
     /**
      * Devuelve una copia exacta del árbol.
-     * 
+     *
      * @return
      */
     public ArbolBB<T> clonar() {
@@ -370,6 +370,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * Devuelve la representación del árbol en forma de cadena. Éste método
      * equivale a llamar listar.toString().
      */
+    @Override
     public String toString() {
         return listar().toString();
     }
