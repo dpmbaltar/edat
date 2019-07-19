@@ -7,49 +7,36 @@ package pruebas;
  */
 public class Prueba {
 
-    private static Object prueba;
-
     public static void main(String[] args) {
         try {
             try {
                 assert false;
                 System.out.println(
-                        "ERROR: las pruebas deben ser ejecutadas con el parámetro "+
-                                "de JVM -enableassertions (ó -ea). Leer README.md!"
-                        );
+                        "ERROR: las pruebas deben ser ejecutadas con el parámetro de JVM -enableassertions (ó -ea). "
+                                + "Leer README.md");
                 System.exit(0);
             } catch (AssertionError e) {
             }
 
-            // Inicio de pruebas
-            prueba = new pruebas.lineales.estaticas.PruebaPila();
-            exito();
-            prueba = new pruebas.lineales.dinamicas.PruebaPila();
-            exito();
-            prueba = new pruebas.lineales.estaticas.PruebaCola();
-            exito();
-            prueba = new pruebas.lineales.dinamicas.PruebaCola();
-            exito();
-            prueba = new pruebas.lineales.dinamicas.PruebaLista();
-            exito();
-            prueba = new pruebas.jerarquicas.PruebaArbolBinario();
-            exito();
-            prueba = new pruebas.jerarquicas.PruebaArbolGenerico();
-            exito();
-            prueba = new pruebas.conjuntistas.PruebaHeapMaximo();
-            exito();
-            prueba = new pruebas.conjuntistas.PruebaHeapMinimo();
-            exito();
-            prueba = new pruebas.conjuntistas.PruebaArbolBB();
-            exito();
-            prueba = new pruebas.conjuntistas.PruebaArbolAVL();
-            exito();
-            prueba = new pruebas.grafos.dinamicas.PruebaGrafo();
-            exito();
-            // Fin de pruebas
+            // Inicio de prueba
+            exito(new pruebas.lineales.estaticas.PruebaPila());
+            exito(new pruebas.lineales.dinamicas.PruebaPila());
+            exito(new pruebas.lineales.estaticas.PruebaCola());
+            exito(new pruebas.lineales.dinamicas.PruebaCola());
+            exito(new pruebas.lineales.dinamicas.PruebaLista());
+            exito(new pruebas.jerarquicas.PruebaArbolBinario());
+            exito(new pruebas.jerarquicas.PruebaArbolGenerico());
+            exito(new pruebas.conjuntistas.PruebaHeapMaximo());
+            exito(new pruebas.conjuntistas.PruebaHeapMinimo());
+            exito(new pruebas.conjuntistas.PruebaArbolBB());
+            exito(new pruebas.conjuntistas.PruebaArbolAVL());
+            exito(new pruebas.grafos.dinamicas.PruebaGrafo());
+
+            // Fin de prueba
             System.out.println();
             System.out.println("¡ÉXITO de prueba!");
         } catch (AssertionError e) {
+            // Error de prueba
             System.out.println("¡ERROR de prueba!");
             System.out.println();
             error(e);
@@ -57,22 +44,22 @@ public class Prueba {
     }
 
     /**
-     * Muestra mensaje de éxito de la prueba actual.
+     * Muestra mensaje de éxito de la prueba actual, si no hay errores.
      */
-    private static void exito() {
-        System.out.println(prueba.getClass().getName() + " OK");
+    private static void exito(Object prueba) {
+        System.out.println(prueba.getClass().getName() + " ha pasado todas las pruebas con éxito");
     }
 
     /**
-     * Muestra mensaje de error de la prueba actual.
+     * Muestra mensaje de error de una prueba.
      */
     private static void error(AssertionError error) {
         StackTraceElement origen = error.getStackTrace()[0];
         System.out.println(error.getMessage());
         System.out.print("    en " + origen.getClassName());
         System.out.print("." + origen.getMethodName() + "()");
-        System.out.print(" (" + origen.getFileName());
-        System.out.print(":" + origen.getLineNumber() + ")");
+        System.out.println();
+        System.out.print("    (" + origen.getFileName() + ":" + origen.getLineNumber() + ")");
         System.out.println();
     }
 }
