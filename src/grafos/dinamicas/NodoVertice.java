@@ -44,4 +44,9 @@ public class NodoVertice<T> {
     public void setSiguienteVertice(NodoVertice<T> siguienteVertice) {
         this.siguienteVertice = siguienteVertice;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return elemento.equals(((NodoVertice<T>) o).getElemento());
+    }
 }
