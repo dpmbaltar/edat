@@ -97,6 +97,8 @@ public class PruebaGrafo {
                 : "Camino más corto A..J debe ser [A, E, I, J]";
         assert grafo.caminoMasCorto("F", "G").toString().equals("[F, B, C, G]")
                 : "Camino más corto F..G debe ser [F, B, C, G]";
+        assert grafo.caminoMasCorto("H", "E").toString().equals("[H, J, I, E]")
+                : "Camino más corto H..E debe ser [H, J, I, E]";
     }
 
     private void pruebaCaminoMasLargo() {
@@ -107,6 +109,8 @@ public class PruebaGrafo {
                 : "Camino más largo A..J debe ser [A, E, I, F, B, C, D, G, H, J]";
         assert grafo.caminoMasLargo("F", "G").toString().equals("[F, B, A, E, I, J, H, C, D, G]")
                 : "Camino más largo F..G debe ser [F, B, A, E, I, J, H, C, D, G]";
+        assert grafo.caminoMasLargo("H", "E").toString().equals("[H, G, D, C, B, A, F, I, E]")
+                : "Camino más largo H..E debe ser [H, G, D, C, B, A, F, I, E]";
     }
 
     private void pruebaListarEnProfundidad() {
@@ -146,9 +150,9 @@ public class PruebaGrafo {
      *  |  \  |     |  X
      *  |   \ |     | / \
      * (E)---(F)   (G)---(H)
-     *   \   /            |
-     *    \ /             |
-     *    (I)------------(J)
+     *   \   /           /
+     *    \ /           /
+     *    (I)---------(J)
      *
      * @return
      */
