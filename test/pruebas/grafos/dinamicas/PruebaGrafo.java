@@ -82,6 +82,7 @@ public class PruebaGrafo {
 
         // Ahora no deben existir algunos caminos (grafo no conectado)
         grafo.eliminarVertice("B");
+        grafo.eliminarArco("I", "J");
         assert !grafo.existeCamino("A", "D") : "No debe existir camino A..C";
         assert !grafo.existeCamino("G", "F") : "No debe existir camino G..F";
         assert !grafo.existeCamino("I", "J") : "No debe existir camino I..J";
@@ -92,26 +93,26 @@ public class PruebaGrafo {
         Grafo<String> grafo = crearGrafo();
         assert grafo.caminoMasCorto("A", "D").toString().equals("[A, B, C, D]")
                 : "Camino más corto A..D debe ser [A, B, C, D]";
-        assert grafo.caminoMasCorto("A", "J").toString().equals("[A, B, C, H, J]")
-                : "Camino más corto A..J debe ser [A, B, C, H, J]";
+        assert grafo.caminoMasCorto("A", "J").toString().equals("[A, E, I, J]")
+                : "Camino más corto A..J debe ser [A, E, I, J]";
         assert grafo.caminoMasCorto("F", "G").toString().equals("[F, B, C, G]")
                 : "Camino más corto F..G debe ser [F, B, C, G]";
     }
 
     private void pruebaCaminoMasLargo() {
         Grafo<String> grafo = crearGrafo();
-        assert grafo.caminoMasLargo("A", "D").toString().equals("[A, E, I, F, B, C, H, G, D]")
-                : "Camino más largo A..D debe ser [A, E, I, F, B, C, H, G, D]";
+        assert grafo.caminoMasLargo("A", "D").toString().equals("[A, B, F, E, I, J, H, C, G, D]")
+                : "Camino más largo A..D debe ser [A, B, F, E, I, J, H, C, G, D]";
         assert grafo.caminoMasLargo("A", "J").toString().equals("[A, E, I, F, B, C, D, G, H, J]")
                 : "Camino más largo A..J debe ser [A, E, I, F, B, C, D, G, H, J]";
-        assert grafo.caminoMasLargo("F", "G").toString().equals("[F, I, E, A, B, C, D, G]")
-                : "Camino más largo F..G debe ser [F, I, E, A, B, C, D, G]";
+        assert grafo.caminoMasLargo("F", "G").toString().equals("[F, B, A, E, I, J, H, C, D, G]")
+                : "Camino más largo F..G debe ser [F, B, A, E, I, J, H, C, D, G]";
     }
 
     private void pruebaListarEnProfundidad() {
         Grafo<String> grafo = crearGrafo();
-        assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, C, D, G, H, J]")
-                : "Debe listar: [A, B, F, E, I, C, D, G, H, J]";
+        assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, J, H, C, D, G]")
+                : "Debe listar: [A, B, F, E, I, J, H, C, D, G]";
     }
 
     private void pruebaListarEnAnchura() {
@@ -128,13 +129,13 @@ public class PruebaGrafo {
     }
 
     private void pruebaClonar() {
-//        Grafo<String> grafo = crearGrafo();
-//        grafo.insertarArco("A", "A");
-//        grafo.insertarArco("H", "J");
-//        Grafo<String> clon = grafo.clonar();
-//        System.out.println(grafo+"\r\n\r\n"+clon);
-//        // La estructura interna de arcos queda distinta en algunos casos, pero el grafo es equivalente
-//        assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
+        //TODO: La estructura interna de arcos queda distinta en algunos casos, pero el grafo parece ser equivalente
+        Grafo<String> grafo = crearGrafo();
+        //grafo.insertarArco("A", "A");
+        //grafo.insertarArco("H", "J");
+        //grafo.insertarArco("F", "F");
+        Grafo<String> clon = grafo.clonar();
+        assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
     }
 
     /**
@@ -147,7 +148,7 @@ public class PruebaGrafo {
      * (E)---(F)   (G)---(H)
      *   \   /            |
      *    \ /             |
-     *    (I)            (J)
+     *    (I)------------(J)
      *
      * @return
      */
@@ -163,6 +164,7 @@ public class PruebaGrafo {
         grafo.insertarVertice("C");
         grafo.insertarVertice("B");
         grafo.insertarVertice("A");
+        grafo.insertarArco("I", "J");
         grafo.insertarArco("H", "J");
         grafo.insertarArco("G", "H");
         grafo.insertarArco("F", "I");
