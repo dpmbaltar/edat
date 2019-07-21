@@ -96,9 +96,7 @@ public class PruebaCola {
      */
     private void pruebaToString() {
         Cola<String> cola = crearCola();
-        assert cola.toString().equals("[Uno, Dos, Tres]")
-                : "Cola con elementos \"Uno\", \"Dos\", \"Tres\" debe ser "
-                    + "representada como [Uno, Dos, Tres] en forma de cadena";
+        assert cola.toString().equals("[Uno, Dos, Tres]") : "La cola debe ser representada como \"[Uno, Dos, Tres]\"";
     }
 
     /**

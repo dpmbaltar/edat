@@ -1,7 +1,6 @@
 package pruebas.lineales.dinamicas;
 
 import lineales.dinamicas.Pila;
-//import lineales.estaticas.Pila;
 
 /**
  * Prueba implementación de Pila dinámica.
@@ -96,9 +95,7 @@ public class PruebaPila {
      */
     private void pruebaToString() {
         Pila<String> pila = crearPila();
-        assert pila.toString().equals("[Tres, Dos, Uno]")
-                : "Pila con elementos \"Uno\", \"Dos\", \"Tres\" debe ser "
-                    + "representada como [Uno, Dos, Tres] en forma de cadena";
+        assert pila.toString().equals("[Tres, Dos, Uno]") : "La pila debe ser representada como \"[Uno, Dos, Tres]\"";
     }
 
     /**

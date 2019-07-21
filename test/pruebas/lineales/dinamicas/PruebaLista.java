@@ -119,7 +119,7 @@ public class PruebaLista {
     private void pruebaToString() {
         Lista<Integer> lista = crearLista();
         assert lista.toString().equals("[1, 2, 3, 4, 5, 6, 7, 8]")
-                : "La lista debe ser representada como [1, 2, 3, 4, 5, 6, 7, 8] como cadena";
+                : "La lista debe ser representada como \"[1, 2, 3, 4, 5, 6, 7, 8]\"";
     }
 
     /**
