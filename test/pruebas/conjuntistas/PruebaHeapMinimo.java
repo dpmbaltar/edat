@@ -19,43 +19,43 @@ public class PruebaHeapMinimo {
         pruebaHeapMinimo();
     }
 
-    protected static void pruebaInsertar() {
+    private void pruebaInsertar() {
         HeapMinimo<Integer> heap = new HeapMinimo<Integer>();
         assert heap.insertar(8) : "Debe insertar 8 en el heap";
     }
 
-    protected static void pruebaRecuperarCima() {
-        HeapMinimo<Integer> heap = crearHeapDePrueba();
+    private void pruebaRecuperarCima() {
+        HeapMinimo<Integer> heap = crearHeapMinimo();
         assert heap.recuperarCima() == 1 : "Debe recuperar como cima a 1";
     }
 
-    protected static void pruebaEliminarCima() {
-        HeapMinimo<Integer> heap = crearHeapDePrueba();
+    private void pruebaEliminarCima() {
+        HeapMinimo<Integer> heap = crearHeapMinimo();
         assert heap.eliminarCima() : "Debe eliminar cima (1)";
         assert heap.recuperarCima() == 2 : "Debe recuperar como cima a 2";
     }
 
-    protected static void pruebaEsVacio() {
+    private void pruebaEsVacio() {
         HeapMinimo<Integer> heap = new HeapMinimo<Integer>();
         assert heap.esVacio() : "Heap debe ser vacío";
         heap.insertar(8);
         assert !heap.esVacio() : "Heap no debe ser vacío";
     }
 
-    protected static void pruebaVaciar() {
-        HeapMinimo<Integer> heap = crearHeapDePrueba();
+    private void pruebaVaciar() {
+        HeapMinimo<Integer> heap = crearHeapMinimo();
         heap.vaciar();
         assert heap.esVacio() : "Heap debe ser vacío";
         assert heap.recuperarCima() == null : "Debe recuperar cima nula";
     }
 
-    protected static void pruebaToString() {
-        HeapMinimo<Integer> heap = crearHeapDePrueba();
+    private void pruebaToString() {
+        HeapMinimo<Integer> heap = crearHeapMinimo();
         assert heap.toString().equals("[1, 2, 8, 16, 4, 15, 63, 31]")
                 : "Debe ser los elementos del Heap de izq. a der. por niveles";
     }
-    
-    protected static void pruebaHeapMinimo() {
+
+    private void pruebaHeapMinimo() {
         HeapMinimo<Integer> heap = new HeapMinimo<Integer>();
         assert heap.insertar(7) : "Debe insertar 7 en el heap";
         heap.insertar(3);
@@ -68,7 +68,7 @@ public class PruebaHeapMinimo {
                 : "Debe ser los elementos del Heap por niveles [4, 5, 7]";
     }
 
-    protected static HeapMinimo<Integer> crearHeapDePrueba() {
+    private static HeapMinimo<Integer> crearHeapMinimo() {
         HeapMinimo<Integer> heap = new HeapMinimo<Integer>();
         heap.insertar(8);
         heap.insertar(16);

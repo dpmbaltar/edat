@@ -156,7 +156,7 @@ public class PruebaGrafo {
      *
      * @return
      */
-    private Grafo<String> crearGrafo() {
+    private static Grafo<String> crearGrafo() {
         Grafo<String> grafo = new Grafo<>();
         grafo.insertarVertice("J");
         grafo.insertarVertice("I");
