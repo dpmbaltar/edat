@@ -4,7 +4,7 @@ import jerarquicas.ArbolBinario;
 import lineales.dinamicas.Lista;
 
 /**
- * Prueba implementación de Árbol Binario (de enteros).
+ * Prueba implementación de Árbol Binario.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  */
