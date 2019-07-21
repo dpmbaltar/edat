@@ -12,9 +12,6 @@ import lineales.dinamicas.Lista;
  */
 public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
 
-    /**
-     * Inserta un elemento en el árbol.
-     */
     @Override
     public boolean insertar(T elemento) {
         boolean insertado = false;
@@ -32,10 +29,10 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Inserta un elemento al sub-árbol correspondiente al nodo dado.
      *
-     * @param elemento
-     * @param nodo
-     * @param padre
-     * @return
+     * @param elemento el elemento a insertar
+     * @param nodo el nodo del sub-árbol izquierdo o derecho
+     * @param padre el nodo padre
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     private boolean insertar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean insertado = false;
@@ -45,16 +42,19 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
 
-            // Si el elemento es menor al del nodo, insertar en el sub-árbol
-            // izquierdo. Si el elemento es mayor al del nodo, insertar en el
-            // sub-árbol derecho. Si el elemento es igual al del nodo, el
-            // resultado será falso y no continuará hacia los nodos hijos.
+            // Si el elemento es menor al del nodo, insertar en el sub-árbol izquierdo
+            // Si el elemento es mayor al del nodo, insertar en el sub-árbol derecho
+            // Si el elemento es igual al del nodo, el resultado será falso y no continuará hacia los nodos hijos
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setIzquierdo(nuevo);
-                    if (derecho == null)
+
+                    // Actualizar altura del nodo si corresponde
+                    if (derecho == null) {
                         nodo.setAltura(1);
+                    }
+
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, izquierdo, nodo);
@@ -63,79 +63,36 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 if (derecho == null) {
                     nuevo = new Nodo<T>(elemento);
                     nodo.setDerecho(nuevo);
-                    if (izquierdo == null)
+
+                    // Actualizar altura del nodo si corresponde
+                    if (izquierdo == null) {
                         nodo.setAltura(1);
+                    }
+
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, derecho, nodo);
                 }
             }
 
-            // Balancear si es necesario
+            // Vuelta de la recursión:
+            // Balancear el nodo si es necesario (lo determina el método balancear())
+            // Actualizar altura de los nodos padre
             if (insertado) {
                 actualizarAltura(padre);
                 balancear(nodo, padre);
-                /*Nodo<T> rotado = null;
-                boolean balanceado = false;
-                int alturaIzquierdo, alturaDerecho, balance, balanceHijo;
-                alturaIzquierdo = alturaDerecho = -1;
-                izquierdo = nodo.getIzquierdo();
-                derecho = nodo.getDerecho();
-
-                if (izquierdo != null)
-                    alturaIzquierdo = izquierdo.getAltura();
-                if (derecho != null)
-                    alturaDerecho = derecho.getAltura();
-                nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
-
-                balance = alturaIzquierdo - alturaDerecho;
-                // System.out.println("nodo: "+nodo.getElemento()+" balance:
-                // "+balance);
-                // Aplicar rotaciones, según corresponda
-                if (balance == 2) {
-                    balanceHijo = balance(izquierdo);
-                    if (balanceHijo == 1)
-                        rotado = rotarDerecha(nodo);
-                    else if (balanceHijo == -1)
-                        rotado = rotarIzquierdaDerecha(nodo);
-                    balanceado = true;
-                } else if (balance == -2) {
-                    balanceHijo = balance(derecho);
-                    if (balanceHijo == -1)
-                        rotado = rotarIzquierda(nodo);
-                    else if (balanceHijo == 1)
-                        rotado = rotarDerechaIzquierda(nodo);
-                    balanceado = true;*/
-                }
-
-                // Actualizar enlace del padre al nodo rotado, si corresponde
-                /*if (balanceado) {
-                    if (padre == null) {
-                        raiz = rotado;
-                    } else {
-                        Nodo<T> hermano = null;
-                        T elementoPadre = padre.getElemento();
-                        if (elemento.compareTo(elementoPadre) < 0) {
-                            padre.setIzquierdo(rotado);
-                            hermano = padre.getDerecho();
-                        } else if (elemento.compareTo(elementoPadre) > 0) {
-                            padre.setDerecho(rotado);
-                            hermano = padre.getIzquierdo();
-                        }
-
-//                        // Actualizar altura del padre
-//                        if (hermano == null)
-//                            padre.setAltura(rotado.getAltura() + 1);
-//                        else
-//                            padre.setAltura(Math.max(rotado.getAltura(),
-//                                    hermano.getAltura()) + 1);
-                    }
-                }*/
             }
+        }
 
         return insertado;
     }
 
+    /**
+     * Actualiza la altura de un nodo dado.
+     *
+     * @see Nodo#getAltura
+     * @param nodo el nodo a actualizar la altura
+     */
     private void actualizarAltura(Nodo<T> nodo) {
         if (nodo != null) {
             Nodo<T> izquierdo = nodo.getIzquierdo();
@@ -149,8 +106,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     @Override
     public boolean eliminar(T elemento) {
         boolean eliminado = super.eliminar(elemento);
-        if (eliminado)
+
+        //FIXME: Balancear correctamente el árbol al igual que en insertar()
+        if (eliminado) {
             balancear();
+        }
 
         return eliminado;
     }
@@ -165,8 +125,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Balancea el sub-árbol correspondiente al nodo dado.
      *
-     * @param nodo
-     * @param padre
+     * @param nodo el nodo a balancear
+     * @param padre el nodo padre
      */
     private void balancear(Nodo<T> nodo, Nodo<T> padre) {
         if (nodo != null) {
@@ -252,7 +212,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * Devuelve la altura de un nodo.
      *
      * @deprecated
-     * Utilizar jerarquicas.Nodo<T>.getAltura()
+     * Utilizar {@link jerarquicas.Nodo#getAltura}
      *
      * @param nodo el nodo a calcular su altura
      * @return la altura del nodo
@@ -282,11 +242,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * Aplica una rotación simple a la derecha al sub-árbol correspondiente al
-     * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Aplica una rotación simple a la derecha al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del sub-árbol.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo a rotar
+     * @return el nodo rotado
      */
     private Nodo<T> rotarDerecha(Nodo<T> nodo) {
         Nodo<T> izquierdo, izquierdoHD;
@@ -302,11 +262,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente al
-     * nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del sub-árbol.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo a rotar
+     * @return el nodo rotado
      */
     private Nodo<T> rotarIzquierda(Nodo<T> nodo) {
         Nodo<T> derecho, derechoHI;
@@ -322,11 +282,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * Aplica una rotación doble derecha-izquierda al sub-árbol correspondiente
-     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Aplica una rotación doble derecha-izquierda al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del sub-árbol.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo a rotar
+     * @return el nodo rotado
      */
     private Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
         Nodo<T> rotado = rotarDerecha(nodo.getDerecho());
@@ -336,11 +296,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * Aplica una rotación doble izquierda-derecha al sub-árbol correspondiente
-     * al nodo dado, y devuelve el nuevo nodo raíz del sub-árbol.
+     * Aplica una rotación doble izquierda-derecha al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del sub-árbol.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo a rotar
+     * @return el nodo rotado
      */
     private Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
         Nodo<T> rotado = rotarIzquierda(nodo.getIzquierdo());
@@ -352,7 +312,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Devuelve una lista por niveles con los elementos del árbol.
      *
-     * @return
+     * @return la lista por niveles
      */
     public Lista<T> listarNiveles() {
         Lista<T> lista = new Lista<T>();
@@ -369,10 +329,14 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                     lista.insertar(nodo.getElemento(), lista.longitud() + 1);
                     hijoIzquierdo = nodo.getIzquierdo();
                     hijoDerecho = nodo.getDerecho();
-                    if (hijoIzquierdo != null)
+
+                    if (hijoIzquierdo != null) {
                         cola.poner(hijoIzquierdo);
-                    if (hijoDerecho != null)
+                    }
+
+                    if (hijoDerecho != null) {
                         cola.poner(hijoDerecho);
+                    }
                 } else {
                     lista.insertar(null, lista.longitud() + 1);
                 }
@@ -387,7 +351,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     /**
      * Devuelve una lista de listas por niveles con los elementos del árbol, incluyendo nulos.
      *
-     * @return
+     * @return la lista de lista de niveles
      */
     public Lista<Lista<T>> listarNiveles2() {
         Lista<Lista<T>> lista = new Lista<>();
@@ -414,7 +378,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 if (nivel.longitud() == nivelMaxElementos) {
                     lista.insertar(nivel, lista.longitud() + 1);
                     nivel = new Lista<>();
-                    nivelMaxElementos*= 2;
+                    nivelMaxElementos *= 2;
                 }
             }
         }
@@ -425,18 +389,24 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     @Override
     public ArbolAVL<T> clonar() {
         ArbolAVL<T> clon = new ArbolAVL<T>();
-        clonar(raiz, clon);
+        clonarDesde(raiz, clon);
 
         return clon;
     }
 
-    private void clonar(Nodo<T> nodo, ArbolAVL<T> arbol) {
+    /**
+     * Clona recursivamente el árbol desde un nodo dado.
+     *
+     * @param nodo el nodo desde donde clonar
+     * @param arbol el clon del árbol
+     */
+    private void clonarDesde(Nodo<T> nodo, ArbolAVL<T> arbol) {
         if (nodo != null) {
             Nodo<T> izquierdo = nodo.getIzquierdo();
             Nodo<T> derecho = nodo.getDerecho();
             arbol.insertar(nodo.getElemento());
-            clonar(izquierdo, arbol);
-            clonar(derecho, arbol);
+            clonarDesde(izquierdo, arbol);
+            clonarDesde(derecho, arbol);
         }
     }
 
