@@ -5,7 +5,7 @@ import lineales.dinamicas.Lista;
 import utiles.Valor;
 
 /**
- * Implementación de Grafo no dirigido.
+ * Implementación de Grafo no dirigido para elementos de tipo T.
  *
  * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
  * @param <T>
@@ -297,13 +297,13 @@ public class Grafo<T> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
-     * Esta implementación es medianamente mejor que caminoMasCorto2(), ya que recorre a lo sumo cada vértice una sola
-     * vez, como en listarEnAnchura(), y no utiliza recursión. Sin embargo, utiliza una cola y lista auxiliar, que a lo
-     * sumo, tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sóla referencia al vértice
-     * predecesor, para armar el camino al final del método. También se agregó el método equals() a NodoVertice<T>,
-     * que devuelve verdadero sólo si el elemento es igual al elemento del otro nodo, para poder ubicar un vértice en
-     * la lista con el método Lista<T>.localizar(). Quizá sería mejor buscar una versión alternativa para esto sin
-     * alterar la clase NodoVertice<T>.
+     * <p>Esta implementación es medianamente mejor que {@link Grafo#caminoMasCorto2}, ya que recorre a lo sumo cada
+     * vértice una sola vez, como en {@link #listarEnAnchura}, y no utiliza recursión. Sin embargo, utiliza una cola y
+     * lista auxiliar, que a lo sumo, tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sola
+     * referencia al vértice predecesor, para armar el camino al final del método. También, se agregó el método
+     * {@link NodoVertice#equals}, que devuelve verdadero sólo si el elemento es igual al elemento del otro nodo, para
+     * poder ubicar un vértice en la lista con el método {@link Lista#localizar}. Quizá sería mejor buscar una versión
+     * alternativa para esta funcionalidad sin alterar la clase {@link NodoVertice}.</p>
      *
      * @param origen el elemento origen
      * @param destino el elemento destino
@@ -376,8 +376,10 @@ public class Grafo<T> {
      *
      * @deprecated
      * Esta implementación recorre casi todos los caminos posibles desde el origen manteniendo el camino más corto por
-     * parámetro, incluyendo a veces caminos que no llegan al destino, y por lo tanto es más costoso que el anterior.
+     * parámetro, incluyendo a veces caminos que no llegan al destino, y por lo tanto es más costoso que
+     * {@link #caminoMasCorto}.<p>
      *
+     * @see #caminoMasCorto
      * @param origen el elemento origen
      * @param destino el elemento destino
      * @return la lista con el camino más corto
@@ -400,7 +402,7 @@ public class Grafo<T> {
      * que minimaLongitud, entonces se guarda el camino en el contenedor caminoMin.
      *
      * @deprecated
-     * Parte de la implementación de caminoMasCorto2().
+     * Parte de la implementación de {@link #caminoMasCorto2}.
      *
      * @param vertice el vertice de origen
      * @param destino el elemento destino
@@ -450,9 +452,9 @@ public class Grafo<T> {
      * un camino con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no
      * hay camino posible entre ellos devuelve la lista vacía.
      *
-     * @param origen
-     * @param destino
-     * @return
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return la lista con el camino más largo
      */
     public Lista<T> caminoMasLargo(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
@@ -486,6 +488,7 @@ public class Grafo<T> {
 
         if (vertice != null) {
             camino.insertar(vertice.getElemento(), nuevaLongitud);
+
             if (vertice.getElemento().equals(destino)) {
                 // Destino encontrado
                 if (camino.longitud() > maximaLongitud.getValor()) {
@@ -495,6 +498,7 @@ public class Grafo<T> {
             } else {
                 // Destino no encontrado; buscar en los adyacentes
                 NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+
                 while (adyacente != null) {
                     if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
                         caminoMasLargoDesde(adyacente.getVertice(), destino, camino, caminoMax, maximaLongitud);
@@ -511,7 +515,7 @@ public class Grafo<T> {
     /**
      * Devuelve una lista con los vértices del grafo visitados según el recorrido en profundidad.
      *
-     * @return
+     * @return la lista de elementos visitados en profundidad
      */
     public Lista<T> listarEnProfundidad() {
         Lista<T> visitados = new Lista<>();
@@ -528,6 +532,12 @@ public class Grafo<T> {
         return visitados;
     }
 
+    /**
+     * Visita lo elementos en profundidad, a partir de un nodo dado, y los agrega a la lista dada.
+     *
+     * @param vertice el vértice de origen
+     * @param visitados los vértices visitados
+     */
     private void listarEnProfundidadDesde(NodoVertice<T> vertice, Lista<T> visitados) {
         if (vertice != null) {
             visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
@@ -546,7 +556,7 @@ public class Grafo<T> {
     /**
      * Devuelve una lista con los vértices del grafo visitados según el recorrido en anchura.
      *
-     * @return
+     * @return la lista de elementos visitados en anchura
      */
     public Lista<T> listarEnAnchura() {
         Lista<T> visitados = new Lista<>();
@@ -591,7 +601,7 @@ public class Grafo<T> {
     /**
      * Devuelve falso si hay al menos un vértice cargado en el grafo y verdadero en caso contrario.
      *
-     * @return
+     * @return verdadero si el grafo está vacío, falso en caso contrario
      */
     public boolean esVacio() {
         return inicio == null;
@@ -600,7 +610,7 @@ public class Grafo<T> {
     /**
      * Genera y devuelve un grafo que es equivalente (igual estructura y contenido de los nodos) al original.
      *
-     * @return
+     * @return un grafo equivalente al original
      */
     public Grafo<T> clonar() {
         Grafo<T> clon = new Grafo<>();
@@ -646,7 +656,7 @@ public class Grafo<T> {
         while (vertice != null) {
             adyacente = vertice.getPrimerAdyacente();
             while (adyacente != null) {
-                //FIXME: la estructura interna de arcos queda distinta en algunos casos, pero equivalente
+                //FIXME: La estructura interna de arcos queda distinta en algunos casos, pero aparentemente equivalente
                 clon.insertarArco(vertice.getElemento(), adyacente.getVertice().getElemento());
                 adyacente = adyacente.getSiguienteAdyacente();
             }
