@@ -5,10 +5,13 @@ import conjuntistas.ArbolBB;
 /**
  * Prueba implementación de Árbol Binario de Búsqueda.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaArbolBB {
 
+    /**
+     * Constructor ejecuta todas las pruebas.
+     */
     public PruebaArbolBB() {
         pruebaInsertar();
         pruebaEliminar();
@@ -22,14 +25,20 @@ public class PruebaArbolBB {
         pruebaClonar();
     }
 
-    private void pruebaInsertar() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#insertar(Comparable)}.
+     */
+    public void pruebaInsertar() {
         ArbolBB<Integer> abb = new ArbolBB<Integer>();
         assert abb.insertar(8) : "Debe insertar 8 al árbol";
         assert !abb.insertar(8)
                 : "No debe insertar 8 al árbol (elemento existente)";
     }
 
-    private void pruebaEliminar() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#eliminar(Comparable)}.
+     */
+    public void pruebaEliminar() {
         ArbolBB<Integer> abb = crearArbolBB();
         assert abb.eliminar(1) : "Debe eliminar 1 del árbol";
         assert abb.eliminar(5) : "Debe eliminar 5 del árbol";
@@ -40,61 +49,112 @@ public class PruebaArbolBB {
                 : "No debe eliminar 8 del árbol (elemento inexistente)";
     }
 
-    private void pruebaPertenece() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#pertenece(Comparable)}.
+     */
+    public void pruebaPertenece() {
         ArbolBB<Integer> abb = crearArbolBB();
         assert abb.pertenece(8) : "8 debe pertenecer al árbol";
-        assert !abb.pertenece(16)
-                : "16 no debe pertenecer al árbol (elemento inexistente)";
+        assert !abb.pertenece(17)
+                : "17 no debe pertenecer al árbol (elemento inexistente)";
     }
 
-    private void pruebaMaximo() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#maximo()}.
+     */
+    public void pruebaMaximo() {
         ArbolBB<Integer> abb = crearArbolBB();
-        assert abb.maximo() == 15 : "15 debe ser el elemento máximo del árbol";
+        assert abb.maximo() == 16 : "16 debe ser el elemento máximo del árbol";
+        abb.eliminar(16);
         abb.eliminar(15);
         assert abb.maximo() == 14 : "14 debe ser el elemento máximo del árbol";
     }
 
-    private void pruebaMinimo() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#minimo()}.
+     */
+    public void pruebaMinimo() {
         ArbolBB<Integer> abb = crearArbolBB();
         assert abb.minimo() == 1 : "1 debe ser el elemento mínimo del árbol";
         abb.eliminar(1);
         assert abb.minimo() == 2 : "2 debe ser el elemento mínimo del árbol";
     }
 
-    private void pruebaVacio() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#vacio()}.
+     */
+    public void pruebaVacio() {
         ArbolBB<Integer> abb = new ArbolBB<Integer>();
         assert abb.vacio() : "Árbol debe ser vacío";
         abb.insertar(8);
         assert !abb.vacio() : "Árbol no debe ser vacío";
     }
 
-    private void pruebaVaciar() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#vaciar()}.
+     */
+    public void pruebaVaciar() {
         ArbolBB<Integer> abb = crearArbolBB();
         abb.vaciar();
         assert abb.vacio() : "Árbol debe ser vacío";
     }
 
-    private void pruebaListar() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#listar()}.
+     */
+    public void pruebaListar() {
         ArbolBB<Integer> abb = crearArbolBB();
         assert abb.listar().toString().equals(
-                "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]")
-                : "Debe listar la secuencia de enteros del 1 al 15";
+                "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]")
+                : "Debe listar la secuencia de enteros del 1 al 16";
     }
 
-    private void pruebaListarRango() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#listarRango(Comparable, Comparable)}.
+     */
+    public void pruebaListarRango() {
         ArbolBB<Integer> abb = crearArbolBB();
         assert abb.listarRango(8, 13).toString().equals(
                 "[8, 9, 10, 11, 12, 13]")
                 : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
     }
 
-    private void pruebaClonar() {
+    /**
+     * Prueba {@link conjuntistas.ArbolBB#clonar()}.
+     */
+    public void pruebaClonar() {
         ArbolBB<Integer> abb = crearArbolBB(), clon = abb.clonar();
         assert abb.toString().equals(clon.toString())
                 : "Clon del árbol debe ser una copia exacta del original";
     }
 
-    private static ArbolBB<Integer> crearArbolBB() {
+    /**
+     * Crea un Árbol BB de prueba.
+     * El estado final interno correcto según el orden de inserción debe ser:
+     * <pre>
+     *                     ( 8)
+     *                     /  \
+     *                    /    \
+     *                   /      \
+     *                  /        \
+     *                 /          \
+     *                /            \
+     *               /              \
+     *              /                \
+     *           ( 4)                (15)
+     *           /  \                /  \
+     *          /    \              /    \
+     *         /      \            /      \
+     *      ( 1)      ( 6)      (11)      (16)
+     *         \      /  \      /  \
+     *         ( 2)( 5)  ( 7)(10)  (13)
+     *            \          /     /  \
+     *            ( 3)    ( 9)  (12)  (14)
+     * </pre>
+     *
+     * @return el árbol BB de prueba
+     */
+    public static ArbolBB<Integer> crearArbolBB() {
         ArbolBB<Integer> abb = new ArbolBB<Integer>();
         abb.insertar(8);
         abb.insertar(15);
@@ -105,12 +165,13 @@ public class PruebaArbolBB {
         abb.insertar(13);
         abb.insertar(14);
         abb.insertar(12);
+        abb.insertar(10);
         abb.insertar(3);
         abb.insertar(6);
         abb.insertar(9);
         abb.insertar(7);
         abb.insertar(5);
-        abb.insertar(10);
+        abb.insertar(16);
 
         return abb;
     }
