@@ -29,17 +29,18 @@ public class Grafo<T> {
      * Si puede realizar la inserción devuelve verdadero, en caso contrario devuelve falso.
      *
      * @param elemento el elemento a insertar
-     * @return
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean insertarVertice(T elemento) {
-        boolean exito = false;
-        NodoVertice<T> nodoVertice = buscarVertice(elemento);
-        if (nodoVertice == null) {
+        boolean insertado = false;
+        NodoVertice<T> vertice = buscarVertice(elemento);
+
+        if (vertice == null) {
             inicio = new NodoVertice<T>(elemento, inicio);
-            exito = true;
+            insertado = true;
         }
 
-        return exito;
+        return insertado;
     }
 
     /**
@@ -47,12 +48,14 @@ public class Grafo<T> {
      *
      * @param vertice el nodo vértice
      * @param destino el elemento destino
-     * @return
+     * @return el adyacente buscado, nulo si no fue encontrado
      */
     private NodoAdyacente<T> buscarAdyacente(NodoVertice<T> vertice, T destino) {
         NodoAdyacente<T> adyacente = null;
+
         if (vertice != null) {
             adyacente = vertice.getPrimerAdyacente();
+
             while (adyacente != null && !adyacente.getVertice().getElemento().equals(destino)) {
                 adyacente = adyacente.getSiguienteAdyacente();
             }
@@ -65,10 +68,11 @@ public class Grafo<T> {
      * Busca un nodo vértice a partir del elemento dado.
      *
      * @param elemento el elemento a buscar
-     * @return
+     * @return el vértice buscado, nulo si no fue encontrado
      */
     private NodoVertice<T> buscarVertice(T elemento) {
         NodoVertice<T> vertice = inicio;
+
         while (vertice != null && !vertice.getElemento().equals(elemento)) {
             vertice = vertice.getSiguienteVertice();
         }
@@ -81,15 +85,16 @@ public class Grafo<T> {
      * todos los arcos que lo tengan como origen o destino. Si se puede realizar la eliminación con éxito
      * devuelve verdadero, en caso contrario devuelve falso.
      *
-     * @param vertice el elemento del vértice a eliminar
-     * @return
+     * @param elemento el elemento del vértice a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
-    public boolean eliminarVertice(T vertice) {
+    public boolean eliminarVertice(T elemento) {
         boolean eliminado = false;
         NodoVertice<T> verticeAnterior = null, verticeActual = inicio;
         NodoAdyacente<T> adyacente;
 
-        while (verticeActual != null && !verticeActual.getElemento().equals(vertice)) {
+        // No se utiliza buscarVertice() ya que también se necesita el nodo vértice anterior
+        while (verticeActual != null && !verticeActual.getElemento().equals(elemento)) {
             verticeAnterior = verticeActual;
             verticeActual = verticeActual.getSiguienteVertice();
         }
@@ -102,10 +107,11 @@ public class Grafo<T> {
                 verticeAnterior.setSiguienteVertice(verticeActual.getSiguienteVertice());
             }
 
-            // Eliminar referencias al vértice como destino
             adyacente = verticeActual.getPrimerAdyacente();
+
+            // Eliminar referencias al vértice como destino
             while (adyacente != null) {
-                eliminarAdyacente(adyacente.getVertice(), vertice);
+                eliminarAdyacente(adyacente.getVertice(), elemento);
                 adyacente = adyacente.getSiguienteAdyacente();
             }
 
@@ -116,79 +122,17 @@ public class Grafo<T> {
     }
 
     /**
-     * Dados dos elementos de tipo T (origen y destino) agrega el arco en la estructura, sólo si ambos vértices ya
-     * existen en el grafo. Si puede realizar la inserción devuelve verdadero, en caso contrario devuelve falso.
-     *
-     * @param origen
-     * @param destino
-     * @return
-     */
-    public boolean insertarArco(T origen, T destino) {
-        boolean exito = false;
-        NodoVertice<T> verticeOrigen = buscarVertice(origen);
-
-        if (verticeOrigen != null) {
-            NodoVertice<T> verticeDestino = buscarVertice(destino);
-            if (verticeDestino != null) {
-                NodoAdyacente<T> adyacenteDeOrigen, adyacenteDeDestino;
-                adyacenteDeOrigen = new NodoAdyacente<T>(verticeDestino, verticeOrigen.getPrimerAdyacente());
-                verticeOrigen.setPrimerAdyacente(adyacenteDeOrigen);
-                adyacenteDeDestino = new NodoAdyacente<T>(verticeOrigen, verticeDestino.getPrimerAdyacente());
-                verticeDestino.setPrimerAdyacente(adyacenteDeDestino);
-                exito = true;
-            }
-        }
-
-        return exito;
-    }
-
-    /**
-     * Dados dos elementos de tipo T (origen y destino) se quita de la estructura el arco que une ambos vértices. Si el
-     * arco existe y se puede realizar la eliminación con éxito devuelve verdadero, en caso contrario devuelve falso.
-
-     * @param origen
-     * @param destino
-     * @return
-     */
-    public boolean eliminarArco(T origen, T destino) {
-        return eliminarArco(origen, destino, true);
-    }
-
-    /**
-     * Elimina el arco desde destino a origen, recíprocamente si es especificado.
-     *
-     * @param origen el elemento origen
-     * @param destino el elemento destino
-     * @param reciproco si también se debe borrar el arco de destino a origen
-     * @return
-     */
-    private boolean eliminarArco(T origen, T destino, boolean reciproco) {
-        boolean exito = false;
-        NodoVertice<T> verticeOrigen = buscarVertice(origen);
-
-        if (verticeOrigen != null) {
-            NodoAdyacente<T> eliminado = eliminarAdyacente(verticeOrigen, destino);
-            if (reciproco && eliminado != null) {
-                eliminado = eliminarAdyacente(eliminado.getVertice(), origen);
-            }
-
-            exito = eliminado != null;
-        }
-
-        return exito;
-    }
-
-    /**
      * Eliminar un nodo adyacente a partir del nodo vértice dado.
      *
      * @param vertice el nodo vértice
      * @param destino el elemento destino
-     * @return el adyacente eliminado
+     * @return el adyacente eliminado, nulo si no fue encontrado
      */
     private NodoAdyacente<T> eliminarAdyacente(NodoVertice<T> vertice, T destino) {
-        NodoAdyacente<T> adyacenteAnterior, adyacenteActual = null;
+        NodoAdyacente<T> adyacenteActual = null;
+
         if (vertice != null) {
-            adyacenteAnterior = null;
+            NodoAdyacente<T> adyacenteAnterior = null;
             adyacenteActual = vertice.getPrimerAdyacente();
 
             while (adyacenteActual != null && !adyacenteActual.getVertice().getElemento().equals(destino)) {
@@ -210,10 +154,75 @@ public class Grafo<T> {
     }
 
     /**
+     * Dados dos elementos de tipo T (origen y destino) agrega el arco en la estructura, sólo si ambos vértices ya
+     * existen en el grafo. Si puede realizar la inserción devuelve verdadero, en caso contrario devuelve falso.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return verdadero si el arco fue insertado, falso en caso contrario
+     */
+    public boolean insertarArco(T origen, T destino) {
+        boolean insertado = false;
+        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+
+        if (verticeOrigen != null) {
+            NodoVertice<T> verticeDestino = buscarVertice(destino);
+
+            if (verticeDestino != null) {
+                NodoAdyacente<T> adyacenteOrigen, adyacenteDestino;
+                adyacenteOrigen = new NodoAdyacente<T>(verticeDestino, verticeOrigen.getPrimerAdyacente());
+                verticeOrigen.setPrimerAdyacente(adyacenteOrigen);
+                adyacenteDestino = new NodoAdyacente<T>(verticeOrigen, verticeDestino.getPrimerAdyacente());
+                verticeDestino.setPrimerAdyacente(adyacenteDestino);
+                insertado = true;
+            }
+        }
+
+        return insertado;
+    }
+
+    /**
+     * Dados dos elementos de tipo T (origen y destino) se quita de la estructura el arco que une ambos vértices. Si el
+     * arco existe y se puede realizar la eliminación con éxito devuelve verdadero, en caso contrario devuelve falso.
+
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return verdadero si el arco fue eliminado, falso en caso contrario
+     */
+    public boolean eliminarArco(T origen, T destino) {
+        return eliminarArco(origen, destino, true);
+    }
+
+    /**
+     * Elimina el arco desde destino a origen, recíprocamente si es especificado.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @param reciproco si también se debe borrar el arco de destino a origen
+     * @return
+     */
+    private boolean eliminarArco(T origen, T destino, boolean reciproco) {
+        boolean eliminado = false;
+        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+
+        if (verticeOrigen != null) {
+            NodoAdyacente<T> adyacenteEliminado = eliminarAdyacente(verticeOrigen, destino);
+
+            if (reciproco && adyacenteEliminado != null) {
+                adyacenteEliminado = eliminarAdyacente(adyacenteEliminado.getVertice(), origen);
+            }
+
+            eliminado = adyacenteEliminado != null;
+        }
+
+        return eliminado;
+    }
+
+    /**
      * Dado un elemento, devuelve verdadero si está en la estructura y falso en caso contrario.
      *
-     * @param elemento el elemento del vértice a buscar
-     * @return
+     * @param elemento el elemento a buscar
+     * @return verdadero si el vértice existe, falso en caso contrario
      */
     public boolean existeVertice(T elemento) {
         return buscarVertice(elemento) != null;
@@ -223,8 +232,8 @@ public class Grafo<T> {
      * Dados dos elementos de tipo T (origen y destino), devuelve verdadero si existe un arco en la estructura que los
      * une y falso en caso contrario.
 
-     * @param origen el elemento del vértice origen
-     * @param destino el elemento del vértice destino
+     * @param origen el elemento origen
+     * @param destino el elemento destino
      * @return verdadero si el arco existe, falso en caso contrario
      */
     public boolean existeArco(T origen, T destino) {
@@ -252,7 +261,7 @@ public class Grafo<T> {
     }
 
     /**
-     * Verifica si hay un camino desde el vértice dado al destino en forma recursiva, evitando vértices ya visitados.
+     * Verifica si hay un camino desde el vértice dado al destino, en forma recursiva, evitando vértices ya visitados.
      *
      * @param vertice el vértice a visitar
      * @param destino el elemento destino
@@ -269,7 +278,7 @@ public class Grafo<T> {
                 visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
                 NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
 
-                while (!existe && adyacente != null) {
+                while (adyacente != null && !existe) {
                     if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
                         existe = existeCaminoDesde(adyacente.getVertice(), destino, visitados);
                     }
@@ -288,11 +297,19 @@ public class Grafo<T> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
+     * Esta implementación es medianamente mejor que caminoMasCorto2(), ya que recorre a lo sumo cada vértice una sola
+     * vez, como en listarEnAnchura(), y no utiliza recursión. Sin embargo, utiliza una cola y lista auxiliar, que a lo
+     * sumo, tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sóla referencia al vértice
+     * predecesor, para armar el camino al final del método. También se agregó el método equals() a NodoVertice<T>,
+     * que devuelve verdadero sólo si el elemento es igual al elemento del otro nodo, para poder ubicar un vértice en
+     * la lista con el método Lista<T>.localizar(). Quizá sería mejor buscar una versión alternativa para esto sin
+     * alterar la clase NodoVertice<T>.
+     *
      * @param origen el elemento origen
      * @param destino el elemento destino
      * @return la lista con el camino más corto
      */
-    public Lista<T> caminoMasCorto2(T origen, T destino) {
+    public Lista<T> caminoMasCorto(T origen, T destino) {
         Lista<T> camino = new Lista<>();
         NodoVertice<T> vertice = buscarVertice(origen);
 
@@ -323,6 +340,7 @@ public class Grafo<T> {
                 // Visitar cada vértice adyacente guardando su predecesor
                 while (adyacente != null && !finalizar) {
                     elemento = adyacente.getVertice().getElemento();
+
                     if (visitados.localizar(elemento) < 0) {
                         visitados.insertar(elemento, visitados.longitud() + 1);
                         predecesores.insertar(new NodoVertice<T>(elemento, predecesor), predecesores.longitud() + 1);
@@ -338,8 +356,9 @@ public class Grafo<T> {
                 }
             }
 
-            // Obtener el camino más corto a través de la lista auxiliar de predecesores
             vertice = predecesores.recuperar(predecesores.longitud());
+
+            // Obtener el camino más corto a través de la lista auxiliar de predecesores
             while (vertice != null) {
                 camino.insertar(vertice.getElemento(), 1);
                 vertice = vertice.getSiguienteVertice();
@@ -355,11 +374,16 @@ public class Grafo<T> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
-     * @param origen
-     * @param destino
-     * @return
+     * @deprecated
+     * Esta implementación recorre casi todos los caminos posibles desde el origen manteniendo el camino más corto por
+     * parámetro, incluyendo a veces caminos que no llegan al destino, y por lo tanto es más costoso que el anterior.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return la lista con el camino más corto
      */
-    public Lista<T> caminoMasCorto(T origen, T destino) {
+    @Deprecated
+    public Lista<T> caminoMasCorto2(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
         NodoVertice<T> vertice = buscarVertice(origen);
 
@@ -375,12 +399,16 @@ public class Grafo<T> {
      * dado es el destino, entonces se ha encontrado un camino. Luego, si el camino encontrado es de menor longitud
      * que minimaLongitud, entonces se guarda el camino en el contenedor caminoMin.
      *
+     * @deprecated
+     * Parte de la implementación de caminoMasCorto2().
+     *
      * @param vertice el vertice de origen
      * @param destino el elemento destino
      * @param camino el camino actual
      * @param caminoMin el camino mínimo encontrado
      * @param minimaLongitud la longitud del camino mínimo encontrado
      */
+    @Deprecated
     private void caminoMasCortoDesde(
             NodoVertice<T> vertice,
             T destino,
@@ -392,6 +420,7 @@ public class Grafo<T> {
         // Continuar la búsqueda en el vértice sólo si la longitud del camino actual es menor a la mínima encontrada
         if (nuevaLongitud < minimaLongitud.getValor() && vertice != null) {
             camino.insertar(vertice.getElemento(), nuevaLongitud);
+
             if (vertice.getElemento().equals(destino)) {
                 // Destino encontrado
                 if (camino.longitud() < minimaLongitud.getValor()) {
@@ -401,6 +430,7 @@ public class Grafo<T> {
             } else {
                 // Destino no encontrado; buscar en los adyacentes
                 NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+
                 while (adyacente != null) {
                     if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
                         caminoMasCortoDesde(adyacente.getVertice(), destino, camino, caminoMin, minimaLongitud);
