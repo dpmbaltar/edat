@@ -17,7 +17,7 @@ public class ArbolBB<T extends Comparable<T>> {
     protected Nodo<T> raiz;
 
     /**
-     * Crea y devuelve un árbol BB vacío.
+     * Constructor vacío.
      */
     public ArbolBB() {
         raiz = null;
@@ -26,8 +26,8 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Inserta un elemento al árbol.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a insertar
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean insertar(T elemento) {
         boolean insertado = false;
@@ -45,9 +45,9 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Inserta un elemento al sub-árbol correspondiente al nodo dado.
      *
-     * @param elemento
-     * @param nodo
-     * @return
+     * @param elemento el elemento a insertar
+     * @param nodo el nodo del sub-árbol izquierdo o derecho
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     protected boolean insertar(T elemento, Nodo<T> nodo) {
         boolean insertado = false;
@@ -57,10 +57,9 @@ public class ArbolBB<T extends Comparable<T>> {
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
 
-            // Si el elemento es menor al del nodo, insertar en el sub-árbol
-            // izquierdo. Si el elemento es mayor al del nodo, insertar en el
-            // sub-árbol derecho. Si el elemento es igual al del nodo, el
-            // resultado será falso y no continuará hacia los nodos hijos.
+            // Si el elemento es menor al del nodo, insertar en el sub-árbol izquierdo
+            // Si el elemento es mayor al del nodo, insertar en el sub-árbol derecho
+            // Si el elemento es igual al del nodo, el resultado será falso y no continuará hacia los nodos hijos.
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
                     nuevo = new Nodo<T>(elemento);
@@ -86,8 +85,8 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Elimina el elemento del árbol.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(T elemento) {
         return eliminar(elemento, raiz, null);
@@ -96,9 +95,9 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Elimina un elemento del sub-árbol correspondiente al nodo dado.
      *
-     * @param elemento
-     * @param nodo
-     * @return
+     * @param elemento el elemento a eliminar
+     * @param nodo el nodo desde donde buscar el elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     protected boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean eliminado = false;
@@ -153,23 +152,22 @@ public class ArbolBB<T extends Comparable<T>> {
     }
 
     /**
-     * Devuelve verdadero si el elemento dado pertenece al árbol, o falso en
-     * caso contrario.
+     * Devuelve verdadero si el elemento dado pertenece al árbol, o falso en caso contrario.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a buscar
+     * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
         return pertenece(elemento, raiz);
     }
 
     /**
-     * Devuelve verdadero si el elemento dado pertenece al sub-árbol
-     * correspondiente al nodo dado, o falso en caso contrario.
+     * Devuelve verdadero si el elemento dado pertenece al sub-árbol correspondiente al nodo dado, falso en caso
+     * contrario.
      *
-     * @param elemento
-     * @param nodo
-     * @return
+     * @param elemento el elemento a buscar
+     * @param nodo el nodo desde donde buscar el elemento
+     * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     protected boolean pertenece(T elemento, Nodo<T> nodo) {
         boolean existe = false;
@@ -194,7 +192,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve el elemento máximo del árbol.
      *
-     * @return
+     * @return el elemento máximo
      */
     public T maximo() {
         return maximo(raiz);
@@ -203,8 +201,8 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve el elemento máximo a partir de un nodo.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo desde donde buscar el elemento máximo
+     * @return el elemento máximo
      */
     protected T maximo(Nodo<T> nodo) {
         Nodo<T> derecho = nodo, maximo = null;
@@ -220,7 +218,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve el elemento mínimo del árbol.
      *
-     * @return
+     * @return el elemento mínimo
      */
     public T minimo() {
         return minimo(raiz);
@@ -229,8 +227,8 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve el elemento mínimo a partir de un nodo.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo desde donde buscar el elemento mínimo
+     * @return el elemento mínimo
      */
     protected T minimo(Nodo<T> nodo) {
         Nodo<T> izquierdo = nodo, minimo = null;
@@ -246,7 +244,7 @@ public class ArbolBB<T extends Comparable<T>> {
     /**
      * Devuelve verdadero si el árbol está vacío, o falso en caso contrario.
      *
-     * @return
+     * @return verdadero si el árbol está vacío, falso en caso contrario
      */
     public boolean vacio() {
         return raiz == null;
@@ -260,66 +258,61 @@ public class ArbolBB<T extends Comparable<T>> {
     }
 
     /**
-     * Devuelve una lista con los elementos del árbol - ordenados de menor a
-     * mayor -.
+     * Devuelve una lista con los elementos del árbol - ordenados de menor a mayor -.
      *
-     * @return
+     * @return la lista con los elementos ordenados de menor a mayor
      */
     public Lista<T> listar() {
         Lista<T> lista = new Lista<T>();
-        listar(lista, raiz);
+        listar(raiz, lista);
 
         return lista;
     }
 
     /**
-     * Inserta los elementos del árbol - ordenados de menor a mayor - en la
-     * lista dada, del sub-árbol correspondiente al nodo dado.
+     * Inserta los elementos del árbol - ordenados de menor a mayor - en la lista dada, del sub-árbol correspondiente
+     * al nodo dado.
      *
-     * @param lista
-     * @param nodo
+     * @param nodo el nodo desde donde listar los elementos
+     * @param lista la lista de elementos
      */
-    protected void listar(Lista<T> lista, Nodo<T> nodo) {
+    protected void listar(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> izquierdo, derecho;
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
 
-            listar(lista, izquierdo);
+            listar(izquierdo, lista);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
-            listar(lista, derecho);
+            listar(derecho, lista);
         }
     }
 
     /**
-     * Devuelve una lista con los elementos del árbol - ordenados de menor a
-     * mayor - mientras que el elemento se encuentre dentro del rango mínimo y
-     * máximo especificado.
+     * Devuelve una lista con los elementos del árbol - ordenados de menor a mayor - mientras que el elemento se
+     * encuentre dentro del rango mínimo y máximo especificado.
      *
-     * @param minimo
-     * @param maximo
-     * @return
+     * @param minimo el elemento mínimo del rango
+     * @param maximo el elemento máximo del rango
+     * @return la lista de elementos
      */
     public Lista<T> listarRango(T minimo, T maximo) {
         Lista<T> lista = new Lista<T>();
-        listarRango(minimo, maximo, lista, raiz);
+        listarRango(minimo, maximo, raiz, lista);
 
         return lista;
     }
 
     /**
-     * Inserta los elementos del árbol - ordenados de menor a mayor - mientras
-     * que el elemento se encuentre dentro del rango mínimo y máximo
-     * especificado, en la lista dada, del sub-árbol correspondiente al nodo
-     * dado.
+     * Inserta los elementos del árbol - ordenados de menor a mayor - mientras que el elemento se encuentre dentro del
+     * rango mínimo y máximo especificado, en la lista dada, del sub-árbol correspondiente al nodo dado.
      *
-     * @param minimo
-     * @param maximo
-     * @param lista
-     * @param nodo
+     * @param minimo el elemento mínimo del rango
+     * @param maximo el elemento máximo del rango
+     * @param nodo el nodo desde donde listar los elementos
+     * @param lista la lista de elementos
      */
-    protected void listarRango(T minimo, T maximo, Lista<T> lista,
-            Nodo<T> nodo) {
+    protected void listarRango(T minimo, T maximo, Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> izquierdo, derecho;
             T elemento;
@@ -327,18 +320,20 @@ public class ArbolBB<T extends Comparable<T>> {
             derecho = nodo.getDerecho();
             elemento = nodo.getElemento();
 
-            listarRango(minimo, maximo, lista, izquierdo);
-            if (elemento.compareTo(minimo) >= 0
-                    && elemento.compareTo(maximo) <= 0)
+            listarRango(minimo, maximo, izquierdo, lista);
+
+            if (elemento.compareTo(minimo) >= 0 && elemento.compareTo(maximo) <= 0) {
                 lista.insertar(elemento, lista.longitud() + 1);
-            listarRango(minimo, maximo, lista, derecho);
+            }
+
+            listarRango(minimo, maximo, derecho, lista);
         }
     }
 
     /**
      * Devuelve una copia exacta del árbol.
      *
-     * @return
+     * @return la copia del árbol
      */
     public ArbolBB<T> clonar() {
         ArbolBB<T> clon = new ArbolBB<T>();
@@ -366,10 +361,6 @@ public class ArbolBB<T extends Comparable<T>> {
         return clon;
     }
 
-    /**
-     * Devuelve la representación del árbol en forma de cadena. Éste método
-     * equivale a llamar listar.toString().
-     */
     @Override
     public String toString() {
         return listar().toString();
