@@ -297,10 +297,10 @@ public class Grafo<T> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
-     * <p>Esta implementación es medianamente mejor que {@link Grafo#caminoMasCorto2}, ya que recorre a lo sumo cada
+     * <p>Esta implementación es medianamente mejor que {@link #caminoMasCorto2}, ya que recorre a lo sumo cada
      * vértice una sola vez, como en {@link #listarEnAnchura}, y no utiliza recursión. Sin embargo, utiliza una cola y
-     * lista auxiliar, que a lo sumo, tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sola
-     * referencia al vértice predecesor, para armar el camino al final del método. También, se agregó el método
+     * lista auxiliar, que a lo sumo tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sola
+     * referencia que es al vértice predecesor, para armar el camino al final del método. También, se agregó el método
      * {@link NodoVertice#equals}, que devuelve verdadero sólo si el elemento es igual al elemento del otro nodo, para
      * poder ubicar un vértice en la lista con el método {@link Lista#localizar}. Quizá sería mejor buscar una versión
      * alternativa para esta funcionalidad sin alterar la clase {@link NodoVertice}.</p>
@@ -315,18 +315,15 @@ public class Grafo<T> {
 
         if (vertice != null) {
             boolean finalizar = false;
-            T elemento;
+            T elementoAdy;
             NodoVertice<T> predecesor;
             NodoAdyacente<T> adyacente;
             Cola<NodoVertice<T>> colaVertices = new Cola<>();
-            Lista<NodoVertice<T>> predecesores = new Lista<>();
-            Lista<T> visitados = new Lista<>();
+            Lista<NodoVertice<T>> visitados = new Lista<>();
 
             // Visitar el origen primero y guardarlo como predecesor
-            elemento = vertice.getElemento();
-            visitados.insertar(elemento, 1);
-            predecesor = new NodoVertice<T>(elemento);
-            predecesores.insertar(predecesor, 1);
+            predecesor = new NodoVertice<T>(vertice.getElemento());
+            visitados.insertar(predecesor, 1);
             colaVertices.poner(vertice);
 
             // Recorrer cada vértice como en listar en anchura
@@ -334,20 +331,19 @@ public class Grafo<T> {
                 vertice = colaVertices.obtenerFrente();
                 colaVertices.sacar();
                 //TODO: Se agregó NodoVertice<T>.equals() para localizar vértices por elemento. ¿Buscar alternativa?
-                predecesor = predecesores.recuperar(predecesores.localizar(vertice));
+                predecesor = visitados.recuperar(visitados.localizar(vertice));
                 adyacente = vertice.getPrimerAdyacente();
 
                 // Visitar cada vértice adyacente guardando su predecesor
                 while (adyacente != null && !finalizar) {
-                    elemento = adyacente.getVertice().getElemento();
+                    elementoAdy = adyacente.getVertice().getElemento();
 
-                    if (visitados.localizar(elemento) < 0) {
-                        visitados.insertar(elemento, visitados.longitud() + 1);
-                        predecesores.insertar(new NodoVertice<T>(elemento, predecesor), predecesores.longitud() + 1);
+                    if (visitados.localizar(adyacente.getVertice()) < 0) {
+                        visitados.insertar(new NodoVertice<T>(elementoAdy, predecesor), visitados.longitud() + 1);
                         colaVertices.poner(adyacente.getVertice());
 
                         // Finalizar si el destino fue encontrado
-                        if (elemento.equals(destino)) {
+                        if (elementoAdy.equals(destino)) {
                             finalizar = true;
                         }
                     }
@@ -356,7 +352,7 @@ public class Grafo<T> {
                 }
             }
 
-            vertice = predecesores.recuperar(predecesores.longitud());
+            vertice = visitados.recuperar(visitados.longitud());
 
             // Obtener el camino más corto a través de la lista auxiliar de predecesores
             while (vertice != null) {
