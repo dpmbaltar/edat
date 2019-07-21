@@ -6,10 +6,13 @@ import lineales.dinamicas.Lista;
 /**
  * Prueba implementación de Árbol Genérico.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaArbolGenerico {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaArbolGenerico() {
         pruebaInsertar();
         pruebaEsVacio();
@@ -26,9 +29,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.insertar().
+     * Prueba {@link jerarquicas.ArbolGenerico#insertar(Object, Object)}.
      */
-    private void pruebaInsertar() {
+    public void pruebaInsertar() {
         ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
         assert ag.insertar('a', null) : "Debe insertar 'a' como raíz del árbol";
         assert ag.insertar('b', 'a') : "Debe insertar 'b' como hijo de 'a'";
@@ -40,9 +43,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.esVacio().
+     * Prueba {@link jerarquicas.ArbolGenerico#esVacio()}.
      */
-    private void pruebaEsVacio() {
+    public void pruebaEsVacio() {
         ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
         assert ag.esVacio() : "Árbol debe ser vacío";
         ag.insertar('a', null);
@@ -50,9 +53,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.pertenece().
+     * Prueba {@link jerarquicas.ArbolGenerico#pertenece(Object)}.
      */
-    private void pruebaPertenece() {
+    public void pruebaPertenece() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.pertenece('a') : "'a' debe pertenecer al árbol";
         assert ag.pertenece('g') : "'g' debe pertenecer al árbol";
@@ -61,9 +64,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.altura().
+     * Prueba {@link jerarquicas.ArbolGenerico#altura()}.
      */
-    private void pruebaAltura() {
+    public void pruebaAltura() {
         ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
         assert ag.altura() == 0 : "Altura debe ser 0";
         ag = crearArbolGenerico();
@@ -71,9 +74,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.nivel().
+     * Prueba {@link jerarquicas.ArbolGenerico#nivel(Object)}.
      */
-    private void pruebaNivel() {
+    public void pruebaNivel() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.nivel('a') == 0 : "Nivel de 'a' debe ser 0";
         assert ag.nivel('b') == 1 : "Nivel de 'b' debe ser 1";
@@ -84,9 +87,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.padre().
+     * Prueba {@link jerarquicas.ArbolGenerico#padre(Object)}.
      */
-    private void pruebaPadre() {
+    public void pruebaPadre() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.padre('a') == null : "Padre de 'a' debe ser nulo";
         assert ag.padre('b') == 'a' : "Padre de 'b' debe ser 'a'";
@@ -97,9 +100,9 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.ancestros().
+     * Prueba {@link jerarquicas.ArbolGenerico#ancestros(Object)}.
      */
-    private void pruebaAncestros() {
+    public void pruebaAncestros() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         Lista<Character> lc;
         assert ag.ancestros('a').toString().equals("[]")
@@ -123,52 +126,52 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.listarPreorden().
+     * Prueba {@link jerarquicas.ArbolGenerico#listarPreorden()}.
      */
-    private void pruebaListarPreorden() {
+    public void pruebaListarPreorden() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.listarPreorden().toString().equals("[a, b, e, f, c, g, d, h, j, k, l, m, n, i]")
                 : "Listado en preorden debe ser: [a, b, e, f, c, g, d, h, j, k, l, m, n, i]";
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.listarInorden().
+     * Prueba {@link jerarquicas.ArbolGenerico#listarInorden()}.
      */
-    private void pruebaListarInorden() {
+    public void pruebaListarInorden() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.listarInorden().toString().equals("[e, b, f, a, g, c, j, h, k, m, l, n, d, i]")
                 : "Listado en inorden debe ser: [e, b, f, a, g, c, j, h, k, m, l, n, d, i]";
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.listarPosorden().
+     * Prueba {@link jerarquicas.ArbolGenerico#listarPosorden()}.
      */
-    private void pruebaListarPosorden() {
+    public void pruebaListarPosorden() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.listarPosorden().toString().equals("[e, f, b, g, c, j, k, m, n, l, h, i, d, a]")
                 : "Listado en posorden debe ser: [e, f, b, g, c, j, k, m, n, l, h, i, d, a]";
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.listarNiveles().
+     * Prueba {@link jerarquicas.ArbolGenerico#listarNiveles()}.
      */
-    private void pruebaListarNiveles() {
+    public void pruebaListarNiveles() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.listarNiveles().toString().equals("[a, b, c, d, e, f, g, h, i, j, k, l, m, n]")
                 : "Listado por niveles debe ser: [a, b, c, d, e, f, g, h, i, j, k, l, m, n]";
     }
 
     /**
-     * Prueba jerarquicas.ArbolGenerico.clonar().
+     * Prueba {@link jerarquicas.ArbolGenerico#clonar()}.
      */
-    private void pruebaClonar() {
+    public void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.toString().equals(ag.clonar().toString()) : "Árbol debe ser igual a su clon";
     }
 
     /**
      * Provee un Árbol para pruebas. Estructura del Árbol:
-     *
+     * <pre>
      * Tipo:        {@link ArbolGenerico}
      * Altura:      4
      * Niveles:     5
@@ -192,8 +195,11 @@ public class PruebaArbolGenerico {
      *   |   +-m
      *   |   +-n
      *   +-i
+     * </pre>
+     *
+     * @return el árbol genérico de prueba
      */
-    private static ArbolGenerico<Character> crearArbolGenerico() {
+    public static ArbolGenerico<Character> crearArbolGenerico() {
         ArbolGenerico<Character> ag = new ArbolGenerico<Character>();
         ag.insertar('a', null);
         ag.insertar('b', 'a');

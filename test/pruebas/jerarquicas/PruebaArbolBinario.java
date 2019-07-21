@@ -6,10 +6,13 @@ import lineales.dinamicas.Lista;
 /**
  * Prueba implementación de Árbol Binario.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaArbolBinario {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaArbolBinario() {
         pruebaInsertar();
         pruebaEsVacio();
@@ -29,9 +32,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.insertar().
+     * Prueba {@link jerarquicas.ArbolBinario#insertar(Object, Object, jerarquicas.ArbolBinario.Posicion)}.
      */
-    private void pruebaInsertar() {
+    public void pruebaInsertar() {
         ArbolBinario<Integer> ab = new ArbolBinario<>();
         assert ab.insertarRaiz(1) : "Debe insertar 1 como raíz";
         assert ab.insertarIzquierdo(2, 1) : "Debe insertar 2 como hijo izq. de 1";
@@ -43,9 +46,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.esVacio().
+     * Prueba {@link jerarquicas.ArbolBinario#esVacio()}.
      */
-    private void pruebaEsVacio() {
+    public void pruebaEsVacio() {
         ArbolBinario<Integer> ab = new ArbolBinario<>();
         assert ab.esVacio() : "Árbol debe ser vacío";
         ab.insertarRaiz(1);
@@ -53,26 +56,26 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.vaciar().
+     * Prueba {@link jerarquicas.ArbolBinario#vaciar()}.
      */
-    private void pruebaVaciar() {
+    public void pruebaVaciar() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         ab.vaciar();
         assert ab.esVacio() : "Árbol debe ser vacío";
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.altura().
+     * Prueba {@link jerarquicas.ArbolBinario#altura()}.
      */
-    private void pruebaAltura() {
+    public void pruebaAltura() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.altura() == 3 : "Altura del árbol debe ser 3";
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.nivel().
+     * Prueba {@link jerarquicas.ArbolBinario#nivel(Object)}.
      */
-    private void pruebaNivel() {
+    public void pruebaNivel() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.nivel(1) == 0 : "Nivel de 1 debe ser 0";
         assert ab.nivel(2) == 1 : "Nivel de 2 debe ser 1";
@@ -81,9 +84,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.padre().
+     * Prueba {@link jerarquicas.ArbolBinario#padre(Object)}.
      */
-    private void pruebaPadre() {
+    public void pruebaPadre() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.padre(10) == 5 : "Padre de 10 debe ser 5";
         assert ab.padre(16) == null : "Padre de 16 debe ser nulo (inexistente)";
@@ -91,9 +94,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.listarPreorden().
+     * Prueba {@link jerarquicas.ArbolBinario#listarPreorden()}.
      */
-    private void pruebaListarPreorden() {
+    public void pruebaListarPreorden() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.listarPreorden().toString().equals(
                 "[1, 2, 4, 8, 9, 5, 10, 11, 3, 6, 12, 13, 7, 14, 15]")
@@ -101,9 +104,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.listarInorden().
+     * Prueba {@link jerarquicas.ArbolBinario#listarInorden()}.
      */
-    private void pruebaListarInorden() {
+    public void pruebaListarInorden() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.listarInorden().toString().equals(
                 "[8, 4, 9, 2, 10, 5, 11, 1, 12, 6, 13, 3, 14, 7, 15]")
@@ -111,9 +114,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.listarPosorden().
+     * Prueba {@link jerarquicas.ArbolBinario#listarPosorden()}.
      */
-    private void pruebaListarPosorden() {
+    public void pruebaListarPosorden() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.listarPosorden().toString().equals(
                 "[8, 9, 4, 10, 11, 5, 2, 12, 13, 6, 14, 15, 7, 3, 1]")
@@ -121,9 +124,9 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.listarNiveles().
+     * Prueba {@link jerarquicas.ArbolBinario#listarNiveles()}.
      */
-    private void pruebaListarNiveles() {
+    public void pruebaListarNiveles() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.listarNiveles().toString().equals(
                 "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]")
@@ -131,25 +134,25 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.clonar().
+     * Prueba {@link jerarquicas.ArbolBinario#clonar()}.
      */
-    private void pruebaClonar() {
+    public void pruebaClonar() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.toString().equals(ab.clonar().toString()) : "Árbol debe ser igual a su clon";
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.sumarRamas().
+     * Prueba {@link jerarquicas.ArbolBinario#sumarRamas()}.
      */
-    private void pruebaSumarRamas() {
+    public void pruebaSumarRamas() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.sumarRamas() == 120 : "Suma de ramas debe ser igual a 120";
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.verificarPatron().
+     * Prueba {@link jerarquicas.ArbolBinario#verificarPatron(Lista)}.
      */
-    private void pruebaVerificarPatron() {
+    public void pruebaVerificarPatron() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         Lista<Integer> lista = new Lista<Integer>();
         lista.insertar(1, 1);
@@ -164,18 +167,18 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.frontera().
+     * Prueba {@link jerarquicas.ArbolBinario#frontera()}.
      */
-    private void pruebaFrontera() {
+    public void pruebaFrontera() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.frontera().toString().equals("[8, 9, 10, 11, 12, 13, 14, 15]")
                 : "La frontera debe: 8, 9, 10, 11, 12, 13, 14 y 15";
     }
 
     /**
-     * Prueba jerarquicas.ArbolBinario.clonarHijosInvertidos().
+     * Prueba {@link jerarquicas.ArbolBinario#clonarHijosInvertidos()}.
      */
-    private void pruebaClonarHijosInvertidos() {
+    public void pruebaClonarHijosInvertidos() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
         assert ab.clonarHijosInvertidos().listarNiveles().toString().equals(
                 "[1, 3, 2, 7, 6, 5, 4, 15, 14, 13, 12, 11, 10, 9, 8]")
@@ -184,7 +187,7 @@ public class PruebaArbolBinario {
 
     /**
      * Crea un árbol binario completo de prueba:
-     *
+     * <pre>
      * Tipo:        {@link ArbolBinario}
      * Altura:      3
      * Niveles:     4
@@ -201,10 +204,11 @@ public class PruebaArbolBinario {
      *   4     5     6     7
      *  / \   / \   / \   / \
      * 8   9 10 11 12 13 14 15
+     * </pre>
      *
-     * @return
+     * @return el árbol binario de prueba
      */
-    private static ArbolBinario<Integer> crearArbolBinarioCompleto() {
+    public static ArbolBinario<Integer> crearArbolBinarioCompleto() {
         ArbolBinario<Integer> ab = new ArbolBinario<Integer>();
         ab.insertarRaiz(1);
         ab.insertarIzquierdo(2, 1);
