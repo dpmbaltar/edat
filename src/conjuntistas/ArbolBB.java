@@ -110,13 +110,9 @@ public class ArbolBB<T extends Comparable<T>> {
 
             // Buscar el elemento a eliminar
             if (elemento.compareTo(nodo.getElemento()) < 0) {
-                if (izquierdo != null) {
-                    eliminado = eliminar(elemento, izquierdo, nodo);
-                }
+                eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
-                if (derecho != null) {
-                    eliminado = eliminar(elemento, derecho, nodo);
-                }
+                eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo);
             } else {
                 // Elemento encontrado. Eliminarlo según los 3 casos posibles:
                 if (izquierdo == null && derecho == null) { // Caso 1:
