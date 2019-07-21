@@ -3,8 +3,8 @@ package conjuntistas;
 /**
  * Implementación de Heap Mínimo.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class HeapMinimo<T extends Comparable<T>> {
 
@@ -24,16 +24,16 @@ public class HeapMinimo<T extends Comparable<T>> {
     private Object[] heap;
 
     /**
-     * Crea y devuelve un heap vacío, con capacidad para 15 elementos.
+     * Constructor con capacidad para 15 elementos.
      */
     public HeapMinimo() {
         this(TAM);
     }
 
     /**
-     * Crea y devuelve un heap vacío con capacidad especificada (debe ser > 0).
+     * Constructor con capacidad especificada (debe ser mayor a cero).
      *
-     * @param capacidad
+     * @param capacidad la capidad del Heap
      */
     public HeapMinimo(int capacidad) {
         heap = new Object[capacidad > 0 ? capacidad : TAM];
@@ -43,27 +43,26 @@ public class HeapMinimo<T extends Comparable<T>> {
     /**
      * Inserta un nuevo elemento al Heap.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a insertar
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean insertar(T elemento) {
-        boolean resultado = false;
+        boolean insertado = false;
 
         if (ultimo < heap.length) {
             heap[ultimo] = elemento;
             ultimo++;
             hacerSubir();
-            resultado = true;
+            insertado = true;
         }
 
-        return resultado;
+        return insertado;
     }
 
     /**
-     * Asegura que luego de insertar un elemento, la cima del Heap sea el
-     * elemento correcto (el mínimo). Se calculan las posiciones como si las
-     * posiciones del arreglo comenzaran en 1, pero se accede a los elementos
-     * iniciando desde 0, es decir, se resta 1.
+     * Asegura que luego de insertar un elemento, la cima del Heap sea el elemento correcto (el mínimo). Se calculan
+     * las posiciones como si las posiciones del arreglo comenzaran en 1, pero se accede a los elementos iniciando
+     * desde 0, es decir, se resta 1.
      */
     @SuppressWarnings("unchecked")
     private void hacerSubir() {
@@ -74,6 +73,7 @@ public class HeapMinimo<T extends Comparable<T>> {
 
             while (subir && posPadre > 0) {
                 T padre = (T) heap[posPadre - 1];
+
                 if (padre != null && ultimoElem.compareTo(padre) < 0) {
                     heap[posElem - 1] = padre;
                     heap[posPadre - 1] = ultimoElem;
@@ -87,10 +87,9 @@ public class HeapMinimo<T extends Comparable<T>> {
     }
 
     /**
-     * Asegura que luego de borrar la cima, la nueva cima del Heap sea el
-     * elemento correcto (el mínimo). Se calculan las posiciones como si las
-     * posiciones del arreglo comenzaran en 1, pero se accede a los elementos
-     * iniciando desde 0, es decir, se resta 1.
+     * Asegura que luego de borrar la cima, la nueva cima del Heap sea el elemento correcto (el mínimo). Se calculan
+     * las posiciones como si las posiciones del arreglo comenzaran en 1, pero se accede a los elementos iniciando
+     * desde 0, es decir, se resta 1.
      */
     @SuppressWarnings("unchecked")
     private void hacerBajar() {
@@ -117,10 +116,11 @@ public class HeapMinimo<T extends Comparable<T>> {
                 } else {
                     bajar = false;
                 }
-                
+
                 // Intercambiar con el hijo menor, si existe
                 if (posHijoMenor > 0) {
                     hijoMenor = (T) heap[posHijoMenor - 1];
+
                     if (ultimoElem.compareTo(hijoMenor) > 0) {
                         heap[posPadre - 1] = hijoMenor;
                         heap[posHijoMenor - 1] = ultimoElem;
@@ -137,7 +137,7 @@ public class HeapMinimo<T extends Comparable<T>> {
     /**
      * Elimina el elemento de la cima del Heap.
      *
-     * @return
+     * @return verdadero si la cima fue eliminada, falso en caso contrario
      */
     public boolean eliminarCima() {
         boolean resultado = false;
@@ -156,7 +156,7 @@ public class HeapMinimo<T extends Comparable<T>> {
     /**
      * Devuelve el elemento de la cima del Heap.
      *
-     * @return
+     * @return la cima
      */
     @SuppressWarnings("unchecked")
     public T recuperarCima() {
@@ -164,10 +164,9 @@ public class HeapMinimo<T extends Comparable<T>> {
     }
 
     /**
-     * Devuelve verdadero si el Heap no tiene elementos, o falso en caso
-     * contrario.
+     * Devuelve verdadero si el Heap no tiene elementos, o falso en caso contrario.
      *
-     * @return
+     * @return verdadero si es vacío, falso en caso contrario
      */
     public boolean esVacio() {
         return ultimo == 0;
@@ -177,14 +176,13 @@ public class HeapMinimo<T extends Comparable<T>> {
      * Elimina todos los elementos del Heap.
      */
     public void vaciar() {
-        for (int i = ultimo - 1; i >= 0; i--)
+        for (int i = ultimo - 1; i >= 0; i--) {
             heap[i] = null;
+        }
+
         ultimo = 0;
     }
 
-    /**
-     * Devuelve la representación en forma de cadena de carácteres del Heap.
-     */
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
@@ -192,6 +190,7 @@ public class HeapMinimo<T extends Comparable<T>> {
         if (ultimo > 0) {
             for (int i = 0; i < ultimo; i++) {
                 cadena.append(heap[i]);
+
                 if ((i + 1) < ultimo) {
                     cadena.append(", ");
                 }

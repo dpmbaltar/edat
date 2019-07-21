@@ -6,8 +6,8 @@ import lineales.dinamicas.Lista;
 /**
  * Implementación de Árbol Binario de Búsqueda.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class ArbolBB<T extends Comparable<T>> {
 
