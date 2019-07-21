@@ -5,10 +5,13 @@ import grafos.dinamicas.Grafo;
 /**
  * Prueba implementación de Grafo.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaGrafo {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaGrafo() {
         pruebaInsertarVertice();
         pruebaInsertarArco();
@@ -25,14 +28,20 @@ public class PruebaGrafo {
         pruebaClonar();
     }
 
-    private void pruebaInsertarVertice() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#insertarVertice(Object)}.
+     */
+    public void pruebaInsertarVertice() {
         Grafo<String> grafo = new Grafo<>();
         assert grafo.insertarVertice("A") : "Debe insertar A";
         assert !grafo.insertarVertice("A") : "No debe insertar A (ya existe)";
         assert grafo.insertarVertice("B") : "Debe insertar B";
     }
 
-    private void pruebaInsertarArco() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#insertarArco(Object, Object)}.
+     */
+    public void pruebaInsertarArco() {
         Grafo<String> grafo = new Grafo<>();
         grafo.insertarVertice("A");
         grafo.insertarVertice("B");
@@ -40,26 +49,38 @@ public class PruebaGrafo {
         assert !grafo.insertarArco("A", "C") : "No debe insertar arco de A a C (no existe C)";
     }
 
-    private void pruebaEliminarVertice() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#eliminarVertice(Object)}.
+     */
+    public void pruebaEliminarVertice() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.eliminarVertice("A") : "Debe eliminar A";
         assert !grafo.eliminarVertice("A") : "No debe eliminar A (no existe)";
     }
 
-    private void pruebaEliminarArco() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#eliminarArco(Object, Object)}.
+     */
+    public void pruebaEliminarArco() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.eliminarArco("A", "B") : "Debe eliminar arco A-B";
         assert !grafo.eliminarArco("A", "B") : "No debe eliminar arco A-B (no existe)";
         assert !grafo.eliminarArco("B", "A") : "No debe eliminar arco B-A (no existe)";
     }
 
-    private void pruebaExisteVertice() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#existeVertice(Object)}.
+     */
+    public void pruebaExisteVertice() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.existeVertice("A") : "Debe existir A";
         assert !grafo.existeVertice("K") : "No debe existir K";
     }
 
-    private void pruebaExisteArco() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#existeArco(Object, Object)}.
+     */
+    public void pruebaExisteArco() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.existeArco("A", "B") : "Debe existir arco A-B";
         assert grafo.existeArco("B", "A") : "Debe existir arco B-A";
@@ -68,7 +89,10 @@ public class PruebaGrafo {
         assert !grafo.existeArco("C", "A") : "No debe existir arco C-A";
     }
 
-    private void pruebaExisteCamino() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#existeCamino(Object, Object)}.
+     */
+    public void pruebaExisteCamino() {
         Grafo<String> grafo = crearGrafo();
         String[] vertices = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 
@@ -89,7 +113,10 @@ public class PruebaGrafo {
         assert !grafo.existeCamino("H", "E") : "No debe existir camino H..E";
     }
 
-    private void pruebaCaminoMasCorto() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#caminoMasCorto(Object, Object)}.
+     */
+    public void pruebaCaminoMasCorto() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.caminoMasCorto("A", "D").toString().equals("[A, B, C, D]")
                 : "Camino más corto A..D debe ser [A, B, C, D]";
@@ -101,7 +128,10 @@ public class PruebaGrafo {
                 : "Camino más corto H..E debe ser [H, J, I, E]";
     }
 
-    private void pruebaCaminoMasLargo() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#caminoMasLargo(Object, Object)}.
+     */
+    public void pruebaCaminoMasLargo() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.caminoMasLargo("A", "D").toString().equals("[A, B, F, E, I, J, H, C, G, D]")
                 : "Camino más largo A..D debe ser [A, B, F, E, I, J, H, C, G, D]";
@@ -113,26 +143,38 @@ public class PruebaGrafo {
                 : "Camino más largo H..E debe ser [H, G, D, C, B, A, F, I, E]";
     }
 
-    private void pruebaListarEnProfundidad() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#listarEnProfundidad()}.
+     */
+    public void pruebaListarEnProfundidad() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, J, H, C, D, G]")
                 : "Debe listar: [A, B, F, E, I, J, H, C, D, G]";
     }
 
-    private void pruebaListarEnAnchura() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#listarEnAnchura()}.
+     */
+    public void pruebaListarEnAnchura() {
         Grafo<String> grafo = crearGrafo();
         assert grafo.listarEnAnchura().toString().equals("[B, E, F, A, C, I, D, G, H, J]")
                 : "Debe listar: [B, E, F, A, C, I, D, G, H, J]";
     }
 
-    private void pruebaEsVacio() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#esVacio()}.
+     */
+    public void pruebaEsVacio() {
         Grafo<String> grafo = new Grafo<>();
         assert grafo.esVacio() : "Debe ser vacío";
         grafo = crearGrafo();
         assert !grafo.esVacio() : "No debe ser vacío";
     }
 
-    private void pruebaClonar() {
+    /**
+     * Prueba {@link grafos.dinamicas.Grafo#clonar()}.
+     */
+    public void pruebaClonar() {
         //TODO: La estructura interna de arcos queda distinta en algunos casos, pero el grafo parece ser equivalente
         Grafo<String> grafo = crearGrafo();
         //grafo.insertarArco("A", "A");
@@ -144,7 +186,7 @@ public class PruebaGrafo {
 
     /**
      * Crea un grafo de tipo "String" de prueba:
-     *
+     * <pre>
      * (A)---(B)---(C)---(D)
      *  | \   |     | \ /
      *  |  \  |     |  X
@@ -153,10 +195,11 @@ public class PruebaGrafo {
      *   \   /           /
      *    \ /           /
      *    (I)---------(J)
+     * </pre>
      *
-     * @return
+     * @return el grafo de prueba
      */
-    private static Grafo<String> crearGrafo() {
+    public static Grafo<String> crearGrafo() {
         Grafo<String> grafo = new Grafo<>();
         grafo.insertarVertice("J");
         grafo.insertarVertice("I");

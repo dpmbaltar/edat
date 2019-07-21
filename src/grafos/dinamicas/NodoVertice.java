@@ -5,8 +5,8 @@ import lineales.dinamicas.Lista;
 /**
  * Implementación de Nodo Vértice para un elemento de tipo T.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de elemento
  */
 public class NodoVertice<T> {
 

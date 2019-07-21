@@ -10,7 +10,7 @@ import conjuntistas.ArbolAVL;
 public class PruebaArbolAVL {
 
     /**
-     * Constructor ejecuta todas las pruebas.
+     * Constructor ejecuta todas las pruebas de la clase.
      */
     public PruebaArbolAVL() {
         pruebaInsertar();

@@ -7,6 +7,11 @@ package pruebas;
  */
 public class Prueba {
 
+    /**
+     * Programa de prueba de todas las estructuras.
+     *
+     * @param args argumentos
+     */
     public static void main(String[] args) {
         try {
             try {

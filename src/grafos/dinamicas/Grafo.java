@@ -7,8 +7,8 @@ import utiles.Valor;
 /**
  * Implementación de Grafo no dirigido para elementos de tipo T.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class Grafo<T> {
 

@@ -10,7 +10,7 @@ import conjuntistas.ArbolBB;
 public class PruebaArbolBB {
 
     /**
-     * Constructor ejecuta todas las pruebas.
+     * Constructor ejecuta todas las pruebas de la clase.
      */
     public PruebaArbolBB() {
         pruebaInsertar();

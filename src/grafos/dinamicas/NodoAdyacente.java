@@ -3,8 +3,8 @@ package grafos.dinamicas;
 /**
  * Implementación de Nodo Adyacente para un elemento de tipo T.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de elemento
  */
 public class NodoAdyacente<T> {
 

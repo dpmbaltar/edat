@@ -5,10 +5,13 @@ import conjuntistas.HeapMaximo;
 /**
  * Prueba implementación de Heap Máximo.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaHeapMaximo {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaHeapMaximo() {
         pruebaInsertar();
         pruebaRecuperarCima();
@@ -19,43 +22,64 @@ public class PruebaHeapMaximo {
         pruebaHeapMaximo();
     }
 
-    private void pruebaInsertar() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#insertar(Comparable)}.
+     */
+    public void pruebaInsertar() {
         HeapMaximo<Integer> heap = new HeapMaximo<Integer>();
         assert heap.insertar(8) : "Debe insertar 8 en el heap";
     }
 
-    private void pruebaRecuperarCima() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#recuperarCima()}.
+     */
+    public void pruebaRecuperarCima() {
         HeapMaximo<Integer> heap = crearHeapMaximo();
         assert heap.recuperarCima() == 63 : "Debe recuperar como cima a 63";
     }
 
-    private void pruebaEliminarCima() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#eliminarCima()}.
+     */
+    public void pruebaEliminarCima() {
         HeapMaximo<Integer> heap = crearHeapMaximo();
         assert heap.eliminarCima() : "Debe eliminar cima (63)";
         assert heap.recuperarCima() == 31 : "Debe recuperar como cima a 31";
     }
 
-    private void pruebaEsVacio() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#esVacio()}.
+     */
+    public void pruebaEsVacio() {
         HeapMaximo<Integer> heap = new HeapMaximo<Integer>();
         assert heap.esVacio() : "Heap debe ser vacío";
         heap.insertar(8);
         assert !heap.esVacio() : "Heap no debe ser vacío";
     }
 
-    private void pruebaVaciar() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#vaciar()}.
+     */
+    public void pruebaVaciar() {
         HeapMaximo<Integer> heap = crearHeapMaximo();
         heap.vaciar();
         assert heap.esVacio() : "Heap debe ser vacío";
         assert heap.recuperarCima() == null : "Debe recuperar cima nula";
     }
 
-    private void pruebaToString() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo#toString()}.
+     */
+    public void pruebaToString() {
         HeapMaximo<Integer> heap = crearHeapMaximo();
         assert heap.toString().equals("[63, 31, 16, 8, 1, 4, 15, 2]")
                 : "Debe ser los elementos del Heap de izq. a der. por niveles";
     }
 
-    private void pruebaHeapMaximo() {
+    /**
+     * Prueba {@link conjuntistas.HeapMaximo}.
+     */
+    public void pruebaHeapMaximo() {
         HeapMaximo<Integer> heap = new HeapMaximo<Integer>();
         assert heap.insertar(5) : "Debe insertar 5 en el heap";
         heap.insertar(4);
@@ -68,7 +92,12 @@ public class PruebaHeapMaximo {
                 : "Debe ser los elementos del Heap por niveles [5, 4, 3]";
     }
 
-    private static HeapMaximo<Integer> crearHeapMaximo() {
+    /**
+     * Crea un Heap máximo de prueba.
+     *
+     * @return el heap máximo de prueba
+     */
+    public static HeapMaximo<Integer> crearHeapMaximo() {
         HeapMaximo<Integer> heap = new HeapMaximo<Integer>();
         heap.insertar(8);
         heap.insertar(16);
