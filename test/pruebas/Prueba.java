@@ -3,14 +3,14 @@ package pruebas;
 /**
  * Prueba implementación de todas las estructuras de datos.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class Prueba {
 
     /**
      * Programa de prueba de todas las estructuras.
      *
-     * @param args argumentos
+     * @param args los argumentos
      */
     public static void main(String[] args) {
         try {
@@ -18,7 +18,7 @@ public class Prueba {
                 assert false;
                 System.out.println(
                         "ERROR: las pruebas deben ser ejecutadas con el parámetro de JVM -enableassertions (ó -ea). "
-                                + "Leer README.md");
+                            + "Leer README.md");
                 System.exit(0);
             } catch (AssertionError e) {
             }
