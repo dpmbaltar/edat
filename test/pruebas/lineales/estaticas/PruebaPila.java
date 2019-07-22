@@ -5,10 +5,13 @@ import lineales.estaticas.Pila;
 /**
  * Prueba implementación de Pila estática.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaPila {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaPila() {
         pruebaApilar();
         pruebaObtenerTope();
@@ -20,17 +23,17 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.apilar().
+     * Prueba {@link lineales.estaticas.Pila#apilar(Object)}.
      */
-    private void pruebaApilar() {
+    public void pruebaApilar() {
         Pila<Integer> pila = new Pila<>();
         assert pila.apilar(1) : "Debe apilar 1";
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.obtenerTope().
+     * Prueba {@link lineales.estaticas.Pila#obtenerTope()}.
      */
-    private void pruebaObtenerTope() {
+    public void pruebaObtenerTope() {
         Pila<Integer> pila = new Pila<>();
         assert pila.obtenerTope() == null : "Tope de pila vacía debe ser nulo";
         pila = crearPila();
@@ -38,9 +41,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.desapilar().
+     * Prueba {@link lineales.estaticas.Pila#desapilar()}.
      */
-    private void pruebaDesapilar() {
+    public void pruebaDesapilar() {
         Pila<Integer> pila = new Pila<>();
         assert !pila.desapilar() : "No debe desapilar pila vacía";
         pila = crearPila();
@@ -49,9 +52,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.esVacia().
+     * Prueba {@link lineales.estaticas.Pila#esVacia()}.
      */
-    private void pruebaEsVacia() {
+    public void pruebaEsVacia() {
         Pila<Integer> pila = new Pila<>();
         assert pila.esVacia() : "Pila debe ser vacía";
         pila.apilar(1);
@@ -59,9 +62,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.vaciar().
+     * Prueba {@link lineales.estaticas.Pila#vaciar()}.
      */
-    private void pruebaVaciar() {
+    public void pruebaVaciar() {
         Pila<Integer> pila = crearPila();
         pila.vaciar();
         assert !pila.desapilar() : "No debe desapilar pila vacía";
@@ -70,9 +73,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.clonar().
+     * Prueba {@link lineales.estaticas.Pila#clonar()}.
      */
-    private void pruebaClonar() {
+    public void pruebaClonar() {
         Pila<Integer> pila = crearPila();
         Pila<Integer> clon = pila.clonar();
         assert pila.obtenerTope() == clon.obtenerTope()
@@ -91,9 +94,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.estaticas.Pila.toString().
+     * Prueba {@link lineales.estaticas.Pila#toString()}.
      */
-    private void pruebaToString() {
+    public void pruebaToString() {
         Pila<Integer> pila = crearPila();
         assert pila.toString().equals("[3, 2, 1]") : "La pila debe ser representada como \"[3, 2, 1]\"";
     }
@@ -103,7 +106,7 @@ public class PruebaPila {
      *
      * @return la pila de enteros
      */
-    private static Pila<Integer> crearPila() {
+    public static Pila<Integer> crearPila() {
         Pila<Integer> pila = new Pila<>();
         pila.apilar(1);
         pila.apilar(2);
