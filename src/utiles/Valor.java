@@ -2,13 +2,14 @@ package utiles;
 
 /**
  * Contenedor un valor de tipo T. Ejemplos:
- *
+ * <pre>
  * Valor<Integer> entero = new Valor<>(256);
  * Valor<Lista<String>> listaCadenas = new Valor<>(Lista<String>());
  * listaCadenas.getValor().insertar("Cadena", 1);
+ * </pre>
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo del valor
  */
 public class Valor<T> {
 
@@ -27,7 +28,7 @@ public class Valor<T> {
     /**
      * Constructor con el valor de tipo T.
      *
-     * @param valor
+     * @param valor el valor
      */
     public Valor(T valor) {
         this.valor = valor;
@@ -36,7 +37,7 @@ public class Valor<T> {
     /**
      * Devuelve el valor.
      *
-     * @return
+     * @return el valor
      */
     public T getValor() {
         return valor;
@@ -45,7 +46,7 @@ public class Valor<T> {
     /**
      * Establece el valor.
      *
-     * @param valor
+     * @param valor el valor
      */
     public void setValor(T valor) {
         this.valor = valor;
