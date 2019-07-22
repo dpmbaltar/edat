@@ -2,9 +2,9 @@ package jerarquicas;
 
 /**
  * Implementación de un nodo de dos enlaces: izquierdo y derecho.
- * 
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <E>
+ *
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <E> el tipo de elemento
  */
 public class Nodo<E> {
 
@@ -29,42 +29,39 @@ public class Nodo<E> {
     private int altura;
 
     /**
-     * Crea y devuelve un nodo sin elemento ni enlaces.
+     * Constructor sin elemento ni enlaces.
      */
     public Nodo() {
         this(null, null, null, -1);
     }
 
     /**
-     * Crea y devuelve un nodo con el elemento establecido.
-     * 
-     * @param elemento
+     * Constructor con el elemento.
+     *
+     * @param elemento el elemento
      */
     public Nodo(E elemento) {
         this(elemento, null, null, 0);
     }
 
     /**
-     * Crea y devuelve un nodo con el elemento y los enlaces izquierdo y derecho
-     * establecidos.
-     * 
-     * @param elemento
-     * @param izquierdo
-     * @param derecho
+     * Constructor con el elemento y los enlaces izquierdo y derecho.
+     *
+     * @param elemento el elemento
+     * @param izquierdo el nodo izquierdo
+     * @param derecho el nodo derecho
      */
     public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho) {
-        this(elemento, izquierdo, derecho,
-                Math.max(izquierdo.getAltura(), derecho.getAltura()) + 1);
+        this(elemento, izquierdo, derecho, Math.max(izquierdo.getAltura(), derecho.getAltura()) + 1);
     }
 
     /**
-     * Crea y devuelve un nodo con el elemento, los enlaces izquierdo y derecho
-     * establecidos y su altura.
-     * 
-     * @param elemento
-     * @param izquierdo
-     * @param derecho
-     * @param altura
+     * Constructor con el elemento, los enlaces izquierdo y derecho, y su altura.
+     *
+     * @param elemento el elemento
+     * @param izquierdo el nodo izquierdo
+     * @param derecho el nodo derecho
+     * @param altura la altura
      */
     public Nodo(E elemento, Nodo<E> izquierdo, Nodo<E> derecho, int altura) {
         this.elemento = elemento;
@@ -75,8 +72,8 @@ public class Nodo<E> {
 
     /**
      * Devuelve el elemento.
-     * 
-     * @return
+     *
+     * @return el elemento
      */
     public E getElemento() {
         return elemento;
@@ -84,8 +81,8 @@ public class Nodo<E> {
 
     /**
      * Establece el elemento.
-     * 
-     * @param elemento
+     *
+     * @param elemento el elemento
      */
     public void setElemento(E elemento) {
         this.elemento = elemento;
@@ -93,8 +90,8 @@ public class Nodo<E> {
 
     /**
      * Devuelve el nodo izquierdo.
-     * 
-     * @return
+     *
+     * @return el nodo izquierdo
      */
     public Nodo<E> getIzquierdo() {
         return izquierdo;
@@ -102,8 +99,8 @@ public class Nodo<E> {
 
     /**
      * Establece el nodo izquierdo.
-     * 
-     * @param izquierdo
+     *
+     * @param izquierdo el nodo
      */
     public void setIzquierdo(Nodo<E> izquierdo) {
         this.izquierdo = izquierdo;
@@ -111,8 +108,8 @@ public class Nodo<E> {
 
     /**
      * Devuelve el nodo derecho.
-     * 
-     * @return
+     *
+     * @return el nodo derecho
      */
     public Nodo<E> getDerecho() {
         return derecho;
@@ -120,8 +117,8 @@ public class Nodo<E> {
 
     /**
      * Establece el nodo derecho.
-     * 
-     * @param derecho
+     *
+     * @param derecho el nodo
      */
     public void setDerecho(Nodo<E> derecho) {
         this.derecho = derecho;
@@ -129,8 +126,8 @@ public class Nodo<E> {
 
     /**
      * Devuelve la altura del nodo.
-     * 
-     * @return
+     *
+     * @return la altura
      */
     public int getAltura() {
         return altura;
@@ -138,8 +135,8 @@ public class Nodo<E> {
 
     /**
      * Establece la altura del nodo.
-     * 
-     * @param altura
+     *
+     * @param altura la altura
      */
     public void setAltura(int altura) {
         this.altura = altura;

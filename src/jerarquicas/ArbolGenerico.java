@@ -6,7 +6,8 @@ import lineales.dinamicas.Lista;
 /**
  * Implementación dinámica de Árbol Genérico.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class ArbolGenerico<T> {
 
@@ -16,7 +17,7 @@ public class ArbolGenerico<T> {
     private Nodo<T> raiz;
 
     /**
-     * Crea y devuelve un árbol genérico vacío.
+     * Constructor vacío.
      */
     public ArbolGenerico() {
         raiz = null;
@@ -25,9 +26,9 @@ public class ArbolGenerico<T> {
     /**
      * Inserta un nuevo elemento al árbol.
      *
-     * @param elemento
-     * @param elementoPadre
-     * @return
+     * @param elemento el elemento a insertar
+     * @param elementoPadre el elemento padre
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean insertar(T elemento, T elementoPadre) {
         boolean resultado = false;
@@ -37,6 +38,7 @@ public class ArbolGenerico<T> {
             resultado = true;
         } else if (elementoPadre != null) {
             Nodo<T> nodoPadre = buscarNodo(elementoPadre);
+
             if (nodoPadre != null) {
                 Nodo<T> nodoNuevo = new Nodo<T>(elemento),
                         nodoHermano = nodoPadre.getIzquierdo();
@@ -57,10 +59,12 @@ public class ArbolGenerico<T> {
                     nodoPadre.setIzquierdo(nodoNuevo);
                 } else {
                     Nodo<T> ultimoHermano = null;
+
                     while (nodoHermano != null) {
                         ultimoHermano = nodoHermano;
                         nodoHermano = nodoHermano.getDerecho();
                     }
+
                     ultimoHermano.setDerecho(nodoNuevo);
                 }
 
@@ -72,26 +76,25 @@ public class ArbolGenerico<T> {
     }
 
     /**
-     * Busca un nodo en forma recursiva con el elemento dado a partir del nodo
-     * raíz del árbol.
+     * Busca un nodo en forma recursiva con el elemento dado a partir del nodo raíz del árbol.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a buscar
+     * @return el nodo si el elemento fue encontrado, nulo en caso contrario
      */
     private Nodo<T> buscarNodo(T elemento) {
         return buscarNodo(elemento, raiz);
     }
 
     /**
-     * Busca un nodo en forma recursiva con el elemento dado a partir de un nodo
-     * específico.
+     * Busca el nodo del elemento dado a partir de un nodo en particular.
      *
-     * @param elemento
-     * @param nodo
-     * @return
+     * @param elemento el elemento a buscar
+     * @param nodo el nodo desde donde buscar el elemento
+     * @return el nodo si el elemento fue encontrado, nulo en caso contrario
      */
     private Nodo<T> buscarNodo(T elemento, Nodo<T> nodo) {
         Nodo<T> buscado = null;
+
         if (nodo != null) {
             if (((Object) nodo.getElemento()).equals(elemento)) {
                 buscado = nodo;
@@ -103,12 +106,12 @@ public class ArbolGenerico<T> {
                 // (y en los hijos de los hermanos, en forma recursiva)
                 if (buscado == null) {
                     Nodo<T> hermano = nodo.getDerecho();
+
                     while (hermano != null && buscado == null) {
                         if (((Object) hermano.getElemento()).equals(elemento)) {
                             buscado = hermano;
                         } else {
-                            buscado = buscarNodo(elemento,
-                                    hermano.getIzquierdo());
+                            buscado = buscarNodo(elemento, hermano.getIzquierdo());
                             hermano = hermano.getDerecho();
                         }
                     }
@@ -120,10 +123,9 @@ public class ArbolGenerico<T> {
     }
 
     /**
-     * Devuelve verdadero si el árbol no tiene elementos, de lo contrario
-     * devuelve falso.
+     * Devuelve verdadero si el árbol no tiene elementos, de lo contrario devuelve falso.
      *
-     * @return
+     * @return verdadero si es vacío, falso en caso contrario
      */
     public boolean esVacio() {
         return raiz == null;
@@ -132,8 +134,8 @@ public class ArbolGenerico<T> {
     /**
      * Determina si el elemento dado pertenece al árbol.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a buscar
+     * @return verdadero si el elemento existe, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
         return buscarNodo(elemento) != null;
@@ -142,17 +144,17 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve la altura del árbol.
      *
-     * @return
+     * @return la altura del arbol
      */
     public int altura() {
         return altura(raiz);
     }
 
     /**
-     * Calcula la altura del sub-árbol correspondiente a un nodo particular.
+     * Obtiene la altura del sub-árbol correspondiente a un nodo en particular.
      *
-     * @param nodo
-     * @return
+     * @param nodo el nodo del cual calcular su altura
+     * @return la altura del nodo
      */
     private int altura(Nodo<T> nodo) {
         int altura = 0, maxima = 0;
@@ -171,8 +173,10 @@ public class ArbolGenerico<T> {
             // La altura estará dada por la máxima altura de cada sub-árbol
             while (hermano != null) {
                 hijo = hermano.getIzquierdo();
+
                 if (hijo != null) {
                     altura = 1 + altura(hijo);
+
                     if (altura > maxima) {
                         maxima = altura;
                     }
@@ -188,19 +192,20 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve el nivel del elemento dado, o -1 si el elemento no existe.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a calcular el nivel
+     * @return el nivel del elemento si fue encontrado, -1 en caso contrario
      */
     public int nivel(T elemento) {
         return nivel(elemento, raiz, 0);
     }
 
     /**
+     * Obtiene el nivel del elemento dado, a partir de un nodo y su nivel.
      *
-     * @param elemento
-     * @param nodo
-     * @param nivelActual
-     * @return
+     * @param elemento el elemento a calcular el nivel
+     * @param nodo el nodo desde donde calcular el nivel
+     * @param nivelActual el nivel actual
+     * @return el nivel del elemento si fue encontrado, -1 en caso contrario
      */
     private int nivel(T elemento, Nodo<T> nodo, int nivelActual) {
         int nivel = -1;
@@ -219,8 +224,7 @@ public class ArbolGenerico<T> {
                     if (((Object) hermano.getElemento()).equals(elemento)) {
                         nivel = nivelActual;
                     } else {
-                        nivel = nivel(elemento, hermano.getIzquierdo(),
-                                nivelActual + 1);
+                        nivel = nivel(elemento, hermano.getIzquierdo(), nivelActual + 1);
                         hermano = hermano.getDerecho();
                     }
                 }
@@ -233,21 +237,22 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve el elemento padre de un elemento dado (si existe el elemento).
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento
+     * @return el elemento padre si fue encontrado, nulo en caso contrario
      */
     public T padre(T elemento) {
         Nodo<T> padre = padre(elemento, raiz, null);
+
         return padre == null ? null : padre.getElemento();
     }
 
     /**
-     * Devuelve el nodo padre de un elemento dado (si existe el elemento).
+     * Obtiene el padre del elemento dado, a partir de un nodo y su padre.
      *
-     * @param elemento
-     * @param nodo
-     * @param padre
-     * @return
+     * @param elemento el elemento
+     * @param nodo el nodo desde donde buscar el padre
+     * @param padre el nodo padre
+     * @return el elemento padre si fue encontrado, nulo en caso contrario
      */
     private Nodo<T> padre(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         Nodo<T> buscado = null;
@@ -283,23 +288,32 @@ public class ArbolGenerico<T> {
     }
 
     /**
-     * Devuelve una lista con los ancestros de un elemento dado, si éste
-     * pertenece al árbol, de lo contrario una lista vacía.
+     * Devuelve una lista de ancestros de un elemento, si éste pertenece al árbol, de lo contrario una lista vacía.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento del cual buscar sus ancestros
+     * @return la lista de ancestros
      */
     public Lista<T> ancestros(T elemento) {
         Lista<T> ancestros = new Lista<T>();
         ancestros(elemento, raiz, ancestros);
+
         return ancestros;
     }
 
+    /**
+     * Busca los ancestros de un elemento a partir de un nodo dado.
+     *
+     * @param elemento el elemento del cual buscar sus ancestros
+     * @param nodo el nodo desde donde buscar los ancestros
+     * @param lista la lista de ancestros
+     * @return la lista de ancestros
+     */
     private boolean ancestros(T elemento, Nodo<T> nodo, Lista<T> lista) {
         boolean encontrado = false;
 
         if (nodo != null) {
             T elementoNodo = nodo.getElemento();
+
             if (((Object) elementoNodo).equals(elemento)) {
                 encontrado = true;
             } else {
@@ -309,6 +323,7 @@ public class ArbolGenerico<T> {
                     lista.insertar(elementoNodo, 1);
                 } else {
                     Nodo<T> hermano = nodo.getDerecho();
+
                     while (hermano != null && !encontrado) {
                         encontrado = ancestros(elemento, hermano, lista);
                         hermano = hermano.getDerecho();
@@ -323,14 +338,21 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve una lista en preorden con los elementos del árbol.
      *
-     * @return
+     * @return la lista en preorden
      */
     public Lista<T> listarPreorden() {
         Lista<T> lista = new Lista<T>();
         preorden(raiz, lista);
+
         return lista;
     }
 
+    /**
+     * Inserta los elementos en preorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo el nodo desde donde listar
+     * @param lista la lista en preorden
+     */
     private void preorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijo = nodo.getIzquierdo();
@@ -346,14 +368,21 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve una lista en inorden con los elementos del árbol.
      *
-     * @return
+     * @return la lista en inorden
      */
     public Lista<T> listarInorden() {
         Lista<T> lista = new Lista<T>();
         inorden(raiz, lista);
+
         return lista;
     }
 
+    /**
+     * Inserta los elementos en inorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo el nodo desde donde listar
+     * @param lista la lista en inorden
+     */
     private void inorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijo = nodo.getIzquierdo();
@@ -375,14 +404,21 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve una lista en posorden con los elementos del árbol.
      *
-     * @return
+     * @return la lista en posorden
      */
     public Lista<T> listarPosorden() {
         Lista<T> lista = new Lista<T>();
         posorden(raiz, lista);
+
         return lista;
     }
 
+    /**
+     * Inserta los elementos en posorden en la lista dada, a partir de un nodo.
+     *
+     * @param nodo el nodo desde donde listar
+     * @param lista la lista en posorden
+     */
     private void posorden(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> hijo = nodo.getIzquierdo();
@@ -397,10 +433,9 @@ public class ArbolGenerico<T> {
     }
 
     /**
-     * Devuelve una lista por niveles (de izquierda a derecha) con los elementos
-     * del árbol.
+     * Devuelve una lista por niveles (de izquierda a derecha) con los elementos del árbol.
      *
-     * @return
+     * @return la lista de elementos por nivel
      */
     public Lista<T> listarNiveles() {
         Lista<T> lista = new Lista<T>();
@@ -434,26 +469,33 @@ public class ArbolGenerico<T> {
     /**
      * Devuelve una copia exacta del árbol.
      *
-     * @return
+     * @return la copia del árbol
      */
     public ArbolGenerico<T> clonar() {
         ArbolGenerico<T> clon = new ArbolGenerico<T>();
         clonar(raiz, null, clon);
+
         return clon;
     }
 
+    /**
+     * Copia el árbol desde un nodo dado.
+     *
+     * @param hijo el nodo hijo
+     * @param padre el nodo padre
+     * @param arbol el clon del árbol
+     */
     private void clonar(Nodo<T> hijo, Nodo<T> padre, ArbolGenerico<T> arbol) {
         while (hijo != null) {
-            arbol.insertar(hijo.getElemento(),
-                    padre == null ? null : padre.getElemento());
+            arbol.insertar(hijo.getElemento(), padre == null ? null : padre.getElemento());
             clonar(hijo.getIzquierdo(), hijo, arbol);
             hijo = hijo.getDerecho();
         }
     }
 
     /**
-     * Devuelve la representación del árbol en forma de cadena. Por defecto,
-     * éste método equivale a llamar listarNiveles.toString().
+     * Devuelve la representación del árbol en forma de cadena. Por defecto, éste método equivale a llamar
+     * listarNiveles.toString().
      */
     @Override
     public String toString() {
