@@ -3,9 +3,11 @@ package utiles;
 /**
  * Contenedor un valor de tipo T. Ejemplos:
  * <pre>
+ * {@code
  * Valor<Integer> entero = new Valor<>(256);
  * Valor<Lista<String>> listaCadenas = new Valor<>(Lista<String>());
  * listaCadenas.getValor().insertar("Cadena", 1);
+ * }
  * </pre>
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
