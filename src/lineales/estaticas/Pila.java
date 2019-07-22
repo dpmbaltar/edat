@@ -3,8 +3,8 @@ package lineales.estaticas;
 /**
  * Implementación de Pila estática.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class Pila<T> {
 
@@ -24,7 +24,7 @@ public class Pila<T> {
     private int tope;
 
     /**
-     * Crea y devuelve la pila vacía.
+     * Constructor vacío.
      */
     public Pila() {
         pila = new Object[TAM];
@@ -35,8 +35,8 @@ public class Pila<T> {
      * Pone el elemento nuevoElemento en el tope de la pila. Devuelve verdadero
      * si el elemento se pudo apilar y falso en caso contrario.
      *
-     * @param nuevoElemento
-     * @return
+     * @param nuevoElemento el elemento a insertar
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean apilar(T nuevoElemento) {
         boolean resultado = false;
@@ -51,11 +51,10 @@ public class Pila<T> {
     }
 
     /**
-     * Saca el elemento del tope de la pila. Devuelve verdadero si la pila no
-     * estaba vacía al momento de desapilar (es decir que se pudo desapilar) y
-     * falso en caso contrario.
+     * Saca el elemento del tope de la pila. Devuelve verdadero si la pila no estaba vacía al momento de desapilar
+     * (es decir que se pudo desapilar) y falso en caso contrario.
      *
-     * @return
+     * @return verdadero si se puede desapilar un elemento, falso en caso contrario
      */
     public boolean desapilar() {
         boolean resultado = false;
@@ -70,10 +69,9 @@ public class Pila<T> {
     }
 
     /**
-     * Devuelve el elemento en el tope de la pila. Precondición: la pila no está
-     * vacía.
+     * Devuelve el elemento en el tope de la pila. Precondición: la pila no está vacía.
      *
-     * @return
+     * @return el elemento tope si existe, nulo en caso contrario
      */
     @SuppressWarnings("unchecked")
     public T obtenerTope() {
@@ -81,10 +79,9 @@ public class Pila<T> {
     }
 
     /**
-     * Devuelve verdadero si la pila no tiene elementos y falso en caso
-     * contrario.
+     * Devuelve verdadero si la pila no tiene elementos y falso en caso contrario.
      *
-     * @return
+     * @return verdadero si es vacía, falso en caso contrario
      */
     public boolean esVacia() {
         return tope < 0;
@@ -101,33 +98,31 @@ public class Pila<T> {
     /**
      * Devuelve una copia de la pila original.
      *
-     * @return
+     * @return la copia de la pila
      */
     @SuppressWarnings("unchecked")
     public Pila<T> clonar() {
         Pila<T> clon = new Pila<T>();
-        int pos;
 
-        for (pos = 0; pos <= tope; pos++) {
-            clon.apilar((T) pila[pos]);
+        for (int i = 0; i <= tope; i++) {
+            clon.apilar((T) pila[i]);
         }
 
         return clon;
     }
 
     /**
-     * Devuelve una cadena de carácteres formada por todos los elementos de la
-     * pila para poder mostrarla por pantalla. Es recomendable utilizar este
-     * método únicamente en la etapa de prueba y luego comentar el código.
+     * Devuelve una cadena de carácteres formada por todos los elementos de la pila para poder mostrarla por pantalla.
+     * Es recomendable utilizar este método únicamente en la etapa de prueba y luego comentar el código.
      */
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
-        int pos;
 
-        for (pos = tope; pos > -1; pos--) {
-            cadena.append(String.valueOf(pila[pos]));
-            if ((pos - 1) > -1) {
+        for (int i = tope; i > -1; i--) {
+            cadena.append(String.valueOf(pila[i]));
+
+            if ((i - 1) > -1) {
                 cadena.append(", ");
             }
         }
