@@ -3,8 +3,8 @@ package lineales.estaticas;
 /**
  * Implementación de Cola estática.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de los elementos
  */
 public class Cola<T> {
 
@@ -29,7 +29,7 @@ public class Cola<T> {
     private int ultimo;
 
     /**
-     * Crea y devuelve la cola vacía.
+     * Constructor vacío.
      */
     public Cola() {
         cola = new Object[TAM];
@@ -38,11 +38,11 @@ public class Cola<T> {
     }
 
     /**
-     * Pone el elemento al final de la cola. Devuelve verdadero si el elemento
-     * se pudo agregar en la estructura y falso en caso contrario.
+     * Pone el elemento al final de la cola. Devuelve verdadero si el elemento se pudo agregar en la estructura y
+     * falso en caso contrario.
      *
-     * @param nuevoElemento
-     * @return
+     * @param nuevoElemento el elemento a insertar
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean poner(T nuevoElemento) {
         boolean resultado = false;
@@ -58,11 +58,10 @@ public class Cola<T> {
     }
 
     /**
-     * Saca el elemento que está en el frente de la cola. Devuelve verdadero si
-     * el elemento se pudo sacar (la estructura no estaba vacía) y falso en caso
-     * contrario.
+     * Saca el elemento que está en el frente de la cola. Devuelve verdadero si el elemento se pudo sacar (la
+     * estructura no estaba vacía) y falso en caso contrario.
      *
-     * @return
+     * @return verdadero si se puede sacar un elemento, falso en caso contrario
      */
     public boolean sacar() {
         boolean resultado = false;
@@ -77,10 +76,9 @@ public class Cola<T> {
     }
 
     /**
-     * Devuelve el elemento que está en el frente. Precondición: la cola no está
-     * vacía.
+     * Devuelve el elemento que está en el frente. Precondición: la cola no está vacía.
      *
-     * @return
+     * @return el elemento del frente si existe, nulo en caso contrario
      */
     @SuppressWarnings("unchecked")
     public T obtenerFrente() {
@@ -88,10 +86,9 @@ public class Cola<T> {
     }
 
     /**
-     * Devuelve verdadero si la cola no tiene elementos y falso en caso
-     * contrario.
+     * Devuelve verdadero si la cola no tiene elementos y falso en caso contrario.
      *
-     * @return
+     * @return verdadero si es vacía, falso en caso contrario
      */
     public boolean esVacia() {
         return frente == ultimo;
@@ -109,14 +106,13 @@ public class Cola<T> {
     /**
      * Devuelve una copia de la cola original.
      *
-     * @return
+     * @return la copia de la cola
      */
     @SuppressWarnings("unchecked")
     public Cola<T> clonar() {
         Cola<T> clon = new Cola<T>();
-        int i;
 
-        for (i = frente; (i % cola.length) != ultimo; i++) {
+        for (int i = frente; (i % cola.length) != ultimo; i++) {
             clon.poner((T) cola[i]);
         }
 
@@ -124,9 +120,8 @@ public class Cola<T> {
     }
 
     /**
-     * Crea y devuelve una cadena de carácteres formada por todos los elementos
-     * de la cola para poder mostrarla por pantalla. Es recomendable utilizar
-     * este método únicamente en la etapa de prueba y luego comentar el código.
+     * Crea y devuelve una cadena de carácteres formada por todos los elementos de la cola para poder mostrarla por
+     * pantalla. Es recomendable utilizar este método únicamente en la etapa de prueba y luego comentar el código.
      */
     @Override
     public String toString() {
@@ -135,6 +130,7 @@ public class Cola<T> {
 
         for (i = frente; (i % cola.length) != ultimo; i++) {
             cadena.append(String.valueOf(cola[i]));
+
             if (((i + 1) % cola.length) != ultimo) {
                 cadena.append(", ");
             }
