@@ -5,10 +5,13 @@ import lineales.dinamicas.Cola;
 /**
  * Prueba implementación de Cola dinámica.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaCola {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaCola() {
         pruebaPoner();
         pruebaObtenerFrente();
@@ -20,17 +23,17 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.poner().
+     * Prueba {@link lineales.dinamicas.Cola#poner(Object)}.
      */
-    private void pruebaPoner() {
+    public void pruebaPoner() {
         Cola<String> cola = new Cola<>();
         assert cola.poner("Uno") : "Debe poner \"Uno\"";
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.obtenerFrente().
+     * Prueba {@link lineales.dinamicas.Cola#obtenerFrente()}.
      */
-    private void pruebaObtenerFrente() {
+    public void pruebaObtenerFrente() {
         Cola<String> cola = new Cola<>();
         assert cola.obtenerFrente() == null : "Frente de cola vacía debe ser nulo";
         cola.poner("Uno");
@@ -38,9 +41,9 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.sacar().
+     * Prueba {@link lineales.dinamicas.Cola#sacar()}.
      */
-    private void pruebaSacar() {
+    public void pruebaSacar() {
         Cola<String> cola = new Cola<>();
         assert !cola.sacar() : "No debe sacar de cola vacía";
         cola.poner("Uno");
@@ -50,9 +53,9 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.esVacia().
+     * Prueba {@link lineales.dinamicas.Cola#esVacia()}.
      */
-    private void pruebaEsVacia() {
+    public void pruebaEsVacia() {
         Cola<String> cola = new Cola<>();
         assert cola.esVacia() : "Cola debe ser vacía";
         cola.poner("Uno");
@@ -60,9 +63,9 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.vaciar().
+     * Prueba {@link lineales.dinamicas.Cola#vaciar()}.
      */
-    private void pruebaVaciar() {
+    public void pruebaVaciar() {
         Cola<String> cola = crearCola();
         cola.vaciar();
         assert !cola.sacar() : "No debe sacar de cola vacía";
@@ -71,9 +74,9 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.clonar().
+     * Prueba {@link lineales.dinamicas.Cola#clonar()}.
      */
-    private void pruebaClonar() {
+    public void pruebaClonar() {
         Cola<String> cola = crearCola();
         Cola<String> clon = cola.clonar();
         assert cola.obtenerFrente().equals(clon.obtenerFrente())
@@ -92,9 +95,9 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba lineales.dinamicas.Cola.toString().
+     * Prueba {@link lineales.dinamicas.Cola#toString()}.
      */
-    private void pruebaToString() {
+    public void pruebaToString() {
         Cola<String> cola = crearCola();
         assert cola.toString().equals("[Uno, Dos, Tres]") : "La cola debe ser representada como \"[Uno, Dos, Tres]\"";
     }
@@ -104,7 +107,7 @@ public class PruebaCola {
      *
      * @return la cola de cadenas
      */
-    private static Cola<String> crearCola() {
+    public static Cola<String> crearCola() {
         Cola<String> cola = new Cola<>();
         cola.poner("Uno");
         cola.poner("Dos");

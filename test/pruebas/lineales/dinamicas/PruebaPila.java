@@ -5,10 +5,13 @@ import lineales.dinamicas.Pila;
 /**
  * Prueba implementación de Pila dinámica.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class PruebaPila {
 
+    /**
+     * Constructor ejecuta todas las pruebas de la clase.
+     */
     public PruebaPila() {
         pruebaApilar();
         pruebaObtenerTope();
@@ -20,17 +23,17 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.apilar().
+     * Prueba {@link lineales.dinamicas.Pila#apilar(Object)}.
      */
-    private void pruebaApilar() {
+    public void pruebaApilar() {
         Pila<String> pila = new Pila<>();
         assert pila.apilar("Uno") : "Debe apilar \"Uno\"";
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.obtenerTope().
+     * Prueba {@link lineales.dinamicas.Pila#obtenerTope()}.
      */
-    private void pruebaObtenerTope() {
+    public void pruebaObtenerTope() {
         Pila<String> pila = new Pila<>();
         assert pila.obtenerTope() == null : "Tope de pila vacía debe ser nulo";
         pila = crearPila();
@@ -38,9 +41,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.desapilar().
+     * Prueba {@link lineales.dinamicas.Pila#desapilar()}.
      */
-    private void pruebaDesapilar() {
+    public void pruebaDesapilar() {
         Pila<String> pila = new Pila<>();
         assert !pila.desapilar() : "No debe desapilar pila vacía";
         pila = crearPila();
@@ -49,9 +52,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.esVacia().
+     * Prueba {@link lineales.dinamicas.Pila#esVacia()}.
      */
-    private void pruebaEsVacia() {
+    public void pruebaEsVacia() {
         Pila<String> pila = new Pila<>();
         assert pila.esVacia() : "Pila debe ser vacía";
         pila.apilar("Uno");
@@ -59,9 +62,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.vaciar().
+     * Prueba {@link lineales.dinamicas.Pila#vaciar()}.
      */
-    private void pruebaVaciar() {
+    public void pruebaVaciar() {
         Pila<String> pila = crearPila();
         pila.vaciar();
         assert !pila.desapilar() : "No debe desapilar pila vacía";
@@ -70,9 +73,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.clonar().
+     * Prueba {@link lineales.dinamicas.Pila#clonar()}.
      */
-    private void pruebaClonar() {
+    public void pruebaClonar() {
         Pila<String> pila = crearPila();
         Pila<String> clon = pila.clonar();
         assert pila.obtenerTope().equals(clon.obtenerTope())
@@ -91,9 +94,9 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba lineales.dinamicas.Pila.toString().
+     * Prueba {@link lineales.dinamicas.Pila#toString()}.
      */
-    private void pruebaToString() {
+    public void pruebaToString() {
         Pila<String> pila = crearPila();
         assert pila.toString().equals("[Tres, Dos, Uno]") : "La pila debe ser representada como \"[Uno, Dos, Tres]\"";
     }
@@ -103,7 +106,7 @@ public class PruebaPila {
      *
      * @return la pila de cadenas
      */
-    private static Pila<String> crearPila() {
+    public static Pila<String> crearPila() {
         Pila<String> pila = new Pila<>();
         pila.apilar("Uno");
         pila.apilar("Dos");
