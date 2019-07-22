@@ -3,8 +3,8 @@ package lineales.dinamicas;
 /**
  * Implementación de un nodo genérico de un solo enlace.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <E>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <E> el tipo de elemento
  */
 public class Nodo<E> {
 
@@ -19,35 +19,35 @@ public class Nodo<E> {
     private Nodo<E> enlace;
 
     /**
-     * Crea y devuelve un nodo sin enlace y elemento nulo.
+     * Constructor sin enlace y elemento nulo.
      */
     public Nodo() {
         this(null, null);
     }
 
     /**
-     * Crea y devuelve un nodo sin enlace, y el elemento establecido.
+     * Constructor sin enlace, y el elemento.
      *
-     * @param elemento
+     * @param elemento el elemento
      */
     public Nodo(E elemento) {
         this(elemento, null);
     }
 
     /**
-     * Crea y devuelve un nodo sin elemento, y el enlace establecido.
+     * Constructor sin elemento, y el enlace.
      *
-     * @param elemento
+     * @param enlace el enlace
      */
     public Nodo(Nodo<E> enlace) {
         this(null, enlace);
     }
 
     /**
-     * Crea y devuelve un nodo con el elemento y enlace establecidos.
+     * Constructor con el elemento y enlace.
      *
-     * @param elemento
-     * @param enlace
+     * @param elemento el elemento
+     * @param enlace el enlace
      */
     public Nodo(E elemento, Nodo<E> enlace) {
         this.elemento = elemento;
@@ -57,7 +57,7 @@ public class Nodo<E> {
     /**
      * Devuelve el elemento del nodo.
      *
-     * @return
+     * @return el elemento
      */
     public E getElemento() {
         return elemento;
@@ -66,7 +66,7 @@ public class Nodo<E> {
     /**
      * Devuelve el enlace del nodo.
      *
-     * @return
+     * @return el enlace
      */
     public Nodo<E> getEnlace() {
         return enlace;
@@ -75,7 +75,7 @@ public class Nodo<E> {
     /**
      * Establece el elemento del nodo.
      *
-     * @param elemento
+     * @param elemento el elemento
      */
     public void setElemento(E elemento) {
         this.elemento = elemento;
@@ -84,7 +84,7 @@ public class Nodo<E> {
     /**
      * Establece el enlace del nodo.
      *
-     * @param enlace
+     * @param enlace el enlace
      */
     public void setEnlace(Nodo<E> enlace) {
         this.enlace = enlace;

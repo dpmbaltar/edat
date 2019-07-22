@@ -3,8 +3,8 @@ package lineales.dinamicas;
 /**
  * Implementación de Lista dinámica.
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
- * @param <T>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ * @param <T> el tipo de elemento
  */
 public class Lista<T> {
 
@@ -19,7 +19,7 @@ public class Lista<T> {
     private int longitud;
 
     /**
-     * Crea y devuelve una lista vacía.
+     * Constructor vacío.
      */
     public Lista() {
         cabecera = null;
@@ -27,15 +27,14 @@ public class Lista<T> {
     }
 
     /**
-     * Inserta el elemento pasado por parámetro en la posición dada, de manera
-     * que la cantidad de elementos de la lista se incrementa en 1. Para una
-     * inserción exitosa, la posición recibida debe ser: 1 ≤ posicion ≤
-     * longitud(lista) + 1 Devuelve verdadero si se puede insertar correctamente
-     * y falso en caso contrario.
+     * Inserta el elemento pasado por parámetro en la posición dada, de manera que la cantidad de elementos de la
+     * lista se incrementa en 1. Para una inserción exitosa, la posición recibida debe ser:
+     * <pre>1 ≤ posicion ≤ longitud(lista) + 1</pre>
+     * <p>Devuelve verdadero si se puede insertar correctamente y falso en caso contrario.</p>
      *
-     * @param elemento
-     * @param posicion
-     * @return
+     * @param elemento el elemento a insertar
+     * @param posicion la posición donde insertar el elemento
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
     public boolean insertar(T elemento, int posicion) {
         boolean resultado = false;
@@ -67,14 +66,13 @@ public class Lista<T> {
     }
 
     /**
-     * Borra el elemento de la posición dada, por lo que la cantidad de
-     * elementos de la lista disminuye en uno. Para una eliminación exitosa, la
-     * lista no debe estar vacía y la posición recibida debe ser: 1 ≤ posicion ≤
-     * longitud(lista) Devuelve verdadero si se puede eliminar correctamente y
-     * falso en caso contrario.
+     * Borra el elemento de la posición dada, por lo que la cantidad de elementos de la lista disminuye en uno. Para
+     * una eliminación exitosa, la lista no debe estar vacía y la posición recibida debe ser:
+     * <pre>1 ≤ posicion ≤ longitud(lista)</pre>
+     * <p>Devuelve verdadero si se puede eliminar correctamente y falso en caso contrario.</p>
      *
-     * @param posicion
-     * @return
+     * @param posicion la posición del elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(int posicion) {
         boolean resultado = false;
@@ -102,11 +100,10 @@ public class Lista<T> {
     }
 
     /**
-     * Devuelve el elemento de la posición dada. La precondición es que la
-     * posición sea válida.
+     * Devuelve el elemento de la posición dada. La precondición es que la posición sea válida.
      *
-     * @param posicion
-     * @return
+     * @param posicion la posicion del elemento a recuperar
+     * @return el elemento si existe la posición, nulo en caso contrario
      */
     public T recuperar(int posicion) {
         T elemento = null;
@@ -127,11 +124,11 @@ public class Lista<T> {
     }
 
     /**
-     * Devuelve la posición en la que se encuentra la primera ocurrencia del
-     * elemento dado dentro de la lista. En caso de no encontrarlo devuelve -1.
+     * Devuelve la posición en la que se encuentra la primera ocurrencia del elemento dado dentro de la lista. En caso
+     * de no encontrarlo devuelve -1.
      *
-     * @param elemento
-     * @return
+     * @param elemento el elemento a buscar
+     * @return la posición del elemento si fue encontrado, -1 en caso contrario
      */
     public int localizar(T elemento) {
         int posicion = -1;
@@ -143,6 +140,7 @@ public class Lista<T> {
         // if (cabecera != null) {
         while (nodo != null && posicion < 0) {
             actual = nodo.getElemento();
+
             if (actual != null && actual.equals(elemento)) {
                 posicion = i;
             } else {
@@ -158,7 +156,7 @@ public class Lista<T> {
     /**
      * Devuelve la cantidad de elementos de la lista.
      *
-     * @return
+     * @return la longitud de la lista
      */
     public int longitud() {
         // Optimización: O(n) -> O(1)
@@ -175,8 +173,8 @@ public class Lista<T> {
     }
 
     /**
-     * Quita todos los elementos de la lista. El manejo de memoria es similar al
-     * explicado anteriormente para Cola y Pila dinámicas.
+     * Quita todos los elementos de la lista. El manejo de memoria es similar al explicado anteriormente para Cola y
+     * Pila dinámicas.
      */
     public void vaciar() {
         cabecera = null;
@@ -184,10 +182,9 @@ public class Lista<T> {
     }
 
     /**
-     * Devuelve verdadero si la lista no tiene elementos y falso en caso
-     * contrario.
+     * Devuelve verdadero si la lista no tiene elementos y falso en caso contrario.
      *
-     * @return
+     * @return verdadero si es vacía, falso en caso contrario
      */
     public boolean esVacia() {
         return cabecera == null;
@@ -196,44 +193,38 @@ public class Lista<T> {
     /**
      * Crea una copia exacta de la lista original.
      *
-     * @return
+     * @return la copia de la lista
      */
     public Lista<T> clonar() {
         int pos = 1;
         Lista<T> clon = new Lista<T>();
         Nodo<T> nodo = cabecera;
 
-        // No utilizar "if": "while" verificará si el nodo cabecera es nulo
-        // if (cabecera != null) {
         while (nodo != null) {
             clon.insertar(nodo.getElemento(), pos++);
             nodo = nodo.getEnlace();
         }
-        // }
 
         return clon;
     }
 
     /**
-     * Crea y devuelve una cadena de carácteres formada por todos los elementos
-     * de la lista para poder mostrarla por pantalla. Es recomendable utilizar
-     * este método únicamente en la etapa de prueba y luego comentar el código.
+     * Crea y devuelve una cadena de carácteres formada por todos los elementos de la lista para poder mostrarla por
+     * pantalla. Es recomendable utilizar este método únicamente en la etapa de prueba y luego comentar el código.
      */
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
         Nodo<T> nodo = cabecera;
 
-        // No utilizar "if": "while" verificará si el nodo cabecera es nulo
-        // if (cabecera != null) {
         while (nodo != null) {
             cadena.append(String.valueOf(nodo.getElemento()));
             nodo = nodo.getEnlace();
+
             if (nodo != null) {
                 cadena.append(", ");
             }
         }
-        // }
 
         cadena.append(']');
 
