@@ -422,7 +422,7 @@ public class Grafo<T> {
             if (vertice.getElemento().equals(destino)) {
                 // Destino encontrado
                 if (camino.longitud() < minimaLongitud.getValor()) {
-                    caminoMin.setValor(camino.clonar());
+                    caminoMin.setValor(camino.clone());
                     minimaLongitud.setValor(caminoMin.getValor().longitud());
                 }
             } else {
@@ -488,7 +488,7 @@ public class Grafo<T> {
             if (vertice.getElemento().equals(destino)) {
                 // Destino encontrado
                 if (camino.longitud() > maximaLongitud.getValor()) {
-                    caminoMax.setValor(camino.clonar());
+                    caminoMax.setValor(camino.clone());
                     maximaLongitud.setValor(caminoMax.getValor().longitud());
                 }
             } else {
