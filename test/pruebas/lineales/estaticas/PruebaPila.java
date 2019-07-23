@@ -18,7 +18,7 @@ public class PruebaPila {
         pruebaDesapilar();
         pruebaEsVacia();
         pruebaVaciar();
-        pruebaClonar();
+        pruebaClone();
         pruebaToString();
     }
 
@@ -73,11 +73,11 @@ public class PruebaPila {
     }
 
     /**
-     * Prueba {@link lineales.estaticas.Pila#clonar()}.
+     * Prueba {@link lineales.estaticas.Pila#clone()}.
      */
-    public void pruebaClonar() {
+    public void pruebaClone() {
         Pila<Integer> pila = crearPila();
-        Pila<Integer> clon = pila.clonar();
+        Pila<Integer> clon = pila.clone();
         assert pila.obtenerTope() == clon.obtenerTope()
                 : "Tope de pila debe ser igual al de su clon (1)";
         pila.desapilar();

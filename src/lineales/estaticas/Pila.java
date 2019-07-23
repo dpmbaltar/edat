@@ -100,8 +100,9 @@ public class Pila<T> {
      *
      * @return la copia de la pila
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public Pila<T> clonar() {
+    public Pila<T> clone() {
         Pila<T> clon = new Pila<T>();
 
         for (int i = 0; i <= tope; i++) {

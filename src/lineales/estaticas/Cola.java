@@ -108,11 +108,13 @@ public class Cola<T> {
      *
      * @return la copia de la cola
      */
+    @Override
     @SuppressWarnings("unchecked")
-    public Cola<T> clonar() {
+    public Cola<T> clone() {
         Cola<T> clon = new Cola<T>();
 
         for (int i = frente; (i % cola.length) != ultimo; i++) {
+            i %= cola.length;
             clon.poner((T) cola[i]);
         }
 
@@ -129,6 +131,7 @@ public class Cola<T> {
         int i;
 
         for (i = frente; (i % cola.length) != ultimo; i++) {
+            i %= cola.length;
             cadena.append(String.valueOf(cola[i]));
 
             if (((i + 1) % cola.length) != ultimo) {

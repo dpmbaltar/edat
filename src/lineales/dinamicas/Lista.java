@@ -195,7 +195,8 @@ public class Lista<T> {
      *
      * @return la copia de la lista
      */
-    public Lista<T> clonar() {
+    @Override
+    public Lista<T> clone() {
         int pos = 1;
         Lista<T> clon = new Lista<T>();
         Nodo<T> nodo = cabecera;

@@ -79,7 +79,8 @@ public class Pila<T> {
      *
      * @return la copia de la pila
      */
-    public Pila<T> clonar() {
+    @Override
+    public Pila<T> clone() {
         Pila<T> clon = new Pila<T>();
 
         if (tope != null) {

@@ -18,7 +18,7 @@ public class PruebaCola {
         pruebaSacar();
         pruebaEsVacia();
         pruebaVaciar();
-        pruebaClonar();
+        pruebaClone();
         pruebaToString();
     }
 
@@ -73,11 +73,11 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba {@link lineales.estaticas.Cola#clonar()}.
+     * Prueba {@link lineales.estaticas.Cola#clone()}.
      */
-    public void pruebaClonar() {
+    public void pruebaClone() {
         Cola<Integer> cola = crearCola();
-        Cola<Integer> clon = cola.clonar();
+        Cola<Integer> clon = cola.clone();
         assert cola.obtenerFrente() == clon.obtenerFrente()
                 : "Frente de cola debe ser igual al de su clon (1)";
         cola.sacar();

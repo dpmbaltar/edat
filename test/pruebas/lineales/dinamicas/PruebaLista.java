@@ -20,7 +20,7 @@ public class PruebaLista {
         pruebaLongitud();
         pruebaEsVacia();
         pruebaVaciar();
-        pruebaClonar();
+        pruebaClone();
         pruebaToString();
     }
 
@@ -99,11 +99,11 @@ public class PruebaLista {
     }
 
     /**
-     * Prueba {@link lineales.dinamicas.Lista#clonar()}.
+     * Prueba {@link lineales.dinamicas.Lista#clone()}.
      */
-    public void pruebaClonar() {
+    public void pruebaClone() {
         Lista<Integer> lista = crearLista();
-        Lista<Integer> clon = lista.clonar();
+        Lista<Integer> clon = lista.clone();
         assert lista.recuperar(1) == clon.recuperar(1) : "Elemento @1 de lista debe ser igual al de su clon";
         lista.eliminar(1);
         clon.eliminar(1);

@@ -18,7 +18,7 @@ public class PruebaCola {
         pruebaSacar();
         pruebaEsVacia();
         pruebaVaciar();
-        pruebaClonar();
+        pruebaClone();
         pruebaToString();
     }
 
@@ -74,11 +74,11 @@ public class PruebaCola {
     }
 
     /**
-     * Prueba {@link lineales.dinamicas.Cola#clonar()}.
+     * Prueba {@link lineales.dinamicas.Cola#clone()}.
      */
-    public void pruebaClonar() {
+    public void pruebaClone() {
         Cola<String> cola = crearCola();
-        Cola<String> clon = cola.clonar();
+        Cola<String> clon = cola.clone();
         assert cola.obtenerFrente().equals(clon.obtenerFrente())
                 : "Frente de cola debe ser igual al de su clon (\"Uno\")";
         cola.sacar();

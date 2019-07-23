@@ -100,7 +100,8 @@ public class Cola<T> {
      *
      * @return la copia de la cola
      */
-    public Cola<T> clonar() {
+    @Override
+    public Cola<T> clone() {
         Cola<T> clon = new Cola<T>();
 
         if (frente != null) {
