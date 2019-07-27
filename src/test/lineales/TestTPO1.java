@@ -1,8 +1,8 @@
 package test.lineales;
 
 import lineales.dinamicas.Lista;
-import lineales.dinamicas.Pila;
 import lineales.estaticas.Cola;
+import lineales.estaticas.Pila;
 import utiles.Aleatorio;
 import utiles.TecladoIn;
 
