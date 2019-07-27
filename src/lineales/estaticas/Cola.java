@@ -9,9 +9,9 @@ package lineales.estaticas;
 public class Cola<T> {
 
     /**
-     * El tamaño de la cola - +1, ya que se reserva una celda - (por defecto).
+     * El tamaño de la cola (32 por defecto, ya que se reserva una celda).
      */
-    public static final int TAM = 32;
+    public static final int TAM = 33;
 
     /**
      * Los elementos de la cola.

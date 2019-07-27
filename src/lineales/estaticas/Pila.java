@@ -9,7 +9,7 @@ package lineales.estaticas;
 public class Pila<T> {
 
     /**
-     * El tamaño de la pila (por defecto).
+     * El tamaño de la pila (32 por defecto).
      */
     public static final int TAM = 32;
 
