@@ -7,7 +7,7 @@ import utiles.TecladoIn;
 /**
  * Programa de prueba de generar(Cola c1).
  *
- * @author Diego P. M. Baltar <dpmbaltar@gmail.com>
+ * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class TestCadenas {
 
