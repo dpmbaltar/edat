@@ -11,7 +11,7 @@ public class Cola<T> {
     /**
      * El tamaño de la cola - +1, ya que se reserva una celda - (por defecto).
      */
-    public static final int TAM = 256;
+    public static final int TAM = 32;
 
     /**
      * Los elementos de la cola.

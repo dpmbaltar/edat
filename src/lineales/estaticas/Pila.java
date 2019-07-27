@@ -11,7 +11,7 @@ public class Pila<T> {
     /**
      * El tamaño de la pila (por defecto).
      */
-    public static final int TAM = 256;
+    public static final int TAM = 32;
 
     /**
      * Los elementos de la pila.
