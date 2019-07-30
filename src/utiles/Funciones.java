@@ -8,6 +8,25 @@ package utiles;
 public class Funciones {
 
     /**
+     * Implementación de función "Doblamiento" para Tabla Hash.
+     *
+     * @param elem
+     * @param tam
+     * @return
+     */
+    public static int doblamiento(int elem, int tam) {
+        int suma = elem;
+        int digitos = digitosDec(elem);
+        int divisor = digitosDec(tam);
+
+        if (digitos >= divisor) {
+            suma = elem;
+        }
+
+        return suma;
+    }
+
+    /**
      * Devuelve la cantidad de dígitos binarios de un número.
      *
      * @param binario el número a calcular la cantidad de dígitos
@@ -66,8 +85,36 @@ public class Funciones {
         return digitos;
     }
 
+    public static int subintBin(int binario, int desde) {
+        return subint(binario, desde, digitosBin(binario), 0b10);
+    }
+
+    public static int subintBin(int binario, int desde, int hasta) {
+        return subint(binario, desde, hasta, 0b10);
+    }
+
+    public static int subintDec(int decimal, int desde) {
+        return subint(decimal, desde, digitosDec(decimal), 10);
+    }
+
     public static int subintDec(int decimal, int desde, int hasta) {
         return subint(decimal, desde, hasta, 10);
+    }
+
+    public static int subintHex(int hexadecimal, int desde) {
+        return subint(hexadecimal, desde, digitosHex(hexadecimal), 0x10);
+    }
+
+    public static int subintHex(int hexadecimal, int desde, int hasta) {
+        return subint(hexadecimal, desde, hasta, 0x10);
+    }
+
+    public static int subintOct(int octal, int desde) {
+        return subint(octal, desde, digitosOct(octal), 010);
+    }
+
+    public static int subintOct(int octal, int desde, int hasta) {
+        return subint(octal, desde, hasta, 010);
     }
 
     /**
@@ -83,25 +130,14 @@ public class Funciones {
     public static int subint(int numero, int desde, int hasta, int base) {
         int signo = numero >= 0 ? 1 : 0;
         int subentero = numero >= 0 ? numero : -numero;
+        int digitos = digitos(numero, base);
 
-        if (desde > 0 && hasta > 0 && desde < hasta) {
-            subentero -= numero % (int) (Math.pow(base, digitos(numero, base) - Math.abs(hasta)));
-            subentero /= (int) (Math.pow(base, digitos(numero, base) - Math.abs(hasta)));
+        if (desde > 0 && hasta > 0 && desde < hasta && hasta <= digitos) {
+            subentero -= numero % (int) (Math.pow(base, digitos - Math.abs(hasta)));
+            subentero /= (int) (Math.pow(base, digitos - Math.abs(hasta)));
             subentero %= (int) (Math.pow(base, digitos(subentero, base) - Math.abs(desde)));
         }
 
         return signo * subentero;
-    }
-
-    public static int doblamiento(int elem, int tam) {
-        int suma = elem;
-        int digitos = digitosDec(elem);
-        int divisor = digitosDec(tam);
-
-        if (digitos >= divisor) {
-            suma = elem;
-        }
-
-        return suma;
     }
 }
