@@ -159,16 +159,6 @@ public class Lista<T> {
      * @return la longitud de la lista
      */
     public int longitud() {
-        // Optimización: O(n) -> O(1)
-        // int longitud = 0;
-        // Nodo<T> nodo = cabecera;
-        //
-        // while (nodo != null) {
-        // nodo = nodo.getEnlace();
-        // longitud++;
-        // }
-        //
-        // return longitud;
         return longitud;
     }
 
@@ -197,13 +187,20 @@ public class Lista<T> {
      */
     @Override
     public Lista<T> clone() {
-        int pos = 1;
         Lista<T> clon = new Lista<T>();
-        Nodo<T> nodo = cabecera;
 
-        while (nodo != null) {
-            clon.insertar(nodo.getElem(), pos++);
-            nodo = nodo.getEnlace();
+        if (cabecera != null) {
+            clon.cabecera = new Nodo<>(cabecera.getElem());
+            clon.longitud = 1;
+            Nodo<T> nodoClon = clon.cabecera;
+            Nodo<T> nodoSiguiente = cabecera.getEnlace();
+
+            while (nodoSiguiente != null) {
+                clon.longitud++;
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon = nodoClon.getEnlace();
+                nodoSiguiente = nodoSiguiente.getEnlace();
+            }
         }
 
         return clon;
