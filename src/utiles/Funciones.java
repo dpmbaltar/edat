@@ -7,6 +7,13 @@ package utiles;
  */
 public class Funciones {
 
+    public static void main(String[] args) {
+        int test = 12345678;
+
+        System.out.println(test + " => " + subintDec(test, 0, 9));
+        System.out.println(test + " => " + doblamiento(test, 256));
+    }
+
     /**
      * Implementación de función "Doblamiento" para Tabla Hash.
      *
@@ -15,12 +22,28 @@ public class Funciones {
      * @return
      */
     public static int doblamiento(int elem, int tam) {
-        int suma = elem;
+        int suma = 0;
         int digitos = digitosDec(elem);
         int divisor = digitosDec(tam);
 
         if (digitos >= divisor) {
-            suma = elem;
+            int desde = 0;
+            int hasta = 0;
+            int parte = digitos / divisor;
+            int resto = digitos % divisor;
+
+            for (int i = parte; i < digitos; i += parte) {
+                hasta = i + 1;
+                suma += subintDec(elem, desde, hasta);
+                desde = hasta;
+            }
+
+            if (resto > 0) {
+                desde = digitos - resto + 1;
+                hasta = digitos;
+                suma += subintDec(elem, desde, hasta);
+                System.out.println(desde + ", " + hasta + " => " + subintDec(elem, desde, hasta));
+            }
         }
 
         return suma;
@@ -132,7 +155,7 @@ public class Funciones {
         int subentero = numero >= 0 ? numero : -numero;
         int digitos = digitos(numero, base);
 
-        if (desde > 0 && hasta > 0 && desde < hasta && hasta <= digitos) {
+        if (desde >= 0 && hasta >= 0 && hasta > desde && hasta <= (digitos + 1)) {
             subentero -= numero % (int) (Math.pow(base, digitos - Math.abs(hasta)));
             subentero /= (int) (Math.pow(base, digitos - Math.abs(hasta)));
             subentero %= (int) (Math.pow(base, digitos(subentero, base) - Math.abs(desde)));
