@@ -35,7 +35,7 @@ public class TestTPO1 {
     }
 
     public static void testCola() {
-        Cola<String> c1 = new Cola<>();
+        Cola c1 = new Cola();
         String[] elems = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
@@ -49,7 +49,7 @@ public class TestTPO1 {
             i = (i + 1) % elems.length;
         }
 
-        Cola<String> c2 = c1.clone();
+        Cola c2 = c1.clone();
         System.out.println("E) Cola 1 y Cola 2, son iguales?");
         System.out.println("Cola 1: " + c1.toString());
         System.out.println("Cola 2: " + c2.toString());
@@ -98,8 +98,8 @@ public class TestTPO1 {
             "María Luisa Brazo Dorado", "Matías Queroso", "Oscar Acol", "Penélope Luda",
             "Ramona Ponte Alegre", "Rubén Fermizo", "Soila Cerda", "Susana Torio"};
 
-        Pila<String> p1 = new Pila<>();
-        Pila<String> p2 = p1.clone();
+        Pila p1 = new Pila();
+        Pila p2 = p1.clone();
 
         System.out.print("Apilar 3 elementos en pila 1: ");
         System.out.println(p1.apilar(elems[Aleatorio.intAleatorio(0, elems.length - 1)])
@@ -139,8 +139,8 @@ public class TestTPO1 {
 
         System.out.println("\n*** Probando Clase LISTA ***\n");
 
-        Lista<String> l1 = new Lista<>();
-        Lista<String> l2 = l1.clone();
+        Lista l1 = new Lista();
+        Lista l2 = l1.clone();
 
         for (i = 0; i < elems.length; i++) {
             if (!l2.insertar(elems[i], pos[i])) {
@@ -150,7 +150,7 @@ public class TestTPO1 {
             }
         }
 
-        Lista<String> l3 = l2.clone();
+        Lista l3 = l2.clone();
 
         System.out.println("K) Lista 2 y Lista 3, son iguales?");
         System.out.println("Lista 1: " + l1.toString());
