@@ -9,9 +9,9 @@ package lineales.estaticas;
 public class Pila<T> {
 
     /**
-     * El tamaño de la pila (32 por defecto).
+     * El tamaño de la pila (10 por defecto).
      */
-    public static final int TAM = 32;
+    public static final int TAM = 10;
 
     /**
      * Los elementos de la pila.
@@ -27,7 +27,16 @@ public class Pila<T> {
      * Constructor vacío.
      */
     public Pila() {
-        pila = new Object[TAM];
+        this(TAM);
+    }
+
+    /**
+     * Constructor con tamaño máximo de pila.
+     *
+     * @param tam el tamaño máximo (debe ser mayor a 0)
+     */
+    public Pila(int tam) {
+        pila = new Object[tam > 0 ? tam : TAM];
         tope = -1;
     }
 
@@ -101,12 +110,12 @@ public class Pila<T> {
      * @return la copia de la pila
      */
     @Override
-    @SuppressWarnings("unchecked")
     public Pila<T> clone() {
-        Pila<T> clon = new Pila<T>();
+        Pila<T> clon = new Pila<T>(pila.length);
+        clon.tope = tope;
 
-        for (int i = 0; i <= tope; i++) {
-            clon.apilar((T) pila[i]);
+        for (int i = 0; i < pila.length; i++) {
+            clon.pila[i] = pila[i];
         }
 
         return clon;

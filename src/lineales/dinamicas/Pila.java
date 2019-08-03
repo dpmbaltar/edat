@@ -84,17 +84,14 @@ public class Pila<T> {
         Pila<T> clon = new Pila<T>();
 
         if (tope != null) {
-            Pila<T> auxiliar = new Pila<T>();
-            Nodo<T> nodo = tope;
+            Nodo<T> nodoSiguiente = tope.getEnlace();
+            Nodo<T> nodoClon = new Nodo<>(tope.getElem());
+            clon.tope = nodoClon;
 
-            while (nodo != null) {
-                auxiliar.apilar(nodo.getElem());
-                nodo = nodo.getEnlace();
-            }
-
-            while (!auxiliar.esVacia()) {
-                clon.apilar(auxiliar.obtenerTope());
-                auxiliar.desapilar();
+            while (nodoSiguiente != null) {
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon = nodoClon.getEnlace();
+                nodoSiguiente = nodoSiguiente.getEnlace();
             }
         }
 

@@ -105,11 +105,14 @@ public class Cola<T> {
         Cola<T> clon = new Cola<T>();
 
         if (frente != null) {
-            Nodo<T> nodo = frente;
+            Nodo<T> nodoSiguiente = frente.getEnlace();
+            Nodo<T> nodoClon = new Nodo<>(frente.getElem());
+            clon.frente = nodoClon;
 
-            while (nodo != null) {
-                clon.poner(nodo.getElem());
-                nodo = nodo.getEnlace();
+            while (nodoSiguiente != null) {
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon = nodoClon.getEnlace();
+                nodoSiguiente = nodoSiguiente.getEnlace();
             }
         }
 

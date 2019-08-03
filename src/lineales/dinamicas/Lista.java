@@ -190,16 +190,16 @@ public class Lista<T> {
         Lista<T> clon = new Lista<T>();
 
         if (cabecera != null) {
-            clon.cabecera = new Nodo<>(cabecera.getElem());
-            clon.longitud = 1;
-            Nodo<T> nodoClon = clon.cabecera;
             Nodo<T> nodoSiguiente = cabecera.getEnlace();
+            Nodo<T> nodoClon = new Nodo<>(cabecera.getElem());
+            clon.cabecera = nodoClon;
+            clon.longitud = 1;
 
             while (nodoSiguiente != null) {
-                clon.longitud++;
                 nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
                 nodoClon = nodoClon.getEnlace();
                 nodoSiguiente = nodoSiguiente.getEnlace();
+                clon.longitud++;
             }
         }
 

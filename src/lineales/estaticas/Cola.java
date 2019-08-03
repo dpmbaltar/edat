@@ -9,9 +9,9 @@ package lineales.estaticas;
 public class Cola<T> {
 
     /**
-     * El tamaño de la cola (32 por defecto, ya que se reserva una celda).
+     * El tamaño de la cola (10 por defecto (es decir 11, ya que se reserva una celda)).
      */
-    public static final int TAM = 33;
+    public static final int TAM = 11;
 
     /**
      * Los elementos de la cola.
@@ -32,7 +32,16 @@ public class Cola<T> {
      * Constructor vacío.
      */
     public Cola() {
-        cola = new Object[TAM];
+        this(TAM);
+    }
+
+    /**
+     * Constructor con tamaño máximo de cola.
+     *
+     * @param tam el tamaño máximo (debe ser mayor a 0)
+     */
+    public Cola(int tam) {
+        cola = new Object[tam > 0 ? tam + 1 : TAM];
         frente = 0;
         ultimo = 0;
     }
@@ -109,13 +118,13 @@ public class Cola<T> {
      * @return la copia de la cola
      */
     @Override
-    @SuppressWarnings("unchecked")
     public Cola<T> clone() {
-        Cola<T> clon = new Cola<T>();
+        Cola<T> clon = new Cola<T>(cola.length);
+        clon.frente = frente;
+        clon.ultimo = ultimo;
 
-        for (int i = frente; (i % cola.length) != ultimo; i++) {
-            i %= cola.length;
-            clon.poner((T) cola[i]);
+        for (int i = 0; i < cola.length; i++) {
+            clon.cola[i] = cola[i];
         }
 
         return clon;
@@ -128,10 +137,8 @@ public class Cola<T> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder("[");
-        int i;
 
-        for (i = frente; (i % cola.length) != ultimo; i++) {
-            i %= cola.length;
+        for (int i = frente; (i % cola.length) != ultimo; i = (i + 1) % cola.length) {
             cadena.append(String.valueOf(cola[i]));
 
             if (((i + 1) % cola.length) != ultimo) {
