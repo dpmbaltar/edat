@@ -7,13 +7,6 @@ package utiles;
  */
 public class Funciones {
 
-    public static void main(String[] args) {
-        int test = 12345678;
-
-        System.out.println(test + " => " + subintDec(test, 0, 9));
-        System.out.println(test + " => " + doblamiento(test, 256));
-    }
-
     /**
      * Implementación de función "Doblamiento" para Tabla Hash.
      *
@@ -28,25 +21,21 @@ public class Funciones {
 
         if (digitos >= divisor) {
             int desde = 0;
-            int hasta = 0;
             int parte = digitos / divisor;
             int resto = digitos % divisor;
 
-            for (int i = parte; i < digitos; i += parte) {
-                hasta = i + 1;
-                suma += subintDec(elem, desde, hasta);
-                desde = hasta;
+            for (int i = parte; i <= digitos; i += parte) {
+                suma += subintDec(elem, desde, i);
+                desde = i;
             }
 
             if (resto > 0) {
-                desde = digitos - resto + 1;
-                hasta = digitos;
-                suma += subintDec(elem, desde, hasta);
-                System.out.println(desde + ", " + hasta + " => " + subintDec(elem, desde, hasta));
+                desde = digitos - resto;
+                suma += subintDec(elem, desde, digitos);
             }
         }
 
-        return suma;
+        return suma % tam;
     }
 
     /**
@@ -143,22 +132,25 @@ public class Funciones {
     /**
      * Devuelve una porción de dígitos de un entero (sin contar el signo) al igual que String.substring(), pero con
      * enteros como entrada, como por ejemplo: <code>Funciones.subint(123456789, 1, 3, 10) // 23</code>
+     * Precondición: 0 <= desde < hasta <= digitos
      *
      * @param numero el número entero
      * @param desde la posición desde (inclusive)
      * @param hasta la posición hasta (exclusive)
      * @param base la base del número entero
-     * @return el entero resultante según se indique desde y hasta
+     * @return el entero resultante según se indique desde y hasta, 0 si desde y hasta son incorrectos
      */
     public static int subint(int numero, int desde, int hasta, int base) {
         int signo = numero >= 0 ? 1 : 0;
         int subentero = numero >= 0 ? numero : -numero;
         int digitos = digitos(numero, base);
 
-        if (desde >= 0 && hasta >= 0 && hasta > desde && hasta <= (digitos + 1)) {
-            subentero -= numero % (int) (Math.pow(base, digitos - Math.abs(hasta)));
-            subentero /= (int) (Math.pow(base, digitos - Math.abs(hasta)));
+        if (desde >= 0 && hasta >= 0 && hasta > desde && hasta <= digitos) {
+            subentero -= numero % (int) (Math.pow(base, Math.abs(digitos - hasta)));
+            subentero /= (int) (Math.pow(base, Math.abs(digitos - hasta)));
             subentero %= (int) (Math.pow(base, digitos(subentero, base) - Math.abs(desde)));
+        } else {
+            subentero = 0;
         }
 
         return signo * subentero;
