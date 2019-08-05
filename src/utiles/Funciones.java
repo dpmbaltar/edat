@@ -15,7 +15,7 @@ public class Funciones {
      * @return
      */
     public static int doblamiento(int elem, int tam) {
-        int suma = 0;
+        int suma = elem;
         int digitos = digitosDec(elem);
         int divisor = digitosDec(tam);
 
@@ -23,8 +23,9 @@ public class Funciones {
             int desde = 0;
             int parte = digitos / divisor;
             int resto = digitos % divisor;
+            suma = 0;
 
-            for (int i = parte; i <= digitos; i += parte) {
+            for (int i = parte; i <= (digitos - resto); i += parte) {
                 suma += subintDec(elem, desde, i);
                 desde = i;
             }
