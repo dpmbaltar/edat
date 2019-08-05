@@ -24,6 +24,7 @@ public class Prueba {
             }
 
             // Inicio de prueba
+            exito(new pruebas.utiles.PruebaFunciones());
             exito(new pruebas.lineales.estaticas.PruebaPila());
             exito(new pruebas.lineales.dinamicas.PruebaPila());
             exito(new pruebas.lineales.estaticas.PruebaCola());
