@@ -8,16 +8,34 @@ package utiles;
 public class Funciones {
 
     /**
+     * Suma los caracteres de una cadena y devuelve la suma si es menor a m, o (suma mod m) si es mayor a m.
+     *
+     * @param s la cadena de entrada
+     * @param m el tamaño de la tabla
+     * @return el resultado
+     */
+    public static int sumaCaracteres(String s, int m) {
+        int suma = 0;
+        char[] caracteres = s.toCharArray();
+
+        for (int i = 0; i < caracteres.length; i++) {
+            suma += caracteres[i];
+        }
+
+        return suma % m;
+    }
+
+    /**
      * Implementación de función "Doblamiento" para Tabla Hash.
      *
-     * @param elem
-     * @param tam
-     * @return
+     * @param n el entero
+     * @param m el tamaño de la tabla
+     * @return el entero resultante
      */
-    public static int doblamiento(int elem, int tam) {
-        int suma = elem;
-        int digitos = digitosDec(elem);
-        int divisor = digitosDec(tam);
+    public static int doblamiento(int n, int m) {
+        int suma = n;
+        int digitos = digitosDec(n);
+        int divisor = digitosDec(m);
 
         if (digitos >= divisor) {
             int desde = 0;
@@ -26,17 +44,39 @@ public class Funciones {
             suma = 0;
 
             for (int i = parte; i <= (digitos - resto); i += parte) {
-                suma += subintDec(elem, desde, i);
+                suma += subintDec(n, desde, i);
                 desde = i;
             }
 
             if (resto > 0) {
                 desde = digitos - resto;
-                suma += subintDec(elem, desde, digitos);
+                suma += subintDec(n, desde, digitos);
             }
         }
 
-        return suma % tam;
+        return suma % m;
+    }
+
+    /**
+     * Consiste en elevar al cuadrado la clave y luego tomar los dígitos centrales como dirección. El número de
+     * dígitos a tomar queda determinado por el tamaño M.
+     *
+     * @param n el entero
+     * @param m el tamaño de la tabla
+     * @return los dígitos centrales según n y m dados
+     */
+    public static int digitosCentrales(int n, int m) {
+        int cuadrado = n * n;
+        int resultado = cuadrado;
+
+        if (cuadrado >= m && m > 0) {
+            int maximosDigitos = digitosDec(m - 1);
+            int desde = (digitosDec(cuadrado) / 2) - (maximosDigitos / 2);
+            int hasta = desde + (maximosDigitos / 2 + maximosDigitos % 2) + 1;
+            resultado = subintDec(cuadrado, desde, hasta);
+        }
+
+        return resultado;
     }
 
     /**
