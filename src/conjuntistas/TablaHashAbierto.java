@@ -84,8 +84,40 @@ public class TablaHashAbierto<T> {
         return !encontrado;
     }
 
+    /**
+     * Recibe el elemento que se desea eliminar y se procede a quitarlo de la tabla. Si todo funciona OK (el
+     * elemento estaba cargado previamente en la tabla) devuelve verdadero, si hay algún problema devuelve falso.
+     *
+     * @param elemento el elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
+     */
+    @SuppressWarnings("unchecked")
     public boolean eliminar(T elemento) {
-        return false;
+        boolean eliminado = false;
+
+        if (cantidad > 0) {
+            int posicion = hash(elemento);
+            Nodo<T> nodo = (Nodo<T>) hash[posicion];
+            Nodo<T> nodoAnterior = null;
+
+            while (!eliminado && nodo != null) {
+                if (nodo.getElem().equals(elemento)) {
+                    if (nodoAnterior == null) {
+                        hash[posicion] = nodo.getEnlace();
+                    } else {
+                        nodoAnterior.setEnlace(nodo.getEnlace());
+                    }
+
+                    cantidad--;
+                    eliminado = true;
+                }
+
+                nodoAnterior = nodo;
+                nodo = nodo.getEnlace();
+            }
+        }
+
+        return eliminado;
     }
 
     /**
@@ -189,9 +221,29 @@ public class TablaHashAbierto<T> {
         cantidad = 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public TablaHashAbierto<T> clone() {
-        return new TablaHashAbierto<>();
+        TablaHashAbierto<T> clon = new TablaHashAbierto<>();
+        Nodo<T> nodo, nodoClon;
+        clon.cantidad = cantidad;
+        clon.hash = new Object[hash.length];
+
+        for (int i = 0; i < hash.length; i++) {
+            if (hash[i] != null) {
+                clon.hash[i] = new Nodo<T>(((Nodo<T>) hash[i]).getElem());
+                nodoClon = (Nodo<T>) clon.hash[i];
+                nodo = ((Nodo<T>) hash[i]).getEnlace();
+
+                while (nodo != null) {
+                    nodoClon.setEnlace(new Nodo<T>(nodo.getElem()));
+                    nodoClon = nodoClon.getEnlace();
+                    nodo = nodo.getEnlace();
+                }
+            }
+        }
+
+        return clon;
     }
 
     /**

@@ -15,12 +15,12 @@ public class PruebaTablaHashAbierto {
      */
     public PruebaTablaHashAbierto() {
         pruebaInsertar();
-        //pruebaEliminar();
+        pruebaEliminar();
         pruebaPertenece();
         pruebaListar();
         pruebaEsVacia();
         pruebaVaciar();
-        //pruebaClone();
+        pruebaClone();
     }
 
     /**
@@ -32,6 +32,16 @@ public class PruebaTablaHashAbierto {
         assert th.insertar(2) : "Debe insertar 2 en la tabla hash";
         assert th.insertar(256) : "Debe insertar 256 en la tabla hash";
         assert !th.insertar(256) : "No debe insertar 256 en la tabla hash (existente)";
+    }
+
+    /**
+     * Prueba {@link conjuntistas.TablaHashAbierto#eliminar(Object)}.
+     */
+    public void pruebaEliminar() {
+        TablaHashAbierto<Integer> th = crearTablaHashAbierto();
+        assert th.eliminar(0) : "Debe eliminar 0";
+        assert th.eliminar(16384) : "Debe eliminar 16384";
+        assert !th.eliminar(0) : "No debe eliminar 0 (inexistente)";
     }
 
     /**
@@ -76,6 +86,15 @@ public class PruebaTablaHashAbierto {
         assert th.esVacia() : "Debe ser vacía";
         th.insertar(1);
         assert !th.esVacia() : "No debe ser vacía";
+    }
+
+    /**
+     * Prueba {@link conjuntistas.TablaHashAbierto#clone()}.
+     */
+    public void pruebaClone() {
+        TablaHashAbierto<Integer> th = crearTablaHashAbierto();
+        TablaHashAbierto<Integer> clon = th.clone();
+        assert th.toString().equals(clon.toString()) : "La tabla hash debe ser igual a su clon";
     }
 
     /**
