@@ -5,7 +5,7 @@ import lineales.dinamicas.Nodo;
 import utiles.Funciones;
 
 /**
- * Implementación de Tabla Hash.
+ * Implementación de Tabla Hash (abierto).
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  * @param <T> el tipo de los elementos
@@ -20,12 +20,12 @@ public class TablaHashAbierto<T> {
     /**
      * La cantidad de elementos en la tabla.
      */
-    private int cantidad;
+    protected int cantidad;
 
     /**
      * El arreglo de la tabla hash.
      */
-    private Object[] hash;
+    protected Object[] hash;
 
     /**
      * Constructor vacío.
@@ -50,7 +50,7 @@ public class TablaHashAbierto<T> {
      * @param elem el elemento al aplicar la función
      * @return la posición para el elemento
      */
-    private int hash(T elemento) {
+    protected int hash(T elemento) {
         int hashElemento = 0;
 
         if (elemento instanceof Integer) {
@@ -224,10 +224,9 @@ public class TablaHashAbierto<T> {
     @SuppressWarnings("unchecked")
     @Override
     public TablaHashAbierto<T> clone() {
-        TablaHashAbierto<T> clon = new TablaHashAbierto<>();
+        TablaHashAbierto<T> clon = new TablaHashAbierto<>(hash.length);
         Nodo<T> nodo, nodoClon;
         clon.cantidad = cantidad;
-        clon.hash = new Object[hash.length];
 
         for (int i = 0; i < hash.length; i++) {
             if (hash[i] != null) {
