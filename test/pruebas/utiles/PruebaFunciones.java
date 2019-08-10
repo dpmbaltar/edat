@@ -1,5 +1,6 @@
 package pruebas.utiles;
 
+import lineales.dinamicas.Lista;
 import utiles.Funciones;
 
 /**
@@ -20,6 +21,7 @@ public class PruebaFunciones {
         pruebaDoblamiento();
         pruebaDigitosCentrales();
         pruebaSumaCaracteres();
+        //pruebaPosicionesTablaHash();
     }
 
     /**
@@ -125,5 +127,35 @@ public class PruebaFunciones {
         assert Funciones.sumaCaracteres("ABC", 100) == 98 : "La suma de \"ABC\" y tam. 100 debe ser 98";
         assert Funciones.sumaCaracteres("xyz", 100) == 63 : "La suma de \"xyz\" y tam. 100 debe ser 63";
         assert Funciones.sumaCaracteres("XYZ", 100) == 67 : "La suma de \"XYZ\" y tam. 100 debe ser 67";
+    }
+
+    /**
+     * @see conjuntistas.TablaHashCerrado
+     */
+    @SuppressWarnings("unused")
+    private void pruebaPosicionesTablaHash() {
+        int m = 31;
+        int primos[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
+
+        for (int n = 0; n < 10000; n++) {
+            for (int j = 0; j < primos.length; j++) {
+                int posicion = Funciones.doblamiento(n, m);
+                int incremento = Funciones.modPrimo(n, primos[j], m);
+                int intento = 1;
+                int pos = posicion;
+                Lista<Integer> cubiertos = new Lista<>();
+
+                while (cubiertos.longitud() < m) {
+                    if (cubiertos.localizar(pos) > -1) {
+                        pos = (posicion + intento * incremento) % m;
+                        intento++;
+                    } else {
+                        cubiertos.insertar(pos, cubiertos.longitud() + 1);
+                    }
+                }
+
+                System.out.println("entero: " + n + " tamaño: " + m + " primo: " + primos[j] + " ¡OK!");
+            }
+        }
     }
 }
