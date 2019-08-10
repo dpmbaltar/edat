@@ -471,9 +471,14 @@ public class ArbolGenerico<T> {
      *
      * @return la copia del árbol
      */
-    public ArbolGenerico<T> clonar() {
+    @Override
+    public ArbolGenerico<T> clone() {
         ArbolGenerico<T> clon = new ArbolGenerico<T>();
-        clonar(raiz, null, clon);
+
+        if (raiz != null) {
+            clon.raiz = new Nodo<T>(raiz.getElemento());
+            clonarNodo(raiz, clon.raiz);
+        }
 
         return clon;
     }
@@ -481,15 +486,26 @@ public class ArbolGenerico<T> {
     /**
      * Copia el árbol desde un nodo dado.
      *
-     * @param hijo el nodo hijo
-     * @param padre el nodo padre
-     * @param arbol el clon del árbol
+     * @param nodo el nodo desde donde clonar
+     * @param nodoClon el nodo clon
      */
-    private void clonar(Nodo<T> hijo, Nodo<T> padre, ArbolGenerico<T> arbol) {
-        while (hijo != null) {
-            arbol.insertar(hijo.getElemento(), padre == null ? null : padre.getElemento());
-            clonar(hijo.getIzquierdo(), hijo, arbol);
-            hijo = hijo.getDerecho();
+    private void clonarNodo(Nodo<T> nodo, Nodo<T> nodoClon) {
+        if (nodo != null) {
+            Nodo<T> hijo = nodo.getIzquierdo();
+
+            if (hijo != null) {
+                Nodo<T> hijoClon = new Nodo<T>(hijo.getElemento());
+                nodoClon.setIzquierdo(hijoClon);
+                clonarNodo(hijo, hijoClon);
+                hijo = hijo.getDerecho();
+
+                while (hijo != null) {
+                    hijoClon.setDerecho(new Nodo<T>(hijo.getElemento()));
+                    hijoClon = hijoClon.getDerecho();
+                    clonarNodo(hijo, hijoClon);
+                    hijo = hijo.getDerecho();
+                }
+            }
         }
     }
 

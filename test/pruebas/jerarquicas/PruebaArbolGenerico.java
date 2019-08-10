@@ -162,11 +162,11 @@ public class PruebaArbolGenerico {
     }
 
     /**
-     * Prueba {@link jerarquicas.ArbolGenerico#clonar()}.
+     * Prueba {@link jerarquicas.ArbolGenerico#clone()}.
      */
     public void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
-        assert ag.toString().equals(ag.clonar().toString()) : "Árbol debe ser igual a su clon";
+        assert ag.toString().equals(ag.clone().toString()) : "Árbol debe ser igual a su clon";
     }
 
     /**
