@@ -106,6 +106,7 @@ public class NodoVertice<T> {
      * @see Grafo#caminoMasCorto
      * @see Lista#localizar
      */
+    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
         return elemento.equals(((NodoVertice<T>) o).getElemento());
