@@ -1,4 +1,4 @@
-package tpf.cye;
+package tpfinal;
 
 public class Juego {
 
