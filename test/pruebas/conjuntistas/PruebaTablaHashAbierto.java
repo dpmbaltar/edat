@@ -98,12 +98,12 @@ public class PruebaTablaHashAbierto {
     }
 
     /**
-     * Crea y devuelve una Tabla Hash Abierto de prueba de 10 elementos.
+     * Crea y devuelve una Tabla Hash Abierto de prueba.
      *
      * @return la tabla hash
      */
     public static TablaHashAbierto<Integer> crearTablaHashAbierto() {
-        TablaHashAbierto<Integer> th = new TablaHashAbierto<>(10);
+        TablaHashAbierto<Integer> th = new TablaHashAbierto<>();
         Integer[] elementos = crearElementos();
 
         for (int i = 0; i < elementos.length; i++) {
