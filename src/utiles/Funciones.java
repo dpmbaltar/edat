@@ -76,7 +76,19 @@ public class Funciones {
             resultado = subintDec(cuadrado, desde, hasta);
         }
 
-        return resultado;
+        return resultado % m;
+    }
+
+    /**
+     * Devuelve primo menos el entero MOD primo.
+     *
+     * @param n el entero
+     * @param p el número primo
+     * @param m el tamaño de la tabla
+     * @return el resultado
+     */
+    public static int modPrimo(int n, int p, int m) {
+        return (p - (n % p)) % m;
     }
 
     /**
@@ -138,34 +150,94 @@ public class Funciones {
         return digitos;
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base binaria hasta el último dígito.
+     *
+     * @param binario el binario
+     * @param desde la posición desde (inclusive)
+     * @return el entero resultante según desde
+     */
     public static int subintBin(int binario, int desde) {
         return subint(binario, desde, digitosBin(binario), 0b10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base binaria.
+     *
+     * @param binario el binario
+     * @param desde la posición desde (inclusive)
+     * @param hasta la posición desde (exclusive)
+     * @return el entero resultante según desde y hasta
+     */
     public static int subintBin(int binario, int desde, int hasta) {
         return subint(binario, desde, hasta, 0b10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base decimal hasta el último dígito.
+     *
+     * @param decimal el decimal
+     * @param desde la posición desde (inclusive)
+     * @return el entero resultante según desde
+     */
     public static int subintDec(int decimal, int desde) {
         return subint(decimal, desde, digitosDec(decimal), 10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base decimal.
+     *
+     * @param decimal el decimal
+     * @param desde la posición desde (inclusive)
+     * @param hasta la posición desde (exclusive)
+     * @return el entero resultante según desde y hasta
+     */
     public static int subintDec(int decimal, int desde, int hasta) {
         return subint(decimal, desde, hasta, 10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base hexadecimal hasta el último dígito.
+     *
+     * @param hexadecimal el hexadecimal
+     * @param desde la posición desde (inclusive)
+     * @return el entero resultante según desde
+     */
     public static int subintHex(int hexadecimal, int desde) {
         return subint(hexadecimal, desde, digitosHex(hexadecimal), 0x10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base hexadecimal.
+     *
+     * @param hexadecimal el hexadecimal
+     * @param desde la posición desde (inclusive)
+     * @param hasta la posición desde (exclusive)
+     * @return el entero resultante según desde y hasta
+     */
     public static int subintHex(int hexadecimal, int desde, int hasta) {
         return subint(hexadecimal, desde, hasta, 0x10);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base octal hasta el último dígito.
+     *
+     * @param octal el octal
+     * @param desde la posición desde (inclusive)
+     * @return el entero resultante según desde
+     */
     public static int subintOct(int octal, int desde) {
         return subint(octal, desde, digitosOct(octal), 010);
     }
 
+    /**
+     * Igual que {@link utiles.Funciones#subint(int, int, int, int)} con base octal.
+     *
+     * @param octal el octal
+     * @param desde la posición desde (inclusive)
+     * @param hasta la posición desde (exclusive)
+     * @return el entero resultante según desde y hasta
+     */
     public static int subintOct(int octal, int desde, int hasta) {
         return subint(octal, desde, hasta, 010);
     }
@@ -173,7 +245,7 @@ public class Funciones {
     /**
      * Devuelve una porción de dígitos de un entero (sin contar el signo) al igual que String.substring(), pero con
      * enteros como entrada, como por ejemplo: <code>Funciones.subint(123456789, 1, 3, 10) // 23</code>
-     * Precondición: 0 <= desde < hasta <= digitos
+     * Precondición: 0 &lt;= desde &lt; hasta &lt;= digitos
      *
      * @param numero el número entero
      * @param desde la posición desde (inclusive)
