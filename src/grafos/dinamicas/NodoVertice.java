@@ -1,7 +1,5 @@
 package grafos.dinamicas;
 
-import lineales.dinamicas.Lista;
-
 /**
  * Implementación de Nodo Vértice para un elemento de tipo T.
  *
