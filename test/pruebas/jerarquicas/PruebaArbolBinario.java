@@ -134,11 +134,11 @@ public class PruebaArbolBinario {
     }
 
     /**
-     * Prueba {@link jerarquicas.ArbolBinario#clonar()}.
+     * Prueba {@link jerarquicas.ArbolBinario#clone()}.
      */
     public void pruebaClonar() {
         ArbolBinario<Integer> ab = crearArbolBinarioCompleto();
-        assert ab.toString().equals(ab.clonar().toString()) : "Árbol debe ser igual a su clon";
+        assert ab.toString().equals(ab.clone().toString()) : "Árbol debe ser igual a su clon";
     }
 
     /**

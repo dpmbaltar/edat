@@ -385,12 +385,13 @@ public class ArbolBinario<T> {
      *
      * @return una copia del árbol
      */
-    public ArbolBinario<T> clonar() {
+    @Override
+    public ArbolBinario<T> clone() {
         ArbolBinario<T> clon = new ArbolBinario<T>();
 
         if (!esVacio()) {
             clon.raiz = new Nodo<T>(raiz.getElemento());
-            clonar(raiz, clon.raiz);
+            clonarNodo(raiz, clon.raiz);
         }
 
         return clon;
@@ -402,19 +403,19 @@ public class ArbolBinario<T> {
      * @param nodo el nodo desde donde clonar
      * @param nodoClon el nodo del árbol clon
      */
-    private void clonar(Nodo<T> nodo, Nodo<T> nodoClon) {
+    private void clonarNodo(Nodo<T> nodo, Nodo<T> nodoClon) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
 
             if (hijoIzquierdo != null) {
                 nodoClon.setIzquierdo(new Nodo<T>(hijoIzquierdo.getElemento()));
-                clonar(hijoIzquierdo, nodoClon.getIzquierdo());
+                clonarNodo(hijoIzquierdo, nodoClon.getIzquierdo());
             }
 
             if (hijoDerecho != null) {
                 nodoClon.setDerecho(new Nodo<T>(hijoDerecho.getElemento()));
-                clonar(hijoDerecho, nodoClon.getDerecho());
+                clonarNodo(hijoDerecho, nodoClon.getDerecho());
             }
         }
     }
