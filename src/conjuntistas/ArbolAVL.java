@@ -469,26 +469,39 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     @Override
-    public ArbolAVL<T> clonar() {
+    public ArbolAVL<T> clone() {
         ArbolAVL<T> clon = new ArbolAVL<T>();
-        clonarDesde(raiz, clon);
+
+        if (!vacio()) {
+            clon.raiz = new Nodo<T>(raiz.getElemento());
+            clon.raiz.setAltura(raiz.getAltura());
+            clonarNodo(raiz, clon.raiz);
+        }
 
         return clon;
     }
 
     /**
-     * Clona recursivamente el árbol desde un nodo dado.
+     * Clona el arbol a partir de un nodo.
      *
      * @param nodo el nodo desde donde clonar
-     * @param arbol el clon del árbol
+     * @param nodoClon el nodo clon
      */
-    private void clonarDesde(Nodo<T> nodo, ArbolAVL<T> arbol) {
+    private void clonarNodo(Nodo<T> nodo, Nodo<T> nodoClon) {
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo();
-            Nodo<T> derecho = nodo.getDerecho();
-            arbol.insertar(nodo.getElemento());
-            clonarDesde(izquierdo, arbol);
-            clonarDesde(derecho, arbol);
+            Nodo<T> hijoIzquierdo = nodo.getIzquierdo();
+            Nodo<T> hijoDerecho = nodo.getDerecho();
+            nodoClon.setAltura(nodo.getAltura());
+
+            if (hijoIzquierdo != null) {
+                nodoClon.setIzquierdo(new Nodo<T>(hijoIzquierdo.getElemento()));
+                clonarNodo(hijoIzquierdo, nodoClon.getIzquierdo());
+            }
+
+            if (hijoDerecho != null) {
+                nodoClon.setDerecho(new Nodo<T>(hijoDerecho.getElemento()));
+                clonarNodo(hijoDerecho, nodoClon.getDerecho());
+            }
         }
     }
 

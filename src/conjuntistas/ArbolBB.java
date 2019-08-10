@@ -331,7 +331,7 @@ public class ArbolBB<T extends Comparable<T>> {
      *
      * @return la copia del árbol
      */
-    public ArbolBB<T> clonar() {
+    public ArbolBB<T> clone() {
         ArbolBB<T> clon = new ArbolBB<T>();
         Lista<T> lista = listar();
         T elemento = null;

@@ -125,11 +125,11 @@ public class PruebaArbolAVL {
     }
 
     /**
-     * Prueba {@link conjuntistas.ArbolAVL#clonar()}.
+     * Prueba {@link conjuntistas.ArbolAVL#clone()}.
      */
     public void pruebaClonar() {
         ArbolAVL<Integer> avl = crearArbolAVL();
-        ArbolAVL<Integer> clon = avl.clonar();
+        ArbolAVL<Integer> clon = avl.clone();
         assert avl.toString().equals(clon.toString())
                 : "Clon del árbol debe ser una copia exacta del original";
     }
