@@ -13,9 +13,9 @@ import utiles.Funciones;
 public class TablaHashAbierto<T> {
 
     /**
-     * El tamaño máximo de la tabla hash (100 por defecto).
+     * El tamaño máximo de la tabla hash (31 por defecto).
      */
-    public static final int TAM = 100;
+    public static final int TAM = 31;
 
     /**
      * La cantidad de elementos en la tabla.
@@ -31,16 +31,7 @@ public class TablaHashAbierto<T> {
      * Constructor vacío.
      */
     public TablaHashAbierto() {
-        this(TAM);
-    }
-
-    /**
-     * Constructor con tamaño de tabla.
-     *
-     * @param tam el tamaño de la tabla
-     */
-    public TablaHashAbierto(int tam) {
-        hash = new Object[tam > 0 ? tam : TAM];
+        hash = new Object[TAM];
         cantidad = 0;
     }
 
@@ -224,7 +215,7 @@ public class TablaHashAbierto<T> {
     @SuppressWarnings("unchecked")
     @Override
     public TablaHashAbierto<T> clone() {
-        TablaHashAbierto<T> clon = new TablaHashAbierto<>(hash.length);
+        TablaHashAbierto<T> clon = new TablaHashAbierto<>();
         Nodo<T> nodo, nodoClon;
         clon.cantidad = cantidad;
 

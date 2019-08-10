@@ -11,52 +11,79 @@ import utiles.Funciones;
  */
 public class TablaHashCerrado<T> extends TablaHashAbierto<T> {
 
+    /**
+     * Indica el estado de celda vacía.
+     */
     public static final int VACIO = 0;
+
+    /**
+     * Indica el estado de celda ocupada.
+     */
     public static final int OCUPADO = 1;
+
+    /**
+     * Indica el estado de celda borrada.
+     */
     public static final int BORRADO = -1;
+
+    /**
+     * Indica el tamaño máximo de la tabla (con el método utilizado debe ser primo).
+     */
+    public static final int TAM = 31;
+
+    /**
+     * Indica el primo máximo menor que el tamaño de la tabla.
+     */
+    public static final int PRIMO = 29;
 
     /**
      * Constructor vacío.
      */
     public TablaHashCerrado() {
-        this(TAM);
-    }
-
-    /**
-     * Constructor con tamaño de tabla.
-     *
-     * @param tam el tamaño de la tabla
-     */
-    public TablaHashCerrado(int tam) {
-        super(tam);
+        super();
 
         for (int i = 0; i < hash.length; i++) {
             hash[i] = new CeldaHash<>();
         }
     }
 
+    /**
+     * Método para rehashing doble: para un funcionamiento óptimo, la constantes TAM y PRIMO deben ser primos, ya
+     * que de esta forma se cubren todas las posiciones posibles dentro de la tabla en caso de colisiones.
+     *
+     * @see utiles.Funciones#modPrimo(int, int, int)
+     * @param elemento el elemento
+     * @return el resultado
+     */
     private int rehash(T elemento) {
-        int hashElemento = 0;
+        int clave = 0;
 
         if (elemento instanceof Integer) {
-            hashElemento = Funciones.digitosCentrales((Integer) elemento, hash.length);
+            clave = (Integer) elemento;
         } else if (elemento instanceof String) {
-            hashElemento = Funciones.sumaCaracteres((String) elemento, hash.length);
-            hashElemento = Funciones.digitosCentrales(hashElemento, hash.length);
+            clave = Funciones.sumaCaracteres((String) elemento, hash.length);
         } else {
-            hashElemento = Funciones.digitosCentrales(elemento.hashCode(), hash.length);
+            clave = elemento.hashCode();
         }
 
-        return hashElemento;
+        return Funciones.modPrimo(clave, PRIMO, hash.length);
+    }
+
+    /**
+     * Verifica si la tabla esta llena.
+     *
+     * @return devuelve verdadero si la tabla está llena, falso en caso contrario
+     */
+    public boolean estaLlena() {
+        return cantidad == hash.length;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public boolean insertar(T elemento) {
         boolean insertado = false;
-        boolean encontrado = pertenece(elemento);
 
-        if (!encontrado) {
+        if (!estaLlena() && !pertenece(elemento)) {
             int posicion = hash(elemento);
             int incremento = rehash(elemento);
             int intento = 1;
@@ -64,8 +91,8 @@ public class TablaHashCerrado<T> extends TablaHashAbierto<T> {
 
             while (!insertado && intento < hash.length) {
                 if (celda.getEstado() == OCUPADO) {
-                    posicion = (posicion + intento * incremento) % hash.length;
-                    celda = (CeldaHash<T>) hash[posicion];
+                    int nuevaPosicion = (posicion + intento * incremento) % hash.length;
+                    celda = (CeldaHash<T>) hash[nuevaPosicion];
                     intento++;
                 } else {
                     celda.setElem(elemento);
@@ -78,9 +105,31 @@ public class TablaHashCerrado<T> extends TablaHashAbierto<T> {
         return insertado;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean eliminar(T elemento) {
-        return false;
+        boolean encontrado = false;
+        int posicion = hash(elemento);
+        int incremento = rehash(elemento);
+        int intento = 1;
+        CeldaHash<T> celda = (CeldaHash<T>) hash[posicion];
+
+        while (!encontrado && intento < hash.length && celda.getEstado() != VACIO) {
+            if (celda.getEstado() == OCUPADO) {
+                encontrado = celda.getElem().equals(elemento);
+
+                if (encontrado) {
+                    celda.setEstado(BORRADO);
+                    cantidad--;
+                }
+            }
+
+            posicion = (posicion + (intento * incremento)) % hash.length;
+            celda = (CeldaHash<T>) hash[posicion];
+            intento++;
+        }
+
+        return encontrado;
     }
 
     @SuppressWarnings("unchecked")
@@ -95,11 +144,11 @@ public class TablaHashCerrado<T> extends TablaHashAbierto<T> {
         while (!encontrado && intento < hash.length && celda.getEstado() != VACIO) {
             if (celda.getEstado() == OCUPADO && celda.getElem().equals(elemento)) {
                 encontrado = true;
-            } else {
-                posicion = (posicion + intento * incremento) % hash.length;
-                celda = (CeldaHash<T>) hash[posicion];
-                intento++;
             }
+
+            int nuevaPosicion = (posicion + intento * incremento) % hash.length;
+            celda = (CeldaHash<T>) hash[nuevaPosicion];
+            intento++;
         }
 
         return encontrado;
@@ -125,11 +174,11 @@ public class TablaHashCerrado<T> extends TablaHashAbierto<T> {
     @SuppressWarnings("unchecked")
     @Override
     public TablaHashCerrado<T> clone() {
-        TablaHashCerrado<T> clon = new TablaHashCerrado<>(hash.length);
+        TablaHashCerrado<T> clon = new TablaHashCerrado<>();
         clon.cantidad = cantidad;
 
         for (int i = 0; i < hash.length; i++) {
-            ((CeldaHash<T>) clon.hash[i]).setElem((T) hash[i]);
+            ((CeldaHash<T>) clon.hash[i]).setElem((T) ((CeldaHash<Object>) hash[i]).getElem());
             ((CeldaHash<T>) clon.hash[i]).setEstado(((CeldaHash<T>) hash[i]).getEstado());
         }
 
