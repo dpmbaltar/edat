@@ -387,34 +387,34 @@ public class ArbolBinario<T> {
      */
     public ArbolBinario<T> clonar() {
         ArbolBinario<T> clon = new ArbolBinario<T>();
-        clonar(raiz, clon);
+
+        if (!esVacio()) {
+            clon.raiz = new Nodo<T>(raiz.getElemento());
+            clonar(raiz, clon.raiz);
+        }
 
         return clon;
     }
 
     /**
-     * Inserta los elementos en el árbol dado, a partir de un nodo.
+     * Clona el arbol a partir de un nodo.
      *
      * @param nodo el nodo desde donde clonar
-     * @param arbol el clon del árbol
+     * @param nodoClon el nodo del árbol clon
      */
-    private void clonar(Nodo<T> nodo, ArbolBinario<T> arbol) {
+    private void clonar(Nodo<T> nodo, Nodo<T> nodoClon) {
         if (nodo != null) {
             Nodo<T> hijoIzquierdo = nodo.getIzquierdo(),
                     hijoDerecho = nodo.getDerecho();
 
-            if (arbol.esVacio()) {
-                arbol.insertarRaiz(nodo.getElemento());
-            }
-
             if (hijoIzquierdo != null) {
-                arbol.insertarIzquierdo(hijoIzquierdo.getElemento(), nodo.getElemento());
-                clonar(hijoIzquierdo, arbol);
+                nodoClon.setIzquierdo(new Nodo<T>(hijoIzquierdo.getElemento()));
+                clonar(hijoIzquierdo, nodoClon.getIzquierdo());
             }
 
             if (hijoDerecho != null) {
-                arbol.insertarDerecho(hijoDerecho.getElemento(), nodo.getElemento());
-                clonar(hijoDerecho, arbol);
+                nodoClon.setDerecho(new Nodo<T>(hijoDerecho.getElemento()));
+                clonar(hijoDerecho, nodoClon.getDerecho());
             }
         }
     }
