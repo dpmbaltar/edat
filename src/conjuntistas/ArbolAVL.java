@@ -250,6 +250,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a calcular su altura
      * @return la altura del nodo
      */
+    @SuppressWarnings("unused")
     @Deprecated
     private int altura(Nodo<T> nodo) {
         int altura = -1;
@@ -387,7 +388,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param hastaNivel el nivel máximo a listar
      * @return la lista de lista de niveles
      */
-    public Lista<Lista<T>> listarNiveles2(int hastaNivel) {
+    public Lista<Lista<T>> listarNivelesCompletos(int hastaNivel) {
         Lista<Lista<T>> lista = new Lista<>();
 
         if (raiz != null) {
