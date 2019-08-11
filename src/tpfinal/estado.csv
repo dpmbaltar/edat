@@ -1,0 +1,34 @@
+J: Jugador 1;guerrero;novato;5000
+J: Jugador 2;guerrero;aficionado;1000
+J: Jugador 3;guerrero;aficionado;
+J: Jugador 4;guerrero;profesional;
+J: Jugador 5;guerrero;profesional;
+J: Jugador 6;defensor;aficionado;
+J: Jugador 7;defensor;profesional;
+J: Jugador 8;defensor;profesional;
+I: A001;Armadura de Cuero;;
+I: A002;Armadura de Bronce;;
+I: A003;Armadura de Placas;;
+I: A004;Armadura de Escamas de Dragón;;
+I: E001;Espada Corta;;
+I: E002;Cimitarra;;
+I: E003;Sable;;
+I: E004;Espada de Cristal;;
+I: E005;Espada Ancha;;
+I: E006;Espada Larga;;
+I: E007;Espada de Guerra;;
+I: E008;Espada Gigante;;
+I: E009;Espada Bastarda;;
+I: E010;Espada del Ejecutor;;
+I: S001;Escudo de Espinas;;
+I: S002;Escudo de Huesos;;
+L: Lugar 1;;;
+L: Lugar 2;;;
+L: Lugar 3;;;
+L: Lugar 4;;;
+L: Lugar 5;;;
+L: Lugar 6;;;
+L: Lugar 7;;;
+L: Lugar 8;;;
+L: Lugar 9;;;
+L: Lugar 10;;;
