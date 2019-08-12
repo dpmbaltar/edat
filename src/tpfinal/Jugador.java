@@ -1,5 +1,7 @@
 package tpfinal;
 
+import java.text.DecimalFormat;
+
 import lineales.dinamicas.Lista;
 
 /**
@@ -13,7 +15,6 @@ public class Jugador implements Comparable<Jugador> {
      * Nombre de usuario.
      */
     private String usuario;
-    private String tipo;
 
     /**
      * Categoría (novato, aficionado o profesional).
@@ -55,16 +56,16 @@ public class Jugador implements Comparable<Jugador> {
      *
      * @param usuario el nombre de usuario
      * @param categoria la categoría
-     * @param equipo el equipo
+     * @param dinero el dinero inicial
      */
-    public Jugador(String usuario, Categoria categoria, Equipo equipo) {
+    public Jugador(String usuario, Categoria categoria, double dinero) {
         this.usuario = usuario;
         this.categoria = categoria;
-        this.dinero = 0.00;
+        this.dinero = dinero;
         this.salud = 100.00;
         this.derrotas = 0;
         this.victorias = 0;
-        this.equipo = equipo;
+        this.equipo = null;
         this.items = new Lista<Item>();
     }
 
@@ -135,5 +136,17 @@ public class Jugador implements Comparable<Jugador> {
     @Override
     public int compareTo(Jugador otroJugador) {
         return usuario.compareTo(otroJugador.getUsuario());
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder cadena = new StringBuilder();
+        cadena.append("J: ").append(usuario).append("; ");
+        cadena.append(getClass().getSimpleName()).append("; ");
+        cadena.append(categoria).append("; ");
+        cadena.append((new DecimalFormat("#.00")).format(dinero)).append("; ");
+        //TODO: Agregar ítems a Jugador#toString()
+
+        return cadena.toString();
     }
 }

@@ -1,11 +1,11 @@
-J: Jugador 1;guerrero;novato;5000
-J: Jugador 2;guerrero;aficionado;1000
-J: Jugador 3;guerrero;aficionado;
-J: Jugador 4;guerrero;profesional;
-J: Jugador 5;guerrero;profesional;
-J: Jugador 6;defensor;aficionado;
-J: Jugador 7;defensor;profesional;
-J: Jugador 8;defensor;profesional;
+J: Jugador 1;guerrero;novato;5000;<A001,E001>
+J: Jugador 2;guerrero;aficionado;8000;<A002,E004>
+J: Jugador 3;guerrero;aficionado;7500;
+J: Jugador 4;guerrero;profesional;15000
+J: Jugador 5;guerrero;profesional;14500
+J: Jugador 6;defensor;aficionado;7800
+J: Jugador 7;defensor;profesional;19000
+J: Jugador 8;defensor;profesional;12300
 I: A001;Armadura de Cuero;;
 I: A002;Armadura de Bronce;;
 I: A003;Armadura de Placas;;
