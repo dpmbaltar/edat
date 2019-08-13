@@ -1,34 +1,85 @@
-J: Jugador 1;guerrero;novato;5000;<A001,E001>
-J: Jugador 2;guerrero;aficionado;8000;<A002,E004>
-J: Jugador 3;guerrero;aficionado;7500;
-J: Jugador 4;guerrero;profesional;15000
-J: Jugador 5;guerrero;profesional;14500
-J: Jugador 6;defensor;aficionado;7800
-J: Jugador 7;defensor;profesional;19000
-J: Jugador 8;defensor;profesional;12300
-I: A001;Armadura de Cuero;;
-I: A002;Armadura de Bronce;;
-I: A003;Armadura de Placas;;
-I: A004;Armadura de Escamas de Dragón;;
-I: E001;Espada Corta;;
-I: E002;Cimitarra;;
-I: E003;Sable;;
-I: E004;Espada de Cristal;;
-I: E005;Espada Ancha;;
-I: E006;Espada Larga;;
-I: E007;Espada de Guerra;;
-I: E008;Espada Gigante;;
-I: E009;Espada Bastarda;;
-I: E010;Espada del Ejecutor;;
-I: S001;Escudo de Espinas;;
-I: S002;Escudo de Huesos;;
-L: Lugar 1;;;
-L: Lugar 2;;;
-L: Lugar 3;;;
-L: Lugar 4;;;
-L: Lugar 5;;;
-L: Lugar 6;;;
-L: Lugar 7;;;
-L: Lugar 8;;;
-L: Lugar 9;;;
-L: Lugar 10;;;
+J: Jugador 1;guerrero;novato;4000;<A002,S002>;
+J: Jugador 2;guerrero;aficionado;6000;<A003,S003>;
+J: Jugador 3;guerrero;aficionado;800;<A002,S004>;
+J: Jugador 4;guerrero;profesional;12000;<A004,U006>;
+J: Jugador 5;guerrero;profesional;10000;<U001,U010>;
+J: Jugador 6;defensor;novato;5000;<A001,E001,S001>;
+J: Jugador 7;defensor;aficionado;8000;<A002,E002,S002>;
+J: Jugador 8;defensor;profesional;14000;<U002,U005,U008>;
+J: Jugador 9;guerrero;novato;2000;;
+J: Jugador 10;defensor;novato;2000;;
+I: A001;Armadura de Cuero;500;0;10;20
+I: A002;Armadura de Cota de Malla;1500;0;15;20
+I: A003;Armadura de Placas;3000;0;25;15
+I: A004;Armadura Adamantina;5000;0;40;15
+I: E001;Escudo de madera;400;0;5;20
+I: E002;Escudo de captura flechas;2000;0;15;15
+I: S001;Daga;400;6;0;20
+I: S002;Espada defensora;1200;12;0;20
+I: S003;Gran espada;3600;18;0;15
+I: S004;Espada en llamas;6400;28;0;15
+I: H001;Hacha de mano;600;8;0;20
+I: H002;Hacha de batalla;2400;30;0;15
+I: U001;Armadura de escamas de dragón;10000;0;65;1
+I: U002;Armadura de cota de malla élfica;9000;0;55;1
+I: U003;Armadura de plata enana;9500;0;60;1
+I: U004;Escudo de atracción de misiles;7500;0;22;1
+I: U005;Escudo de protección contra hechizos;8500;0;32;1
+I: U006;Espada cazadora de dragones;15000;48;0;1
+I: U007;Espada del santo vengador;14000;40;0;1
+I: U008;Cuchilla de la suerte;13000;36;0;1
+I: U009;Hacha frenética;13500;34;0;1
+I: U010;Gran hacha viciosa;14500;44;0;1
+L: El Hielo Alto;;;;;
+L: Agujas de Hielo;;;;;
+L: Gran Caverna de Gusanos;;;;;
+L: Roca Cuervo;;;;;
+L: Montañas de las Espadas;;;;;
+L: El Bosque Alto;;;;;
+L: El Mar Congelado;;;;;
+L: El Bosque Congelado;;;;;
+L: La Llanura de Piedras;;;;;
+L: Las Tierras Torturadas;;;;;
+L: El Bosque Brumoso;;;;;
+L: El Páramo Alto;;;;;
+L: Colinas de Serpiente;;;;;
+L: Los Campos de los Muertos;;;;;
+L: Las Colinas Lejanas;;;;;
+L: Lago de los Dragones;;;;;
+L: Los Cuernos de Tormenta;;;;;
+L: Bosque Arácnido;;;;;
+L: Bosque Fronterizo;;;;;
+C: El Hielo Alto;Agujas de Hielo;310;;;
+C: Agujas de Hielo;Gran Caverna de Gusanos;400;;;
+C: Gran Caverna de Gusanos;Roca Cuervo;220;;;
+C: Roca Cuervo;Montañas de las Espadas;510;;;
+C: Montañas de las Espadas;Gran Caverna de Gusanos;480;;;
+C: El Hielo Alto;El Bosque Alto;560;;;
+C: Agujas de Hielo;El Bosque Alto;500;;;
+C: Montañas de las Espadas;El Bosque Alto;540;;;
+C: El Hielo Alto;El Mar Congelado;470;;;
+C: El Bosque Alto;El Mar Congelado;240;;;
+C: El Hielo Alto;El Bosque Congelado;380;;;
+C: El Bosque Congelado;El Mar Congelado;810;;;
+C: El Hielo Alto;La Llanura de Piedras;380;;;
+C: El Bosque Congelado;La Llanura de Piedras;360;;;
+C: El Bosque Congelado;Las Tierras Torturadas;360;;;
+C: La Llanura de Piedras;Las Tierras Torturadas;300;;;
+C: Montañas de las Espadas;El Bosque Brumoso;540;;;
+C: El Bosque Alto;El Bosque Brumoso;620;;;
+C: El Bosque Brumoso;El Páramo Alto;100;;;
+C: El Páramo Alto;Colinas de Serpiente;40;;;
+C: El Páramo Alto;La Llanura de Piedras;780;;;
+C: Colinas de Serpiente;La Llanura de Piedras;780;;;
+C: Colinas de Serpiente;Los Campos de los Muertos;300;;;
+C: El Páramo Alto;Los Campos de los Muertos;300;;;
+C: Los Campos de los Muertos;Las Colinas Lejanas;340;;;
+C: Colinas de Serpiente;Las Colinas Lejanas;350;;;
+C: Las Colinas Lejanas;Lago de los Dragones;290;;;
+C: Las Colinas Lejanas;Los Cuernos de Tormenta;110;;;
+C: Lago de los Dragones;Los Cuernos de Tormenta;250;;;
+C: Los Cuernos de Tormenta;Bosque Arácnido;330;;;
+C: Lago de los Dragones;Bosque Arácnido;520;;;
+C: Bosque Arácnido;Bosque Fronterizo;320;;;
+C: Bosque Fronterizo;Las Tierras Torturadas;360;;;
+C: Bosque Fronterizo;La Llanura de Piedras;410;;;
