@@ -20,7 +20,15 @@ public class Dungeons2019 {
      * El archivo del menú.
      */
     private static final String ARCHIVO_MENU = "menu.txt";
+
+    /**
+     * El archivo de estado del juego.
+     */
     private static final String ARCHIVO_ESTADO = "estado.csv";
+
+    /**
+     * El archivo de registro.
+     */
     private static final String ARCHIVO_REGISTRO = "registro.log";
 
     public static final int ALTA_JUGADOR = 1;
@@ -41,22 +49,22 @@ public class Dungeons2019 {
     /**
      * Jugadores en el juego.
      */
-    private static HashMap<String, Jugador> jugadores; //FIXME: Debe ser una impl. de Tabla de Búsqueda con AVL
+    private static HashMap<String, Jugador> jugadores; //TODO: Debe ser una impl. de Tabla de Búsqueda con AVL
 
     /**
      * Jugadores en espera.
      */
-    private static PriorityQueue<Jugador> esperando; //FIXME: Debe ser una impl. de Cola de Prioridad
+    private static PriorityQueue<Jugador> esperando; //TODO: Debe ser una impl. de Cola de Prioridad
 
     /**
      * Ítems disponibles en el juego.
      */
-    private static ArbolAVL<Item> items;
+    private static ArbolAVL<Item> items; //TODO: El AVL debe aceptar ítems con precios iguales
 
     /**
      * El mapa del juego.
      */
-    private static Mapa mapa;
+    private static Mapa mapa; //TODO: El mapa debe usar un grafo etiquetado
 
     /**
      * La cadena del menú.
@@ -71,8 +79,10 @@ public class Dungeons2019 {
     public static void main(String[] args) {
         equipos = new HashMap<>();
         jugadores = new HashMap<>();
+        items = new ArbolAVL<>();
         mapa = new Mapa();
-        int accion = 0;
+        cargar();
+        /*int accion = 0;
 
         do {
             accion = menu();
@@ -90,7 +100,44 @@ public class Dungeons2019 {
             }
         } while (accion > 0);
 
-        System.out.println("~ FIN ~");
+        System.out.println("~ FIN ~");*/
+    }
+
+    /**
+     * Inicializa el juego desde el archivo de estado (se asume formato válido).
+     */
+    public static void cargar() {
+        try {
+            String url = Dungeons2019.class.getResource(ARCHIVO_ESTADO).getPath();
+            BufferedReader archivoEstado = new BufferedReader(new FileReader(url));
+            String linea = archivoEstado.readLine();
+
+            while (linea != null) {
+                switch (linea.charAt(0)) {
+                    case 'I':
+                        Item item = Item.crearDesdeCadena(linea.substring(2));
+                        if (item != null) {
+                            items.insertar(item);
+                        }
+                        break;
+                    case 'J':
+                        Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
+                        if (jugador != null) {
+                            jugadores.put(jugador.getUsuario(), jugador);
+                            System.out.println(jugador);
+                        }
+                        break;
+                }
+
+                linea = archivoEstado.readLine();
+            }
+
+            archivoEstado.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //System.out.println(items);
     }
 
     /**
@@ -138,17 +185,8 @@ public class Dungeons2019 {
         Jugador jugador = null;
         String usuario = leerUsuario();
         Categoria categoria = leerCategoria();
-        double dinero = TecladoIn.readLineDouble();
-
-        // El tipo es 0 o 1, ya verificado en leerTipo()
-        switch (tipo) {
-            case 0:
-                jugador = new Guerrero(usuario, categoria, dinero);
-                break;
-            case 1:
-                jugador = new Defensor(usuario, categoria, dinero);
-                break;
-        }
+        int dinero = TecladoIn.readLineInt();
+        //TODO: Leer tipo
 
         //TODO: Registrar acción en registro.log
         System.out.println(jugador.toString());

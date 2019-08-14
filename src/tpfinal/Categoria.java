@@ -23,6 +23,32 @@ public enum Categoria {
     PROFESIONAL;
 
     /**
+     * Devuelve una categoría desde una cadena.
+     *
+     * @param cadena la cadena
+     * @return la categoría correspondiente
+     */
+    /*public static Categoria desdeCadena(String cadena) {
+        Categoria categoria;
+
+        switch (cadena.toUpperCase()) {
+            case "":
+                categoria = NOVATO;
+                break;
+            case "":
+                categoria = AFICIONADO;
+                break;
+            case "":
+                categoria = PROFESIONAL;
+                break;
+            default:
+                categoria = null;
+        }
+
+        return categoria;
+    }*/
+
+    /**
      * Devuelve una categoría desde un entero.
      *
      * @param entero el entero

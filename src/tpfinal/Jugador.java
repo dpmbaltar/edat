@@ -1,7 +1,5 @@
 package tpfinal;
 
-import java.text.DecimalFormat;
-
 import lineales.dinamicas.Lista;
 
 /**
@@ -17,6 +15,11 @@ public class Jugador implements Comparable<Jugador> {
     private String usuario;
 
     /**
+     * Tipo de jugador (guerrero o defensor).
+     */
+    private String tipo;
+
+    /**
      * Categoría (novato, aficionado o profesional).
      */
     private Categoria categoria;
@@ -24,7 +27,7 @@ public class Jugador implements Comparable<Jugador> {
     /**
      * Dinero recolectado.
      */
-    private double dinero;
+    private int dinero;
 
     /**
      * Salud (0 a 100).
@@ -52,13 +55,20 @@ public class Jugador implements Comparable<Jugador> {
     private Lista<Item> items;
 
     /**
+     * Constructor vacío.
+     */
+    public Jugador() {
+        this(null, null, 0);
+    }
+
+    /**
      * Constructor con nombre de usuario, categoría y equipo.
      *
      * @param usuario el nombre de usuario
      * @param categoria la categoría
      * @param dinero el dinero inicial
      */
-    public Jugador(String usuario, Categoria categoria, double dinero) {
+    public Jugador(String usuario, Categoria categoria, int dinero) {
         this.usuario = usuario;
         this.categoria = categoria;
         this.dinero = dinero;
@@ -77,6 +87,14 @@ public class Jugador implements Comparable<Jugador> {
         this.usuario = usuario;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
     public Categoria getCategoria() {
         return categoria;
     }
@@ -89,7 +107,7 @@ public class Jugador implements Comparable<Jugador> {
         return dinero;
     }
 
-    public void setDinero(double dinero) {
+    public void setDinero(int dinero) {
         this.dinero = dinero;
     }
 
@@ -133,9 +151,33 @@ public class Jugador implements Comparable<Jugador> {
         this.items = items;
     }
 
-    @Override
-    public int compareTo(Jugador otroJugador) {
-        return usuario.compareTo(otroJugador.getUsuario());
+    /**
+     * Crea un jugador desde una cadena de acorde al formato:
+     * <code>
+     * J: usuario;tipo;categoría;dinero;&lt;cód. ítem 1{,cód. ítem 2,...}&gt;salud;victorias;derrotas;equipo
+     * </code>
+     *
+     * @param cadena
+     * @return
+     */
+    public static Jugador crearDesdeCadena(String cadena) {
+        Jugador nuevoJugador = null;
+        String[] partes = cadena.split(";");
+
+        if (partes.length >= 5) {
+            nuevoJugador = new Jugador();
+            nuevoJugador.usuario = partes[0].trim();
+            nuevoJugador.tipo = partes[1].trim().toLowerCase();
+            nuevoJugador.categoria = Categoria.valueOf(partes[2].trim().toUpperCase());
+
+            try {
+                nuevoJugador.dinero = Integer.valueOf(partes[3].trim());
+            } catch (NumberFormatException e) {}
+
+            //TODO: Agregar ítems
+        }
+
+        return nuevoJugador;
     }
 
     @Override
@@ -144,9 +186,14 @@ public class Jugador implements Comparable<Jugador> {
         cadena.append("J: ").append(usuario).append("; ");
         cadena.append(getClass().getSimpleName()).append("; ");
         cadena.append(categoria).append("; ");
-        cadena.append((new DecimalFormat("#.00")).format(dinero)).append("; ");
+        cadena.append(dinero).append("; ");
         //TODO: Agregar ítems a Jugador#toString()
 
         return cadena.toString();
+    }
+
+    @Override
+    public int compareTo(Jugador otroJugador) {
+        return usuario.compareTo(otroJugador.getUsuario());
     }
 }
