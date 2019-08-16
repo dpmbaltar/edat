@@ -5,8 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 import conjuntistas.ArbolAVL;
+import lineales.dinamicas.Lista;
 import utiles.TecladoIn;
 
 /**
@@ -41,6 +43,9 @@ public class Dungeons2019 {
     public static final int BAJA_LOCACION = 8;
     public static final int MODI_LOCACION = 9;
 
+    public static final int CONSULTAR_JUGADOR = 10;
+    public static final int FILTRAR_JUGADORES = 11;
+
     /**
      * Equipos registrados.
      */
@@ -64,7 +69,7 @@ public class Dungeons2019 {
     /**
      * El mapa del juego.
      */
-    private static Mapa mapa; //TODO: El mapa debe usar un grafo etiquetado
+    private static Mapa mapa; //TODO: El mapa debe ser un grafo etiquetado
 
     /**
      * La cadena del menú.
@@ -82,7 +87,7 @@ public class Dungeons2019 {
         items = new ArbolAVL<>();
         mapa = new Mapa();
         cargar();
-        /*int accion = 0;
+        int accion = 0;
 
         do {
             accion = menu();
@@ -97,10 +102,20 @@ public class Dungeons2019 {
                 case MODI_JUGADOR:
                     modiJugador();
                     break;
+                case CONSULTAR_JUGADOR:
+                    consultarJugador();
+                    break;
+                case FILTRAR_JUGADORES:
+                    filtrarJugadores();
+                    break;
+            }
+
+            if (accion > 0) {
+                pausar();
             }
         } while (accion > 0);
 
-        System.out.println("~ FIN ~");*/
+        System.out.println("~ FIN ~");
     }
 
     /**
@@ -124,7 +139,20 @@ public class Dungeons2019 {
                         Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
                         if (jugador != null) {
                             jugadores.put(jugador.getUsuario(), jugador);
-                            System.out.println(jugador);
+                        }
+                        break;
+                    case 'L':
+                        mapa.insertarVertice(linea.substring(2).replace(';', ' ').trim());
+                        break;
+                    case 'C':
+                        String[] partes = linea.substring(2).split(";");
+
+                        if (partes.length >= 3) {
+                            mapa.insertarArco(partes[0].trim(), partes[1].trim());
+                            //TODO: Implementar y usar grafo etiquetado
+                            try {
+                                int etiqueta = Integer.valueOf(partes[2].trim());
+                            } catch (NumberFormatException e) {}
                         }
                         break;
                 }
@@ -136,8 +164,6 @@ public class Dungeons2019 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //System.out.println(items);
     }
 
     /**
@@ -169,12 +195,17 @@ public class Dungeons2019 {
 
         do {
             accion = TecladoIn.readLineInt();
-            if (accion < 0 || accion > 9) {
+            if (accion < 0 || accion > 20) {
                 System.out.println("La opción no es válida");
             }
-        } while (accion < 0 || accion > 9);
+        } while (accion < 0 || accion > 20);
 
         return accion;
+    }
+
+    public static void pausar() {
+        System.out.println("Presionar Entrar para volver al menú...");
+        TecladoIn.readLine();
     }
 
     /**
@@ -262,5 +293,69 @@ public class Dungeons2019 {
     private static void modiJugador() {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * I. Consultas sobre jugadores:
+     * Dado un nombre de usuario de un jugador, mostrar todos sus datos.
+     */
+    private static void consultarJugador() {
+        String usuario = leerUsuario();
+
+        if (jugadores.containsKey(usuario)) {
+            Jugador jugador = jugadores.get(usuario);
+            StringBuilder datos = new StringBuilder();
+            datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
+            datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
+            datos.append("Categoría: ").append(jugador.getCategoria()).append("\r\n");
+            datos.append("Dinero:    ").append(jugador.getDinero()).append("\r\n");
+            datos.append("Salud:     ").append(jugador.getSalud()).append("\r\n");
+            datos.append("Victorias: ").append(jugador.getVictorias()).append("\r\n");
+            datos.append("Derrotas:  ").append(jugador.getDerrotas()).append("\r\n");
+            datos.append("Equipo:    ");
+
+            if (jugador.tieneEquipo()) {
+                datos.append(jugador.getEquipo().getNombre());
+            } else {
+                datos.append("(sin asignar)");
+            }
+
+            datos.append("\r\n");
+            System.out.println(datos);
+        } else {
+            System.out.println(String.format("El jugador \"%s\" no existe", usuario));
+        }
+    }
+
+    /**
+     * I. Consultas sobre jugadores:
+     * Dada una subcadena, mostrar todos los nombres de usuarios que comienzan con esa subcadena.
+     */
+    private static void filtrarJugadores() {
+        String prefijo = leerUsuario();
+        Set<String> claves = jugadores.keySet();
+        String[] usuarios = claves.toArray(new String[claves.size()]);
+        Lista<String> filtrados = new Lista<>();
+
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i].startsWith(prefijo)) {
+                filtrados.insertar(usuarios[i], filtrados.longitud() + 1);
+            }
+        }
+
+        if (filtrados.longitud() > 0) {
+            String usuario;
+            System.out.println(String.format("Usuarios que comienzan con \"%s\":", prefijo));
+
+            for (int i = 1; i <= filtrados.longitud(); i++) {
+                usuario = filtrados.recuperar(i);
+
+                if (usuario.startsWith(prefijo)) {
+                    System.out.println(i + ": " + usuario);
+                }
+            }
+        } else {
+            System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
+        }
     }
 }

@@ -3,6 +3,8 @@
    <1> Alta de Jugador
    <2> Baja de Jugador
    <3> Modificación de Jugador
+   <?> Consultar Jugador
+   <?> Buscar Jugador
 -- Ítems ------------------------------
    <4> Alta de Ítem
    <5> Baja de Ítem

@@ -2,7 +2,6 @@ package tpfinal;
 
 import grafos.dinamicas.Grafo;
 
-public class Mapa {
+public class Mapa extends Grafo<String> {
 
-    private Grafo<String> locaciones;
 }

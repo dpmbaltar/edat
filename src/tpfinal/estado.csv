@@ -1,13 +1,13 @@
-J: Jugador 1;guerrero;novato;4000;<A002,S002>;
-J: Jugador 2;guerrero;aficionado;6000;<A003,S003>;
-J: Jugador 3;guerrero;aficionado;800;<A002,S004>;
-J: Jugador 4;guerrero;profesional;12000;<A004,U006>;
-J: Jugador 5;guerrero;profesional;10000;<U001,U010>;
-J: Jugador 6;defensor;novato;5000;<A001,E001,S001>;
-J: Jugador 7;defensor;aficionado;8000;<A002,E002,S002>;
-J: Jugador 8;defensor;profesional;14000;<U002,U005,U008>;
-J: Jugador 9;guerrero;novato;2000;;
-J: Jugador 10;defensor;novato;2000;;
+J: Jugador1;guerrero;novato;4000;<A002,S002>;
+J: Jugador2;guerrero;aficionado;6000;<A003,S003>;
+J: Jugador3;guerrero;aficionado;800;<A002,S004>;
+J: Jugador4;guerrero;profesional;12000;<A004,U006>;
+J: Jugador5;guerrero;profesional;10000;<U001,U010>;
+J: Jugador6;defensor;novato;5000;<A001,E001,S001>;
+J: Jugador7;defensor;aficionado;8000;<A002,E002,S002>;
+J: Jugador8;defensor;profesional;14000;<U002,U005,U008>;
+J: Jugador9;guerrero;novato;2000;;
+J: Jugador10;defensor;novato;2000;;
 I: A001;Armadura de Cuero;500;0;10;20
 I: A002;Armadura de Cota de Malla;1500;0;15;20
 I: A003;Armadura de Placas;3000;0;25;15

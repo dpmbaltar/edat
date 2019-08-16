@@ -103,7 +103,7 @@ public class Jugador implements Comparable<Jugador> {
         this.categoria = categoria;
     }
 
-    public double getDinero() {
+    public int getDinero() {
         return dinero;
     }
 
@@ -151,6 +151,10 @@ public class Jugador implements Comparable<Jugador> {
         this.items = items;
     }
 
+    public boolean tieneEquipo() {
+        return equipo != null;
+    }
+
     /**
      * Crea un jugador desde una cadena de acorde al formato:
      * <code>
@@ -184,7 +188,7 @@ public class Jugador implements Comparable<Jugador> {
     public String toString() {
         StringBuilder cadena = new StringBuilder();
         cadena.append("J: ").append(usuario).append("; ");
-        cadena.append(getClass().getSimpleName()).append("; ");
+        cadena.append(tipo).append("; ");
         cadena.append(categoria).append("; ");
         cadena.append(dinero).append("; ");
         //TODO: Agregar ítems a Jugador#toString()
