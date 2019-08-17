@@ -1,17 +1,34 @@
-******* Calabozos & Estructuras *******
--- Jugadores --------------------------
-   <1> Alta de Jugador
-   <2> Baja de Jugador
-   <3> Modificación de Jugador
-   <?> Consultar Jugador
-   <?> Buscar Jugador
--- Ítems ------------------------------
-   <4> Alta de Ítem
-   <5> Baja de Ítem
-   <6> Modificación de Ítem
--- Locaciones -------------------------
-   <7> Alta de Locación
-   <8> Baja de Locación
-   <9> Modificación de Locación
-
+********************** Calabozos & Estructuras **********************
+~~~{ Jugadores }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <11> Agregar jugador
+   <12> Borrar jugador
+   <13> Modificar jugador
+   <14> Consultar jugador
+   <15> Filtrar jugadores
+   <16> Poner jugador en espera
+~~~{ Ítems }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <21> Agregar ítem
+   <22> Borrar ítem
+   <23> Modificar ítem
+   <24> Consultar ítem
+   <25> Mostrar ítems para comprar (con precio max.)
+   <26> Mostrar ítems para comprar (con precio min. y max.)
+~~~{ Locaciones }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <31> Agregar locación
+   <32> Borrar locación
+   <33> Modificar locación
+   <34> Mostrar locaciones adyacentes
+   <35> Mostrar camino más corto (en kms)
+   <36> Mostrar camino más directo
+   <37> Mostrar camino con distancia máxima
+   <38> Mostrar camino más directo sin pasar por una locación
+~~~{ Equipos }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <41> Consultar equipo
+   <42> Crear equipo
+   <43> Iniciar batalla entre equipos
+~~~{ Generales }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   <51> Mostrar ranking de jugadores
+   <52> Mostrar ítems con última disponibilidad
+   <53> Mostrar sistema
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    <0> Salir

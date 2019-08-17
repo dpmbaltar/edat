@@ -33,48 +33,81 @@ public class Dungeons2019 {
      */
     private static final String ARCHIVO_REGISTRO = "registro.log";
 
-    public static final int ALTA_JUGADOR = 1;
-    public static final int BAJA_JUGADOR = 2;
-    public static final int MODI_JUGADOR = 3;
-    public static final int ALTA_ITEM = 4;
-    public static final int BAJA_ITEM = 5;
-    public static final int MODI_ITEM = 6;
-    public static final int ALTA_LOCACION = 7;
-    public static final int BAJA_LOCACION = 8;
-    public static final int MODI_LOCACION = 9;
+    /**
+     * Acciones de jugador.
+     */
+    public static final int AGREGAR_JUGADOR = 11;
+    public static final int BORRAR_JUGADOR = 12;
+    public static final int MODIFICAR_JUGADOR = 13;
+    public static final int CONSULTAR_JUGADOR = 14;
+    public static final int FILTRAR_JUGADORES = 15;
+    public static final int PONER_JUGADOR_EN_ESPERA = 16;
 
-    public static final int CONSULTAR_JUGADOR = 10;
-    public static final int FILTRAR_JUGADORES = 11;
+    /**
+     * Acciones de ítem.
+     */
+    public static final int AGREGAR_ITEM = 21;
+    public static final int BORRAR_ITEM = 22;
+    public static final int MODIFICAR_ITEM = 23;
+    public static final int CONSULTAR_ITEM = 24;
+    public static final int MOSTRAR_ITEMS_HASTA_PRECIO = 25;
+    public static final int MOSTRAR_ITEMS_DESDE_HASTA_PRECIO = 26;
+
+    /**
+     * Acciones de locación.
+     */
+    public static final int AGREGAR_LOCACION = 31;
+    public static final int BORRAR_LOCACION = 32;
+    public static final int MODIFICAR_LOCACION = 33;
+    public static final int MOSTRAR_LOCACIONES_ADYACENTES = 34;
+    public static final int MOSTRAR_CAMINO_MAS_CORTO = 35;
+    public static final int MOSTRAR_CAMINO_MAS_DIRECTO = 36;
+    public static final int MOSTRAR_CAMINO_HASTA_DISTANCIA = 37;
+    public static final int MOSTRAR_CAMINO_SIN_LOCACION = 38;
+
+    /**
+     * Acciones de equipo.
+     */
+    public static final int CONSULTAR_EQUIPO = 41;
+    public static final int CREAR_EQUIPO = 42;
+    public static final int INICIAR_BATALLA_ENTRE_EQUIPOS = 43;
+
+    /**
+     * Acciones generales.
+     */
+    public static final int MOSTRAR_RANKING_JUGADORES = 51;
+    public static final int MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD = 52;
+    public static final int MOSTRAR_SISTEMA = 53;
 
     /**
      * Equipos registrados.
      */
-    private static HashMap<String, Equipo> equipos;
+    private HashMap<String, Equipo> equipos;
 
     /**
      * Jugadores en el juego.
      */
-    private static HashMap<String, Jugador> jugadores; //TODO: Debe ser una impl. de Tabla de Búsqueda con AVL
+    private HashMap<String, Jugador> jugadores; //TODO: Debe ser una impl. de Tabla de Búsqueda con AVL
 
     /**
      * Jugadores en espera.
      */
-    private static PriorityQueue<Jugador> esperando; //TODO: Debe ser una impl. de Cola de Prioridad
+    private PriorityQueue<Jugador> esperando; //TODO: Debe ser una impl. de Cola de Prioridad
 
     /**
      * Ítems disponibles en el juego.
      */
-    private static ArbolAVL<Item> items; //TODO: El AVL debe aceptar ítems con precios iguales
+    private ArbolAVL<Item> items; //TODO: El AVL debe aceptar ítems con precios iguales
 
     /**
      * El mapa del juego.
      */
-    private static Mapa mapa; //TODO: El mapa debe ser un grafo etiquetado
+    private Mapa mapa; //TODO: El mapa debe ser un grafo etiquetado
 
     /**
      * La cadena del menú.
      */
-    private static String menu;
+    private String menu;
 
     /**
      * Programa principal.
@@ -82,25 +115,39 @@ public class Dungeons2019 {
      * @param args argumentos
      */
     public static void main(String[] args) {
+        Dungeons2019 juego = new Dungeons2019();
+        juego.cargar("estado.csv");
+        juego.iniciar();
+    }
+
+    /**
+     * Constructor.
+     */
+    public Dungeons2019() {
         equipos = new HashMap<>();
         jugadores = new HashMap<>();
         items = new ArbolAVL<>();
         mapa = new Mapa();
-        cargar();
+    }
+
+    /**
+     * Inicia el juego.
+     */
+    public void iniciar() {
         int accion = 0;
 
         do {
             accion = menu();
 
             switch (accion) {
-                case ALTA_JUGADOR:
-                    altaJugador();
+                case AGREGAR_JUGADOR:
+                    agregarJugador();
                     break;
-                case BAJA_JUGADOR:
-                    bajaJugador();
+                case BORRAR_JUGADOR:
+                    borrarJugador();
                     break;
-                case MODI_JUGADOR:
-                    modiJugador();
+                case MODIFICAR_JUGADOR:
+                    modificarJugador();
                     break;
                 case CONSULTAR_JUGADOR:
                     consultarJugador();
@@ -115,15 +162,15 @@ public class Dungeons2019 {
             }
         } while (accion > 0);
 
-        System.out.println("~ FIN ~");
+        System.out.println("~{ FIN }~");
     }
 
     /**
-     * Inicializa el juego desde el archivo de estado (se asume formato válido).
+     * Carga el estado del juego desde un archivo (se asume el formato válido).
      */
-    public static void cargar() {
+    public void cargar(String nombreArchivo) {
         try {
-            String url = Dungeons2019.class.getResource(ARCHIVO_ESTADO).getPath();
+            String url = Dungeons2019.class.getResource(nombreArchivo).getPath();
             BufferedReader archivoEstado = new BufferedReader(new FileReader(url));
             String linea = archivoEstado.readLine();
 
@@ -169,7 +216,7 @@ public class Dungeons2019 {
     /**
      * Muestra el menú principal.
      */
-    public static int menu() {
+    public int menu() {
         int accion = 0;
 
         if (menu == null) {
@@ -203,16 +250,17 @@ public class Dungeons2019 {
         return accion;
     }
 
-    public static void pausar() {
-        System.out.println("Presionar Entrar para volver al menú...");
+    private void pausar() {
+        System.out.println("Presionar [Entrar] para volver al menú...");
         TecladoIn.readLine();
     }
 
     /**
-     * Alta de jugador.
+     * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
+     * Agrega un jugador.
      */
-    private static void altaJugador() {
-        int tipo = leerTipo();
+    public void agregarJugador() {
+        TipoJugador tipo = leerTipo();
         Jugador jugador = null;
         String usuario = leerUsuario();
         Categoria categoria = leerCategoria();
@@ -229,16 +277,16 @@ public class Dungeons2019 {
      *
      * @return el usuario leído
      */
-    private static String leerUsuario() {
+    private String leerUsuario() {
         String usuario;
 
         do {
             System.out.println("Ingresar el nombre de usuario:");
             usuario = TecladoIn.readLineWord();
 
-            //FIXME: Validar nombre de usuario
+            //TODO: Validar nombre de usuario
             if (usuario.isEmpty()) {
-                System.out.println("El nombre ingresado no es válido");
+                System.out.println("El nombre de usuario ingresado no es válido");
             }
         } while (usuario.isEmpty());
 
@@ -250,15 +298,15 @@ public class Dungeons2019 {
      *
      * @return la categoría leída
      */
-    private static Categoria leerCategoria() {
+    private Categoria leerCategoria() {
         Categoria categoria;
 
         do {
-            System.out.println("Ingresar categoría (NOVATO: 0, AFICIONADO: 1, PROFESIONAL: 2):");
+            System.out.println("Ingresar categoría (<0> Novato, <1> Aficionado, <2> Profesional):");
             categoria = Categoria.desdeEntero(TecladoIn.readLineInt());
 
             if (categoria == null) {
-                System.out.println("La opción ingresada no es válida");
+                System.out.println("La categoría ingresada no es válida");
             }
         } while (categoria == null);
 
@@ -268,38 +316,40 @@ public class Dungeons2019 {
     /**
      * Lee el tipo de jugador.
      *
-     * @return el tipo de jugador
+     * @return el tipo de jugador leído
      */
-    private static int leerTipo() {
-        int tipo;
+    private TipoJugador leerTipo() {
+        TipoJugador tipo;
 
         do {
-            System.out.println("Ingresar el tipo de jugador (GUERRERO: 0, DEFENSOR: 1):");
-            tipo = TecladoIn.readLineInt();
+            System.out.println("Ingresar el tipo de jugador (<0> Guerrero, <1> Defensor):");
+            tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
 
-            if (tipo < 0 || tipo > 1) {
-                System.out.println("La opción ingresada no es válida");
+            if (tipo == null) {
+                System.out.println("El tipo de jugador ingresado no es válido");
             }
-        } while (tipo < 0 || tipo > 1);
+        } while (tipo == null);
 
         return tipo;
     }
 
-    private static void bajaJugador() {
-        // TODO Auto-generated method stub
-
+    /**
+     * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
+     * Borra un jugador.
+     */
+    public void borrarJugador() {
+        //TODO: borrarJugador()
     }
 
-    private static void modiJugador() {
-        // TODO Auto-generated method stub
-
+    public void modificarJugador() {
+        //TODO: modificarJugador()
     }
 
     /**
      * I. Consultas sobre jugadores:
      * Dado un nombre de usuario de un jugador, mostrar todos sus datos.
      */
-    private static void consultarJugador() {
+    public void consultarJugador() {
         String usuario = leerUsuario();
 
         if (jugadores.containsKey(usuario)) {
@@ -331,7 +381,7 @@ public class Dungeons2019 {
      * I. Consultas sobre jugadores:
      * Dada una subcadena, mostrar todos los nombres de usuarios que comienzan con esa subcadena.
      */
-    private static void filtrarJugadores() {
+    public void filtrarJugadores() {
         String prefijo = leerUsuario();
         Set<String> claves = jugadores.keySet();
         String[] usuarios = claves.toArray(new String[claves.size()]);

@@ -1,24 +1,24 @@
 package tpfinal;
 
 /**
- * Categoría.
+ * Categoría de jugador/equipo.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public enum Categoria {
 
     /**
-     * Indica la categoría novato.
+     * Indica la categoría "Novato".
      */
     NOVATO,
 
     /**
-     * Indica la categoría aficionado.
+     * Indica la categoría "Aficionado".
      */
     AFICIONADO,
 
     /**
-     * Indica la categoría profesional.
+     * Indica la categoría "Profesional".
      */
     PROFESIONAL;
 
@@ -28,17 +28,17 @@ public enum Categoria {
      * @param cadena la cadena
      * @return la categoría correspondiente
      */
-    /*public static Categoria desdeCadena(String cadena) {
+    public static Categoria desdeCadena(String cadena) {
         Categoria categoria;
 
         switch (cadena.toUpperCase()) {
-            case "":
+            case "NOVATO":
                 categoria = NOVATO;
                 break;
-            case "":
+            case "AFICIONADO":
                 categoria = AFICIONADO;
                 break;
-            case "":
+            case "PROFESIONAL":
                 categoria = PROFESIONAL;
                 break;
             default:
@@ -46,7 +46,7 @@ public enum Categoria {
         }
 
         return categoria;
-    }*/
+    }
 
     /**
      * Devuelve una categoría desde un entero.

@@ -17,7 +17,7 @@ public class Jugador implements Comparable<Jugador> {
     /**
      * Tipo de jugador (guerrero o defensor).
      */
-    private String tipo;
+    private TipoJugador tipo;
 
     /**
      * Categoría (novato, aficionado o profesional).
@@ -58,7 +58,7 @@ public class Jugador implements Comparable<Jugador> {
      * Constructor vacío.
      */
     public Jugador() {
-        this(null, null, 0);
+        this(null, null, null, 0);
     }
 
     /**
@@ -68,8 +68,9 @@ public class Jugador implements Comparable<Jugador> {
      * @param categoria la categoría
      * @param dinero el dinero inicial
      */
-    public Jugador(String usuario, Categoria categoria, int dinero) {
+    public Jugador(String usuario, TipoJugador tipo, Categoria categoria, int dinero) {
         this.usuario = usuario;
+        this.tipo = tipo;
         this.categoria = categoria;
         this.dinero = dinero;
         this.salud = 100.00;
@@ -87,11 +88,11 @@ public class Jugador implements Comparable<Jugador> {
         this.usuario = usuario;
     }
 
-    public String getTipo() {
+    public TipoJugador getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoJugador tipo) {
         this.tipo = tipo;
     }
 
@@ -171,7 +172,7 @@ public class Jugador implements Comparable<Jugador> {
         if (partes.length >= 5) {
             nuevoJugador = new Jugador();
             nuevoJugador.usuario = partes[0].trim();
-            nuevoJugador.tipo = partes[1].trim().toLowerCase();
+            nuevoJugador.tipo = TipoJugador.valueOf(partes[1].trim().toLowerCase());
             nuevoJugador.categoria = Categoria.valueOf(partes[2].trim().toUpperCase());
 
             try {
