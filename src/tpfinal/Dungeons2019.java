@@ -209,23 +209,23 @@ public class Dungeons2019 {
 
             while (linea != null) {
                 switch (linea.charAt(0)) {
-                    case 'I':
+                    case 'I': // Cargar Ítem
                         Item item = Item.crearDesdeCadena(linea.substring(2));
                         if (item != null) {
                             items.insertar(item);
                         }
                         break;
-                    case 'J':
+                    case 'J': // Cargar Jugador
                         Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
                         if (jugador != null) {
-                            jugadores.put(jugador.getUsuario(), jugador);
+                            jugadores.put(jugador.getUsuario().toUpperCase(), jugador);
                             //TODO: Agregar items
                         }
                         break;
-                    case 'L':
+                    case 'L': // Cargar Locación
                         mapa.insertarVertice(linea.substring(2).replace(';', ' ').trim());
                         break;
-                    case 'C':
+                    case 'C': // Cargar Camino
                         String[] partes = linea.substring(2).split(";");
 
                         if (partes.length >= 3) {
@@ -284,7 +284,8 @@ public class Dungeons2019 {
         accion = TecladoIn.readLineInt();
 
         while (!esAccionValida(accion)) {
-            System.out.println("La opción ingresada no es válida");
+            System.out.println("La opción ingresada no es válida.");
+            System.out.print("Intente nuevamente: ");
             accion = TecladoIn.readLineInt();
         }
 
@@ -335,33 +336,6 @@ public class Dungeons2019 {
     }
 
     /**
-     * Verifica si un usuario es válido.
-     *
-     * @param usuario el usuario
-     * @return verdadero si el usuario es válido, falso en caso contrario
-     */
-    private static boolean esUsuarioValido(String usuario) {
-        boolean esValido = false;
-        int longitud = usuario != null ? usuario.length() : -1;
-
-        if (1 <= longitud && longitud <= 20) {
-            char primerCaracter = usuario.charAt(0);
-
-            if (Funciones.esLetra(primerCaracter)) {
-                int i = 1;
-
-                while (i < longitud && Funciones.esAlfanumerico(usuario.charAt(i))) {
-                    i++;
-                }
-
-                esValido = i == longitud;
-            }
-        }
-
-        return esValido;
-    }
-
-    /**
      * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
      */
     private static void pausar() {
@@ -382,18 +356,8 @@ public class Dungeons2019 {
      *
      * @return el usuario leído
      */
-    private static String leerUsuario() {
-        System.out.print("Nombre de usuario: ");
-        String usuario = TecladoIn.readLineWord();
-
-        while (!esUsuarioValido(usuario)) {
-            System.out.println("El nombre de usuario ingresado no es válido.");
-            System.out.println("Debe ser una cadena alfanumérica de 1 a 20 caracteres que inicie con una letra.");
-            System.out.print("Intente nuevamente: ");
-            usuario = TecladoIn.readLineWord();
-        }
-
-        return usuario;
+    private static String leerNombreUsuario() {
+        return Funciones.leerPalabra("Nombre de usuario: ", "El nombre de usuario ingresado no es válido.", 20);
     }
 
     /**
@@ -434,32 +398,28 @@ public class Dungeons2019 {
         return categoria;
     }
 
-    private static int leerEnteroPositivo(String mensajeInfo, String mensajeError) {
-        System.out.print(mensajeInfo);
-        int enteroPositivo = TecladoIn.readLineInt();
-
-        while (enteroPositivo < 0) {
-            System.out.println(mensajeError);
-            System.out.println("Debe ser un entero mayor o igual a cero.");
-            System.out.print("Intente nuevamente: ");
-            enteroPositivo = TecladoIn.readLineInt();
-        }
-
-        return enteroPositivo;
+    private static int leerDinero() {
+        return Funciones.leerEnteroPositivo("Dinero: ", "La cantidad de dinero no es válida.");
     }
 
-    private static String leerFrase(String mensajeInfo, String mensajeError) {
-        System.out.print(mensajeInfo);
-        String frase = TecladoIn.readLine();
+    private static String leerNombreItem() {
+        return Funciones.leerFrase("Nombre: ", "El nombre del ítem no es válido.", 30);
+    }
 
-        while (frase.isEmpty()) { //TODO: Validar frase
-            System.out.println(mensajeError);
-            System.out.println("Debe ser una cadena con una o más palabras alfanuméricas.");
-            System.out.print("Intente nuevamente: ");
-            frase = TecladoIn.readLine();
-        }
+    private static int leerPrecio() {
+        return Funciones.leerEnteroPositivo("Precio: ", "El precio ingresado no es válido.");
+    }
 
-        return frase;
+    private static int leerAtaque() {
+        return Funciones.leerEnteroPositivo("Puntos de ataque: ", "Los puntos de ataque ingresados no son válidos.");
+    }
+
+    private static int leerDefensa() {
+        return Funciones.leerEnteroPositivo("Puntos de defensa: ", "Los puntos de defensa ingresados no son válidos.");
+    }
+
+    private static int leerDisponibilidad() {
+        return Funciones.leerEnteroPositivo("Disponibilidad: ", "La disponibilidad ingresada no es válida.");
     }
 
     /**
@@ -469,11 +429,11 @@ public class Dungeons2019 {
     public void agregarJugador() {
         System.out.println("Agregar jugador...");
         Jugador jugador = new Jugador();
-        jugador.setUsuario(leerUsuario());
+        jugador.setUsuario(leerNombreUsuario());
         jugador.setTipo(leerTipo());
         jugador.setCategoria(leerCategoria());
-        jugador.setDinero(leerEnteroPositivo("Dinero: ", "La cantidad de dinero no es válida."));
-        jugadores.put(jugador.getUsuario(), jugador);
+        jugador.setDinero(leerDinero());
+        jugadores.put(jugador.getUsuario().toUpperCase(), jugador);
         log(String.format("Se agregó el jugador \"%s\"", jugador.getUsuario()));
     }
 
@@ -483,13 +443,13 @@ public class Dungeons2019 {
      */
     public void borrarJugador() {
         System.out.println("Borrar jugador...");
-        String usuario = leerUsuario();
-        Jugador jugador = jugadores.remove(usuario);
+        String usuario = leerNombreUsuario();
+        Jugador jugador = jugadores.remove(usuario.toUpperCase());
 
         if (jugador == null) {
             log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
         } else {
-            log(String.format("Se borró el jugador \"%s\"", usuario));
+            log(String.format("Se borró el jugador \"%s\"", jugador.getUsuario()));
         }
     }
 
@@ -499,10 +459,12 @@ public class Dungeons2019 {
      */
     public void modificarJugador() {
         System.out.println("Modificar jugador...");
-        String usuario = leerUsuario();
+        String usuario = leerNombreUsuario();
+        String usuarioClave = usuario.toUpperCase();
 
-        if (jugadores.containsKey(usuario)) {
-            Jugador jugador = jugadores.get(usuario);
+        if (jugadores.containsKey(usuarioClave)) {
+            Jugador jugador = jugadores.get(usuarioClave);
+            usuario = jugador.getUsuario();
             int opcion = 0;
 
             do {
@@ -510,12 +472,13 @@ public class Dungeons2019 {
 
                 switch (opcion) {
                     case 1:
-                        jugador.setUsuario(leerUsuario());
-                        jugadores.put(jugador.getUsuario(), jugador);
-                        jugadores.remove(usuario);
-                        log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuario,
-                                jugador.getUsuario()));
-                        usuario = jugador.getUsuario();
+                        jugadores.remove(usuarioClave);
+                        String usuarioAnt = usuario;
+                        usuario = leerNombreUsuario();
+                        usuarioClave = usuario.toUpperCase();
+                        jugador.setUsuario(usuario);
+                        jugadores.put(usuarioClave, jugador);
+                        log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnt, usuario));
                         break;
                     case 2:
                         jugador.setTipo(leerTipo());
@@ -527,7 +490,7 @@ public class Dungeons2019 {
                                 jugador.getCategoria()));
                         break;
                     case 4:
-                        jugador.setDinero(leerEnteroPositivo("Dinero: ", "La cantidad de dinero no es válida."));
+                        jugador.setDinero(leerDinero());
                         log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
                                 jugador.getDinero()));
                         break;
@@ -543,7 +506,7 @@ public class Dungeons2019 {
      *
      * @return la opción de modificación
      */
-    private int leerAccionModificarJugador() {
+    private static int leerAccionModificarJugador() {
         System.out.print("Opción a modificar ");
         System.out.print("(<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar): ");
         int accion = TecladoIn.readLineInt();
@@ -564,7 +527,7 @@ public class Dungeons2019 {
      * Dado un nombre de usuario de un jugador, mostrar todos sus datos.
      */
     public void consultarJugador() {
-        String usuario = leerUsuario();
+        String usuario = leerNombreUsuario().toUpperCase();
 
         if (jugadores.containsKey(usuario)) {
             Jugador jugador = jugadores.get(usuario);
@@ -597,14 +560,15 @@ public class Dungeons2019 {
      * Dada una subcadena, mostrar todos los nombres de usuarios que comienzan con esa subcadena.
      */
     public void filtrarJugadores() {
-        String prefijo = leerUsuario();
+        System.out.println("Filtrar jugadores...");
+        String prefijo = Funciones.leerPalabra("Prefijo: ", "El prefijo de usuario no es válido.", 20);
         Set<String> claves = jugadores.keySet();
         String[] usuarios = claves.toArray(new String[claves.size()]);
-        Lista<String> filtrados = new Lista<>();
+        Lista<Jugador> filtrados = new Lista<>();
 
         for (int i = 0; i < usuarios.length; i++) {
             if (usuarios[i].regionMatches(true, 0, prefijo, 0, prefijo.length())) {
-                filtrados.insertar(usuarios[i], filtrados.longitud() + 1);
+                filtrados.insertar(jugadores.get(usuarios[i]), filtrados.longitud() + 1);
             }
         }
 
@@ -612,7 +576,7 @@ public class Dungeons2019 {
             System.out.println(String.format("Usuarios que comienzan con \"%s\":", prefijo));
 
             for (int i = 1; i <= filtrados.longitud(); i++) {
-                System.out.println(i + ": " + filtrados.recuperar(i));
+                System.out.println(i + ": " + filtrados.recuperar(i).getUsuario());
             }
         } else {
             System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
@@ -625,7 +589,7 @@ public class Dungeons2019 {
     public void ponerJugadorEnEspera() {
         //TODO: ponerJugadorEnEspera()
         System.out.println("Poner jugador en espera...");
-        String usuario = leerUsuario();
+        String usuario = leerNombreUsuario();
 
         if (jugadores.containsKey(usuario)) {
             esperando.offer(jugadores.get(usuario));
@@ -639,14 +603,14 @@ public class Dungeons2019 {
     public void agregarItem() {
         System.out.println("Agregar ítem...");
         Item item = new Item();
-        item.setCodigo(item.generarCodigo());
-        item.setNombre(leerFrase("Nombre: ", "El nombre del ítem no es válido."));
-        item.setPrecio(leerEnteroPositivo("Precio: ", "El precio ingresado no es válido."));
-        item.setAtaque(leerEnteroPositivo("Puntos de ataque: ", "Los puntos de ataque ingresados no son válidos."));
-        item.setDefensa(leerEnteroPositivo("Puntos de defensa: ", "Los puntos de defensa ingresados no son válidos."));
-        item.setDisponibilidad(leerEnteroPositivo("Disponibilidad: ", "La disponibilidad ingresada no es válida."));
+        item.setCodigo(Item.generarCodigo());
+        item.setNombre(leerNombreItem());
+        item.setPrecio(leerPrecio());
+        item.setAtaque(leerAtaque());
+        item.setDefensa(leerDefensa());
+        item.setDisponibilidad(leerDisponibilidad());
         items.insertar(item);
-        log(String.format("Se agregó el ítem \"%s\"", item.getNombre()));
+        log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
     }
 
     /**

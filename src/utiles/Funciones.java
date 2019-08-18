@@ -318,4 +318,87 @@ public class Funciones {
     public static boolean esLetraMinus(char caracter) {
         return 97 <= caracter && caracter <= 122;
     }
+
+    public static boolean esPalabra(String cadena) {
+        return esPalabra(cadena, Integer.MAX_VALUE);
+    }
+
+    private static boolean esPalabra(String cadena, int longitudMax) {
+        boolean esPalabra = false;
+        int longitud = cadena != null ? cadena.length() : -1;
+
+        if (1 <= longitud && longitud <= longitudMax) {
+            char primerCaracter = cadena.charAt(0);
+
+            if (esLetra(primerCaracter)) {
+                int i = 1;
+
+                while (i < longitud && esAlfanumerico(cadena.charAt(i))) {
+                    i++;
+                }
+
+                esPalabra = i == longitud;
+            }
+        }
+
+        return esPalabra;
+    }
+
+    /**
+     * Lee una frase no vacía según la longitud máxima dada.
+     *
+     * @param mensajeInfo el mensaje de información
+     * @param mensajeError el mensaje de error
+     * @param longitudMax la longitud máxima aceptada
+     * @return la frase leída
+     */
+    public static String leerFrase(String mensajeInfo, String mensajeError, int longitudMax) {
+        System.out.print(mensajeInfo);
+        String frase = TecladoIn.readLine();
+
+        while (frase.isEmpty() || frase.length() > longitudMax) {
+            System.out.println(mensajeError);
+            System.out.println("Debe ser una o más palabras alfanuméricas y longitud máxima " + longitudMax + ".");
+            System.out.print("Intente nuevamente: ");
+            frase = TecladoIn.readLine();
+        }
+
+        return frase;
+    }
+
+    public static String leerPalabra(String mensajeInfo, String mensajeError, int longitudMax) {
+        System.out.print(mensajeInfo);
+        String usuario = TecladoIn.readLineWord();
+
+        while (!esPalabra(usuario, longitudMax)) {
+            System.out.println(mensajeError);
+            System.out.println("Debe ser una palabra alfanumérica y longitud máxima " + longitudMax + ".");
+            System.out.print("Intente nuevamente: ");
+            usuario = TecladoIn.readLineWord();
+        }
+
+        return usuario;
+    }
+
+    public static int leerEntero(String mensajeInfo, String mensajeError, int desde, int hasta) {
+        System.out.print(mensajeInfo);
+        int entero = TecladoIn.readLineInt();
+
+        while (entero < 0) {
+            System.out.println(mensajeError);
+            System.out.println(String.format("Debe ser un entero entre %d y %d.", desde, hasta));
+            System.out.print("Intente nuevamente: ");
+            entero = TecladoIn.readLineInt();
+        }
+
+        return entero;
+    }
+
+    public static int leerEnteroNegativo(String mensajeInfo, String mensajeError) {
+        return leerEntero(mensajeInfo, mensajeError, Integer.MIN_VALUE, 0);
+    }
+
+    public static int leerEnteroPositivo(String mensajeInfo, String mensajeError) {
+        return leerEntero(mensajeInfo, mensajeError, 0, Integer.MAX_VALUE);
+    }
 }

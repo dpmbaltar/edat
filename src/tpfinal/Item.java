@@ -40,14 +40,14 @@ public class Item implements Comparable<Item> {
     private int defensa;
 
     /**
-     * Cantidad disponible del ítem.
-     */
-    private int cantidad;
-
-    /**
      * Disponibilidad del ítem (1 indica que es único).
      */
     private int disponibilidad;
+
+    /**
+     * Cantidad disponible del ítem.
+     */
+    private int cantidad;
 
     /**
      * Constructor vacío.
@@ -72,8 +72,8 @@ public class Item implements Comparable<Item> {
         this.precio = precio;
         this.ataque = ataque;
         this.defensa = defensa;
-        this.cantidad = disponibilidad;
         this.disponibilidad = disponibilidad;
+        this.cantidad = disponibilidad;
     }
 
     public String getCodigo() {
@@ -116,20 +116,20 @@ public class Item implements Comparable<Item> {
         this.defensa = defensa;
     }
 
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
     public int getDisponibilidad() {
         return disponibilidad;
     }
 
     public void setDisponibilidad(int disponibilidad) {
         this.disponibilidad = disponibilidad;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     /**
