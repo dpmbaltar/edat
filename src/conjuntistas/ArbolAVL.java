@@ -1,6 +1,5 @@
 package conjuntistas;
 
-import jerarquicas.Nodo;
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
@@ -10,14 +9,25 @@ import lineales.dinamicas.Lista;
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  * @param <T> el tipo de los elementos
  */
-public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
+public class ArbolAVL<T extends Comparable<T>> {
 
-    @Override
+    /**
+     * El nodo raíz del árbol.
+     */
+    protected NodoAVL<T> raiz;
+
+    /**
+     * Constructor vacío.
+     */
+    public ArbolAVL() {
+        raiz = null;
+    }
+
     public boolean insertar(T elemento) {
         boolean insertado = false;
 
         if (raiz == null) {
-            raiz = new Nodo<T>(elemento);
+            raiz = new NodoAVL<T>(elemento);
             insertado = true;
         } else {
             insertado = insertar(elemento, raiz, null);
@@ -34,11 +44,11 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param padre el nodo padre
      * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
-    private boolean insertar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
+    private boolean insertar(T elemento, NodoAVL<T> nodo, NodoAVL<T> padre) {
         boolean insertado = false;
 
         if (nodo != null) {
-            Nodo<T> izquierdo, derecho, nuevo;
+            NodoAVL<T> izquierdo, derecho, nuevo;
             izquierdo = nodo.getIzquierdo();
             derecho = nodo.getDerecho();
 
@@ -47,7 +57,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
             // Si el elemento es igual al del nodo, el resultado será falso y no continuará hacia los nodos hijos
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
-                    nuevo = new Nodo<T>(elemento);
+                    nuevo = new NodoAVL<T>(elemento);
                     nodo.setIzquierdo(nuevo);
 
                     // Actualizar altura del nodo si corresponde
@@ -61,7 +71,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
-                    nuevo = new Nodo<T>(elemento);
+                    nuevo = new NodoAVL<T>(elemento);
                     nodo.setDerecho(nuevo);
 
                     // Actualizar altura del nodo si corresponde
@@ -93,75 +103,14 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @see Nodo#getAltura
      * @param nodo el nodo a actualizar la altura
      */
-    private void actualizarAltura(Nodo<T> nodo) {
+    private void actualizarAltura(NodoAVL<T> nodo) {
         if (nodo != null) {
-            Nodo<T> izquierdo = nodo.getIzquierdo();
-            Nodo<T> derecho = nodo.getDerecho();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
             int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
             int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
             nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
         }
-    }
-
-    @Override
-    public boolean eliminar(T elemento) {
-        return eliminar(elemento, raiz, null, null);
-    }
-
-    protected boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre, Nodo<T> padreAnterior) {
-        boolean eliminado = false;
-
-        if (nodo != null) {
-            T elemPadre;
-            Nodo<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-
-            // Buscar el elemento a eliminar
-            if (elemento.compareTo(nodo.getElemento()) < 0) {
-                eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo, padre);
-            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
-                eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo, padre);
-            } else {
-                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
-                if (izquierdo == null && derecho == null) { // Caso 1: nodo hoja
-                    elemPadre = padre.getElemento();
-
-                    if (elemento.compareTo(elemPadre) < 0) {
-                        padre.setIzquierdo(null);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
-                        padre.setDerecho(null);
-                    }
-
-                    eliminado = true;
-                } else if (izquierdo != null && derecho != null) { // Caso 3: nodo con ambos hijos
-                    T elemMinDerecho = minimo(derecho);
-                    eliminado = eliminar(elemMinDerecho, derecho, nodo, padre);
-                    nodo.setElemento(elemMinDerecho);
-                } else { // Caso 2: nodo con un solo hijo
-                    Nodo<T> reemplazo = derecho == null ? izquierdo : derecho;
-                    elemPadre = padre.getElemento();
-
-                    if (elemento.compareTo(elemPadre) < 0) {
-                        padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
-                        padre.setDerecho(reemplazo);
-                    }
-
-                    eliminado = true;
-                }
-            }
-
-            // Vuelta de la recursión:
-            // Balancear el nodo si es necesario (lo determina el método balancear())
-            // Actualizar altura de los nodos padre
-            if (eliminado) {
-                actualizarAltura(padre);
-                balancear(padre, padreAnterior);
-            }
-        }
-
-        return eliminado;
     }
 
     /**
@@ -170,10 +119,10 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a balancear
      * @param padre el nodo padre
      */
-    private void balancear(Nodo<T> nodo, Nodo<T> padre) {
+    private void balancear(NodoAVL<T> nodo, NodoAVL<T> padre) {
         if (nodo != null) {
             boolean balanceado = false;
-            Nodo<T> nodoHijo, reemplazo = null;
+            NodoAVL<T> nodoHijo, reemplazo = null;
             int balanceHijo, balanceNodo = balance(nodo);
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
@@ -229,9 +178,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a calcular su balance
      * @return el balance del nodo
      */
-    private int balance(Nodo<T> nodo) {
+    private int balance(NodoAVL<T> nodo) {
         int alturaIzquierdo, alturaDerecho;
-        Nodo<T> izquierdo, derecho;
+        NodoAVL<T> izquierdo, derecho;
 
         izquierdo = nodo.getIzquierdo();
         derecho = nodo.getDerecho();
@@ -252,12 +201,12 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      */
     @SuppressWarnings("unused")
     @Deprecated
-    private int altura(Nodo<T> nodo) {
+    private int altura(NodoAVL<T> nodo) {
         int altura = -1;
 
         if (nodo != null) {
             int alturaIzquierdo, alturaDerecho;
-            Nodo<T> hijoIzquierdo, hijoDerecho;
+            NodoAVL<T> hijoIzquierdo, hijoDerecho;
 
             hijoIzquierdo = nodo.getIzquierdo();
             hijoDerecho = nodo.getDerecho();
@@ -282,8 +231,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a rotar
      * @return el nodo rotado
      */
-    private Nodo<T> rotarDerecha(Nodo<T> nodo) {
-        Nodo<T> izquierdo, izquierdoHD;
+    private NodoAVL<T> rotarDerecha(NodoAVL<T> nodo) {
+        NodoAVL<T> izquierdo, izquierdoHD;
 
         izquierdo = nodo.getIzquierdo();
         izquierdoHD = izquierdo == null ? null : izquierdo.getDerecho();
@@ -302,8 +251,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a rotar
      * @return el nodo rotado
      */
-    private Nodo<T> rotarIzquierda(Nodo<T> nodo) {
-        Nodo<T> derecho, derechoHI;
+    private NodoAVL<T> rotarIzquierda(NodoAVL<T> nodo) {
+        NodoAVL<T> derecho, derechoHI;
 
         derecho = nodo.getDerecho();
         derechoHI = derecho == null ? null : derecho.getIzquierdo();
@@ -322,8 +271,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a rotar
      * @return el nodo rotado
      */
-    private Nodo<T> rotarDerechaIzquierda(Nodo<T> nodo) {
-        Nodo<T> rotado = rotarDerecha(nodo.getDerecho());
+    private NodoAVL<T> rotarDerechaIzquierda(NodoAVL<T> nodo) {
+        NodoAVL<T> rotado = rotarDerecha(nodo.getDerecho());
         nodo.setDerecho(rotado);
 
         return rotarIzquierda(nodo);
@@ -336,11 +285,250 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo a rotar
      * @return el nodo rotado
      */
-    private Nodo<T> rotarIzquierdaDerecha(Nodo<T> nodo) {
-        Nodo<T> rotado = rotarIzquierda(nodo.getIzquierdo());
+    private NodoAVL<T> rotarIzquierdaDerecha(NodoAVL<T> nodo) {
+        NodoAVL<T> rotado = rotarIzquierda(nodo.getIzquierdo());
         nodo.setIzquierdo(rotado);
 
         return rotarDerecha(nodo);
+    }
+
+    public boolean eliminar(T elemento) {
+        return eliminar(elemento, raiz, null, null);
+    }
+
+    private boolean eliminar(T elemento, NodoAVL<T> nodo, NodoAVL<T> padre, NodoAVL<T> padreAnterior) {
+        boolean eliminado = false;
+
+        if (nodo != null) {
+            T elemPadre;
+            NodoAVL<T> izquierdo, derecho;
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+
+            // Buscar el elemento a eliminar
+            if (elemento.compareTo(nodo.getElemento()) < 0) {
+                eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo, padre);
+            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
+                eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo, padre);
+            } else {
+                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
+                if (izquierdo == null && derecho == null) { // Caso 1: nodo hoja
+                    elemPadre = padre.getElemento();
+
+                    if (elemento.compareTo(elemPadre) < 0) {
+                        padre.setIzquierdo(null);
+                    } else if (elemento.compareTo(elemPadre) > 0) {
+                        padre.setDerecho(null);
+                    }
+
+                    eliminado = true;
+                } else if (izquierdo != null && derecho != null) { // Caso 3: nodo con ambos hijos
+                    T elemMinDerecho = minimo(derecho);
+                    eliminado = eliminar(elemMinDerecho, derecho, nodo, padre);
+                    nodo.setElemento(elemMinDerecho);
+                } else { // Caso 2: nodo con un solo hijo
+                    NodoAVL<T> reemplazo = derecho == null ? izquierdo : derecho;
+                    elemPadre = padre.getElemento();
+
+                    if (elemento.compareTo(elemPadre) < 0) {
+                        padre.setIzquierdo(reemplazo);
+                    } else if (elemento.compareTo(elemPadre) > 0) {
+                        padre.setDerecho(reemplazo);
+                    }
+
+                    eliminado = true;
+                }
+            }
+
+            // Vuelta de la recursión:
+            // Balancear el nodo si es necesario (lo determina el método balancear())
+            // Actualizar altura de los nodos padre
+            if (eliminado) {
+                actualizarAltura(padre);
+                balancear(padre, padreAnterior);
+            }
+        }
+
+        return eliminado;
+    }
+
+    /**
+     * Devuelve verdadero si el elemento dado pertenece al árbol, o falso en caso contrario.
+     *
+     * @param elemento el elemento a buscar
+     * @return verdadero si el elemento fue encontrado, falso en caso contrario
+     */
+    public boolean pertenece(T elemento) {
+        return pertenece(elemento, raiz);
+    }
+
+    /**
+     * Devuelve verdadero si el elemento dado pertenece al sub-árbol correspondiente al nodo dado, falso en caso
+     * contrario.
+     *
+     * @param elemento el elemento a buscar
+     * @param nodo el nodo desde donde buscar el elemento
+     * @return verdadero si el elemento fue encontrado, falso en caso contrario
+     */
+    private boolean pertenece(T elemento, NodoAVL<T> nodo) {
+        boolean existe = false;
+
+        if (nodo != null) {
+            NodoAVL<T> izquierdo, derecho;
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+
+            if (elemento.compareTo(nodo.getElemento()) < 0) {
+                existe = pertenece(elemento, izquierdo);
+            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
+                existe = pertenece(elemento, derecho);
+            } else {
+                existe = true;
+            }
+        }
+
+        return existe;
+    }
+
+    /**
+     * Devuelve el elemento máximo del árbol.
+     *
+     * @return el elemento máximo
+     */
+    public T maximo() {
+        return maximo(raiz);
+    }
+
+    /**
+     * Devuelve el elemento máximo a partir de un nodo.
+     *
+     * @param nodo el nodo desde donde buscar el elemento máximo
+     * @return el elemento máximo
+     */
+    private T maximo(NodoAVL<T> nodo) {
+        NodoAVL<T> derecho = nodo, maximo = null;
+
+        while (derecho != null) {
+            maximo = derecho;
+            derecho = derecho.getDerecho();
+        }
+
+        return maximo == null ? null : maximo.getElemento();
+    }
+
+    /**
+     * Devuelve el elemento mínimo del árbol.
+     *
+     * @return el elemento mínimo
+     */
+    public T minimo() {
+        return minimo(raiz);
+    }
+
+    /**
+     * Devuelve el elemento mínimo a partir de un nodo.
+     *
+     * @param nodo el nodo desde donde buscar el elemento mínimo
+     * @return el elemento mínimo
+     */
+    private T minimo(NodoAVL<T> nodo) {
+        NodoAVL<T> izquierdo = nodo, minimo = null;
+
+        while (izquierdo != null) {
+            minimo = izquierdo;
+            izquierdo = izquierdo.getIzquierdo();
+        }
+
+        return minimo == null ? null : minimo.getElemento();
+    }
+
+    /**
+     * Devuelve verdadero si el árbol está vacío, o falso en caso contrario.
+     *
+     * @return verdadero si el árbol está vacío, falso en caso contrario
+     */
+    public boolean vacio() {
+        return raiz == null;
+    }
+
+    /**
+     * Elimina todos los elementos del árbol.
+     */
+    public void vaciar() {
+        raiz = null;
+    }
+
+    /**
+     * Devuelve una lista con los elementos del árbol - ordenados de menor a mayor -.
+     *
+     * @return la lista con los elementos ordenados de menor a mayor
+     */
+    public Lista<T> listar() {
+        Lista<T> lista = new Lista<T>();
+        listar(raiz, lista);
+
+        return lista;
+    }
+
+    /**
+     * Inserta los elementos del árbol - ordenados de menor a mayor - en la lista dada, del sub-árbol correspondiente
+     * al nodo dado.
+     *
+     * @param nodo el nodo desde donde listar los elementos
+     * @param lista la lista de elementos
+     */
+    private void listar(NodoAVL<T> nodo, Lista<T> lista) {
+        if (nodo != null) {
+            NodoAVL<T> izquierdo, derecho;
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+
+            listar(izquierdo, lista);
+            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+            listar(derecho, lista);
+        }
+    }
+
+    /**
+     * Devuelve una lista con los elementos del árbol - ordenados de menor a mayor - mientras que el elemento se
+     * encuentre dentro del rango mínimo y máximo especificado.
+     *
+     * @param minimo el elemento mínimo del rango
+     * @param maximo el elemento máximo del rango
+     * @return la lista de elementos
+     */
+    public Lista<T> listarRango(T minimo, T maximo) {
+        Lista<T> lista = new Lista<T>();
+        listarRango(minimo, maximo, raiz, lista);
+
+        return lista;
+    }
+
+    /**
+     * Inserta los elementos del árbol - ordenados de menor a mayor - mientras que el elemento se encuentre dentro del
+     * rango mínimo y máximo especificado, en la lista dada, del sub-árbol correspondiente al nodo dado.
+     *
+     * @param minimo el elemento mínimo del rango
+     * @param maximo el elemento máximo del rango
+     * @param nodo el nodo desde donde listar los elementos
+     * @param lista la lista de elementos
+     */
+    private void listarRango(T minimo, T maximo, NodoAVL<T> nodo, Lista<T> lista) {
+        if (nodo != null) {
+            NodoAVL<T> izquierdo, derecho;
+            T elemento;
+            izquierdo = nodo.getIzquierdo();
+            derecho = nodo.getDerecho();
+            elemento = nodo.getElemento();
+
+            listarRango(minimo, maximo, izquierdo, lista);
+
+            if (elemento.compareTo(minimo) >= 0 && elemento.compareTo(maximo) <= 0) {
+                lista.insertar(elemento, lista.longitud() + 1);
+            }
+
+            listarRango(minimo, maximo, derecho, lista);
+        }
     }
 
     /**
@@ -352,8 +540,8 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         Lista<T> lista = new Lista<T>();
 
         if (raiz != null) {
-            Nodo<T> nodo, hijoIzquierdo, hijoDerecho;
-            Cola<Nodo<T>> cola = new Cola<Nodo<T>>();
+            NodoAVL<T> nodo, hijoIzquierdo, hijoDerecho;
+            Cola<NodoAVL<T>> cola = new Cola<>();
             cola.poner(raiz);
 
             while (!cola.esVacia()) {
@@ -394,9 +582,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         if (raiz != null) {
             int nivelActual = 0;
             int nivelMaxElementos = 1;
-            Nodo<T> nodo;
+            NodoAVL<T> nodo;
             Lista<T> nivel = new Lista<>();
-            Cola<Nodo<T>> cola = new Cola<>();
+            Cola<NodoAVL<T>> cola = new Cola<>();
             cola.poner(raiz);
 
             while (!cola.esVacia() && nivelActual <= hastaNivel) {
@@ -426,7 +614,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
     }
 
     /**
-     * Devuelve una lista de listas por niveles con los elementos del árbol, incluyendo nulos.
+     * Devuelve una lista de listas por niveles con las alturas de los elementos del árbol, incluyendo nulos.
      *
      * @param hastaNivel el nivel máximo a listar
      * @return la lista de lista de niveles
@@ -437,9 +625,9 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         if (raiz != null) {
             int nivelActual = 0;
             int nivelMaxElementos = 1;
-            Nodo<T> nodo;
+            NodoAVL<T> nodo;
             Lista<Integer> nivel = new Lista<>();
-            Cola<Nodo<T>> cola = new Cola<>();
+            Cola<NodoAVL<T>> cola = new Cola<>();
             cola.poner(raiz);
 
             while (!cola.esVacia() && nivelActual <= hastaNivel) {
@@ -473,7 +661,7 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
         ArbolAVL<T> clon = new ArbolAVL<T>();
 
         if (!vacio()) {
-            clon.raiz = new Nodo<T>(raiz.getElemento());
+            clon.raiz = new NodoAVL<T>(raiz.getElemento());
             clon.raiz.setAltura(raiz.getAltura());
             clonarNodo(raiz, clon.raiz);
         }
@@ -487,22 +675,26 @@ public class ArbolAVL<T extends Comparable<T>> extends ArbolBB<T> {
      * @param nodo el nodo desde donde clonar
      * @param nodoClon el nodo clon
      */
-    private void clonarNodo(Nodo<T> nodo, Nodo<T> nodoClon) {
+    private void clonarNodo(NodoAVL<T> nodo, NodoAVL<T> nodoClon) {
         if (nodo != null) {
-            Nodo<T> hijoIzquierdo = nodo.getIzquierdo();
-            Nodo<T> hijoDerecho = nodo.getDerecho();
+            NodoAVL<T> hijoIzquierdo = nodo.getIzquierdo();
+            NodoAVL<T> hijoDerecho = nodo.getDerecho();
             nodoClon.setAltura(nodo.getAltura());
 
             if (hijoIzquierdo != null) {
-                nodoClon.setIzquierdo(new Nodo<T>(hijoIzquierdo.getElemento()));
+                nodoClon.setIzquierdo(new NodoAVL<T>(hijoIzquierdo.getElemento()));
                 clonarNodo(hijoIzquierdo, nodoClon.getIzquierdo());
             }
 
             if (hijoDerecho != null) {
-                nodoClon.setDerecho(new Nodo<T>(hijoDerecho.getElemento()));
+                nodoClon.setDerecho(new NodoAVL<T>(hijoDerecho.getElemento()));
                 clonarNodo(hijoDerecho, nodoClon.getDerecho());
             }
         }
     }
 
+    @Override
+    public String toString() {
+        return listar().toString();
+    }
 }
