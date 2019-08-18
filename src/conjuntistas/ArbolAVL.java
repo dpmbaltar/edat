@@ -23,6 +23,12 @@ public class ArbolAVL<T extends Comparable<T>> {
         raiz = null;
     }
 
+    /**
+     * Inserta un elemento al árbol.
+     *
+     * @param elemento el elemento a insertar
+     * @return verdadero si el elemento fue insertado, falso en caso contrario
+     */
     public boolean insertar(T elemento) {
         boolean insertado = false;
 
@@ -292,10 +298,23 @@ public class ArbolAVL<T extends Comparable<T>> {
         return rotarDerecha(nodo);
     }
 
+    /**
+     * Elimina el elemento del árbol.
+     *
+     * @param elemento el elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
+     */
     public boolean eliminar(T elemento) {
         return eliminar(elemento, raiz, null, null);
     }
 
+    /**
+     * Elimina un elemento del sub-árbol correspondiente al nodo dado.
+     *
+     * @param elemento el elemento a eliminar
+     * @param nodo el nodo desde donde buscar el elemento a eliminar
+     * @return verdadero si el elemento fue eliminado, falso en caso contrario
+     */
     private boolean eliminar(T elemento, NodoAVL<T> nodo, NodoAVL<T> padre, NodoAVL<T> padreAnterior) {
         boolean eliminado = false;
 
@@ -693,6 +712,9 @@ public class ArbolAVL<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Devuelve la representación en forma de cadena del árbol.
+     */
     @Override
     public String toString() {
         return listar().toString();

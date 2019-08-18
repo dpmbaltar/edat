@@ -49,7 +49,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo del sub-árbol izquierdo o derecho
      * @return verdadero si el elemento fue insertado, falso en caso contrario
      */
-    protected boolean insertar(T elemento, Nodo<T> nodo) {
+    private boolean insertar(T elemento, Nodo<T> nodo) {
         boolean insertado = false;
 
         if (nodo != null) {
@@ -99,7 +99,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde buscar el elemento a eliminar
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
-    protected boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
+    private boolean eliminar(T elemento, Nodo<T> nodo, Nodo<T> padre) {
         boolean eliminado = false;
 
         if (nodo != null) {
@@ -165,7 +165,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde buscar el elemento
      * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
-    protected boolean pertenece(T elemento, Nodo<T> nodo) {
+    private boolean pertenece(T elemento, Nodo<T> nodo) {
         boolean existe = false;
 
         if (nodo != null) {
@@ -200,7 +200,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde buscar el elemento máximo
      * @return el elemento máximo
      */
-    protected T maximo(Nodo<T> nodo) {
+    private T maximo(Nodo<T> nodo) {
         Nodo<T> derecho = nodo, maximo = null;
 
         while (derecho != null) {
@@ -226,7 +226,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde buscar el elemento mínimo
      * @return el elemento mínimo
      */
-    protected T minimo(Nodo<T> nodo) {
+    private T minimo(Nodo<T> nodo) {
         Nodo<T> izquierdo = nodo, minimo = null;
 
         while (izquierdo != null) {
@@ -272,7 +272,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde listar los elementos
      * @param lista la lista de elementos
      */
-    protected void listar(Nodo<T> nodo, Lista<T> lista) {
+    private void listar(Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> izquierdo, derecho;
             izquierdo = nodo.getIzquierdo();
@@ -308,7 +308,7 @@ public class ArbolBB<T extends Comparable<T>> {
      * @param nodo el nodo desde donde listar los elementos
      * @param lista la lista de elementos
      */
-    protected void listarRango(T minimo, T maximo, Nodo<T> nodo, Lista<T> lista) {
+    private void listarRango(T minimo, T maximo, Nodo<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             Nodo<T> izquierdo, derecho;
             T elemento;
@@ -331,6 +331,7 @@ public class ArbolBB<T extends Comparable<T>> {
      *
      * @return la copia del árbol
      */
+    @Override
     public ArbolBB<T> clone() {
         ArbolBB<T> clon = new ArbolBB<T>();
         Lista<T> lista = listar();
@@ -357,6 +358,9 @@ public class ArbolBB<T extends Comparable<T>> {
         return clon;
     }
 
+    /**
+     * Devuelve la representación en forma de cadena del árbol.
+     */
     @Override
     public String toString() {
         return listar().toString();

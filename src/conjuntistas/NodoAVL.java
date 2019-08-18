@@ -29,7 +29,7 @@ public class NodoAVL<E> {
     private int altura;
 
     /**
-     * Constructor sin elemento ni enlaces.
+     * Constructor vacío.
      */
     public NodoAVL() {
         this(null, null, null, -1);
@@ -141,5 +141,4 @@ public class NodoAVL<E> {
     public void setAltura(int altura) {
         this.altura = altura;
     }
-
 }
