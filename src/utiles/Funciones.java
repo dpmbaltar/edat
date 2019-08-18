@@ -296,6 +296,26 @@ public class Funciones {
      * @return verdadero si es una letra, falso en caso contrario
      */
     public static boolean esLetra(char caracter) {
-        return (65 <= caracter && caracter <= 90) || (97 <= caracter && caracter <= 122);
+        return esLetraMayus(caracter) || esLetraMinus(caracter);
+    }
+
+    /**
+     * Devuelve verdadero si un caracter es una letra mayúscula, falso en caso contrario.
+     *
+     * @param caracter el caracter
+     * @return verdadero si es una letra mayúscula, falso en caso contrario
+     */
+    public static boolean esLetraMayus(char caracter) {
+        return 65 <= caracter && caracter <= 90;
+    }
+
+    /**
+     * Devuelve verdadero si un caracter es una letra minúscula, falso en caso contrario.
+     *
+     * @param caracter el caracter
+     * @return verdadero si es una letra minúscula, falso en caso contrario
+     */
+    public static boolean esLetraMinus(char caracter) {
+        return 97 <= caracter && caracter <= 122;
     }
 }

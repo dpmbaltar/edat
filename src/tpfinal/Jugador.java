@@ -179,8 +179,6 @@ public class Jugador implements Comparable<Jugador> {
             try {
                 nuevoJugador.dinero = Integer.valueOf(partes[3].trim());
             } catch (NumberFormatException e) {}
-
-            //TODO: Agregar ítems
         }
 
         return nuevoJugador;
@@ -193,7 +191,16 @@ public class Jugador implements Comparable<Jugador> {
         cadena.append(tipo).append("; ");
         cadena.append(categoria).append("; ");
         cadena.append(dinero).append("; ");
-        //TODO: Agregar ítems a Jugador#toString()
+        cadena.append("<");
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            cadena.append(items.recuperar(i));
+            if (i < items.longitud()) {
+                cadena.append(",");
+            }
+        }
+
+        cadena.append(">");
 
         return cadena.toString();
     }

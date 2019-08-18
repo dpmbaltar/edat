@@ -1,11 +1,18 @@
 package tpfinal;
 
+import conjuntistas.TablaHashAbierto;
+import utiles.Funciones;
+
 /**
  * Item.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class Item implements Comparable<Item> {
+
+    private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
+    private static char letra = 'A';
+    private static int secuencia = 0;
 
     /**
      * Código alfanumérico del ítem (único).
@@ -33,15 +40,20 @@ public class Item implements Comparable<Item> {
     private int defensa;
 
     /**
-     * Indica si el ítem es único.
+     * Cantidad disponible del ítem.
      */
-    private boolean unico;
+    private int cantidad;
+
+    /**
+     * Disponibilidad del ítem (1 indica que es único).
+     */
+    private int disponibilidad;
 
     /**
      * Constructor vacío.
      */
     public Item() {
-        this(null, null, 0, 0, 0, false);
+        this(null, null, 0, 0, 0, 0);
     }
 
     /**
@@ -52,15 +64,16 @@ public class Item implements Comparable<Item> {
      * @param precio el precio
      * @param ataque los puntos de ataque
      * @param defensa los puntos de defensa
-     * @param unico si el ítem es único
+     * @param disponibilidad cantidad disponible
      */
-    public Item(String codigo, String nombre, int precio, int ataque, int defensa, boolean unico) {
+    public Item(String codigo, String nombre, int precio, int ataque, int defensa, int disponibilidad) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
         this.ataque = ataque;
         this.defensa = defensa;
-        this.unico = unico;
+        this.cantidad = disponibilidad;
+        this.disponibilidad = disponibilidad;
     }
 
     public String getCodigo() {
@@ -103,13 +116,49 @@ public class Item implements Comparable<Item> {
         this.defensa = defensa;
     }
 
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public int getDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setDisponibilidad(int disponibilidad) {
+        this.disponibilidad = disponibilidad;
+    }
+
     /**
      * Devuelve verdadero si el ítem es único.
      *
      * @return verdadero si el ítem es único, falso en caso contrario
      */
     public boolean esUnico() {
-        return unico;
+        return disponibilidad == 1;
+    }
+
+    public static String generarCodigo() {
+        String codigo = null;
+
+        if (Funciones.esLetraMayus(letra)) {
+            do {
+                codigo = String.format("%s%03d", letra, secuencia);
+                secuencia++;
+
+                if (secuencia > 99) {
+                    secuencia = 0;
+                    letra++;
+                }
+            } while (codigos.pertenece(codigo) && Funciones.esLetraMayus(letra));
+        }
+
+        codigos.insertar(codigo);
+
+        return codigo;
     }
 
     /**
@@ -138,7 +187,7 @@ public class Item implements Comparable<Item> {
             } catch (NumberFormatException e) {}
 
             if (nuevoItem.codigo.charAt(0) == 'U') {
-                nuevoItem.unico = true;
+                nuevoItem.disponibilidad = 1;
             }
         }
 
@@ -147,7 +196,14 @@ public class Item implements Comparable<Item> {
 
     @Override
     public String toString() {
-        return codigo;// + ";" + nombre + ";" + precio + ";" + ataque + ";" + defensa;
+        StringBuilder cadena = new StringBuilder();
+        cadena.append(codigo).append("; ");
+        cadena.append(nombre).append("; ");
+        cadena.append(precio).append("; ");
+        cadena.append(ataque).append("; ");
+        cadena.append(defensa).append("; ");
+
+        return cadena.toString();
     }
 
     @Override
