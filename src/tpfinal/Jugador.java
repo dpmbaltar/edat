@@ -172,7 +172,7 @@ public class Jugador implements Comparable<Jugador> {
         if (partes.length >= 5) {
             nuevoJugador = new Jugador();
             nuevoJugador.usuario = partes[0].trim();
-            nuevoJugador.tipo = TipoJugador.valueOf(partes[1].trim().toLowerCase());
+            nuevoJugador.tipo = TipoJugador.valueOf(partes[1].trim().toUpperCase());
             nuevoJugador.categoria = Categoria.valueOf(partes[2].trim().toUpperCase());
 
             try {

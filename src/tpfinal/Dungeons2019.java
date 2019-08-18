@@ -78,6 +78,7 @@ public class Dungeons2019 {
     public static final int MOSTRAR_RANKING_JUGADORES = 51;
     public static final int MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD = 52;
     public static final int MOSTRAR_SISTEMA = 53;
+    public static final int SALIR = 0;
 
     /**
      * Equipos registrados.
@@ -155,14 +156,18 @@ public class Dungeons2019 {
                 case FILTRAR_JUGADORES:
                     filtrarJugadores();
                     break;
+                case PONER_JUGADOR_EN_ESPERA:
+                    ponerJugadorEnEspera();
+                    break;
+                case SALIR:
+                    System.out.println("Juego finalizado.");
+                    break;
             }
 
-            if (accion > 0) {
+            if (accion != SALIR) {
                 pausar();
             }
-        } while (accion > 0);
-
-        System.out.println("~{ FIN }~");
+        } while (accion != SALIR);
     }
 
     /**
@@ -239,37 +244,72 @@ public class Dungeons2019 {
         }
 
         System.out.println(menu);
+        accion = TecladoIn.readLineInt();
 
-        do {
+        while (!esAccionValida(accion)) {
+            System.out.println("La opción no es válida");
             accion = TecladoIn.readLineInt();
-            if (accion < 0 || accion > 20) {
-                System.out.println("La opción no es válida");
-            }
-        } while (accion < 0 || accion > 20);
+        }
 
         return accion;
     }
 
+    /**
+     * Verifica si una acción es válida.
+     *
+     * @param accion la acción a verificar
+     * @return verdadero si la acción es válida, falso en caso contrario
+     */
+    private static boolean esAccionValida(int accion) {
+        boolean valida = false;
+
+        switch (accion) {
+            case AGREGAR_JUGADOR:
+            case BORRAR_JUGADOR:
+            case MODIFICAR_JUGADOR:
+            case CONSULTAR_JUGADOR:
+            case FILTRAR_JUGADORES:
+            case PONER_JUGADOR_EN_ESPERA:
+            case AGREGAR_ITEM:
+            case BORRAR_ITEM:
+            case MODIFICAR_ITEM:
+            case CONSULTAR_ITEM:
+            case MOSTRAR_ITEMS_HASTA_PRECIO:
+            case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
+            case AGREGAR_LOCACION:
+            case BORRAR_LOCACION:
+            case MODIFICAR_LOCACION:
+            case MOSTRAR_LOCACIONES_ADYACENTES:
+            case MOSTRAR_CAMINO_MAS_CORTO:
+            case MOSTRAR_CAMINO_MAS_DIRECTO:
+            case MOSTRAR_CAMINO_HASTA_DISTANCIA:
+            case MOSTRAR_CAMINO_SIN_LOCACION:
+            case CONSULTAR_EQUIPO:
+            case CREAR_EQUIPO:
+            case INICIAR_BATALLA_ENTRE_EQUIPOS:
+            case MOSTRAR_RANKING_JUGADORES:
+            case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
+            case MOSTRAR_SISTEMA:
+            case SALIR:
+                valida = true;
+        }
+
+        return valida;
+    }
+
+    /**
+     * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
+     */
     private void pausar() {
         System.out.println("Presionar [Entrar] para volver al menú...");
         TecladoIn.readLine();
     }
 
     /**
-     * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
-     * Agrega un jugador.
+     * Agrega información al registro del juego.
      */
-    public void agregarJugador() {
-        TipoJugador tipo = leerTipo();
-        Jugador jugador = null;
-        String usuario = leerUsuario();
-        Categoria categoria = leerCategoria();
-        int dinero = TecladoIn.readLineInt();
-        //TODO: Leer tipo
-
-        //TODO: Registrar acción en registro.log
-        System.out.println(jugador.toString());
-        jugadores.put(usuario, jugador);
+    private void log(String info) {
+        //TODO: Registrar acciones en archivo .log
     }
 
     /**
@@ -335,12 +375,32 @@ public class Dungeons2019 {
 
     /**
      * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
-     * Borra un jugador.
+     * Agregar jugador.
+     */
+    public void agregarJugador() {
+        String usuario = leerUsuario();
+        TipoJugador tipo = leerTipo();
+        Categoria categoria = leerCategoria();
+        int dinero = TecladoIn.readLineInt();
+        Jugador jugador = null;
+
+        //TODO: Registrar acción en registro.log
+        System.out.println(jugador.toString());
+        jugadores.put(usuario, jugador);
+    }
+
+    /**
+     * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
+     * Borrar jugador.
      */
     public void borrarJugador() {
         //TODO: borrarJugador()
     }
 
+    /**
+     * A. ABM (Altas-Bajas-Modificaciones) de jugadores:
+     * Modificar jugador.
+     */
     public void modificarJugador() {
         //TODO: modificarJugador()
     }
@@ -407,5 +467,12 @@ public class Dungeons2019 {
         } else {
             System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
         }
+    }
+
+    /**
+     * D. Alta de un jugador en la cola de espera por un equipo
+     */
+    private void ponerJugadorEnEspera() {
+        //TODO: ponerJugadorEnEspera()
     }
 }
