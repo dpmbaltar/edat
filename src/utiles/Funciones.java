@@ -320,14 +320,14 @@ public class Funciones {
     }
 
     public static boolean esPalabra(String cadena) {
-        return esPalabra(cadena, Integer.MAX_VALUE);
+        return esPalabra(cadena, 1, Integer.MAX_VALUE);
     }
 
-    private static boolean esPalabra(String cadena, int longitudMax) {
+    private static boolean esPalabra(String cadena, int longMin, int longMax) {
         boolean esPalabra = false;
         int longitud = cadena != null ? cadena.length() : -1;
 
-        if (1 <= longitud && longitud <= longitudMax) {
+        if (longMin <= longitud && longitud <= longMax) {
             char primerCaracter = cadena.charAt(0);
 
             if (esLetra(primerCaracter)) {
@@ -349,49 +349,32 @@ public class Funciones {
      *
      * @param mensajeInfo el mensaje de información
      * @param mensajeError el mensaje de error
-     * @param longitudMax la longitud máxima aceptada
+     * @param longMin la longitud mínima aceptada
+     * @param longMax la longitud máxima aceptada
      * @return la frase leída
      */
-    public static String leerFrase(String mensajeInfo, String mensajeError, int longitudMax) {
+    public static String leerFrase(String mensajeInfo, String mensajeError, int longMin, int longMax) {
         System.out.print(mensajeInfo);
         String frase = TecladoIn.readLine();
 
-        while (frase.isEmpty() || frase.length() > longitudMax) {
-            System.out.println(mensajeError);
-            System.out.println("Debe ser una o más palabras alfanuméricas y longitud máxima " + longitudMax + ".");
-            System.out.print("Intente nuevamente: ");
+        while (frase.length() < longMin || longMax < frase.length()) { //TODO: Validar frase
+            System.out.print(mensajeError);
             frase = TecladoIn.readLine();
         }
 
         return frase;
     }
 
-    public static String leerPalabra(String mensajeInfo, String mensajeError, int longitudMax) {
+    public static String leerPalabra(String mensajeInfo, String mensajeError, int longMin, int longMax) {
         System.out.print(mensajeInfo);
         String usuario = TecladoIn.readLineWord();
 
-        while (!esPalabra(usuario, longitudMax)) {
-            System.out.println(mensajeError);
-            System.out.println("Debe ser una palabra alfanumérica y longitud máxima " + longitudMax + ".");
-            System.out.print("Intente nuevamente: ");
+        while (!esPalabra(usuario, longMin, longMax)) {
+            System.out.print(mensajeError);
             usuario = TecladoIn.readLineWord();
         }
 
         return usuario;
-    }
-
-    public static int leerEntero(String mensajeInfo, String mensajeError, int desde, int hasta) {
-        System.out.print(mensajeInfo);
-        int entero = TecladoIn.readLineInt();
-
-        while (entero < 0) {
-            System.out.println(mensajeError);
-            System.out.println(String.format("Debe ser un entero entre %d y %d.", desde, hasta));
-            System.out.print("Intente nuevamente: ");
-            entero = TecladoIn.readLineInt();
-        }
-
-        return entero;
     }
 
     public static int leerEnteroNegativo(String mensajeInfo, String mensajeError) {
@@ -400,5 +383,17 @@ public class Funciones {
 
     public static int leerEnteroPositivo(String mensajeInfo, String mensajeError) {
         return leerEntero(mensajeInfo, mensajeError, 0, Integer.MAX_VALUE);
+    }
+
+    public static int leerEntero(String mensajeInfo, String mensajeError, int desde, int hasta) {
+        System.out.print(mensajeInfo);
+        int entero = TecladoIn.readLineInt();
+
+        while (entero < desde || hasta < entero) {
+            System.out.print(mensajeError);
+            entero = TecladoIn.readLineInt();
+        }
+
+        return entero;
     }
 }

@@ -165,6 +165,8 @@ public class Dungeons2019 {
                     agregarItem();
                     break;
                 case BORRAR_ITEM:
+                    borrarItem();
+                    break;
                 case MODIFICAR_ITEM:
                 case CONSULTAR_ITEM:
                 case MOSTRAR_ITEMS_HASTA_PRECIO:
@@ -357,7 +359,8 @@ public class Dungeons2019 {
      * @return el usuario leído
      */
     private static String leerNombreUsuario() {
-        return Funciones.leerPalabra("Nombre de usuario: ", "El nombre de usuario ingresado no es válido.", 20);
+        return Funciones.leerPalabra("Nombre de usuario: ", "El nombre de usuario ingresado no es válido.\r\n"
+                + "Debe ser una palabra de 1 a 20 caracteres que inicie con letra.\r\nReintentar: ", 1, 20);
     }
 
     /**
@@ -372,7 +375,7 @@ public class Dungeons2019 {
         while (tipo == null) {
             System.out.println("El tipo de jugador ingresado no es válido.");
             System.out.println("Debe ser un entero según se indica: <0> Guerrero, <1> Defensor.");
-            System.out.print("Intente nuevamente: ");
+            System.out.print("Reintentar: ");
             tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
         }
 
@@ -391,7 +394,7 @@ public class Dungeons2019 {
         while (categoria == null) {
             System.out.println("La categoría ingresada no es válida.");
             System.out.println("Debe ser un entero según se indica: <0> Novato - <1> Aficionado - <2> Profesional.");
-            System.out.print("Intente nuevamente: ");
+            System.out.print("Reintentar: ");
             categoria = Categoria.desdeEntero(TecladoIn.readLineInt());
         }
 
@@ -399,27 +402,49 @@ public class Dungeons2019 {
     }
 
     private static int leerDinero() {
-        return Funciones.leerEnteroPositivo("Dinero: ", "La cantidad de dinero no es válida.");
+        return Funciones.leerEnteroPositivo("Dinero: ",
+                "El dinero ingresado no es válido.\r\nDebe ser un entero positivo o cero.\r\nReintentar: ");
+    }
+
+    private static String leerPrefijoUsuario() {
+        return Funciones.leerPalabra("Prefijo: ",
+                "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
+    }
+
+    private static String leerCodigoItem() {
+        return Funciones.leerPalabra("Código: ",
+                "El código ingresado no es válido.\r\nDebe ser una letra seguido de 3 dígitos.\r\nReintentar: ", 4, 4);
     }
 
     private static String leerNombreItem() {
-        return Funciones.leerFrase("Nombre: ", "El nombre del ítem no es válido.", 30);
+        return Funciones.leerFrase("Nombre: ",
+                "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
+                        + "\r\nReintentar: ",
+                2, 50);
     }
 
     private static int leerPrecio() {
-        return Funciones.leerEnteroPositivo("Precio: ", "El precio ingresado no es válido.");
+        return Funciones.leerEntero("Precio: ",
+                "El precio ingresado no es válido.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
     }
 
     private static int leerAtaque() {
-        return Funciones.leerEnteroPositivo("Puntos de ataque: ", "Los puntos de ataque ingresados no son válidos.");
+        return Funciones.leerEnteroPositivo("Puntos de ataque: ",
+                "Los puntos de ataque ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
     }
 
     private static int leerDefensa() {
-        return Funciones.leerEnteroPositivo("Puntos de defensa: ", "Los puntos de defensa ingresados no son válidos.");
+        return Funciones.leerEnteroPositivo("Puntos de defensa: ",
+                "Los puntos de defensa ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
     }
 
     private static int leerDisponibilidad() {
-        return Funciones.leerEnteroPositivo("Disponibilidad: ", "La disponibilidad ingresada no es válida.");
+        return Funciones.leerEntero("Disponibilidad: ",
+                "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
     }
 
     /**
@@ -515,7 +540,7 @@ public class Dungeons2019 {
             System.out.println("La opción ingresada no es válida.");
             System.out.println("Debe ser un entero según se indica:");
             System.out.println("<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar");
-            System.out.print("Intente nuevamente: ");
+            System.out.print("Reintentar: ");
             accion = TecladoIn.readLineInt();
         }
 
@@ -561,7 +586,7 @@ public class Dungeons2019 {
      */
     public void filtrarJugadores() {
         System.out.println("Filtrar jugadores...");
-        String prefijo = Funciones.leerPalabra("Prefijo: ", "El prefijo de usuario no es válido.", 20);
+        String prefijo = leerPrefijoUsuario();
         Set<String> claves = jugadores.keySet();
         String[] usuarios = claves.toArray(new String[claves.size()]);
         Lista<Jugador> filtrados = new Lista<>();
@@ -611,6 +636,25 @@ public class Dungeons2019 {
         item.setDisponibilidad(leerDisponibilidad());
         items.insertar(item);
         log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
+    }
+
+    /**
+     * B. ABM de ítems:
+     * Borrar ítem.
+     */
+    public void borrarItem() {
+        System.out.println("Borrar ítem...");
+        String codigo = leerCodigoItem().toUpperCase();
+        //TODO: Recuperar ítem a borrar
+        Item item = null;
+        //TODO: Borrar ítem por código
+        boolean borrado = true;//items.eliminarCodigo(codigo);
+
+        if (borrado) {
+            log(String.format("Se borró el ítem \"%s\"", codigo));
+        } else {
+            log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+        }
     }
 
     /**
