@@ -268,4 +268,34 @@ public class Funciones {
 
         return signo * subentero;
     }
+
+    /**
+     * Devuelve verdadero si un caracter es alfanumérico, falso en caso contrario.
+     *
+     * @param caracter el caracter
+     * @return verdadero si es alfanumérico, falso en caso contrario
+     */
+    public static boolean esAlfanumerico(char caracter) {
+        return esDigito(caracter) || esLetra(caracter);
+    }
+
+    /**
+     * Devuelve verdadero si un caracter es un dígito, falso en caso contrario.
+     *
+     * @param caracter el caracter
+     * @return verdadero si es un dígito, falso en caso contrario
+     */
+    public static boolean esDigito(char caracter) {
+        return 48 <= caracter && caracter <= 57;
+    }
+
+    /**
+     * Devuelve verdadero si un caracter es una letra, falso en caso contrario.
+     *
+     * @param caracter el caracter
+     * @return verdadero si es una letra, falso en caso contrario
+     */
+    public static boolean esLetra(char caracter) {
+        return (65 <= caracter && caracter <= 90) || (97 <= caracter && caracter <= 122);
+    }
 }

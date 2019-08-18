@@ -65,6 +65,7 @@ public class Jugador implements Comparable<Jugador> {
      * Constructor con nombre de usuario, categoría y equipo.
      *
      * @param usuario el nombre de usuario
+     * @param tipo el tipo de jugador
      * @param categoria la categoría
      * @param dinero el dinero inicial
      */
@@ -188,7 +189,7 @@ public class Jugador implements Comparable<Jugador> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();
-        cadena.append("J: ").append(usuario).append("; ");
+        cadena.append(usuario).append("; ");
         cadena.append(tipo).append("; ");
         cadena.append(categoria).append("; ");
         cadena.append(dinero).append("; ");

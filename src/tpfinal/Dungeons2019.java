@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
 import conjuntistas.ArbolAVL;
 import lineales.dinamicas.Lista;
+import utiles.Funciones;
 import utiles.TecladoIn;
 
 /**
@@ -159,8 +161,32 @@ public class Dungeons2019 {
                 case PONER_JUGADOR_EN_ESPERA:
                     ponerJugadorEnEspera();
                     break;
+                case AGREGAR_ITEM:
+                case BORRAR_ITEM:
+                case MODIFICAR_ITEM:
+                case CONSULTAR_ITEM:
+                case MOSTRAR_ITEMS_HASTA_PRECIO:
+                case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
+                case AGREGAR_LOCACION:
+                case BORRAR_LOCACION:
+                case MODIFICAR_LOCACION:
+                case MOSTRAR_LOCACIONES_ADYACENTES:
+                case MOSTRAR_CAMINO_MAS_CORTO:
+                case MOSTRAR_CAMINO_MAS_DIRECTO:
+                case MOSTRAR_CAMINO_HASTA_DISTANCIA:
+                case MOSTRAR_CAMINO_SIN_LOCACION:
+                case CONSULTAR_EQUIPO:
+                case CREAR_EQUIPO:
+                case INICIAR_BATALLA_ENTRE_EQUIPOS:
+                case MOSTRAR_RANKING_JUGADORES:
+                case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
+                    System.out.println("Sin implementar");
+                    break;
+                case MOSTRAR_SISTEMA:
+                    mostrarSistema();
+                    break;
                 case SALIR:
-                    System.out.println("Juego finalizado.");
+                    System.out.println("Fin");
                     break;
             }
 
@@ -219,6 +245,13 @@ public class Dungeons2019 {
     }
 
     /**
+     * Guarda el estado del juego a un archivo CSV.
+     */
+    public void guardar() {
+        //TODO: Guardar nuevo estado del juego
+    }
+
+    /**
      * Muestra el menú principal.
      */
     public int menu() {
@@ -243,11 +276,12 @@ public class Dungeons2019 {
             }
         }
 
-        System.out.println(menu);
+        System.out.print(menu);
+        System.out.print("Opción: ");
         accion = TecladoIn.readLineInt();
 
         while (!esAccionValida(accion)) {
-            System.out.println("La opción no es válida");
+            System.out.println("La opción ingresada no es válida");
             accion = TecladoIn.readLineInt();
         }
 
@@ -298,6 +332,33 @@ public class Dungeons2019 {
     }
 
     /**
+     * Verifica si un usuario es válido.
+     *
+     * @param usuario el usuario
+     * @return verdadero si el usuario es válido, falso en caso contrario
+     */
+    private static boolean esUsuarioValido(String usuario) {
+        boolean esValido = false;
+        int longitud = usuario != null ? usuario.length() : -1;
+
+        if (1 <= longitud && longitud <= 20) {
+            char primerCaracter = usuario.charAt(0);
+
+            if (Funciones.esLetra(primerCaracter)) {
+                int i = 1;
+
+                while (i < longitud && Funciones.esAlfanumerico(usuario.charAt(i))) {
+                    i++;
+                }
+
+                esValido = i == longitud;
+            }
+        }
+
+        return esValido;
+    }
+
+    /**
      * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
      */
     private void pausar() {
@@ -309,7 +370,8 @@ public class Dungeons2019 {
      * Agrega información al registro del juego.
      */
     private void log(String info) {
-        //TODO: Registrar acciones en archivo .log
+        System.out.println(info);
+        //TODO: Registrar acciones en archivo LOG
     }
 
     /**
@@ -318,39 +380,17 @@ public class Dungeons2019 {
      * @return el usuario leído
      */
     private String leerUsuario() {
-        String usuario;
+        System.out.print("Nombre de usuario: ");
+        String usuario = TecladoIn.readLineWord();
 
-        do {
-            System.out.println("Ingresar el nombre de usuario:");
+        while (!esUsuarioValido(usuario)) {
+            System.out.println("El nombre de usuario ingresado no es válido.");
+            System.out.println("Debe ser una cadena alfanumérica de 1 a 20 caracteres que inicie con una letra.");
+            System.out.print("Intente nuevamente: ");
             usuario = TecladoIn.readLineWord();
-
-            //TODO: Validar nombre de usuario
-            if (usuario.isEmpty()) {
-                System.out.println("El nombre de usuario ingresado no es válido");
-            }
-        } while (usuario.isEmpty());
+        }
 
         return usuario;
-    }
-
-    /**
-     * Lee una categoría.
-     *
-     * @return la categoría leída
-     */
-    private Categoria leerCategoria() {
-        Categoria categoria;
-
-        do {
-            System.out.println("Ingresar categoría (<0> Novato, <1> Aficionado, <2> Profesional):");
-            categoria = Categoria.desdeEntero(TecladoIn.readLineInt());
-
-            if (categoria == null) {
-                System.out.println("La categoría ingresada no es válida");
-            }
-        } while (categoria == null);
-
-        return categoria;
     }
 
     /**
@@ -359,18 +399,55 @@ public class Dungeons2019 {
      * @return el tipo de jugador leído
      */
     private TipoJugador leerTipo() {
-        TipoJugador tipo;
+        System.out.print("Tipo de jugador (<0> Guerrero - <1> Defensor): ");
+        TipoJugador tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
 
-        do {
-            System.out.println("Ingresar el tipo de jugador (<0> Guerrero, <1> Defensor):");
+        while (tipo == null) {
+            System.out.println("El tipo de jugador ingresado no es válido.");
+            System.out.println("Debe ser un entero según se indica: <0> Guerrero, <1> Defensor.");
+            System.out.print("Intente nuevamente: ");
             tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
-
-            if (tipo == null) {
-                System.out.println("El tipo de jugador ingresado no es válido");
-            }
-        } while (tipo == null);
+        }
 
         return tipo;
+    }
+
+    /**
+     * Lee una categoría.
+     *
+     * @return la categoría leída
+     */
+    private Categoria leerCategoria() {
+        System.out.print("Categoría (<0> Novato - <1> Aficionado - <2> Profesional): ");
+        Categoria categoria = Categoria.desdeEntero(TecladoIn.readLineInt());
+
+        while (categoria == null) {
+            System.out.println("La categoría ingresada no es válida.");
+            System.out.println("Debe ser un entero según se indica: <0> Novato - <1> Aficionado - <2> Profesional.");
+            System.out.print("Intente nuevamente: ");
+            categoria = Categoria.desdeEntero(TecladoIn.readLineInt());
+        }
+
+        return categoria;
+    }
+
+    /**
+     * Lee una cantidad positiva de dinero.
+     *
+     * @return el dinero leído
+     */
+    private int leerDinero() {
+        System.out.print("Dinero: ");
+        int dinero = TecladoIn.readLineInt();
+
+        while (dinero < 0) {
+            System.out.println("La cantidad de dinero no es válida.");
+            System.out.println("Debe ser un entero mayor o igual a cero.");
+            System.out.print("Intente nuevamente: ");
+            dinero = TecladoIn.readLineInt();
+        }
+
+        return dinero;
     }
 
     /**
@@ -378,15 +455,14 @@ public class Dungeons2019 {
      * Agregar jugador.
      */
     public void agregarJugador() {
-        String usuario = leerUsuario();
-        TipoJugador tipo = leerTipo();
-        Categoria categoria = leerCategoria();
-        int dinero = TecladoIn.readLineInt();
-        Jugador jugador = null;
-
-        //TODO: Registrar acción en registro.log
-        System.out.println(jugador.toString());
-        jugadores.put(usuario, jugador);
+        System.out.println("Agregar jugador...");
+        Jugador jugador = new Jugador();
+        jugador.setUsuario(leerUsuario());
+        jugador.setTipo(leerTipo());
+        jugador.setCategoria(leerCategoria());
+        jugador.setDinero(leerDinero());
+        jugadores.put(jugador.getUsuario(), jugador);
+        log(String.format("Se agregó el jugador \"%s\"", jugador.getUsuario()));
     }
 
     /**
@@ -394,7 +470,15 @@ public class Dungeons2019 {
      * Borrar jugador.
      */
     public void borrarJugador() {
-        //TODO: borrarJugador()
+        System.out.println("Borrar jugador...");
+        String usuario = leerUsuario();
+        Jugador jugador = jugadores.remove(usuario);
+
+        if (jugador == null) {
+            log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
+        } else {
+            log(String.format("Se borró el jugador \"%s\"", usuario));
+        }
     }
 
     /**
@@ -402,7 +486,65 @@ public class Dungeons2019 {
      * Modificar jugador.
      */
     public void modificarJugador() {
-        //TODO: modificarJugador()
+        System.out.println("Modificar jugador...");
+        String usuario = leerUsuario();
+
+        if (jugadores.containsKey(usuario)) {
+            Jugador jugador = jugadores.get(usuario);
+            int opcion = 0;
+
+            do {
+                opcion = leerAccionModificarJugador();
+
+                switch (opcion) {
+                    case 1:
+                        jugador.setUsuario(leerUsuario());
+                        jugadores.put(jugador.getUsuario(), jugador);
+                        jugadores.remove(usuario);
+                        log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuario,
+                                jugador.getUsuario()));
+                        usuario = jugador.getUsuario();
+                        break;
+                    case 2:
+                        jugador.setTipo(leerTipo());
+                        log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, jugador.getTipo()));
+                        break;
+                    case 3:
+                        jugador.setCategoria(leerCategoria());
+                        log(String.format("Se modificó la categoría del jugador \"%s\" a %s", usuario,
+                                jugador.getCategoria()));
+                        break;
+                    case 4:
+                        jugador.setDinero(leerDinero());
+                        log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
+                                jugador.getDinero()));
+                        break;
+                }
+            } while (opcion != 0);
+        } else {
+            log(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
+        }
+    }
+
+    /**
+     * Lee una opción para modificar jugador.
+     *
+     * @return la opción de modificación
+     */
+    private int leerAccionModificarJugador() {
+        System.out.print("Opción a modificar ");
+        System.out.print("(<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar): ");
+        int accion = TecladoIn.readLineInt();
+
+        while (accion < 0 || 4 < accion) {
+            System.out.println("La opción ingresada no es válida.");
+            System.out.println("Debe ser un entero según se indica:");
+            System.out.println("<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar");
+            System.out.print("Intente nuevamente: ");
+            accion = TecladoIn.readLineInt();
+        }
+
+        return accion;
     }
 
     /**
@@ -431,6 +573,7 @@ public class Dungeons2019 {
             }
 
             datos.append("\r\n");
+            //TODO: Mostrar ítems
             System.out.println(datos);
         } else {
             System.out.println(String.format("El jugador \"%s\" no existe", usuario));
@@ -448,21 +591,16 @@ public class Dungeons2019 {
         Lista<String> filtrados = new Lista<>();
 
         for (int i = 0; i < usuarios.length; i++) {
-            if (usuarios[i].startsWith(prefijo)) {
+            if (usuarios[i].regionMatches(true, 0, prefijo, 0, prefijo.length())) {
                 filtrados.insertar(usuarios[i], filtrados.longitud() + 1);
             }
         }
 
         if (filtrados.longitud() > 0) {
-            String usuario;
             System.out.println(String.format("Usuarios que comienzan con \"%s\":", prefijo));
 
             for (int i = 1; i <= filtrados.longitud(); i++) {
-                usuario = filtrados.recuperar(i);
-
-                if (usuario.startsWith(prefijo)) {
-                    System.out.println(i + ": " + usuario);
-                }
+                System.out.println(i + ": " + filtrados.recuperar(i));
             }
         } else {
             System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
@@ -472,7 +610,26 @@ public class Dungeons2019 {
     /**
      * D. Alta de un jugador en la cola de espera por un equipo
      */
-    private void ponerJugadorEnEspera() {
+    public void ponerJugadorEnEspera() {
         //TODO: ponerJugadorEnEspera()
+        System.out.println("Poner jugador en espera...");
+        String usuario = leerUsuario();
+
+        if (jugadores.containsKey(usuario)) {
+            esperando.offer(jugadores.get(usuario));
+        }
+    }
+
+    /**
+     * Muestra el estado del juego.
+     */
+    public void mostrarSistema() {
+        Iterator<Jugador> iterador = jugadores.values().iterator();
+
+        System.out.println("Jugadores:");
+
+        while (iterador.hasNext()) {
+            System.out.println(iterador.next());
+        }
     }
 }
