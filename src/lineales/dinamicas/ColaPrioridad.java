@@ -57,8 +57,11 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
                         nodoNuevo.getElementos().poner(elemento);
                         nodoAnterior.setEnlace(nodoNuevo);
                     }
+
+                    nodo = null;
                 } else {
                     nodo.getElementos().poner(elemento);
+                    nodo = null;
                 }
             }
         }
@@ -118,12 +121,12 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
         ColaPrioridad<E, P> clon = new ColaPrioridad<>();
 
         if (inicio != null) {
-            clon.inicio = new NodoCP<>(inicio.getPrioridad(), inicio.getElementos());
+            clon.inicio = new NodoCP<>(inicio.getPrioridad(), inicio.getElementos().clone());
             NodoCP<E, P> nodoClon = clon.inicio;
             NodoCP<E, P> nodo = inicio.getEnlace();
 
             while (nodo != null) {
-                nodoClon.setEnlace(new NodoCP<>(nodo.getPrioridad(), nodo.getElementos()));
+                nodoClon.setEnlace(new NodoCP<>(nodo.getPrioridad(), nodo.getElementos().clone()));
                 nodoClon = nodoClon.getEnlace();
                 nodo = nodo.getEnlace();
             }
@@ -137,7 +140,7 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
      */
     @Override
     public String toString() {
-        StringBuilder cadena = new StringBuilder('[');
+        StringBuilder cadena = new StringBuilder("[");
         NodoCP<E, P> nodo = inicio;
 
         while (nodo != null) {
