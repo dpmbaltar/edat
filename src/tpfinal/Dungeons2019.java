@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import conjuntistas.ArbolAVL;
 import lineales.dinamicas.Lista;
 import utiles.Funciones;
 import utiles.TecladoIn;
@@ -100,7 +99,7 @@ public class Dungeons2019 {
     /**
      * Ítems disponibles en el juego.
      */
-    private ArbolAVL<Item> items; //TODO: El AVL debe aceptar ítems con precios iguales
+    private ItemsAVL items; //TODO: El AVL debe aceptar ítems con precios iguales
 
     /**
      * El mapa del juego.
@@ -129,7 +128,7 @@ public class Dungeons2019 {
     public Dungeons2019() {
         equipos = new HashMap<>();
         jugadores = new HashMap<>();
-        items = new ArbolAVL<>();
+        items = new ItemsAVL();
         mapa = new Mapa();
     }
 
@@ -168,7 +167,11 @@ public class Dungeons2019 {
                     borrarItem();
                     break;
                 case MODIFICAR_ITEM:
+                    borrarItem();
+                    break;
                 case CONSULTAR_ITEM:
+                    consultarItem();
+                    break;
                 case MOSTRAR_ITEMS_HASTA_PRECIO:
                 case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
                 case AGREGAR_LOCACION:
@@ -645,15 +648,39 @@ public class Dungeons2019 {
     public void borrarItem() {
         System.out.println("Borrar ítem...");
         String codigo = leerCodigoItem().toUpperCase();
-        //TODO: Recuperar ítem a borrar
-        Item item = null;
-        //TODO: Borrar ítem por código
-        boolean borrado = true;//items.eliminarCodigo(codigo);
-
+        Item item = items.obtener(codigo);
+        boolean borrado = items.eliminar(item);
+        //TODO: Borrar de los jugadores
         if (borrado) {
             log(String.format("Se borró el ítem \"%s\"", codigo));
         } else {
             log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+        }
+    }
+
+    /**
+     * H. Consultas sobre items:
+     * Dado un código de ítem, mostrar sus atributos.
+     */
+    public void consultarItem() {
+        System.out.println("Consultar ítem...");
+        String codigo = leerCodigoItem().toUpperCase();
+        Item item = items.obtener(codigo);
+
+        if (item != null) {
+            StringBuilder datos = new StringBuilder();
+            datos.append("Código:         ").append(item.getCodigo()).append("\r\n");
+            datos.append("Nombre:         ").append(item.getNombre()).append("\r\n");
+            datos.append("Precio:         ").append(item.getPrecio()).append("\r\n");
+            datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
+            datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
+            datos.append("Disponibilidad: ").append(item.getCantidad()).append(" de ");
+            datos.append(item.getDisponibilidad()).append("\r\n");
+
+            System.out.println(datos);
+            log(String.format("Se consultó el ítem \"%s\"", codigo));
+        } else {
+            log(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
         }
     }
 
@@ -667,6 +694,14 @@ public class Dungeons2019 {
 
         while (iterador.hasNext()) {
             System.out.println(iterador.next());
+        }
+
+        System.out.println("Ítems:");
+
+        Lista<Item> items = this.items.listar();
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            System.out.println(items.recuperar(i));
         }
     }
 }

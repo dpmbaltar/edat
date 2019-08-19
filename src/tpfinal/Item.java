@@ -92,7 +92,7 @@ public class Item implements Comparable<Item> {
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
+    public int getPrecio() {
         return precio;
     }
 
@@ -100,7 +100,7 @@ public class Item implements Comparable<Item> {
         this.precio = precio;
     }
 
-    public double getAtaque() {
+    public int getAtaque() {
         return ataque;
     }
 
@@ -108,7 +108,7 @@ public class Item implements Comparable<Item> {
         this.ataque = ataque;
     }
 
-    public double getDefensa() {
+    public int getDefensa() {
         return defensa;
     }
 
@@ -183,15 +183,17 @@ public class Item implements Comparable<Item> {
                 nuevoItem.precio = Integer.valueOf(partes[2].trim());
                 nuevoItem.ataque = Integer.valueOf(partes[3].trim());
                 nuevoItem.defensa = Integer.valueOf(partes[4].trim());
-                //TODO: Manejar la disponibilidad del ítem
+                nuevoItem.disponibilidad = Integer.valueOf(partes[5].trim());
+                nuevoItem.cantidad = nuevoItem.disponibilidad;
             } catch (NumberFormatException e) {}
-
-            if (nuevoItem.codigo.charAt(0) == 'U') {
-                nuevoItem.disponibilidad = 1;
-            }
         }
 
         return nuevoItem;
+    }
+
+    @Override
+    public boolean equals(Object otro) {
+        return codigo.equalsIgnoreCase(((Item) otro).getCodigo());
     }
 
     @Override
