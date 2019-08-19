@@ -29,6 +29,7 @@ public class Prueba {
             exito(new pruebas.lineales.dinamicas.PruebaPila());
             exito(new pruebas.lineales.estaticas.PruebaCola());
             exito(new pruebas.lineales.dinamicas.PruebaCola());
+            exito(new pruebas.lineales.dinamicas.PruebaColaPrioridad());
             exito(new pruebas.lineales.dinamicas.PruebaLista());
             exito(new pruebas.jerarquicas.PruebaArbolBinario());
             exito(new pruebas.jerarquicas.PruebaArbolGenerico());
