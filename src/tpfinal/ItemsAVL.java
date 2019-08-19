@@ -29,21 +29,21 @@ public class ItemsAVL extends ArbolAVL<Item> {
     }
 
     /**
-     * Busca el nodo del elemento dado a partir del nodo raíz.
+     * Busca el nodo del código de ítem dado a partir del nodo raíz.
      *
-     * @param elemento el elemento a buscar
-     * @return el nodo si el elemento fue encontrado, nulo en caso contrario
+     * @param elemento el código a buscar
+     * @return el nodo si el ítem fue encontrado, nulo en caso contrario
      */
     private NodoAVL<Item> buscarNodo(String codigo) {
         return buscarNodo(codigo, raiz);
     }
 
     /**
-     * Busca el nodo del elemento dado a partir de un nodo en particular.
+     * Busca el nodo del código de ítem dado a partir de un nodo en particular.
      *
-     * @param elemento el elemento a buscar
-     * @param nodo el nodo desde donde buscar el elemento
-     * @return el nodo si el elemento fue encontrado, nulo en caso contrario
+     * @param elemento el código a buscar
+     * @param nodo el nodo desde donde buscar el ítem
+     * @return el nodo si el ítem fue encontrado, nulo en caso contrario
      */
     private NodoAVL<Item> buscarNodo(String codigo, NodoAVL<Item> nodo) {
         NodoAVL<Item> buscado = null;

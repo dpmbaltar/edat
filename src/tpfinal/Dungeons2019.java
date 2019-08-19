@@ -175,11 +175,19 @@ public class Dungeons2019 {
                 case MOSTRAR_ITEMS_HASTA_PRECIO:
                 case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
                 case AGREGAR_LOCACION:
+                    agregarLocacion();
+                    break;
                 case BORRAR_LOCACION:
                 case MODIFICAR_LOCACION:
+                    break;
                 case MOSTRAR_LOCACIONES_ADYACENTES:
+                    mostrarLocacionesAdyacentes();
+                    break;
                 case MOSTRAR_CAMINO_MAS_CORTO:
+                    break;
                 case MOSTRAR_CAMINO_MAS_DIRECTO:
+                    mostrarCaminoMasDirecto();
+                    break;
                 case MOSTRAR_CAMINO_HASTA_DISTANCIA:
                 case MOSTRAR_CAMINO_SIN_LOCACION:
                 case CONSULTAR_EQUIPO:
@@ -234,10 +242,9 @@ public class Dungeons2019 {
                         String[] partes = linea.substring(2).split(";");
 
                         if (partes.length >= 3) {
-                            mapa.insertarArco(partes[0].trim(), partes[1].trim(), 1);
-                            //TODO: Implementar y usar grafo etiquetado
                             try {
                                 int etiqueta = Integer.valueOf(partes[2].trim());
+                                mapa.insertarArco(partes[0].trim(), partes[1].trim(), etiqueta);
                             } catch (NumberFormatException e) {}
                         }
                         break;
@@ -420,7 +427,7 @@ public class Dungeons2019 {
     }
 
     private static String leerNombreItem() {
-        return Funciones.leerFrase("Nombre: ",
+        return Funciones.leerFrase("Nombre del ítem: ",
                 "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
                         + "\r\nReintentar: ",
                 2, 50);
@@ -448,6 +455,18 @@ public class Dungeons2019 {
         return Funciones.leerEntero("Disponibilidad: ",
                 "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
                 1, Integer.MAX_VALUE);
+    }
+
+    private static String leerLocacion() {
+        return Funciones.leerFrase("Nombre de locación: ",
+                "El nombre de locación ingresado no es válido."
+                        + "\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres.\r\nReintentar: ",
+                2, 50);
+    }
+
+    private static int leerDistancia() {
+        return Funciones.leerEnteroPositivo("Distancia: ",
+                "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
     }
 
     /**
@@ -650,7 +669,7 @@ public class Dungeons2019 {
         String codigo = leerCodigoItem().toUpperCase();
         Item item = items.obtener(codigo);
         boolean borrado = items.eliminar(item);
-        //TODO: Borrar de los jugadores
+        //TODO: Borrar ítem de los jugadores
         if (borrado) {
             log(String.format("Se borró el ítem \"%s\"", codigo));
         } else {
@@ -685,6 +704,64 @@ public class Dungeons2019 {
     }
 
     /**
+     * C. ABM de locaciones
+     * Agregar locación.
+     */
+    public void agregarLocacion() {
+        System.out.println("Agregar locación...");
+        String locacion = leerLocacion();
+        mapa.insertarVertice(locacion);
+        log(String.format("Se agregó la locación \"%s\"", locacion));
+    }
+
+    /**
+     * J. Consultas sobre locaciones:
+     * Dado un nombre de locación, mostrar todas las locaciones a las que puede moverse un equipo después de ganar una
+     * batalla en dicha locación.
+     */
+    public void mostrarLocacionesAdyacentes() {
+        System.out.println("Mostrar locaciones adyacentes...");
+        String locacion = leerLocacion();
+        Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
+
+        if (!adyacentes.esVacia()) {
+            for (int i = 1; i <= adyacentes.longitud(); i++) {
+                System.out.println(i + ": " + adyacentes.recuperar(i));
+            }
+
+            log(String.format("Se consultaron las locaciones adyacentes a \"%s\"", locacion));
+        } else {
+            log(String.format("Se consultó las locaciones adyacentes de una locación inexistente \"%s\"", locacion));
+        }
+    }
+
+    /**
+     * J. Consultas sobre locaciones:
+     * Dados dos nombres de locaciones A y B:
+     * ii. Obtener el camino que llegue de A a B pasando por la mínima cantidad de locaciones.
+     */
+    public void mostrarCaminoMasDirecto() {
+        System.out.println("Mostrar camino más directo entre locaciones...");
+        System.out.print("Origen - ");
+        String locacion1 = leerLocacion();
+        System.out.print("Destino - ");
+        String locacion2 = leerLocacion();
+        Lista<String> caminoMasDirecto = mapa.caminoMasCorto(locacion1, locacion2);
+
+        if (!caminoMasDirecto.esVacia()) {
+            for (int i = 1; i <= caminoMasDirecto.longitud(); i++) {
+                System.out.println(i + ": " + caminoMasDirecto.recuperar(i));
+            }
+
+            log(String.format("Se consultó el camino más directo entre \"%s\" y \"%s\"", locacion1, locacion2));
+        } else {
+            log(String.format(
+                    "Se consultó el camino más directo entre \"%s\" y \"%s\" siendo al menos una inexistente",
+                    locacion1, locacion2));
+        }
+    }
+
+    /**
      * Muestra el estado del juego.
      */
     public void mostrarSistema() {
@@ -703,5 +780,8 @@ public class Dungeons2019 {
         for (int i = 1; i <= items.longitud(); i++) {
             System.out.println(items.recuperar(i));
         }
+
+        System.out.println("Mapa:");
+        System.out.println(mapa);
     }
 }
