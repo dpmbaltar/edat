@@ -5,17 +5,19 @@ import lineales.dinamicas.Lista;
 import utiles.Valor;
 
 /**
- * Implementación de Grafo no dirigido para elementos de tipo T.
+ * Implementación de Grafo etiquetado no dirigido para elementos de tipo T y etiqueta E.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ *
  * @param <T> el tipo de los elementos
+ * @param <E> el tipo de las etiquetas
  */
-public class Grafo<T> {
+public class Grafo<T, E extends Comparable<E>> {
 
     /**
      * El vértice de inicio del grafo.
      */
-    private NodoVertice<T> inicio;
+    private NodoVertice<T, E> inicio;
 
     /**
      * Crea un grafo vacío.
@@ -33,10 +35,10 @@ public class Grafo<T> {
      */
     public boolean insertarVertice(T elemento) {
         boolean insertado = false;
-        NodoVertice<T> vertice = buscarVertice(elemento);
+        NodoVertice<T, E> vertice = buscarVertice(elemento);
 
         if (vertice == null) {
-            inicio = new NodoVertice<T>(elemento, inicio);
+            inicio = new NodoVertice<T, E>(elemento, inicio);
             insertado = true;
         }
 
@@ -50,8 +52,8 @@ public class Grafo<T> {
      * @param destino el elemento destino
      * @return el adyacente buscado, nulo si no fue encontrado
      */
-    private NodoAdyacente<T> buscarAdyacente(NodoVertice<T> vertice, T destino) {
-        NodoAdyacente<T> adyacente = null;
+    private NodoAdyacente<T, E> buscarAdyacente(NodoVertice<T, E> vertice, T destino) {
+        NodoAdyacente<T, E> adyacente = null;
 
         if (vertice != null) {
             adyacente = vertice.getPrimerAdyacente();
@@ -70,8 +72,8 @@ public class Grafo<T> {
      * @param elemento el elemento a buscar
      * @return el vértice buscado, nulo si no fue encontrado
      */
-    private NodoVertice<T> buscarVertice(T elemento) {
-        NodoVertice<T> vertice = inicio;
+    private NodoVertice<T, E> buscarVertice(T elemento) {
+        NodoVertice<T, E> vertice = inicio;
 
         while (vertice != null && !vertice.getElemento().equals(elemento)) {
             vertice = vertice.getSiguienteVertice();
@@ -90,8 +92,8 @@ public class Grafo<T> {
      */
     public boolean eliminarVertice(T elemento) {
         boolean eliminado = false;
-        NodoVertice<T> verticeAnterior = null, verticeActual = inicio;
-        NodoAdyacente<T> adyacente;
+        NodoVertice<T, E> verticeAnterior = null, verticeActual = inicio;
+        NodoAdyacente<T, E> adyacente;
 
         // No se utiliza buscarVertice() ya que también se necesita el nodo vértice anterior
         while (verticeActual != null && !verticeActual.getElemento().equals(elemento)) {
@@ -128,11 +130,11 @@ public class Grafo<T> {
      * @param destino el elemento destino
      * @return el adyacente eliminado, nulo si no fue encontrado
      */
-    private NodoAdyacente<T> eliminarAdyacente(NodoVertice<T> vertice, T destino) {
-        NodoAdyacente<T> adyacenteActual = null;
+    private NodoAdyacente<T, E> eliminarAdyacente(NodoVertice<T, E> vertice, T destino) {
+        NodoAdyacente<T, E> adyacenteActual = null;
 
         if (vertice != null) {
-            NodoAdyacente<T> adyacenteAnterior = null;
+            NodoAdyacente<T, E> adyacenteAnterior = null;
             adyacenteActual = vertice.getPrimerAdyacente();
 
             while (adyacenteActual != null && !adyacenteActual.getVertice().getElemento().equals(destino)) {
@@ -159,21 +161,22 @@ public class Grafo<T> {
      *
      * @param origen el elemento origen
      * @param destino el elemento destino
+     * @param etiqueta la etiqueta
      * @return verdadero si el arco fue insertado, falso en caso contrario
      */
-    public boolean insertarArco(T origen, T destino) {
+    public boolean insertarArco(T origen, T destino, E etiqueta) {
         boolean insertado = false;
-        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+        NodoVertice<T, E> verticeOrigen = buscarVertice(origen);
 
         if (verticeOrigen != null) {
-            NodoVertice<T> verticeDestino = buscarVertice(destino);
+            NodoVertice<T, E> verticeDestino = buscarVertice(destino);
 
             if (verticeDestino != null) {
-                NodoAdyacente<T> adyacenteOrigen, adyacenteDestino;
-                adyacenteOrigen = new NodoAdyacente<T>(verticeDestino, verticeOrigen.getPrimerAdyacente());
-                verticeOrigen.setPrimerAdyacente(adyacenteOrigen);
-                adyacenteDestino = new NodoAdyacente<T>(verticeOrigen, verticeDestino.getPrimerAdyacente());
-                verticeDestino.setPrimerAdyacente(adyacenteDestino);
+                NodoAdyacente<T, E> adyOrigen, adyDestino;
+                adyOrigen = new NodoAdyacente<T, E>(verticeDestino, verticeOrigen.getPrimerAdyacente(), etiqueta);
+                verticeOrigen.setPrimerAdyacente(adyOrigen);
+                adyDestino = new NodoAdyacente<T, E>(verticeOrigen, verticeDestino.getPrimerAdyacente(), etiqueta);
+                verticeDestino.setPrimerAdyacente(adyDestino);
                 insertado = true;
             }
         }
@@ -203,10 +206,10 @@ public class Grafo<T> {
      */
     private boolean eliminarArco(T origen, T destino, boolean reciproco) {
         boolean eliminado = false;
-        NodoVertice<T> verticeOrigen = buscarVertice(origen);
+        NodoVertice<T, E> verticeOrigen = buscarVertice(origen);
 
         if (verticeOrigen != null) {
-            NodoAdyacente<T> adyacenteEliminado = eliminarAdyacente(verticeOrigen, destino);
+            NodoAdyacente<T, E> adyacenteEliminado = eliminarAdyacente(verticeOrigen, destino);
 
             if (reciproco && adyacenteEliminado != null) {
                 adyacenteEliminado = eliminarAdyacente(adyacenteEliminado.getVertice(), origen);
@@ -250,8 +253,8 @@ public class Grafo<T> {
      */
     public boolean existeCamino(T origen, T destino) {
         boolean existe = false;
-        NodoVertice<T> verticeOrigen = buscarVertice(origen);
-        NodoVertice<T> verticeDestino = buscarVertice(destino);
+        NodoVertice<T, E> verticeOrigen = buscarVertice(origen);
+        NodoVertice<T, E> verticeDestino = buscarVertice(destino);
 
         if (verticeOrigen != null && verticeDestino != null) {
             existe = existeCaminoDesde(verticeOrigen, destino, new Lista<T>());
@@ -268,7 +271,7 @@ public class Grafo<T> {
      * @param visitados lista de vértices visitados
      * @return verdadero si existe un camino del vértice actual a destino, falso en caso contrario
      */
-    private boolean existeCaminoDesde(NodoVertice<T> vertice, T destino, Lista<T> visitados) {
+    private boolean existeCaminoDesde(NodoVertice<T, E> vertice, T destino, Lista<T> visitados) {
         boolean existe = false;
 
         if (vertice != null) {
@@ -276,7 +279,7 @@ public class Grafo<T> {
                 existe = true;
             } else {
                 visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
-                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+                NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
 
                 while (adyacente != null && !existe) {
                     if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
@@ -311,18 +314,18 @@ public class Grafo<T> {
      */
     public Lista<T> caminoMasCorto(T origen, T destino) {
         Lista<T> camino = new Lista<>();
-        NodoVertice<T> vertice = buscarVertice(origen);
+        NodoVertice<T, E> vertice = buscarVertice(origen);
 
         if (vertice != null) {
             boolean finalizar = false;
             T elementoAdy;
-            NodoVertice<T> predecesor;
-            NodoAdyacente<T> adyacente;
-            Cola<NodoVertice<T>> colaVertices = new Cola<>();
-            Lista<NodoVertice<T>> visitados = new Lista<>();
+            NodoVertice<T, E> predecesor;
+            NodoAdyacente<T, E> adyacente;
+            Cola<NodoVertice<T, E>> colaVertices = new Cola<>();
+            Lista<NodoVertice<T, E>> visitados = new Lista<>();
 
             // Visitar el origen primero y guardarlo como predecesor
-            predecesor = new NodoVertice<T>(vertice.getElemento());
+            predecesor = new NodoVertice<T, E>(vertice.getElemento());
             visitados.insertar(predecesor, 1);
             colaVertices.poner(vertice);
 
@@ -330,7 +333,7 @@ public class Grafo<T> {
             while (!colaVertices.esVacia() && !finalizar) {
                 vertice = colaVertices.obtenerFrente();
                 colaVertices.sacar();
-                //TODO: Se agregó NodoVertice<T>.equals() para localizar vértices por elemento. ¿Buscar alternativa?
+                //TODO: Se agregó NodoVertice<T, E>.equals() para localizar vértices por elemento. ¿Buscar alternativa?
                 predecesor = visitados.recuperar(visitados.localizar(vertice));
                 adyacente = vertice.getPrimerAdyacente();
 
@@ -339,7 +342,7 @@ public class Grafo<T> {
                     elementoAdy = adyacente.getVertice().getElemento();
 
                     if (visitados.localizar(adyacente.getVertice()) < 0) {
-                        visitados.insertar(new NodoVertice<T>(elementoAdy, predecesor), visitados.longitud() + 1);
+                        visitados.insertar(new NodoVertice<T, E>(elementoAdy, predecesor), visitados.longitud() + 1);
                         colaVertices.poner(adyacente.getVertice());
 
                         // Finalizar si el destino fue encontrado
@@ -383,7 +386,7 @@ public class Grafo<T> {
     @Deprecated
     public Lista<T> caminoMasCorto2(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
-        NodoVertice<T> vertice = buscarVertice(origen);
+        NodoVertice<T, E> vertice = buscarVertice(origen);
 
         if (vertice != null) {
             caminoMasCortoDesde(vertice, destino, new Lista<>(), camino, new Valor<Integer>(Integer.MAX_VALUE));
@@ -408,7 +411,7 @@ public class Grafo<T> {
      */
     @Deprecated
     private void caminoMasCortoDesde(
-            NodoVertice<T> vertice,
+            NodoVertice<T, E> vertice,
             T destino,
             Lista<T> camino,
             Valor<Lista<T>> caminoMin,
@@ -427,7 +430,7 @@ public class Grafo<T> {
                 }
             } else {
                 // Destino no encontrado; buscar en los adyacentes
-                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+                NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
 
                 while (adyacente != null) {
                     if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
@@ -454,7 +457,7 @@ public class Grafo<T> {
      */
     public Lista<T> caminoMasLargo(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
-        NodoVertice<T> vertice = buscarVertice(origen);
+        NodoVertice<T, E> vertice = buscarVertice(origen);
 
         if (vertice != null) {
             caminoMasLargoDesde(vertice, destino, new Lista<>(), camino, new Valor<Integer>(-1));
@@ -475,7 +478,7 @@ public class Grafo<T> {
      * @param maximaLongitud la longitud del camino máximo encontrado
      */
     private void caminoMasLargoDesde(
-            NodoVertice<T> vertice,
+            NodoVertice<T, E> vertice,
             T destino,
             Lista<T> camino,
             Valor<Lista<T>> caminoMax,
@@ -493,7 +496,7 @@ public class Grafo<T> {
                 }
             } else {
                 // Destino no encontrado; buscar en los adyacentes
-                NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+                NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
 
                 while (adyacente != null) {
                     if (camino.localizar(adyacente.getVertice().getElemento()) < 0) {
@@ -515,7 +518,7 @@ public class Grafo<T> {
      */
     public Lista<T> listarEnProfundidad() {
         Lista<T> visitados = new Lista<>();
-        NodoVertice<T> vertice = inicio;
+        NodoVertice<T, E> vertice = inicio;
 
         while (vertice != null) {
             if (visitados.localizar(vertice.getElemento()) < 0) {
@@ -534,10 +537,10 @@ public class Grafo<T> {
      * @param vertice el vértice de origen
      * @param visitados los vértices visitados
      */
-    private void listarEnProfundidadDesde(NodoVertice<T> vertice, Lista<T> visitados) {
+    private void listarEnProfundidadDesde(NodoVertice<T, E> vertice, Lista<T> visitados) {
         if (vertice != null) {
             visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
-            NodoAdyacente<T> adyacente = vertice.getPrimerAdyacente();
+            NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
 
             while (adyacente != null) {
                 if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
@@ -556,7 +559,7 @@ public class Grafo<T> {
      */
     public Lista<T> listarEnAnchura() {
         Lista<T> visitados = new Lista<>();
-        NodoVertice<T> vertice = inicio;
+        NodoVertice<T, E> vertice = inicio;
 
         while (vertice != null) {
             if (visitados.localizar(vertice.getElemento()) < 0) {
@@ -569,11 +572,11 @@ public class Grafo<T> {
         return visitados;
     }
 
-    private void listarEnAnchuraDesde(NodoVertice<T> vertice, Lista<T> visitados) {
+    private void listarEnAnchuraDesde(NodoVertice<T, E> vertice, Lista<T> visitados) {
         if (vertice != null) {
-            NodoVertice<T> verticeFrente;
-            NodoAdyacente<T> adyacente;
-            Cola<NodoVertice<T>> colaVertices = new Cola<>();
+            NodoVertice<T, E> verticeFrente;
+            NodoAdyacente<T, E> adyacente;
+            Cola<NodoVertice<T, E>> colaVertices = new Cola<>();
             colaVertices.poner(vertice);
 
             while (!colaVertices.esVacia()) {
@@ -608,56 +611,48 @@ public class Grafo<T> {
      *
      * @return un grafo equivalente al original
      */
-    public Grafo<T> clonar() {
-        Grafo<T> clon = new Grafo<>();
-        NodoVertice<T> inicioClon = null;
-        NodoVertice<T> vertice = inicio;
-        NodoAdyacente<T> adyacente = null;
-        Lista<String> listaArcos = new Lista<>();
-        String arco;
-        int posArco;
+    @Override
+    public Grafo<T, E> clone() {
+        Grafo<T, E> clon = new Grafo<>();
 
-        while (vertice != null) {
-            inicioClon = new NodoVertice<T>(vertice.getElemento(), inicioClon);
-            adyacente = vertice.getPrimerAdyacente();
+        if (inicio != null) {
+            clon.inicio = new NodoVertice<>(inicio.getElemento());
+            NodoVertice<T, E> verticeClon = clon.inicio;
+            NodoVertice<T, E> vertice = inicio.getSiguienteVertice();
 
-            while (adyacente != null) {
-                arco = adyacente.getVertice().getElemento().toString()+"-"+vertice.getElemento().toString();
-                posArco = listaArcos.localizar(arco);
+            // Copiar vertices
+            while (vertice != null) {
+                verticeClon.setSiguienteVertice(new NodoVertice<>(vertice.getElemento()));
+                verticeClon = verticeClon.getSiguienteVertice();
+                vertice = vertice.getSiguienteVertice();
+            }
 
-                if (posArco >= 0) {
-                    listaArcos.eliminar(posArco);
-                } else {
-                    arco = vertice.getElemento().toString()+"-"+adyacente.getVertice().getElemento().toString();
-                    listaArcos.insertar(arco, listaArcos.longitud() + 1);
-                    inicioClon.setPrimerAdyacente(
-                            new NodoAdyacente<T>(adyacente.getVertice(), inicioClon.getPrimerAdyacente()));
+            vertice = inicio;
+            verticeClon = clon.inicio;
+
+            // Copiar arcos
+            while (vertice != null) {
+                NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
+
+                if (adyacente != null) {
+                    NodoVertice<T, E> vertDestino = adyacente.getVertice();
+                    NodoVertice<T, E> vertDestinoClon = clon.buscarVertice(vertDestino.getElemento());
+                    NodoAdyacente<T, E> adyClon = new NodoAdyacente<>(vertDestinoClon, adyacente.getEtiqueta());
+                    verticeClon.setPrimerAdyacente(adyClon);
+                    adyacente = adyacente.getSiguienteAdyacente();
+
+                    while (adyacente != null) {
+                        vertDestino = adyacente.getVertice();
+                        vertDestinoClon = clon.buscarVertice(vertDestino.getElemento());
+                        adyClon.setSiguienteAdyacente(new NodoAdyacente<>(vertDestinoClon, adyacente.getEtiqueta()));
+                        adyClon = adyClon.getSiguienteAdyacente();
+                        adyacente = adyacente.getSiguienteAdyacente();
+                    }
                 }
 
-                adyacente = adyacente.getSiguienteAdyacente();
+                vertice = vertice.getSiguienteVertice();
+                verticeClon = verticeClon.getSiguienteVertice();
             }
-
-            vertice = vertice.getSiguienteVertice();
-        }
-
-        // Insertar todos los vértices
-        vertice = inicioClon;
-        while (vertice != null) {
-            clon.insertarVertice(vertice.getElemento());
-            vertice = vertice.getSiguienteVertice();
-        }
-
-        // Insertar todos los arcos
-        vertice = inicioClon;
-        while (vertice != null) {
-            adyacente = vertice.getPrimerAdyacente();
-            while (adyacente != null) {
-                //FIXME: La estructura interna de arcos queda distinta en algunos casos, pero aparentemente equivalente
-                clon.insertarArco(vertice.getElemento(), adyacente.getVertice().getElemento());
-                adyacente = adyacente.getSiguienteAdyacente();
-            }
-
-            vertice = vertice.getSiguienteVertice();
         }
 
         return clon;
@@ -670,39 +665,16 @@ public class Grafo<T> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();
-        NodoVertice<T> vertice = inicio;
-        NodoAdyacente<T> adyacente;
+        NodoVertice<T, E> vertice = inicio;
+        NodoAdyacente<T, E> adyacente;
 
-        // Se forma la cadena recorriendo en forma inversa los vértices y sus adyacentes, para visualizar en el mismo
-        // orden en el que los elementos fueron agregados
-        /*while (vertice != null) {
-            cadena.insert(0, "]");
-            adyacente = vertice.getPrimerAdyacente();
-
-            while (adyacente != null) {
-                cadena.insert(0, String.valueOf(adyacente.getVertice().getElemento()));
-                adyacente = adyacente.getSiguienteAdyacente();
-                if (adyacente != null) {
-                    cadena.insert(0, ", ");
-                }
-            }
-
-            cadena.insert(0, ": [");
-            cadena.insert(0, String.valueOf(vertice.getElemento()));
-            vertice = vertice.getSiguienteVertice();
-
-            if (vertice != null) {
-                cadena.insert(0, "\r\n");
-            }
-        }*/
-
-        // Se forma la cadena recorriendo en orden inverso del cual fueron agregados los vértices de acorde al modelo
         while (vertice != null) {
             cadena.append(String.valueOf(vertice.getElemento())).append(": [");
             adyacente = vertice.getPrimerAdyacente();
 
             while (adyacente != null) {
-                cadena.append(String.valueOf(adyacente.getVertice().getElemento()));
+                cadena.append(String.valueOf(adyacente.getVertice().getElemento())).append(':');
+                cadena.append(String.valueOf(adyacente.getEtiqueta()));
                 adyacente = adyacente.getSiguienteAdyacente();
                 if (adyacente != null) {
                     cadena.append(", ");

@@ -25,14 +25,14 @@ public class PruebaGrafo {
         pruebaListarEnProfundidad();
         pruebaListarEnAnchura();
         pruebaEsVacio();
-        pruebaClonar();
+        pruebaClone();
     }
 
     /**
      * Prueba {@link grafos.dinamicas.Grafo#insertarVertice(Object)}.
      */
     public void pruebaInsertarVertice() {
-        Grafo<String> grafo = new Grafo<>();
+        Grafo<String, Integer> grafo = new Grafo<>();
         assert grafo.insertarVertice("A") : "Debe insertar A";
         assert !grafo.insertarVertice("A") : "No debe insertar A (ya existe)";
         assert grafo.insertarVertice("B") : "Debe insertar B";
@@ -42,18 +42,18 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#insertarArco(Object, Object)}.
      */
     public void pruebaInsertarArco() {
-        Grafo<String> grafo = new Grafo<>();
+        Grafo<String, Integer> grafo = new Grafo<>();
         grafo.insertarVertice("A");
         grafo.insertarVertice("B");
-        assert grafo.insertarArco("A", "B") : "Debe insertar arco de A a B";
-        assert !grafo.insertarArco("A", "C") : "No debe insertar arco de A a C (no existe C)";
+        assert grafo.insertarArco("A", "B", 1) : "Debe insertar arco de A a B";
+        assert !grafo.insertarArco("A", "C", 1) : "No debe insertar arco de A a C (no existe C)";
     }
 
     /**
      * Prueba {@link grafos.dinamicas.Grafo#eliminarVertice(Object)}.
      */
     public void pruebaEliminarVertice() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.eliminarVertice("A") : "Debe eliminar A";
         assert !grafo.eliminarVertice("A") : "No debe eliminar A (no existe)";
     }
@@ -62,7 +62,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#eliminarArco(Object, Object)}.
      */
     public void pruebaEliminarArco() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.eliminarArco("A", "B") : "Debe eliminar arco A-B";
         assert !grafo.eliminarArco("A", "B") : "No debe eliminar arco A-B (no existe)";
         assert !grafo.eliminarArco("B", "A") : "No debe eliminar arco B-A (no existe)";
@@ -72,7 +72,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#existeVertice(Object)}.
      */
     public void pruebaExisteVertice() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.existeVertice("A") : "Debe existir A";
         assert !grafo.existeVertice("K") : "No debe existir K";
     }
@@ -81,7 +81,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#existeArco(Object, Object)}.
      */
     public void pruebaExisteArco() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.existeArco("A", "B") : "Debe existir arco A-B";
         assert grafo.existeArco("B", "A") : "Debe existir arco B-A";
         assert grafo.existeArco("B", "C") : "Debe existir arco B-C";
@@ -93,7 +93,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#existeCamino(Object, Object)}.
      */
     public void pruebaExisteCamino() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         String[] vertices = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 
         // Deben existir caminos entre todos los vértices (grafo conectado)
@@ -117,7 +117,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#caminoMasCorto(Object, Object)}.
      */
     public void pruebaCaminoMasCorto() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.caminoMasCorto("A", "D").toString().equals("[A, B, C, D]")
                 : "Camino más corto A..D debe ser [A, B, C, D]";
         assert grafo.caminoMasCorto("A", "J").toString().equals("[A, E, I, J]")
@@ -132,7 +132,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#caminoMasLargo(Object, Object)}.
      */
     public void pruebaCaminoMasLargo() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.caminoMasLargo("A", "D").toString().equals("[A, B, F, E, I, J, H, C, G, D]")
                 : "Camino más largo A..D debe ser [A, B, F, E, I, J, H, C, G, D]";
         assert grafo.caminoMasLargo("A", "J").toString().equals("[A, E, I, F, B, C, D, G, H, J]")
@@ -147,7 +147,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#listarEnProfundidad()}.
      */
     public void pruebaListarEnProfundidad() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.listarEnProfundidad().toString().equals("[A, B, F, E, I, J, H, C, D, G]")
                 : "Debe listar: [A, B, F, E, I, J, H, C, D, G]";
     }
@@ -156,7 +156,7 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#listarEnAnchura()}.
      */
     public void pruebaListarEnAnchura() {
-        Grafo<String> grafo = crearGrafo();
+        Grafo<String, Integer> grafo = crearGrafo();
         assert grafo.listarEnAnchura().toString().equals("[B, E, F, A, C, I, D, G, H, J]")
                 : "Debe listar: [B, E, F, A, C, I, D, G, H, J]";
     }
@@ -165,22 +165,21 @@ public class PruebaGrafo {
      * Prueba {@link grafos.dinamicas.Grafo#esVacio()}.
      */
     public void pruebaEsVacio() {
-        Grafo<String> grafo = new Grafo<>();
+        Grafo<String, Integer> grafo = new Grafo<>();
         assert grafo.esVacio() : "Debe ser vacío";
         grafo = crearGrafo();
         assert !grafo.esVacio() : "No debe ser vacío";
     }
 
     /**
-     * Prueba {@link grafos.dinamicas.Grafo#clonar()}.
+     * Prueba {@link grafos.dinamicas.Grafo#clone()}.
      */
-    public void pruebaClonar() {
-        //TODO: La estructura interna de arcos queda distinta en algunos casos, pero el grafo parece ser equivalente
-        Grafo<String> grafo = crearGrafo();
-        //grafo.insertarArco("A", "A");
-        //grafo.insertarArco("H", "J");
-        //grafo.insertarArco("F", "F");
-        Grafo<String> clon = grafo.clonar();
+    public void pruebaClone() {
+        Grafo<String, Integer> grafo = crearGrafo();
+        grafo.insertarArco("A", "A", 1);
+        grafo.insertarArco("H", "J", 1);
+        grafo.insertarArco("F", "F", 1);
+        Grafo<String, Integer> clon = grafo.clone();
         assert grafo.toString().equals(clon.toString()) : "El grafo debe ser igual a su clon";
     }
 
@@ -199,8 +198,8 @@ public class PruebaGrafo {
      *
      * @return el grafo de prueba
      */
-    public static Grafo<String> crearGrafo() {
-        Grafo<String> grafo = new Grafo<>();
+    public static Grafo<String, Integer> crearGrafo() {
+        Grafo<String, Integer> grafo = new Grafo<>();
         grafo.insertarVertice("J");
         grafo.insertarVertice("I");
         grafo.insertarVertice("H");
@@ -211,21 +210,21 @@ public class PruebaGrafo {
         grafo.insertarVertice("C");
         grafo.insertarVertice("B");
         grafo.insertarVertice("A");
-        grafo.insertarArco("I", "J");
-        grafo.insertarArco("H", "J");
-        grafo.insertarArco("G", "H");
-        grafo.insertarArco("F", "I");
-        grafo.insertarArco("E", "I");
-        grafo.insertarArco("E", "F");
-        grafo.insertarArco("D", "G");
-        grafo.insertarArco("C", "H");
-        grafo.insertarArco("C", "G");
-        grafo.insertarArco("C", "D");
-        grafo.insertarArco("B", "C");
-        grafo.insertarArco("B", "F");
-        grafo.insertarArco("A", "F");
-        grafo.insertarArco("A", "E");
-        grafo.insertarArco("A", "B");
+        grafo.insertarArco("I", "J", 1);
+        grafo.insertarArco("H", "J", 1);
+        grafo.insertarArco("G", "H", 1);
+        grafo.insertarArco("F", "I", 1);
+        grafo.insertarArco("E", "I", 1);
+        grafo.insertarArco("E", "F", 1);
+        grafo.insertarArco("D", "G", 1);
+        grafo.insertarArco("C", "H", 1);
+        grafo.insertarArco("C", "G", 1);
+        grafo.insertarArco("C", "D", 1);
+        grafo.insertarArco("B", "C", 1);
+        grafo.insertarArco("B", "F", 1);
+        grafo.insertarArco("A", "F", 1);
+        grafo.insertarArco("A", "E", 1);
+        grafo.insertarArco("A", "B", 1);
 
         return grafo;
     }

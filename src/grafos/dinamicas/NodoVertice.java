@@ -4,9 +4,11 @@ package grafos.dinamicas;
  * Implementación de Nodo Vértice para un elemento de tipo T.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
+ *
  * @param <T> el tipo de elemento
+ * @param <E> el tipo de etiqueta
  */
-public class NodoVertice<T> {
+public class NodoVertice<T, E extends Comparable<E>> {
 
     /**
      * El elemento del vértice.
@@ -16,12 +18,12 @@ public class NodoVertice<T> {
     /**
      * El primer nodo adyacente.
      */
-    private NodoAdyacente<T> primerAdyacente;
+    private NodoAdyacente<T, E> primerAdyacente;
 
     /**
      * El siguiente nodo vértice.
      */
-    private NodoVertice<T> siguienteVertice;
+    private NodoVertice<T, E> siguienteVertice;
 
     /**
      * Constructor con el elemento del vértice.
@@ -38,7 +40,7 @@ public class NodoVertice<T> {
      * @param elemento el elemento
      * @param siguienteVertice el vértice siguiente
      */
-    public NodoVertice(T elemento, NodoVertice<T> siguienteVertice) {
+    public NodoVertice(T elemento, NodoVertice<T, E> siguienteVertice) {
         this.elemento = elemento;
         this.siguienteVertice = siguienteVertice;
     }
@@ -66,7 +68,7 @@ public class NodoVertice<T> {
      *
      * @return el nodo adyacente
      */
-    public NodoAdyacente<T> getPrimerAdyacente() {
+    public NodoAdyacente<T, E> getPrimerAdyacente() {
         return primerAdyacente;
     }
 
@@ -75,7 +77,7 @@ public class NodoVertice<T> {
      *
      * @param primerAdyacente el nodo adyacente
      */
-    public void setPrimerAdyacente(NodoAdyacente<T> primerAdyacente) {
+    public void setPrimerAdyacente(NodoAdyacente<T, E> primerAdyacente) {
         this.primerAdyacente = primerAdyacente;
     }
 
@@ -84,7 +86,7 @@ public class NodoVertice<T> {
      *
      * @return el nodo vértice
      */
-    public NodoVertice<T> getSiguienteVertice() {
+    public NodoVertice<T, E> getSiguienteVertice() {
         return siguienteVertice;
     }
 
@@ -93,7 +95,7 @@ public class NodoVertice<T> {
      *
      * @param siguienteVertice el nodo vértice
      */
-    public void setSiguienteVertice(NodoVertice<T> siguienteVertice) {
+    public void setSiguienteVertice(NodoVertice<T, E> siguienteVertice) {
         this.siguienteVertice = siguienteVertice;
     }
 
@@ -107,6 +109,6 @@ public class NodoVertice<T> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object o) {
-        return elemento.equals(((NodoVertice<T>) o).getElemento());
+        return elemento.equals(((NodoVertice<T, E>) o).getElemento());
     }
 }
