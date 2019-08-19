@@ -17,7 +17,7 @@ public class Grafo<T, E extends Comparable<E>> {
     /**
      * El vértice de inicio del grafo.
      */
-    private NodoVertice<T, E> inicio;
+    protected NodoVertice<T, E> inicio;
 
     /**
      * Crea un grafo vacío.
@@ -52,7 +52,7 @@ public class Grafo<T, E extends Comparable<E>> {
      * @param destino el elemento destino
      * @return el adyacente buscado, nulo si no fue encontrado
      */
-    private NodoAdyacente<T, E> buscarAdyacente(NodoVertice<T, E> vertice, T destino) {
+    protected NodoAdyacente<T, E> buscarAdyacente(NodoVertice<T, E> vertice, T destino) {
         NodoAdyacente<T, E> adyacente = null;
 
         if (vertice != null) {
@@ -72,7 +72,7 @@ public class Grafo<T, E extends Comparable<E>> {
      * @param elemento el elemento a buscar
      * @return el vértice buscado, nulo si no fue encontrado
      */
-    private NodoVertice<T, E> buscarVertice(T elemento) {
+    protected NodoVertice<T, E> buscarVertice(T elemento) {
         NodoVertice<T, E> vertice = inicio;
 
         while (vertice != null && !vertice.getElemento().equals(elemento)) {
