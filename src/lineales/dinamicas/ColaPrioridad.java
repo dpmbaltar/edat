@@ -6,6 +6,7 @@ package lineales.dinamicas;
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  *
  * @param <E> el tipo de los elementos
+ * @param <P> el tipo de prioridad
  */
 public class ColaPrioridad<E, P extends Comparable<P>> {
 
@@ -21,10 +22,48 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
         inicio = null;
     }
 
+    /**
+     * Inserta un elemento en la cola, y devuelve siempre verdadero (por ser impl. dinámica).
+     *
+     * @param elemento el elemento a insertar
+     * @param prioridad la prioridad
+     * @return siempre verdadero
+     */
     public boolean insertar(E elemento, P prioridad) {
-        boolean insertado = false;
-        //TODO: insertar()
-        return insertado;
+        if (inicio == null) {
+            inicio = new NodoCP<>(prioridad);
+            inicio.getElementos().poner(elemento);
+        } else {
+            NodoCP<E, P> nodo = inicio;
+            NodoCP<E, P> nodoAnterior = null;
+
+            while (nodo != null) {
+                if (nodo.getPrioridad().compareTo(prioridad) < 0) {
+                    nodoAnterior = nodo;
+                    nodo = nodo.getEnlace();
+
+                    // Insertar al final de la lista de prioridad
+                    if (nodo == null) {
+                        NodoCP<E, P> nodoNuevo = new NodoCP<>(prioridad, nodo);
+                        nodoNuevo.getElementos().poner(elemento);
+                        nodoAnterior.setEnlace(nodoNuevo);
+                    }
+                } else if (nodo.getPrioridad().compareTo(prioridad) > 0) {
+                    if (nodoAnterior == null) {
+                        inicio = new NodoCP<>(prioridad, inicio);
+                        inicio.getElementos().poner(elemento);
+                    } else {
+                        NodoCP<E, P> nodoNuevo = new NodoCP<>(prioridad, nodo);
+                        nodoNuevo.getElementos().poner(elemento);
+                        nodoAnterior.setEnlace(nodoNuevo);
+                    }
+                } else {
+                    nodo.getElementos().poner(elemento);
+                }
+            }
+        }
+
+        return true;
     }
 
     /**

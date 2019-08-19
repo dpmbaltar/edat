@@ -38,10 +38,20 @@ public class NodoCP<E, P extends Comparable<P>> {
      * Constructor con la prioridad y los elementos.
      *
      * @param prioridad la prioridad
-     * @param enlace el nodo enlace
+     * @param elementos los elementos
      */
     public NodoCP(P prioridad, Cola<E> elementos) {
         this(prioridad, elementos, null);
+    }
+
+    /**
+     * Constructor con la prioridad y el enlace.
+     *
+     * @param prioridad la prioridad
+     * @param enlace el nodo enlace
+     */
+    public NodoCP(P prioridad, NodoCP<E, P> enlace) {
+        this(prioridad, new Cola<>(), enlace);
     }
 
     /**
@@ -73,15 +83,6 @@ public class NodoCP<E, P extends Comparable<P>> {
      */
     public Cola<E> getElementos() {
         return elementos;
-    }
-
-    /**
-     * Establece la cola de elementos.
-     *
-     * @param elementos la cola de elementos
-     */
-    public void setElementos(Cola<E> elementos) {
-        this.elementos = elementos;
     }
 
     /**
