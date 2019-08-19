@@ -2,6 +2,6 @@ package tpfinal;
 
 import grafos.dinamicas.Grafo;
 
-public class Mapa extends Grafo<String> {
+public class Mapa extends Grafo<String, Integer> {
 
 }

@@ -234,7 +234,7 @@ public class Dungeons2019 {
                         String[] partes = linea.substring(2).split(";");
 
                         if (partes.length >= 3) {
-                            mapa.insertarArco(partes[0].trim(), partes[1].trim());
+                            mapa.insertarArco(partes[0].trim(), partes[1].trim(), 1);
                             //TODO: Implementar y usar grafo etiquetado
                             try {
                                 int etiqueta = Integer.valueOf(partes[2].trim());
