@@ -20,68 +20,69 @@ I: S003;Gran espada;3600;18;0;15
 I: S004;Espada en llamas;6400;28;0;15
 I: H001;Hacha de mano;600;8;0;20
 I: H002;Hacha de batalla;2400;30;0;15
-I: U001;Armadura de escamas de dragón;10000;0;65;1
-I: U002;Armadura de cota de malla élfica;9000;0;55;1
+I: U001;Armadura de escamas de dragon;10000;0;65;1
+I: U002;Armadura de cota de malla elfica;9000;0;55;1
 I: U003;Armadura de plata enana;9500;0;60;1
-I: U004;Escudo de atracción de misiles;7500;0;22;1
-I: U005;Escudo de protección contra hechizos;8500;0;32;1
+I: U004;Escudo de atraccion de misiles;7500;0;22;1
+I: U005;Escudo de proteccion contra hechizos;8500;0;32;1
 I: U006;Espada cazadora de dragones;15000;48;0;1
 I: U007;Espada del santo vengador;14000;40;0;1
 I: U008;Cuchilla de la suerte;13000;36;0;1
-I: U009;Hacha frenética;13500;34;0;1
+I: U009;Hacha frenetica;13500;34;0;1
 I: U010;Gran hacha viciosa;14500;44;0;1
 L: El Hielo Alto;;;;;
 L: Agujas de Hielo;;;;;
 L: Gran Caverna de Gusanos;;;;;
 L: Roca Cuervo;;;;;
-L: Montañas de las Espadas;;;;;
+L: Cumbre de las Espadas;;;;;
 L: El Bosque Alto;;;;;
 L: El Mar Congelado;;;;;
 L: El Bosque Congelado;;;;;
 L: La Llanura de Piedras;;;;;
 L: Las Tierras Torturadas;;;;;
 L: El Bosque Brumoso;;;;;
-L: El Páramo Alto;;;;;
+L: El Paramo Alto;;;;;
 L: Colinas de Serpiente;;;;;
 L: Los Campos de los Muertos;;;;;
 L: Las Colinas Lejanas;;;;;
 L: Lago de los Dragones;;;;;
 L: Los Cuernos de Tormenta;;;;;
-L: Bosque Arácnido;;;;;
+L: Bosque Aracnido;;;;;
 L: Bosque Fronterizo;;;;;
 L: Los Campos Verdes;;;;;
 C: El Hielo Alto;Agujas de Hielo;310;;;
 C: Agujas de Hielo;Gran Caverna de Gusanos;400;;;
 C: Gran Caverna de Gusanos;Roca Cuervo;220;;;
-C: Roca Cuervo;Montañas de las Espadas;510;;;
-C: Montañas de las Espadas;Gran Caverna de Gusanos;480;;;
+C: Roca Cuervo;Cumbre de las Espadas;510;;;
+C: Cumbre de las Espadas;Gran Caverna de Gusanos;480;;;
 C: El Hielo Alto;El Bosque Alto;560;;;
 C: Agujas de Hielo;El Bosque Alto;500;;;
-C: Montañas de las Espadas;El Bosque Alto;540;;;
+C: Cumbre de las Espadas;El Bosque Alto;540;;;
 C: El Hielo Alto;El Mar Congelado;470;;;
 C: El Bosque Alto;El Mar Congelado;240;;;
 C: El Hielo Alto;El Bosque Congelado;380;;;
 C: El Bosque Congelado;El Mar Congelado;810;;;
 C: El Hielo Alto;La Llanura de Piedras;380;;;
-C: El Bosque Congelado;La Llanura de Piedras;360;;;
+C: El Bosque Congelado;La Llanura de Piedras;570;;;
 C: El Bosque Congelado;Las Tierras Torturadas;360;;;
+C: La Llanura de Piedras;El Mar Congelado;200;;;
 C: La Llanura de Piedras;Las Tierras Torturadas;300;;;
-C: Montañas de las Espadas;El Bosque Brumoso;540;;;
+C: Cumbre de las Espadas;El Bosque Brumoso;540;;;
 C: El Bosque Alto;El Bosque Brumoso;620;;;
-C: El Bosque Brumoso;El Páramo Alto;100;;;
-C: El Páramo Alto;Colinas de Serpiente;40;;;
-C: El Páramo Alto;La Llanura de Piedras;780;;;
+C: El Bosque Brumoso;El Paramo Alto;100;;;
+C: El Paramo Alto;Colinas de Serpiente;40;;;
+C: El Paramo Alto;La Llanura de Piedras;780;;;
 C: Colinas de Serpiente;La Llanura de Piedras;780;;;
 C: Colinas de Serpiente;Los Campos de los Muertos;300;;;
-C: El Páramo Alto;Los Campos de los Muertos;300;;;
+C: El Paramo Alto;Los Campos de los Muertos;300;;;
 C: Los Campos de los Muertos;Las Colinas Lejanas;340;;;
 C: Colinas de Serpiente;Las Colinas Lejanas;350;;;
 C: Las Colinas Lejanas;Lago de los Dragones;290;;;
 C: Las Colinas Lejanas;Los Cuernos de Tormenta;110;;;
 C: Lago de los Dragones;Los Cuernos de Tormenta;250;;;
-C: Los Cuernos de Tormenta;Bosque Arácnido;330;;;
-C: Lago de los Dragones;Bosque Arácnido;520;;;
-C: Bosque Arácnido;Bosque Fronterizo;320;;;
+C: Los Cuernos de Tormenta;Bosque Aracnido;330;;;
+C: Lago de los Dragones;Bosque Aracnido;520;;;
+C: Bosque Aracnido;Bosque Fronterizo;320;;;
 C: Bosque Fronterizo;Las Tierras Torturadas;360;;;
 C: Bosque Fronterizo;La Llanura de Piedras;410;;;
 C: Los Campos de los Muertos;Los Campos Verdes;440;;;
