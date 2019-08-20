@@ -16,12 +16,12 @@ public class PruebaDiccionario {
         pruebaInsertar();
         pruebaEliminar();
         pruebaExisteClave();
-        //pruebaObtenerInformacion();
+        pruebaObtenerInformacion();
         pruebaVacio();
         pruebaVaciar();
-//        pruebaListarClaves();
-//        pruebaListarDatos();
-//        pruebaClonar();
+        pruebaListarClaves();
+        pruebaListarDatos();
+        pruebaClonar();
 //        pruebaDiccionario();
     }
 
@@ -29,9 +29,9 @@ public class PruebaDiccionario {
      * Prueba {@link conjuntistas.Diccionario#insertar(Comparable, Object)}.
      */
     public void pruebaInsertar() {
-        Diccionario<Integer, String> avl = new Diccionario<>();
-        assert avl.insertar(8, "Ocho") : "Debe insertar 8-Ocho al diccionario";
-        assert !avl.insertar(8, "Ocho") : "No debe insertar 8-Ocho al diccionario (ya existe)";
+        Diccionario<Integer, String> dicc = new Diccionario<>();
+        assert dicc.insertar(8, "Ocho") : "Debe insertar 8-Ocho al diccionario";
+        assert !dicc.insertar(8, "Ocho") : "No debe insertar 8-Ocho al diccionario (ya existe)";
     }
 
     /**
@@ -67,6 +67,16 @@ public class PruebaDiccionario {
     }
 
     /**
+     * Prueba {@link conjuntistas.Diccionario#obtenerInformacion(Comparable)}.
+     */
+    public void pruebaObtenerInformacion() {
+        Diccionario<Integer, String> dicc = crearDiccionario();
+        assert dicc.obtenerInformacion(8).equals("Ocho") : "Debe obtener \"Ocho\"";
+        assert dicc.obtenerInformacion(1).equals("Uno") : "Debe obtener \"Uno\"";
+        assert dicc.obtenerInformacion(16).equals("Dieciseis") : "Debe obtener \"Dieciseis\"";
+    }
+
+    /**
      * Prueba {@link conjuntistas.Diccionario#esVacio()}.
      */
     public void pruebaVacio() {
@@ -85,34 +95,36 @@ public class PruebaDiccionario {
         assert dicc.esVacio() : "El diccionario debe ser vacío";
     }
 
-//    /**
-//     * Prueba {@link conjuntistas.ArbolAVL#listar()}.
-//     */
-//    public void pruebaListarClaves() {
-//        ArbolAVL<Integer> avl = crearDiccionario();
-//        assert avl.listar().toString().equals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]")
-//              : "Debe listar la secuencia de enteros del 1 al 16";
-//    }
-//
-//    /**
-//     * Prueba {@link conjuntistas.ArbolAVL#listarRango(Comparable, Comparable)}.
-//     */
-//    public void pruebaListarDatos() {
-//        ArbolAVL<Integer> avl = crearDiccionario();
-//        assert avl.listarRango(8, 13).toString().equals("[8, 9, 10, 11, 12, 13]")
-//              : "Debe listar la secuencia de enteros del 8 al 13 (inclusive)";
-//    }
-//
-//    /**
-//     * Prueba {@link conjuntistas.ArbolAVL#clone()}.
-//     */
-//    public void pruebaClonar() {
-//        ArbolAVL<Integer> avl = crearDiccionario();
-//        ArbolAVL<Integer> clon = avl.clone();
-//        assert avl.toString().equals(clon.toString())
-//                : "Clon del árbol debe ser una copia exacta del original";
-//    }
-//
+    /**
+     * Prueba {@link conjuntistas.Diccionario#listarClaves()}.
+     */
+    public void pruebaListarClaves() {
+        Diccionario<Integer, String> dicc = crearDiccionario();
+        assert dicc.listarClaves().toString().equals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]")
+                : "Debe listar la secuencia de enteros del 1 al 16";
+    }
+
+    /**
+     * Prueba {@link conjuntistas.Diccionario#listarDatos()}.
+     */
+    public void pruebaListarDatos() {
+        Diccionario<Integer, String> dicc = crearDiccionario();
+        assert dicc.listarDatos().toString().equals(
+                "[Uno, Dos, Tres, Cuatro, Cinco, Seis, Siete, Ocho, Nueve, Diez, Once, Doce, Trece, Catorce, Quince, "
+                        + "Dieciseis]")
+                : "Debe listar la secuencia de cadenas \"Uno\", \"Dos\", ..., \"Dieciseis\"";
+    }
+
+    /**
+     * Prueba {@link conjuntistas.Diccionario#clone()}.
+     */
+    public void pruebaClonar() {
+        Diccionario<Integer, String> dicc = crearDiccionario();
+        Diccionario<Integer, String> clon = dicc.clone();
+        assert dicc.toString().equals(clon.toString())
+                : "Clon del diccionario debe ser una copia exacta del original";
+    }
+
 //    /**
 //     * Prueba {@link conjuntistas.ArbolAVL} (funcionamiento interno).
 //     */

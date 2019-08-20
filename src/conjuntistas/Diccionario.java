@@ -344,31 +344,57 @@ public class Diccionario<C extends Comparable<C>, E> {
      * caso contrario devuelve falso.
 
      *
-     * @param elemento el elemento a buscar
-     * @return verdadero si el elemento fue encontrado, falso en caso contrario
+     * @param clave la clave a buscar
+     * @return verdadero si la clave fue encontrada, falso en caso contrario
      */
-    public boolean existeClave(C elemento) {
-        return existeClave(elemento, raiz);
-    }
-
-    private boolean existeClave(C elemento, NodoAVLDicc<C, E> nodo) {
+    public boolean existeClave(C clave) {
         boolean existe = false;
 
-        if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+        if (raiz != null) {
+            NodoAVLDicc<C, E> nodo = raiz;
 
-            if (elemento.compareTo(nodo.getClave()) < 0) {
-                existe = existeClave(elemento, izquierdo);
-            } else if (elemento.compareTo(nodo.getClave()) > 0) {
-                existe = existeClave(elemento, derecho);
-            } else {
-                existe = true;
+            while (nodo != null) {
+                if (clave.compareTo(nodo.getClave()) < 0) {
+                    nodo = nodo.getIzquierdo();
+                } else if (clave.compareTo(nodo.getClave()) > 0) {
+                    nodo = nodo.getDerecho();
+                } else {
+                    existe = true;
+                    nodo = null;
+                }
             }
         }
 
         return existe;
+    }
+
+    /**
+     * Si en la estructura se encuentra almacenado un elemento con la clave recibida por parámetro, devuelve la
+     * información asociada a ella. Precondición: si no existe un elemento con esa clave no se puede asegurar el
+     * funcionamiento de la operación.
+     *
+     * @param clave la clave del elemento
+     * @return el elemento asociado a la clave, si existe, nulo en caso contrario
+     */
+    public E obtenerInformacion(C clave) {
+        E elemento = null;
+
+        if (raiz != null) {
+            NodoAVLDicc<C, E> nodo = raiz;
+
+            while (nodo != null) {
+                if (clave.compareTo(nodo.getClave()) < 0) {
+                    nodo = nodo.getIzquierdo();
+                } else if (clave.compareTo(nodo.getClave()) > 0) {
+                    nodo = nodo.getDerecho();
+                } else {
+                    elemento = nodo.getElemento();
+                    nodo = null;
+                }
+            }
+        }
+
+        return elemento;
     }
 
     /**
@@ -628,6 +654,21 @@ public class Diccionario<C extends Comparable<C>, E> {
 
     @Override
     public String toString() {
-        return listarClaves().toString();
+        Lista<C> claves = listarClaves();
+        Lista<E> elementos = listarDatos();
+        StringBuilder cadena = new StringBuilder("[");
+        int longitud = claves.longitud();
+
+        for (int i = 1; i <= longitud; i++) {
+            cadena.append(claves.recuperar(i)).append(':').append(elementos.recuperar(i));
+
+            if (i < longitud) {
+                cadena.append(", ");
+            }
+        }
+
+        cadena.append("]");
+
+        return cadena.toString();
     }
 }
