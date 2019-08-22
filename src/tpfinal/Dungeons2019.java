@@ -5,9 +5,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.PriorityQueue;
 import java.util.Set;
 
+import conjuntistas.Diccionario;
+import lineales.dinamicas.ColaPrioridad;
 import lineales.dinamicas.Lista;
 import utiles.Funciones;
 import utiles.TecladoIn;
@@ -89,12 +90,12 @@ public class Dungeons2019 {
     /**
      * Jugadores en el juego.
      */
-    private HashMap<String, Jugador> jugadores; //TODO: Debe ser una impl. de Tabla de Búsqueda con AVL
+    private Diccionario<String, Jugador> jugadores;
 
     /**
      * Jugadores en espera.
      */
-    private PriorityQueue<Jugador> esperando; //TODO: Debe ser una impl. de Cola de Prioridad
+    private ColaPrioridad<Jugador, Categoria> esperando;
 
     /**
      * Ítems disponibles en el juego.
@@ -127,7 +128,8 @@ public class Dungeons2019 {
      */
     public Dungeons2019() {
         equipos = new HashMap<>();
-        jugadores = new HashMap<>();
+        jugadores = new Diccionario<>();
+        esperando = new ColaPrioridad<>();
         items = new ItemsAVL();
         mapa = new Mapa();
     }
@@ -231,7 +233,7 @@ public class Dungeons2019 {
                     case 'J': // Cargar Jugador
                         Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
                         if (jugador != null) {
-                            jugadores.put(jugador.getUsuario().toUpperCase(), jugador);
+                            jugadores.insertar(jugador.getUsuario().toUpperCase(), jugador);
                             //TODO: Agregar items
                         }
                         break;
@@ -347,11 +349,17 @@ public class Dungeons2019 {
         return valida;
     }
 
+    private static void titulo(String titulo) {
+        System.out.println(
+                String.format("~~~{ %s }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", titulo)
+                        .substring(0, 77));
+    }
+
     /**
      * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
      */
     private static void pausar() {
-        System.out.println("Presionar [Entrar] para volver al menú...");
+        System.out.println("Presionar [Entrar] para continuar...");
         TecladoIn.readLine();
     }
 
@@ -480,7 +488,7 @@ public class Dungeons2019 {
         jugador.setTipo(leerTipo());
         jugador.setCategoria(leerCategoria());
         jugador.setDinero(leerDinero());
-        jugadores.put(jugador.getUsuario().toUpperCase(), jugador);
+        jugadores.insertar(jugador.getUsuario().toUpperCase(), jugador);
         log(String.format("Se agregó el jugador \"%s\"", jugador.getUsuario()));
     }
 
@@ -491,12 +499,11 @@ public class Dungeons2019 {
     public void borrarJugador() {
         System.out.println("Borrar jugador...");
         String usuario = leerNombreUsuario();
-        Jugador jugador = jugadores.remove(usuario.toUpperCase());
 
-        if (jugador == null) {
-            log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
+        if (jugadores.eliminar(usuario.toUpperCase())) {
+            log(String.format("Se borró el jugador \"%s\"", usuario));
         } else {
-            log(String.format("Se borró el jugador \"%s\"", jugador.getUsuario()));
+            log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
         }
     }
 
@@ -509,8 +516,8 @@ public class Dungeons2019 {
         String usuario = leerNombreUsuario();
         String usuarioClave = usuario.toUpperCase();
 
-        if (jugadores.containsKey(usuarioClave)) {
-            Jugador jugador = jugadores.get(usuarioClave);
+        if (jugadores.existeClave(usuarioClave)) {
+            Jugador jugador = jugadores.obtenerInformacion(usuarioClave);
             usuario = jugador.getUsuario();
             int opcion = 0;
 
@@ -519,12 +526,12 @@ public class Dungeons2019 {
 
                 switch (opcion) {
                     case 1:
-                        jugadores.remove(usuarioClave);
+                        jugadores.eliminar(usuarioClave);
                         String usuarioAnt = usuario;
                         usuario = leerNombreUsuario();
                         usuarioClave = usuario.toUpperCase();
                         jugador.setUsuario(usuario);
-                        jugadores.put(usuarioClave, jugador);
+                        jugadores.insertar(usuarioClave, jugador);
                         log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnt, usuario));
                         break;
                     case 2:
@@ -576,8 +583,8 @@ public class Dungeons2019 {
     public void consultarJugador() {
         String usuario = leerNombreUsuario().toUpperCase();
 
-        if (jugadores.containsKey(usuario)) {
-            Jugador jugador = jugadores.get(usuario);
+        if (jugadores.existeClave(usuario)) {
+            Jugador jugador = jugadores.obtenerInformacion(usuario);
             StringBuilder datos = new StringBuilder();
             datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
             datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
@@ -609,24 +616,28 @@ public class Dungeons2019 {
     public void filtrarJugadores() {
         System.out.println("Filtrar jugadores...");
         String prefijo = leerPrefijoUsuario();
-        Set<String> claves = jugadores.keySet();
-        String[] usuarios = claves.toArray(new String[claves.size()]);
-        Lista<Jugador> filtrados = new Lista<>();
+        Lista<Jugador> datos = jugadores.listarDatos();
 
-        for (int i = 0; i < usuarios.length; i++) {
-            if (usuarios[i].regionMatches(true, 0, prefijo, 0, prefijo.length())) {
-                filtrados.insertar(jugadores.get(usuarios[i]), filtrados.longitud() + 1);
-            }
-        }
-
-        if (filtrados.longitud() > 0) {
+        if (datos.longitud() > 0) {
             System.out.println(String.format("Usuarios que comienzan con \"%s\":", prefijo));
 
-            for (int i = 1; i <= filtrados.longitud(); i++) {
-                System.out.println(i + ": " + filtrados.recuperar(i).getUsuario());
+            String usuario;
+            int i = 1;
+
+            while (i <= datos.longitud()) {
+                usuario = datos.recuperar(i).getUsuario();
+
+                if (!usuario.regionMatches(true, 0, prefijo, 0, prefijo.length())) {
+                    datos.eliminar(i);
+                } else {
+                    System.out.println(i + ": " + usuario);
+                    i++;
+                }
             }
-        } else {
-            System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
+
+            if (datos.esVacia()) {
+                System.out.println(String.format("No existen jugadores cuyo nombre comience con \"%s\"", prefijo));
+            }
         }
     }
 
@@ -634,12 +645,15 @@ public class Dungeons2019 {
      * D. Alta de un jugador en la cola de espera por un equipo
      */
     public void ponerJugadorEnEspera() {
-        //TODO: ponerJugadorEnEspera()
         System.out.println("Poner jugador en espera...");
         String usuario = leerNombreUsuario();
 
-        if (jugadores.containsKey(usuario)) {
-            esperando.offer(jugadores.get(usuario));
+        if (jugadores.existeClave(usuario.toUpperCase())) {
+            Jugador jugador = jugadores.obtenerInformacion(usuario.toUpperCase());
+            esperando.insertar(jugador, jugador.getCategoria());
+            log(String.format("Se colocó el jugador \"%s\" en espera por un equipo", jugador.getUsuario()));
+        } else {
+            log(String.format("No existe el jugador \"%s\" para colocarlo en espera", usuario));
         }
     }
 
@@ -765,23 +779,62 @@ public class Dungeons2019 {
      * Muestra el estado del juego.
      */
     public void mostrarSistema() {
-        Iterator<Jugador> iterador = jugadores.values().iterator();
+        int opcion = 0;
 
-        System.out.println("Jugadores:");
+        do {
+            titulo("Mostrar sistema");
+            opcion = Funciones.leerEntero(
+                    "   <1> Jugadores\r\n"
+                            + "   <2> Ítems\r\n"
+                            + "   <3> Locaciones\r\n"
+                            + "   <4> Equipos\r\n"
+                            + "   <5> Jugadores esperando\r\n"
+                            + "   <0> Cancelar\r\n"
+                            + "Opción: ",
+                    "La opción no es válida.\r\n Reintentar: ", 0, 5);
 
-        while (iterador.hasNext()) {
-            System.out.println(iterador.next());
-        }
+            switch (opcion) {
+                case 1:
+                    System.out.println("Jugadores:");
+                    Lista<Jugador> listaJugadores = jugadores.listarDatos();
 
-        System.out.println("Ítems:");
+                    for (int i = 1; i <= listaJugadores.longitud(); i++) {
+                        System.out.println(listaJugadores.recuperar(i));
+                    }
 
-        Lista<Item> items = this.items.listar();
+                    pausar();
+                    break;
+                case 2:
+                    System.out.println("Ítems:");
+                    Lista<Item> items = this.items.listar();
 
-        for (int i = 1; i <= items.longitud(); i++) {
-            System.out.println(items.recuperar(i));
-        }
+                    for (int i = 1; i <= items.longitud(); i++) {
+                        System.out.println(items.recuperar(i));
+                    }
 
-        System.out.println("Mapa:");
-        System.out.println(mapa);
+                    pausar();
+                    break;
+                case 3:
+                    System.out.println("Mapa:");
+                    System.out.println(mapa);
+                    break;
+                case 4:
+                    System.out.println("Equipos:");
+                    Set<String> claves = equipos.keySet();
+                    Iterator<String> iterador = claves.iterator();
+
+                    while (iterador.hasNext()) {
+                        System.out.println(iterador.next());
+                    }
+
+                    pausar();
+                    break;
+                case 5:
+                    System.out.println("Jugadores en espera:");
+                    System.out.println(esperando);
+                    pausar();
+                    break;
+            }
+        } while(opcion > 0);
     }
 }
