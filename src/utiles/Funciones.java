@@ -385,6 +385,15 @@ public class Funciones {
         return leerEntero(mensajeInfo, mensajeError, 0, Integer.MAX_VALUE);
     }
 
+    /**
+     * Solicita al usuario un entero en el intervalo [desde; hasta].
+     *
+     * @param mensajeInfo el mensaje de información inicial
+     * @param mensajeError el mensaje de error/reintento
+     * @param desde el entero desde (inclusive)
+     * @param hasta el entero hasta (inclusive)
+     * @return el entero leído
+     */
     public static int leerEntero(String mensajeInfo, String mensajeError, int desde, int hasta) {
         System.out.print(mensajeInfo);
         int entero = TecladoIn.readLineInt();
