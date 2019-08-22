@@ -175,25 +175,41 @@ public class Dungeons2019 {
                     consultarItem();
                     break;
                 case MOSTRAR_ITEMS_HASTA_PRECIO:
+                    //TODO: mostrarItemsHastaPrecio()
+                    break;
                 case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
+                    //TODO: mostrarItemsDesdeHastaPrecio()
+                    break;
                 case AGREGAR_LOCACION:
                     agregarLocacion();
                     break;
                 case BORRAR_LOCACION:
+                    //TODO: borrarLocacion()
+                    break;
                 case MODIFICAR_LOCACION:
+                    //TODO: modificarLocacion()
                     break;
                 case MOSTRAR_LOCACIONES_ADYACENTES:
                     mostrarLocacionesAdyacentes();
                     break;
                 case MOSTRAR_CAMINO_MAS_CORTO:
+                    //TODO: mostrarCaminoMasCorto()
                     break;
                 case MOSTRAR_CAMINO_MAS_DIRECTO:
                     mostrarCaminoMasDirecto();
                     break;
                 case MOSTRAR_CAMINO_HASTA_DISTANCIA:
+                    //TODO: mostrarCaminoHastaDistancia()
+                    break;
                 case MOSTRAR_CAMINO_SIN_LOCACION:
+                    //TODO: mostrarCaminoSinLocacion()
+                    break;
                 case CONSULTAR_EQUIPO:
+                    //TODO: consultarEquipo();
+                    break;
                 case CREAR_EQUIPO:
+                    crearEquipo();
+                    break;
                 case INICIAR_BATALLA_ENTRE_EQUIPOS:
                 case MOSTRAR_RANKING_JUGADORES:
                 case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
@@ -773,6 +789,13 @@ public class Dungeons2019 {
                     "Se consultó el camino más directo entre \"%s\" y \"%s\" siendo al menos una inexistente",
                     locacion1, locacion2));
         }
+    }
+
+    /**
+     * E. Creación automática de un equipo.
+     */
+    public void crearEquipo() {
+        //TODO: crearEquipo()
     }
 
     /**

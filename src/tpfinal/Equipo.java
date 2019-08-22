@@ -17,7 +17,7 @@ public class Equipo {
     /**
      * La categoría del equipo (definida por el jugador con la categoría más baja).
      */
-    private String categoria;
+    private Categoria categoria;
 
     /**
      * Locación actual.
@@ -49,11 +49,11 @@ public class Equipo {
         this.nombre = nombre;
     }
 
-    public String getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(String categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
@@ -71,5 +71,19 @@ public class Equipo {
 
     public void setJugadores(Lista<Jugador> jugadores) {
         this.jugadores = jugadores;
+    }
+
+    public boolean agregarJugador(Jugador jugador) {
+        boolean agregado = false;
+
+        if (jugadores.longitud() < 3) {
+            jugadores.insertar(jugador, jugadores.longitud() + 1);
+
+            if (categoria.compareTo(jugador.getCategoria()) > 0) {
+                categoria = jugador.getCategoria();
+            }
+        }
+
+        return agregado;
     }
 }
