@@ -55,6 +55,11 @@ public class Jugador implements Comparable<Jugador> {
     private Lista<Item> items;
 
     /**
+     * Si el jugador espera por un equipo.
+     */
+    private boolean esperando;
+
+    /**
      * Constructor vacío.
      */
     public Jugador() {
@@ -79,6 +84,7 @@ public class Jugador implements Comparable<Jugador> {
         this.victorias = 0;
         this.equipo = null;
         this.items = new Lista<Item>();
+        this.esperando = false;
     }
 
     public String getUsuario() {
@@ -153,8 +159,16 @@ public class Jugador implements Comparable<Jugador> {
         this.items = items;
     }
 
+    public void setEsperando(boolean esperando) {
+        this.esperando = esperando;
+    }
+
     public boolean tieneEquipo() {
         return equipo != null;
+    }
+
+    public boolean esperaEquipo() {
+        return esperando;
     }
 
     /**
