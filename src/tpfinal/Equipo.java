@@ -79,7 +79,7 @@ public class Equipo {
         if (jugadores.longitud() < 3) {
             jugadores.insertar(jugador, jugadores.longitud() + 1);
 
-            if (categoria.compareTo(jugador.getCategoria()) > 0) {
+            if (categoria == null || categoria.compareTo(jugador.getCategoria()) > 0) {
                 categoria = jugador.getCategoria();
             }
         }
