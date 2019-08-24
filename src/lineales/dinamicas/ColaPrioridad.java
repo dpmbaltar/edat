@@ -16,10 +16,16 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
     private NodoCP<E, P> inicio;
 
     /**
+     * La cantidad de elementos en la cola.
+     */
+    private int longitud;
+
+    /**
      * Constructor vacío.
      */
     public ColaPrioridad() {
         inicio = null;
+        longitud = 0;
     }
 
     /**
@@ -66,6 +72,8 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
             }
         }
 
+        longitud++;
+
         return true;
     }
 
@@ -79,6 +87,7 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
 
         if (inicio != null) {
             eliminado = inicio.getElementos().sacar();
+            longitud--;
 
             if (inicio.getElementos().esVacia()) {
                 inicio = inicio.getEnlace();
@@ -98,6 +107,15 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
     }
 
     /**
+     * Devuelve la cantidad de elementos en la cola.
+     *
+     * @return la cantidad de elementos
+     */
+    public int longitud() {
+        return longitud;
+    }
+
+    /**
      * Verifica si la cola está vacía.
      *
      * @return verdadero si la cola está vacía, falso en caso contrario
@@ -111,6 +129,7 @@ public class ColaPrioridad<E, P extends Comparable<P>> {
      */
     public void vaciar() {
         inicio = null;
+        longitud = 0;
     }
 
     /**
