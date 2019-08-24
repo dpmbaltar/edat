@@ -44,6 +44,7 @@ public class Dungeons2019 {
     public static final int CONSULTAR_JUGADOR = 14;
     public static final int FILTRAR_JUGADORES = 15;
     public static final int PONER_JUGADOR_EN_ESPERA = 16;
+    public static final int PONER_JUGADORES_EN_ESPERA = 17;
 
     /**
      * Acciones de ítem.
@@ -162,6 +163,9 @@ public class Dungeons2019 {
                 case PONER_JUGADOR_EN_ESPERA:
                     ponerJugadorEnEspera();
                     break;
+                case PONER_JUGADORES_EN_ESPERA:
+                    ponerJugadoresEnEspera();
+                    break;
                 case AGREGAR_ITEM:
                     agregarItem();
                     break;
@@ -205,7 +209,7 @@ public class Dungeons2019 {
                     //TODO: mostrarCaminoSinLocacion()
                     break;
                 case CONSULTAR_EQUIPO:
-                    //TODO: consultarEquipo();
+                    consultarEquipo();
                     break;
                 case CREAR_EQUIPO:
                     crearEquipo();
@@ -213,7 +217,7 @@ public class Dungeons2019 {
                 case INICIAR_BATALLA_ENTRE_EQUIPOS:
                 case MOSTRAR_RANKING_JUGADORES:
                 case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
-                    System.out.println("Sin implementar");
+                  //TODO:          System.out.println("Sin implementar");
                     break;
                 case MOSTRAR_SISTEMA:
                     mostrarSistema();
@@ -338,6 +342,7 @@ public class Dungeons2019 {
             case CONSULTAR_JUGADOR:
             case FILTRAR_JUGADORES:
             case PONER_JUGADOR_EN_ESPERA:
+            case PONER_JUGADORES_EN_ESPERA:
             case AGREGAR_ITEM:
             case BORRAR_ITEM:
             case MODIFICAR_ITEM:
@@ -498,14 +503,15 @@ public class Dungeons2019 {
      * Agregar jugador.
      */
     public void agregarJugador() {
-        System.out.println("Agregar jugador...");
-        Jugador jugador = new Jugador();
-        jugador.setUsuario(leerNombreUsuario());
-        jugador.setTipo(leerTipo());
-        jugador.setCategoria(leerCategoria());
-        jugador.setDinero(leerDinero());
-        jugadores.insertar(jugador.getUsuario().toUpperCase(), jugador);
-        log(String.format("Se agregó el jugador \"%s\"", jugador.getUsuario()));
+        titulo("Agregar jugador");
+
+        String nombre = leerNombreUsuario();
+        TipoJugador tipo = leerTipo();
+        Categoria categoria = leerCategoria();
+        int dinero = leerDinero();
+
+        jugadores.insertar(nombre.toLowerCase(), new Jugador(nombre, tipo, categoria, dinero));
+        log(String.format("Se agregó el jugador \"%s\"", nombre));
     }
 
     /**
@@ -513,10 +519,11 @@ public class Dungeons2019 {
      * Borrar jugador.
      */
     public void borrarJugador() {
-        System.out.println("Borrar jugador...");
+        titulo("Borrar jugador");
+
         String usuario = leerNombreUsuario();
 
-        if (jugadores.eliminar(usuario.toUpperCase())) {
+        if (jugadores.eliminar(usuario.toLowerCase())) {
             log(String.format("Se borró el jugador \"%s\"", usuario));
         } else {
             log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
@@ -528,68 +535,56 @@ public class Dungeons2019 {
      * Modificar jugador.
      */
     public void modificarJugador() {
-        System.out.println("Modificar jugador...");
-        String usuario = leerNombreUsuario();
-        String usuarioClave = usuario.toUpperCase();
+        titulo("Modificar jugador");
 
-        if (jugadores.existeClave(usuarioClave)) {
-            Jugador jugador = jugadores.obtenerInformacion(usuarioClave);
-            usuario = jugador.getUsuario();
-            int opcion = 0;
+        String usuario = leerNombreUsuario().toLowerCase();
 
-            do {
-                opcion = leerAccionModificarJugador();
-
-                switch (opcion) {
-                    case 1:
-                        jugadores.eliminar(usuarioClave);
-                        String usuarioAnt = usuario;
-                        usuario = leerNombreUsuario();
-                        usuarioClave = usuario.toUpperCase();
-                        jugador.setUsuario(usuario);
-                        jugadores.insertar(usuarioClave, jugador);
-                        log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnt, usuario));
-                        break;
-                    case 2:
-                        jugador.setTipo(leerTipo());
-                        log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, jugador.getTipo()));
-                        break;
-                    case 3:
-                        jugador.setCategoria(leerCategoria());
-                        log(String.format("Se modificó la categoría del jugador \"%s\" a %s", usuario,
-                                jugador.getCategoria()));
-                        break;
-                    case 4:
-                        jugador.setDinero(leerDinero());
-                        log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
-                                jugador.getDinero()));
-                        break;
-                }
-            } while (opcion != 0);
+        if (jugadores.existeClave(usuario)) {
+            modificarJugadorSegunOpcion(usuario);
         } else {
             log(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
         }
     }
 
-    /**
-     * Lee una opción para modificar jugador.
-     *
-     * @return la opción de modificación
-     */
-    private static int leerAccionModificarJugador() {
-        System.out.print("Opción a modificar ");
-        System.out.print("(<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar): ");
-        int accion = TecladoIn.readLineInt();
+    private void modificarJugadorSegunOpcion(String claveUsuario) {
+        Jugador jugador = jugadores.obtenerInformacion(claveUsuario);
+        String usuario = jugador.getUsuario();
+        int opcion = 0;
 
-        while (accion < 0 || 4 < accion) {
-            System.out.println("La opción ingresada no es válida.");
-            System.out.println("Debe ser un entero según se indica:");
-            System.out.println("<1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar");
-            System.out.print("Reintentar: ");
-            accion = TecladoIn.readLineInt();
-        }
+        do {
+            opcion = leerOpcionModificarJugador();
 
-        return accion;
+            switch (opcion) {
+                case 1:
+                    jugadores.eliminar(claveUsuario);
+                    String usuarioAnterior = usuario;
+                    usuario = leerNombreUsuario();
+                    claveUsuario = usuario.toLowerCase();
+                    jugador.setUsuario(usuario);
+                    jugadores.insertar(claveUsuario, jugador);
+
+                    log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnterior, usuario));
+                    break;
+                case 2:
+                    jugador.setTipo(leerTipo());
+                    log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, jugador.getTipo()));
+                    break;
+                case 3:
+                    jugador.setCategoria(leerCategoria());
+                    log(String.format("Se modificó la categoría del jugador \"%s\" a %s", usuario,
+                            jugador.getCategoria()));
+                    break;
+                case 4:
+                    jugador.setDinero(leerDinero());
+                    log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario, jugador.getDinero()));
+                    break;
+            }
+        } while (opcion != 0);
+    }
+
+    private static int leerOpcionModificarJugador() {
+        return Funciones.leerEntero("Modificar <1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar: ",
+                "La opción ingresada no es válida.\r\nReintentar: ", 0, 4);
     }
 
     /**
@@ -597,11 +592,14 @@ public class Dungeons2019 {
      * Dado un nombre de usuario de un jugador, mostrar todos sus datos.
      */
     public void consultarJugador() {
-        String usuario = leerNombreUsuario().toUpperCase();
+        titulo("Consultar jugador");
+
+        String usuario = leerNombreUsuario().toLowerCase();
 
         if (jugadores.existeClave(usuario)) {
             Jugador jugador = jugadores.obtenerInformacion(usuario);
             StringBuilder datos = new StringBuilder();
+
             datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
             datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
             datos.append("Categoría: ").append(jugador.getCategoria()).append("\r\n");
@@ -620,8 +618,10 @@ public class Dungeons2019 {
             datos.append("\r\n");
             //TODO: Mostrar ítems
             System.out.println(datos);
+
+            log(String.format("Se consultó el jugador \"%s\"", jugador.getUsuario()));
         } else {
-            System.out.println(String.format("El jugador \"%s\" no existe", usuario));
+            log(String.format("Se intentó consultar un jugador inexistente \"%s\"", usuario));
         }
     }
 
@@ -630,7 +630,8 @@ public class Dungeons2019 {
      * Dada una subcadena, mostrar todos los nombres de usuarios que comienzan con esa subcadena.
      */
     public void filtrarJugadores() {
-        System.out.println("Filtrar jugadores...");
+        titulo("Filtrar jugadores");
+
         String prefijo = leerPrefijoUsuario();
         Lista<Jugador> datos = jugadores.listarDatos();
 
@@ -658,18 +659,57 @@ public class Dungeons2019 {
     }
 
     /**
-     * D. Alta de un jugador en la cola de espera por un equipo
+     * D. Alta de un jugador en la cola de espera por un equipo.
      */
     public void ponerJugadorEnEspera() {
-        System.out.println("Poner jugador en espera...");
-        String usuario = leerNombreUsuario();
+        titulo("Poner jugador en espera");
 
-        if (jugadores.existeClave(usuario.toUpperCase())) {
-            Jugador jugador = jugadores.obtenerInformacion(usuario.toUpperCase());
-            esperando.insertar(jugador, jugador.getCategoria());
-            log(String.format("Se colocó el jugador \"%s\" en espera por un equipo", jugador.getUsuario()));
+        if (!jugadores.esVacio()) {
+            String usuario = leerNombreUsuario().toLowerCase();
+
+            if (jugadores.existeClave(usuario)) {
+                Jugador jugador = jugadores.obtenerInformacion(usuario);
+
+                if (!jugador.esperaEquipo()) {
+                    jugador.setEsperando(true);
+                    esperando.insertar(jugador, jugador.getCategoria());
+
+                    log(String.format("Se colocó el jugador \"%s\" en espera", jugador.getUsuario()));
+                } else {
+                    log(String.format("El jugador \"%s\" ya tiene un equipo (%s)", jugador.getUsuario()));
+                }
+            } else {
+                log(String.format("No existe el jugador \"%s\" para colocarlo en espera", usuario));
+            }
         } else {
-            log(String.format("No existe el jugador \"%s\" para colocarlo en espera", usuario));
+            log("No existen jugadores para poner en espera");
+        }
+    }
+
+    /**
+     * Alta de todos los jugadores en la cola de espera por un equipo.
+     * Agregado para agilizar pruebas.
+     */
+    public void ponerJugadoresEnEspera() {
+        titulo("Poner todos los jugadores en espera");
+
+        if (!jugadores.esVacio()) {
+            Lista<Jugador> todos = jugadores.listarDatos();
+            int cantidad = todos.longitud();
+            Jugador jugador;
+
+            for (int i = 1; i <= cantidad; i++) {
+                jugador = todos.recuperar(i);
+
+                if (!jugador.esperaEquipo()) {
+                    jugador.setEsperando(true);
+                    esperando.insertar(jugador, jugador.getCategoria());
+                }
+            }
+
+            log("Se colocaron todos los jugadores en espera");
+        } else {
+            log("No existen jugadores para ponerlos en espera");
         }
     }
 
@@ -771,7 +811,8 @@ public class Dungeons2019 {
      * ii. Obtener el camino que llegue de A a B pasando por la mínima cantidad de locaciones.
      */
     public void mostrarCaminoMasDirecto() {
-        System.out.println("Mostrar camino más directo entre locaciones...");
+        titulo("Mostrar camino más directo entre locaciones");
+
         System.out.print("Origen - ");
         String locacion1 = leerLocacion();
         System.out.print("Destino - ");
@@ -795,7 +836,59 @@ public class Dungeons2019 {
      * E. Creación automática de un equipo.
      */
     public void crearEquipo() {
-        //TODO: crearEquipo()
+        titulo("Crear equipo");
+
+        if (esperando.longitud() >= 3) {
+            String nombre = leerNombreEquipo();
+            Equipo equipo = new Equipo(nombre);
+            Jugador jugador;
+
+            for (int i = 0; i < 3; i++) {
+                jugador = esperando.obtenerFrente();
+                esperando.eliminarFrente();
+                jugador.setEsperando(false);
+                jugador.setEquipo(equipo);
+                equipo.agregarJugador(jugador);
+            }
+
+            equipos.put(nombre.toLowerCase(), equipo);
+            log(String.format("Se creó el equipo \"%s\" de categoría \"%s\"", nombre, equipo.getCategoria()));
+        } else {
+            log("No hay suficientes equipos en espera para crear un equipo");
+        }
+    }
+
+    /**
+     * G. Consulta sobre equipos:
+     * Dado un nombre de un equipo, mostrar nombre de sus jugadores y categoría.
+     */
+    public void consultarEquipo() {
+        titulo("Consultar equipo");
+
+        if (!equipos.isEmpty()) {
+            String nombre = leerNombreEquipo().toLowerCase();
+
+            if (equipos.containsKey(nombre)) {
+                Equipo equipo = equipos.get(nombre);
+                StringBuilder cadena = new StringBuilder();
+
+                cadena.append("Nombre:         ").append(equipo.getNombre()).append("\r\n");
+                cadena.append("Categoría:      ").append(equipo.getCategoria()).append("\r\n");
+                cadena.append("Jugadores:      ").append(equipo.getJugadores()).append("\r\n");
+
+                System.out.println(cadena.toString());
+                log(String.format("Se consultó el equipo \"%s\"", nombre));
+            } else {
+                log(String.format("No existe un equipo con nombre \"%s\"", nombre));
+            }
+        } else {
+            log("No existen equipos para consultar");
+        }
+    }
+
+    private static String leerNombreEquipo() {
+        return Funciones.leerFrase("Nombre del equipo: ",
+                "El nombre de equipo ingresado no es válido.\r\nReintentar: ", 1, 30);
     }
 
     /**
