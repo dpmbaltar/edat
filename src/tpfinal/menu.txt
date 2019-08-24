@@ -6,6 +6,7 @@
    <14> Consultar jugador
    <15> Filtrar jugadores
    <16> Poner jugador en espera
+   <17> Poner todos los jugadores en espera
 ~~~{ Ítems }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    <21> Agregar ítem
    <22> Borrar ítem
