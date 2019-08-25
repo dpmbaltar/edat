@@ -405,4 +405,8 @@ public class Funciones {
 
         return entero;
     }
+
+    public static String formatearDinero(int dinero, char simbolo) {
+        return String.format("%c %,d", simbolo, dinero);
+    }
 }
