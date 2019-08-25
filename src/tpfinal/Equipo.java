@@ -33,11 +33,12 @@ public class Equipo {
      * Constructor con el nombre.
      *
      * @param nombre nombre del equipo
+     * @param locacion la locación
      */
-    public Equipo(String nombre) {
+    public Equipo(String nombre, String locacion) {
         this.nombre = nombre;
         this.categoria = null;
-        this.locacion = null;
+        this.locacion = locacion;
         this.jugadores = new Lista<Jugador>();
     }
 
@@ -79,7 +80,7 @@ public class Equipo {
         if (jugadores.longitud() < 3) {
             jugadores.insertar(jugador, jugadores.longitud() + 1);
 
-            if (categoria == null || categoria.compareTo(jugador.getCategoria()) > 0) {
+            if (categoria == null || categoria.compareTo(jugador.getCategoria()) < 0) {
                 categoria = jugador.getCategoria();
             }
         }
