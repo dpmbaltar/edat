@@ -178,7 +178,7 @@ public class Dungeons2019 {
                     consultarItem();
                     break;
                 case MOSTRAR_ITEMS_HASTA_PRECIO:
-                    //TODO: mostrarItemsHastaPrecio()
+                    mostrarItemsHastaPrecio();
                     break;
                 case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
                     //TODO: mostrarItemsDesdeHastaPrecio()
@@ -724,7 +724,8 @@ public class Dungeons2019 {
      * Agregar ítem.
      */
     public void agregarItem() {
-        System.out.println("Agregar ítem...");
+        titulo("Agregar ítem");
+
         Item item = new Item();
         item.setCodigo(Item.generarCodigo());
         item.setNombre(leerNombreItem());
@@ -733,6 +734,7 @@ public class Dungeons2019 {
         item.setDefensa(leerDefensa());
         item.setDisponibilidad(leerDisponibilidad());
         items.insertar(item);
+
         log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
     }
 
@@ -741,15 +743,21 @@ public class Dungeons2019 {
      * Borrar ítem.
      */
     public void borrarItem() {
-        System.out.println("Borrar ítem...");
-        String codigo = leerCodigoItem().toUpperCase();
-        Item item = items.obtener(codigo);
-        boolean borrado = items.eliminar(item);
-        //TODO: Borrar ítem de los jugadores
-        if (borrado) {
-            log(String.format("Se borró el ítem \"%s\"", codigo));
+        titulo("Borrar ítem");
+
+        if (!items.vacio()) {
+            String codigo = leerCodigoItem().toUpperCase();
+            Item item = items.obtener(codigo);
+            boolean borrado = items.eliminar(item);
+            //TODO: Borrar ítem de los jugadores
+
+            if (borrado) {
+                log(String.format("Se borró el ítem \"%s\"", codigo));
+            } else {
+                log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+            }
         } else {
-            log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+            log("No existen ítems para borrar");
         }
     }
 
@@ -758,25 +766,59 @@ public class Dungeons2019 {
      * Dado un código de ítem, mostrar sus atributos.
      */
     public void consultarItem() {
-        System.out.println("Consultar ítem...");
-        String codigo = leerCodigoItem().toUpperCase();
-        Item item = items.obtener(codigo);
+        titulo("Consultar ítem");
 
-        if (item != null) {
-            StringBuilder datos = new StringBuilder();
-            datos.append("Código:         ").append(item.getCodigo()).append("\r\n");
-            datos.append("Nombre:         ").append(item.getNombre()).append("\r\n");
-            datos.append("Precio:         ").append(item.getPrecio()).append("\r\n");
-            datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
-            datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
-            datos.append("Disponibilidad: ").append(item.getCantidad()).append(" de ");
-            datos.append(item.getDisponibilidad()).append("\r\n");
+        if (!items.vacio()) {
+            String codigo = leerCodigoItem().toUpperCase();
+            Item item = items.obtener(codigo);
 
-            System.out.println(datos);
+            if (item != null) {
+                StringBuilder datos = new StringBuilder();
+                datos.append("Código:         ").append(item.getCodigo()).append("\r\n");
+                datos.append("Nombre:         ").append(item.getNombre()).append("\r\n");
+                datos.append("Precio:         ").append(item.getPrecio()).append("\r\n");
+                datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
+                datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
+                datos.append("Disponibilidad: ").append(item.getCantidad()).append(" de ");
+                datos.append(item.getDisponibilidad()).append("\r\n");
 
-            log(String.format("Se consultó el ítem \"%s\"", codigo));
+                System.out.println(datos);
+
+                log(String.format("Se consultó el ítem \"%s\"", codigo));
+            } else {
+                log(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
+            }
         } else {
-            log(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
+            log("No existen ítems para consultar");
+        }
+    }
+
+    private static String formatearDinero(int dinero) {
+        return Funciones.formatearDinero(dinero, '§');
+    }
+
+    /**
+     * Consultas sobre items:
+     * Dado un monto de dinero mostrar todos los items que puede comprar el jugador.
+     */
+    public void mostrarItemsHastaPrecio() {
+        titulo("Mostrar ítems para comprar (según cantidad de dinero)");
+
+        if (!items.vacio()) {
+            int dinero = leerDinero();
+            Lista<Item> itemsPosibles = items.listarRangoPorPrecio(0, dinero);
+            Item item;
+
+            for (int i = 1; i <= itemsPosibles.longitud(); i++) {
+                item = itemsPosibles.recuperar(i);
+                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
+                        item.getNombre(),
+                        item.getAtaque(),
+                        item.getDefensa(),
+                        formatearDinero(item.getPrecio())));
+            }
+        } else {
+            log("No existen ítems para consultar");
         }
     }
 
