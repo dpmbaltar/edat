@@ -171,6 +171,53 @@ public class Jugador implements Comparable<Jugador> {
         return esperando;
     }
 
+    public int calcularAtaque() {
+        return (ataqueBase() * ataqueCategoria()) + ataqueItems();
+    }
+
+    private int ataqueBase() {
+        int ataque = 0;
+
+        switch (tipo) {
+            case GUERRERO:
+                ataque += 100;
+                break;
+            case DEFENSOR:
+                ataque += 25;
+                break;
+        }
+
+        return ataque;
+    }
+
+    private int ataqueCategoria() {
+        int ataque = 0;
+
+        switch (categoria) {
+            case PROFESIONAL:
+                ataque *= 5;
+                break;
+            case AFICIONADO:
+                ataque *= 4;
+                break;
+            case NOVATO:
+                ataque *= 3;
+                break;
+        }
+
+        return ataque;
+    }
+
+    private int ataqueItems() {
+        int ataque = 0;
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            ataque += items.recuperar(i).getAtaque();
+        }
+
+        return ataque;
+    }
+
     /**
      * Crea un jugador desde una cadena de acorde al formato:
      * <code>
