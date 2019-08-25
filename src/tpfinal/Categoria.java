@@ -8,9 +8,9 @@ package tpfinal;
 public enum Categoria {
 
     /**
-     * Indica la categoría "Novato".
+     * Indica la categoría "Profesional".
      */
-    NOVATO,
+    PROFESIONAL,
 
     /**
      * Indica la categoría "Aficionado".
@@ -18,9 +18,9 @@ public enum Categoria {
     AFICIONADO,
 
     /**
-     * Indica la categoría "Profesional".
+     * Indica la categoría "Novato".
      */
-    PROFESIONAL;
+    NOVATO;
 
     /**
      * Devuelve una categoría desde una cadena.
@@ -32,14 +32,14 @@ public enum Categoria {
         Categoria categoria;
 
         switch (cadena.toUpperCase()) {
+            case "PROFESIONAL":
+                categoria = PROFESIONAL;
+                break;
             case "NOVATO":
                 categoria = NOVATO;
                 break;
             case "AFICIONADO":
                 categoria = AFICIONADO;
-                break;
-            case "PROFESIONAL":
-                categoria = PROFESIONAL;
                 break;
             default:
                 categoria = null;
@@ -59,13 +59,13 @@ public enum Categoria {
 
         switch (entero) {
             case 0:
-                categoria = NOVATO;
+                categoria = PROFESIONAL;
                 break;
             case 1:
                 categoria = AFICIONADO;
                 break;
             case 2:
-                categoria = PROFESIONAL;
+                categoria = NOVATO;
                 break;
             default:
                 categoria = null;
