@@ -2,6 +2,7 @@ package tpfinal;
 
 import conjuntistas.ArbolAVL;
 import conjuntistas.NodoAVL;
+import lineales.dinamicas.Lista;
 
 /**
  * Arbol AVL de ítems.
@@ -15,6 +16,38 @@ public class ItemsAVL extends ArbolAVL<Item> {
      */
     public ItemsAVL() {
         raiz = null;
+    }
+
+    /**
+     * Devuelve una lista con los items, ordenados por precio de menor a mayor, mientras que el precio se encuentre
+     * dentro del rango mínimo y máximo especificado (ambos inclusive).
+     *
+     * @param minimo el precio mínimo del rango
+     * @param maximo el precio máximo del rango
+     * @return la lista de items
+     */
+    public Lista<Item> listarRangoPorPrecio(int minimo, int maximo) {
+        Lista<Item> lista = new Lista<>();
+        listarRangoPorPrecio(minimo, maximo, raiz, lista);
+
+        return lista;
+    }
+
+    private void listarRangoPorPrecio(int minimo, int maximo, NodoAVL<Item> nodo, Lista<Item> lista) {
+        if (nodo != null) {
+            NodoAVL<Item> izquierdo = nodo.getIzquierdo();
+            NodoAVL<Item> derecho = nodo.getDerecho();
+            Item item = nodo.getElemento();
+            int precio = item.getPrecio();
+
+            listarRangoPorPrecio(minimo, maximo, izquierdo, lista);
+
+            if (minimo <= precio && precio <= maximo) {
+                lista.insertar(item, lista.longitud() + 1);
+            }
+
+            listarRangoPorPrecio(minimo, maximo, derecho, lista);
+        }
     }
 
     /**
