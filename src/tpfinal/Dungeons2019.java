@@ -83,17 +83,17 @@ public class Dungeons2019 {
     public static final int SALIR = 0;
 
     /**
-     * Equipos registrados.
+     * Equipos registrados (hashmap con clave tipo String y dato tipo Equipo).
      */
     private HashMap<String, Equipo> equipos;
 
     /**
-     * Jugadores en el juego.
+     * Jugadores en el juego (diccionario con clave tipo String y dato tipo Jugador).
      */
     private Diccionario<String, Jugador> jugadores;
 
     /**
-     * Jugadores en espera.
+     * Jugadores en espera (cola de prioridad con elementos tipo Jugador y prioridad tipo Categoria).
      */
     private ColaPrioridad<Jugador, Categoria> esperando;
 
@@ -103,7 +103,7 @@ public class Dungeons2019 {
     private ItemsAVL items; //TODO: El AVL debe aceptar ítems con precios iguales
 
     /**
-     * El mapa del juego.
+     * El mapa del juego (grafo etiquetado con elementos tipo String y etiquetas tipo Integer).
      */
     private Mapa mapa;
 
@@ -172,7 +172,7 @@ public class Dungeons2019 {
                     borrarItem();
                     break;
                 case MODIFICAR_ITEM:
-                    //TODO: modificarItem();
+                    modificarItem();
                     break;
                 case CONSULTAR_ITEM:
                     consultarItem();
@@ -181,7 +181,7 @@ public class Dungeons2019 {
                     mostrarItemsHastaPrecio();
                     break;
                 case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
-                    //TODO: mostrarItemsDesdeHastaPrecio()
+                    mostrarItemsDesdeHastaPrecio();
                     break;
                 case AGREGAR_LOCACION:
                     agregarLocacion();
@@ -393,42 +393,6 @@ public class Dungeons2019 {
         //TODO: Registrar acciones en archivo LOG
     }
 
-    private static String leerCodigoItem() {
-        return Funciones.leerPalabra("Código: ",
-                "El código ingresado no es válido.\r\nDebe ser una letra seguido de 3 dígitos.\r\nReintentar: ", 4, 4);
-    }
-
-    private static String leerNombreItem() {
-        return Funciones.leerFrase("Nombre del ítem: ",
-                "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
-                        + "\r\nReintentar: ",
-                2, 50);
-    }
-
-    private static int leerPrecio() {
-        return Funciones.leerEntero("Precio: ",
-                "El precio ingresado no es válido.\r\nDebe ser un entero positivo.\r\nReintentar: ",
-                1, Integer.MAX_VALUE);
-    }
-
-    private static int leerAtaque() {
-        return Funciones.leerEnteroPositivo("Puntos de ataque: ",
-                "Los puntos de ataque ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
-                        + "\r\nReintentar: ");
-    }
-
-    private static int leerDefensa() {
-        return Funciones.leerEnteroPositivo("Puntos de defensa: ",
-                "Los puntos de defensa ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
-                        + "\r\nReintentar: ");
-    }
-
-    private static int leerDisponibilidad() {
-        return Funciones.leerEntero("Disponibilidad: ",
-                "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
-                1, Integer.MAX_VALUE);
-    }
-
     private static int leerDistancia() {
         return Funciones.leerEnteroPositivo("Distancia: ",
                 "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
@@ -564,7 +528,8 @@ public class Dungeons2019 {
                     break;
                 case 4:
                     jugador.setDinero(leerDinero());
-                    log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario, jugador.getDinero()));
+                    log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
+                            formatearDinero(jugador.getDinero())));
                     break;
             }
         } while (opcion != 0);
@@ -587,12 +552,13 @@ public class Dungeons2019 {
 
             if (jugadores.existeClave(usuario)) {
                 Jugador jugador = jugadores.obtenerInformacion(usuario);
+                Lista<Item> itemsJugador = jugador.getItems();
                 StringBuilder datos = new StringBuilder();
 
                 datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
                 datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
                 datos.append("Categoría: ").append(jugador.getCategoria()).append("\r\n");
-                datos.append("Dinero:    ").append(jugador.getDinero()).append("\r\n");
+                datos.append("Dinero:    ").append(formatearDinero(jugador.getDinero())).append("\r\n");
                 datos.append("Salud:     ").append(jugador.getSalud()).append("\r\n");
                 datos.append("Victorias: ").append(jugador.getVictorias()).append("\r\n");
                 datos.append("Derrotas:  ").append(jugador.getDerrotas()).append("\r\n");
@@ -607,7 +573,17 @@ public class Dungeons2019 {
                 }
 
                 datos.append("\r\n");
-                //TODO: Mostrar ítems
+                datos.append("Items:     ");
+
+                if (!itemsJugador.esVacia()) {
+                    for (int i = 1; i <= itemsJugador.longitud(); i++) {
+                        datos.append(itemsJugador.recuperar(i).getNombre()).append("\r\n");
+                    }
+                } else {
+                    datos.append("-");
+                }
+
+                datos.append("\r\n");
                 System.out.println(datos);
 
                 log(String.format("Se consultó el jugador \"%s\"", jugador.getUsuario()));
@@ -738,6 +714,37 @@ public class Dungeons2019 {
         log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
     }
 
+    private static String leerNombreItem() {
+        return Funciones.leerFrase("Nombre del ítem: ",
+                "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
+                        + "\r\nReintentar: ",
+                2, 50);
+    }
+
+    private static int leerPrecio() {
+        return Funciones.leerEntero("Precio: ",
+                "El precio ingresado no es válido.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
+    }
+
+    private static int leerAtaque() {
+        return Funciones.leerEnteroPositivo("Puntos de ataque: ",
+                "Los puntos de ataque ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
+    }
+
+    private static int leerDefensa() {
+        return Funciones.leerEnteroPositivo("Puntos de defensa: ",
+                "Los puntos de defensa ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
+    }
+
+    private static int leerDisponibilidad() {
+        return Funciones.leerEntero("Disponibilidad: ",
+                "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
+    }
+
     /**
      * B. ABM de ítems:
      * Borrar ítem.
@@ -761,6 +768,83 @@ public class Dungeons2019 {
         }
     }
 
+    private static String leerCodigoItem() {
+        return Funciones.leerPalabra("Código: ",
+                "El código ingresado no es válido.\r\nDebe ser una letra seguido de 3 dígitos.\r\nReintentar: ", 4, 4);
+    }
+
+    /**
+     * B. ABM de ítems:
+     * Modificar ítem.
+     */
+    public void modificarItem() {
+        titulo("Modificar ítem");
+
+        if (!items.vacio()) {
+            String codigo = leerCodigoItem().toUpperCase();
+            Item item = items.obtener(codigo);
+
+            if (item != null) {
+                modificarItemsegunOpcion(item);
+            } else {
+                log(String.format("Se intentó modificar un ítem inexistente \"%s\"", codigo));
+            }
+        } else {
+            log("No existen ítems para modificar");
+        }
+    }
+
+    private void modificarItemsegunOpcion(Item item) {
+        int opcion = 0;
+
+        do {
+            opcion = leerOpcionModificarItem();
+
+            switch (opcion) {
+                case 1: // Modificar nombre del ítem
+                    String nombreAnterior = item.getNombre();
+                    System.out.println("Nombre actual: " + nombreAnterior);
+                    String nombreNuevo = leerNombreItem();
+                    item.setNombre(nombreNuevo);
+
+                    log(String.format("Se modificó el nombre del ítem \"%s\" a \"%s\"", nombreAnterior, nombreNuevo));
+                    break;
+                case 2: // Modificar precio del ítem
+                    int precioAnterior = item.getPrecio();
+                    System.out.println("Precio actual: " + precioAnterior);
+                    int precioNuevo = leerPrecio();
+                    item.setPrecio(precioNuevo);
+
+                    log(String.format("Se modificó el precio del ítem \"%s\" de %s a %s", item.getNombre(),
+                            formatearDinero(precioAnterior), formatearDinero(precioNuevo)));
+                    break;
+                case 3: // Modificar puntos de ataque del ítem
+                    int ataqueAnterior = item.getAtaque();
+                    System.out.println("Ataque actual: " + ataqueAnterior);
+                    int ataqueNuevo = leerAtaque();
+                    item.setAtaque(ataqueNuevo);
+
+                    log(String.format("Se modificaron los puntos de ataque del ítem \"%s\" de %s a %s",
+                            item.getNombre(), ataqueAnterior, ataqueNuevo));
+                    break;
+                case 4: // Modificar puntos de defensa del ítem
+                    int defensaAnterior = item.getDefensa();
+                    System.out.println("Defensa actual: " + defensaAnterior);
+                    int defensaNueva = leerDefensa();
+                    item.setDefensa(defensaNueva);
+
+                    log(String.format("Se modificaron los puntos de defensa del ítem \"%s\" de %s a %s",
+                            item.getNombre(), defensaAnterior, defensaNueva));
+                    break;
+            }
+        } while (opcion != 0);
+    }
+
+    private static int leerOpcionModificarItem() {
+        return Funciones.leerEntero("Modificar <1> Nombre - <2> Precio - <3> Ataque - <4> Defensa - <0> Cancelar: ",
+                "La opción ingresada no es válida.\r\nReintentar: ", 0, 4);
+    }
+
     /**
      * H. Consultas sobre items:
      * Dado un código de ítem, mostrar sus atributos.
@@ -774,12 +858,13 @@ public class Dungeons2019 {
 
             if (item != null) {
                 StringBuilder datos = new StringBuilder();
+                datos.append("Información del ítem:\r\n");
                 datos.append("Código:         ").append(item.getCodigo()).append("\r\n");
                 datos.append("Nombre:         ").append(item.getNombre()).append("\r\n");
-                datos.append("Precio:         ").append(item.getPrecio()).append("\r\n");
+                datos.append("Precio:         ").append(formatearDinero(item.getPrecio())).append("\r\n");
                 datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
                 datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
-                datos.append("Disponibilidad: ").append(item.getCantidad()).append(" de ");
+                datos.append("Disponibilidad: ").append(item.getCantidad()).append('/');
                 datos.append(item.getDisponibilidad()).append("\r\n");
 
                 System.out.println(datos);
@@ -807,6 +892,35 @@ public class Dungeons2019 {
         if (!items.vacio()) {
             int dinero = leerDinero();
             Lista<Item> itemsPosibles = items.listarRangoPorPrecio(0, dinero);
+            Item item;
+
+            for (int i = 1; i <= itemsPosibles.longitud(); i++) {
+                item = itemsPosibles.recuperar(i);
+                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
+                        item.getNombre(),
+                        item.getAtaque(),
+                        item.getDefensa(),
+                        formatearDinero(item.getPrecio())));
+            }
+        } else {
+            log("No existen ítems para consultar");
+        }
+    }
+
+    /**
+     * Consultas sobre items:
+     * Dadas dos valores (min y max que pueden no existir en la estructura) devolver todos los ítems que se puedan
+     * comprar con un monto de dinero entre min y max (incluyendo ambos límites) ordenado de menor a mayor.
+     */
+    public void mostrarItemsDesdeHastaPrecio() {
+        titulo("Mostrar ítems para comprar (con precio min. y max.)");
+
+        if (!items.vacio()) {
+            System.out.print("Mínimo ");
+            int minimo = leerDinero();
+            System.out.print("Máximo ");
+            int maximo = leerDinero();
+            Lista<Item> itemsPosibles = items.listarRangoPorPrecio(minimo, maximo);
             Item item;
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
@@ -964,13 +1078,23 @@ public class Dungeons2019 {
 
             if (equipos.containsKey(nombre)) {
                 Equipo equipo = equipos.get(nombre);
+                Lista<Jugador> jugadores = equipo.getJugadores();
                 StringBuilder cadena = new StringBuilder();
 
                 cadena.append("Nombre:         ").append(equipo.getNombre()).append("\r\n");
                 cadena.append("Categoría:      ").append(equipo.getCategoria()).append("\r\n");
                 cadena.append("Locación:       ").append(equipo.getLocacion()).append("\r\n");
-                cadena.append("Jugadores:      ").append(equipo.getJugadores()).append("\r\n");
+                cadena.append("Jugadores:      ");
 
+                for (int i = 1; i <= jugadores.longitud(); i++) {
+                    cadena.append(jugadores.recuperar(i).getUsuario());
+
+                    if (i < jugadores.longitud()) {
+                        cadena.append(", ");
+                    }
+                }
+
+                cadena.append("\r\n");
                 System.out.println(cadena.toString());
                 log(String.format("Se consultó el equipo \"%s\"", nombre));
             } else {
@@ -1010,8 +1134,9 @@ public class Dungeons2019 {
 
                     pausar();
                     break;
-                case 2:
+                case 2: // Mostrar ítems
                     System.out.println("Ítems:");
+                    System.out.println("Código; Nombre; Precio; Ataque; Defensa");
                     Lista<Item> items = this.items.listar();
 
                     for (int i = 1; i <= items.longitud(); i++) {
