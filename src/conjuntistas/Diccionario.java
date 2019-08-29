@@ -37,11 +37,13 @@ public class Diccionario<C extends Comparable<C>, E> {
     public boolean insertar(C clave, E elemento) {
         boolean insertado = false;
 
-        if (raiz == null) {
-            raiz = new NodoAVLDicc<C, E>(clave, elemento);
-            insertado = true;
-        } else {
-            insertado = insertar(clave, elemento, raiz, null);
+        if (clave != null && elemento != null) {
+            if (raiz == null) {
+                raiz = new NodoAVLDicc<C, E>(clave, elemento);
+                insertado = true;
+            } else {
+                insertado = insertar(clave, elemento, raiz, null);
+            }
         }
 
         return insertado;
@@ -269,7 +271,7 @@ public class Diccionario<C extends Comparable<C>, E> {
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(C elemento) {
-        return eliminar(elemento, raiz, null, null);
+        return elemento != null ? eliminar(elemento, raiz, null, null) : false;
     }
 
     private boolean eliminar(C elemento, NodoAVLDicc<C, E> nodo, NodoAVLDicc<C, E> padre, NodoAVLDicc<C, E> padreAnterior) {
@@ -350,7 +352,7 @@ public class Diccionario<C extends Comparable<C>, E> {
     public boolean existeClave(C clave) {
         boolean existe = false;
 
-        if (raiz != null) {
+        if (clave != null && raiz != null) {
             NodoAVLDicc<C, E> nodo = raiz;
 
             while (nodo != null) {
@@ -379,7 +381,7 @@ public class Diccionario<C extends Comparable<C>, E> {
     public E obtenerInformacion(C clave) {
         E elemento = null;
 
-        if (raiz != null) {
+        if (clave != null && raiz != null) {
             NodoAVLDicc<C, E> nodo = raiz;
 
             while (nodo != null) {
