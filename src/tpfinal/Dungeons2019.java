@@ -1059,6 +1059,7 @@ public class Dungeons2019 {
             opcion(1, "Consultar equipo");
             opcion(2, "Crear equipo");
             opcion(3, "Iniciar batalla entre equipos");
+            opcion(0, "Volver");
 
             opcion = leerOpcion(0, 3);
 
