@@ -409,4 +409,12 @@ public class Funciones {
     public static String formatearDinero(int dinero, char simbolo) {
         return String.format("%c %,d", simbolo, dinero);
     }
+
+    /**
+     * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
+     */
+    private static void pausar() {
+        System.out.println("Presionar [Entrar] para continuar...");
+        TecladoIn.readLine();
+    }
 }

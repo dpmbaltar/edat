@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import conjuntistas.Diccionario;
+import conjuntistas.TablaHashAbierto;
 import lineales.dinamicas.ColaPrioridad;
 import lineales.dinamicas.Lista;
 import utiles.Funciones;
@@ -100,7 +101,7 @@ public class Dungeons2019 {
     /**
      * Ítems disponibles en el juego.
      */
-    private ItemsAVL items; //TODO: El AVL debe aceptar ítems con precios iguales
+    private AVLItems items; //TODO: El AVL debe aceptar ítems con precios iguales
 
     /**
      * El mapa del juego (grafo etiquetado con elementos tipo String y etiquetas tipo Integer).
@@ -111,6 +112,13 @@ public class Dungeons2019 {
      * La cadena del menú.
      */
     private String menu;
+
+    /**
+     * Tabla hash para los códigos de los ítems.
+     */
+    private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
+    private static char letra = 'A';
+    private static int secuencia = 0;
 
     /**
      * Programa principal.
@@ -130,7 +138,7 @@ public class Dungeons2019 {
         equipos = new HashMap<>();
         jugadores = new Diccionario<>();
         esperando = new ColaPrioridad<>();
-        items = new ItemsAVL();
+        items = new AVLItems();
         mapa = new Mapa();
     }
 
@@ -325,6 +333,20 @@ public class Dungeons2019 {
         }
 
         return accion;
+    }
+
+    /**
+     * TODO: Separar menús según tipo de operación
+     */
+    public void menuJugadores() {
+        System.out.println("~~~{ Jugadores }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("   <1> Agregar jugador");
+        System.out.println("   <2> Borrar jugador");
+        System.out.println("   <3> Modificar jugador");
+        System.out.println("   <4> Consultar jugador");
+        System.out.println("   <5> Filtrar jugadores");
+        System.out.println("   <6> Poner jugador en espera");
+        System.out.println("   <7> Poner todos los jugadores en espera");
     }
 
     /**
@@ -703,15 +725,35 @@ public class Dungeons2019 {
         titulo("Agregar ítem");
 
         Item item = new Item();
-        item.setCodigo(Item.generarCodigo());
+        item.setCodigo(generarCodigoItem());
         item.setNombre(leerNombreItem());
         item.setPrecio(leerPrecio());
         item.setAtaque(leerAtaque());
         item.setDefensa(leerDefensa());
-        item.setDisponibilidad(leerDisponibilidad());
+        item.setCantidad(leerDisponibilidad());
         items.insertar(item);
 
         log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
+    }
+
+    public static String generarCodigoItem() {
+        String codigo = null;
+
+        if (Funciones.esLetraMayus(letra)) {
+            do {
+                codigo = String.format("%s%03d", letra, secuencia);
+                secuencia++;
+
+                if (secuencia > 99) {
+                    secuencia = 0;
+                    letra++;
+                }
+            } while (codigos.pertenece(codigo) && Funciones.esLetraMayus(letra));
+        }
+
+        codigos.insertar(codigo);
+
+        return codigo;
     }
 
     private static String leerNombreItem() {
@@ -752,7 +794,7 @@ public class Dungeons2019 {
     public void borrarItem() {
         titulo("Borrar ítem");
 
-        if (!items.vacio()) {
+        if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
             Item item = items.obtener(codigo);
             boolean borrado = items.eliminar(item);
@@ -780,7 +822,7 @@ public class Dungeons2019 {
     public void modificarItem() {
         titulo("Modificar ítem");
 
-        if (!items.vacio()) {
+        if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
             Item item = items.obtener(codigo);
 
@@ -852,7 +894,7 @@ public class Dungeons2019 {
     public void consultarItem() {
         titulo("Consultar ítem");
 
-        if (!items.vacio()) {
+        if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
             Item item = items.obtener(codigo);
 
@@ -864,8 +906,8 @@ public class Dungeons2019 {
                 datos.append("Precio:         ").append(formatearDinero(item.getPrecio())).append("\r\n");
                 datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
                 datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
-                datos.append("Disponibilidad: ").append(item.getCantidad()).append('/');
-                datos.append(item.getDisponibilidad()).append("\r\n");
+                datos.append("Disponibilidad: ").append(item.getCantidadDisponible()).append('/');
+                datos.append(item.getCantidad()).append("\r\n");
 
                 System.out.println(datos);
 
@@ -889,7 +931,7 @@ public class Dungeons2019 {
     public void mostrarItemsHastaPrecio() {
         titulo("Mostrar ítems para comprar (según cantidad de dinero)");
 
-        if (!items.vacio()) {
+        if (!items.esVacio()) {
             int dinero = leerDinero();
             Lista<Item> itemsPosibles = items.listarRangoPorPrecio(0, dinero);
             Item item;
@@ -915,7 +957,7 @@ public class Dungeons2019 {
     public void mostrarItemsDesdeHastaPrecio() {
         titulo("Mostrar ítems para comprar (con precio min. y max.)");
 
-        if (!items.vacio()) {
+        if (!items.esVacio()) {
             System.out.print("Mínimo ");
             int minimo = leerDinero();
             System.out.print("Máximo ");

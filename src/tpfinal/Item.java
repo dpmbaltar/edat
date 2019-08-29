@@ -1,21 +1,15 @@
 package tpfinal;
 
-import conjuntistas.TablaHashAbierto;
-import utiles.Funciones;
-
 /**
- * Item.
+ * Ítem (comparable por precio).
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
 public class Item implements Comparable<Item> {
 
-    private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
-    private static char letra = 'A';
-    private static int secuencia = 0;
-
     /**
-     * Código alfanumérico del ítem (único).
+     * Código alfanumérico del ítem, que debe corresponderse unívocamente con la instancia del ítem, pero puede tener
+     * copias del mísmo según la cantidad establecida.
      */
     private String codigo;
 
@@ -40,14 +34,14 @@ public class Item implements Comparable<Item> {
     private int defensa;
 
     /**
-     * Disponibilidad del ítem (1 indica que es único).
+     * Cantidad de ítem (1 indica que el ítem es único).
      */
-    private int disponibilidad;
+    private int cantidad;
 
     /**
      * Cantidad disponible del ítem.
      */
-    private int cantidad;
+    private int cantidadDisponible;
 
     /**
      * Constructor vacío.
@@ -57,108 +51,158 @@ public class Item implements Comparable<Item> {
     }
 
     /**
-     * Constructor con nombre, precio, ataque y defensa.
+     * Constructor con nombre, precio, ataque, defensa y cantidad.
      *
-     * @param codigo el código
-     * @param nombre el nombre
-     * @param precio el precio
-     * @param ataque los puntos de ataque
-     * @param defensa los puntos de defensa
-     * @param disponibilidad cantidad disponible
+     * @param codigo el código del ítem
+     * @param nombre el nombre del ítem
+     * @param precio el precio del ítem
+     * @param ataque los puntos de ataque del ítem
+     * @param defensa los puntos de defensa del ítem
+     * @param cantidad la cantidad disponible del ítem
      */
-    public Item(String codigo, String nombre, int precio, int ataque, int defensa, int disponibilidad) {
+    public Item(String codigo, String nombre, int precio, int ataque, int defensa, int cantidad) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
         this.ataque = ataque;
         this.defensa = defensa;
-        this.disponibilidad = disponibilidad;
-        this.cantidad = disponibilidad;
+        this.cantidad = cantidad;
+        this.cantidadDisponible = cantidad;
     }
 
+    /**
+     * Devuelve el código del ítem.
+     *
+     * @return el código del ítem
+     */
     public String getCodigo() {
         return codigo;
     }
 
+    /**
+     * Establece el código del ítem.
+     *
+     * @param codigo el nuevo código del ítem
+     */
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
+    /**
+     * Devuelve el nombre del ítem.
+     *
+     * @return el nombre del ítem
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Establece el nombre del ítem.
+     *
+     * @param nombre el nuevo nombre del ítem
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Devuelve el precio del ítem.
+     *
+     * @return el precio del ítem
+     */
     public int getPrecio() {
         return precio;
     }
 
+    /**
+     * Establece el precio del ítem.
+     *
+     * @param precio el nuevo precio del ítem
+     */
     public void setPrecio(int precio) {
         this.precio = precio;
     }
 
+    /**
+     * Devuelve el ataque del ítem.
+     *
+     * @return el ataque del ítem
+     */
     public int getAtaque() {
         return ataque;
     }
 
+    /**
+     * Establece el ataque del ítem.
+     *
+     * @param ataque el nuevo ataque del ítem
+     */
     public void setAtaque(int ataque) {
         this.ataque = ataque;
     }
 
+    /**
+     * Devuelve la defensa del ítem.
+     *
+     * @return la defensa del ítem
+     */
     public int getDefensa() {
         return defensa;
     }
 
+    /**
+     * Establece la defensa del ítem.
+     *
+     * @param defensa la nueva defensa del ítem
+     */
     public void setDefensa(int defensa) {
         this.defensa = defensa;
     }
 
-    public int getDisponibilidad() {
-        return disponibilidad;
-    }
-
-    public void setDisponibilidad(int disponibilidad) {
-        this.disponibilidad = disponibilidad;
-    }
-
+    /**
+     * Devuelve la cantidad del ítem.
+     *
+     * @return la cantidad del ítem
+     */
     public int getCantidad() {
         return cantidad;
     }
 
+    /**
+     * Establece la cantidad del ítem.
+     *
+     * @param cantidad la nueva cantidad del ítem
+     */
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
     /**
-     * Devuelve verdadero si el ítem es único.
+     * Devuelve la cantidad disponible.
+     *
+     * @return la cantidad disponible
+     */
+    public int getCantidadDisponible() {
+        return cantidadDisponible;
+    }
+
+    /**
+     * Establece la cantidad disponible.
+     *
+     * @param cantidadDisponible la nueva cantidad disponible
+     */
+    public void setCantidadDisponible(int cantidadDisponible) {
+        this.cantidadDisponible = cantidadDisponible;
+    }
+
+    /**
+     * Devuelve verdadero si el ítem es único (si cantidad es igual a uno).
      *
      * @return verdadero si el ítem es único, falso en caso contrario
      */
     public boolean esUnico() {
-        return disponibilidad == 1;
-    }
-
-    public static String generarCodigo() {
-        String codigo = null;
-
-        if (Funciones.esLetraMayus(letra)) {
-            do {
-                codigo = String.format("%s%03d", letra, secuencia);
-                secuencia++;
-
-                if (secuencia > 99) {
-                    secuencia = 0;
-                    letra++;
-                }
-            } while (codigos.pertenece(codigo) && Funciones.esLetraMayus(letra));
-        }
-
-        codigos.insertar(codigo);
-
-        return codigo;
+        return cantidad == 1;
     }
 
     /**
@@ -183,8 +227,8 @@ public class Item implements Comparable<Item> {
                 nuevoItem.precio = Integer.valueOf(partes[2].trim());
                 nuevoItem.ataque = Integer.valueOf(partes[3].trim());
                 nuevoItem.defensa = Integer.valueOf(partes[4].trim());
-                nuevoItem.disponibilidad = Integer.valueOf(partes[5].trim());
-                nuevoItem.cantidad = nuevoItem.disponibilidad;
+                nuevoItem.cantidad = Integer.valueOf(partes[5].trim());
+                nuevoItem.cantidadDisponible = nuevoItem.cantidad;
             } catch (NumberFormatException e) {}
         }
 
