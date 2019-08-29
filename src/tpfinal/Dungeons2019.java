@@ -1,8 +1,11 @@
 package tpfinal;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -107,6 +110,7 @@ public class Dungeons2019 {
     public void cargar(String nombreArchivo) {
         try {
             String url = Dungeons2019.class.getResource(nombreArchivo).getPath();
+            System.out.println(url);
             BufferedReader archivoEstado = new BufferedReader(new FileReader(url));
             String linea = archivoEstado.readLine();
 
@@ -184,8 +188,17 @@ public class Dungeons2019 {
      * Agrega información al registro del juego.
      */
     private void log(String info) {
-        System.out.println(info);
-        //TODO: Registrar acciones en archivo LOG
+        //TODO: Guardar info. en registro LOG
+        try {
+            String url = Dungeons2019.class.getResource(ARCHIVO_REGISTRO).getPath();
+            System.out.println(url);
+            PrintWriter salida = new PrintWriter(new FileOutputStream(url));
+            salida.println(info);
+            System.out.println(info);
+            salida.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
