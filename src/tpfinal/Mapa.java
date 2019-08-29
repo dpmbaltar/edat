@@ -51,6 +51,48 @@ public class Mapa extends Grafo<String, Integer> {
         return eliminado;
     }
 
+    public boolean modificarVertice(String locacion, String nuevaLocacion) {
+        boolean modificado = false;
+        NodoVertice<String, Integer> vertice = buscarVertice(locacion);
+
+        if (vertice != null) {
+            vertice.setElemento(nuevaLocacion);
+            modificado = true;
+        }
+
+        return modificado;
+    }
+
+    public boolean modificarEtiqueta(String locacion, String locacionAdyacente, Integer nuevaEtiqueta) {
+        boolean modificada = false;
+        NodoVertice<String, Integer> vertice = buscarVertice(locacion);
+
+        if (vertice != null) {
+            NodoAdyacente<String, Integer> adyacente = buscarAdyacente(vertice, locacionAdyacente);
+
+            if (adyacente != null) {
+                NodoAdyacente<String, Integer> reciproco = buscarAdyacente(adyacente.getVertice(), locacion);
+                adyacente.setEtiqueta(nuevaEtiqueta);
+                reciproco.setEtiqueta(nuevaEtiqueta);
+                modificada = true;
+            }
+        }
+
+        return modificada;
+    }
+
+    public Lista<String> listarVertices() {
+        Lista<String> vertices = new Lista<>();
+        NodoVertice<String, Integer> vertice = inicio;
+
+        while (vertice != null) {
+            vertices.insertar(vertice.getElemento(), vertices.longitud() + 1);
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return vertices;
+    }
+
     /**
      * Devuelve una lista con las locaciones adyacentes a una locación dada.
      *

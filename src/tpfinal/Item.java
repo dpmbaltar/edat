@@ -237,11 +237,13 @@ public class Item implements Comparable<Item> {
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();
-        cadena.append(codigo).append("; ");
-        cadena.append(nombre).append("; ");
-        cadena.append(precio).append("; ");
-        cadena.append(ataque).append("; ");
-        cadena.append(defensa).append("; ");
+        cadena.append(codigo).append(';');
+        cadena.append(nombre).append(';');
+        cadena.append(precio).append(';');
+        cadena.append(ataque).append(';');
+        cadena.append(defensa).append(';');
+        cadena.append(cantidad).append(';');
+        cadena.append(cantidadDisponible);
 
         return cadena.toString();
     }

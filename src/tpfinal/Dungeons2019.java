@@ -110,7 +110,6 @@ public class Dungeons2019 {
     public void cargar(String nombreArchivo) {
         try {
             String url = Dungeons2019.class.getResource(nombreArchivo).getPath();
-            System.out.println(url);
             BufferedReader archivoEstado = new BufferedReader(new FileReader(url));
             String linea = archivoEstado.readLine();
 
@@ -120,23 +119,21 @@ public class Dungeons2019 {
                         items.insertar(crearItemDesdeCadena(linea.substring(2)));
                         break;
                     case 'J': // Cargar Jugador
-                        Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
+                        Jugador jugador = crearJugadorDesdeCadena(linea.substring(2));
+
                         if (jugador != null) {
                             jugadores.insertar(jugador.getUsuario().toLowerCase(), jugador);
-                            //TODO: Agregar items
                         }
                         break;
                     case 'L': // Cargar Locación
-                        mapa.insertarVertice(linea.substring(2).replace(';', ' ').trim());
+                        mapa.insertarVertice(linea.substring(2).replace(";", ""));
                         break;
                     case 'C': // Cargar Camino
                         String[] partes = linea.substring(2).split(";");
 
                         if (partes.length >= 3) {
-                            try {
-                                int etiqueta = Integer.valueOf(partes[2].trim());
-                                mapa.insertarArco(partes[0].trim(), partes[1].trim(), etiqueta);
-                            } catch (NumberFormatException e) {}
+                            int etiqueta = Integer.valueOf(partes[2]);
+                            mapa.insertarArco(partes[0], partes[1], etiqueta);
                         }
                         break;
                 }
@@ -155,26 +152,48 @@ public class Dungeons2019 {
         String[] partes = cadena.split(";");
 
         if (partes.length >= 7) {
-            String codigo = partes[0].trim();
-            String nombre = partes[1].trim();
-            int precio = 0;
-            int ataque = 0;
-            int defensa = 0;
-            int cantidad = 0;
-            int cantidadDisponible = 0;
-
-            try {
-                 precio = Integer.valueOf(partes[2].trim());
-                 ataque = Integer.valueOf(partes[3].trim());
-                 defensa = Integer.valueOf(partes[4].trim());
-                 cantidad = Integer.valueOf(partes[5].trim());
-                 cantidadDisponible = Integer.valueOf(partes[6].trim());
-            } catch (NumberFormatException e) {}
-
+            String codigo = partes[0];
+            String nombre = partes[1];
+            int precio = Integer.valueOf(partes[2]);
+            int ataque = Integer.valueOf(partes[3]);
+            int defensa = Integer.valueOf(partes[4]);
+            int cantidad = Integer.valueOf(partes[5]);
+            int cantidadDisponible = Integer.valueOf(partes[6]);
             nuevoItem = new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidadDisponible);
         }
 
         return nuevoItem;
+    }
+
+    private Jugador crearJugadorDesdeCadena(String cadena) {
+        Jugador nuevoJugador = null;
+        String[] partes = cadena.split(";");
+
+        if (partes.length >= 5) {
+            String usuario = partes[0];
+            TipoJugador tipo = TipoJugador.valueOf(partes[1].toUpperCase());
+            Categoria categoria = Categoria.valueOf(partes[2].toUpperCase());
+            int dinero = Integer.valueOf(partes[3]);
+            nuevoJugador = new Jugador(usuario, tipo, categoria, dinero);
+
+            // Leer y agregar ítems del jugador
+            String cadenaItems = partes[4].substring(1, partes[4].length() - 1);
+
+            if (!cadenaItems.isEmpty()) {
+                String[] codigos = cadenaItems.split(",");
+                Lista<Item> itemsJugador = nuevoJugador.getItems();
+
+                for (int i = 0; i < codigos.length; i++) {
+                    Item item = items.obtener(codigos[i]);
+
+                    if (item != null) {
+                        itemsJugador.insertar(item, itemsJugador.longitud() + 1);
+                    }
+                }
+            }
+        }
+
+        return nuevoJugador;
     }
 
     /**
@@ -191,7 +210,7 @@ public class Dungeons2019 {
         //TODO: Guardar info. en registro LOG
         try {
             String url = Dungeons2019.class.getResource(ARCHIVO_REGISTRO).getPath();
-            System.out.println(url);
+            //System.out.println(url);
             PrintWriter salida = new PrintWriter(new FileOutputStream(url));
             salida.println(info);
             System.out.println(info);
@@ -933,22 +952,22 @@ public class Dungeons2019 {
                     borrarLocacion();
                     break;
                 case 3:
-                    //TODO: modificarLocacion()
+                    modificarLocacion();
                     break;
                 case 4:
                     mostrarLocacionesAdyacentes();
                     break;
                 case 5:
-                    //TODO: mostrarCaminoMasCorto()
+                    //TODO: mostrarCaminoMasCorto();
                     break;
                 case 6:
                     mostrarCaminoMasDirecto();
                     break;
                 case 7:
-                    //TODO: mostrarCaminoHastaDistancia()
+                    //TODO: mostrarCaminoHastaDistancia();
                     break;
                 case 8:
-                    //TODO: mostrarCaminoSinLocacion()
+                    //TODO: mostrarCaminoSinLocacion();
                     break;
             }
 
@@ -992,6 +1011,131 @@ public class Dungeons2019 {
     }
 
     /**
+     * C. ABM de locaciones
+     * Modificar locación.
+     */
+    public void modificarLocacion() {
+        titulo("Modificar locación");
+
+        if (!mapa.esVacio()) {
+            String locacion = leerLocacion();
+
+            if (mapa.existeVertice(locacion)) {
+                modificarLocacionSegunOpcion(locacion);
+            } else {
+                System.out.println(String.format("No existe la locación \"%s\"", locacion));
+            }
+        } else {
+            System.out.println("No existen locaciones para modificar");
+        }
+    }
+
+    private void modificarLocacionSegunOpcion(String locacion) {
+        int opcion = 0;
+
+        do {
+            titulo(String.format("Modificar locación \"%s\"", locacion));
+            opcion(1, "Nombre");
+            opcion(2, "Agregar camino");
+            opcion(3, "Borrar camino");
+            opcion(4, "Modificar camino (distancia)");
+            opcion(0, "Cancelar");
+
+            opcion = leerOpcion(0, 4);
+
+            switch (opcion) {
+                case 1:
+                    locacion = modificarNombreLocacion(locacion);
+                    break;
+                case 2:
+                    agregarCamino(locacion);
+                    break;
+                case 3:
+                    borrarCamino(locacion);
+                    break;
+                case 4:
+                    modificarDistancia(locacion);
+                    break;
+            }
+        } while (opcion > 0);
+    }
+
+    private String modificarNombreLocacion(String locacion) {
+        String nuevaLocacion = leerLocacion();
+        mapa.modificarVertice(locacion, nuevaLocacion);
+
+        log(String.format("Se modificó el nombre de la locación \"%s\" a \"%s\"", locacion, nuevaLocacion));
+
+        return nuevaLocacion;
+    }
+
+    private void agregarCamino(String locacion) {
+        titulo(String.format("Nuevo destino para %s", locacion));
+        Lista<String> locaciones = mapa.listarVertices();
+        String destino;
+
+        for (int i = 1; i <= locaciones.longitud(); i++) {
+            destino = locaciones.recuperar(i);
+
+            if (!destino.equalsIgnoreCase(locacion)) {
+                opcion(i, destino);
+            }
+        }
+
+        opcion(0, "Cancelar");
+        int opcion = leerOpcion(0, locaciones.longitud());
+
+        if (opcion > 0) {
+            int distancia = leerDistancia();
+            destino = locaciones.recuperar(opcion);
+            mapa.insertarArco(locacion, destino, distancia);
+
+            log(String.format("Se insertó un camino de una distancia de %d kms desde \"%s\" hasta \"%s\"", distancia,
+                    locacion, destino));
+        }
+    }
+
+    private void borrarCamino(String locacion) {
+        titulo(String.format("Destino a borrar desde %s", locacion));
+        Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
+
+        for (int i = 1; i <= adyacentes.longitud(); i++) {
+            opcion(i, adyacentes.recuperar(i));
+        }
+
+        opcion(0, "Cancelar");
+        int opcion = leerOpcion(0, adyacentes.longitud());
+
+        if (opcion > 0) {
+            String destino = adyacentes.recuperar(opcion);
+            mapa.eliminarArco(locacion, destino);
+
+            log(String.format("Se eliminó el camino desde \"%s\" hasta \"%s\"", locacion, destino));
+        }
+    }
+
+    private void modificarDistancia(String locacion) {
+        titulo(String.format("Destino a modificar distancia desde %s", locacion));
+        Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
+
+        for (int i = 1; i <= adyacentes.longitud(); i++) {
+            opcion(i, adyacentes.recuperar(i));
+        }
+
+        opcion(0, "Cancelar");
+        int opcion = leerOpcion(0, adyacentes.longitud());
+
+        if (opcion > 0) {
+            String destino = adyacentes.recuperar(opcion);
+            int distancia = leerDistancia();
+            mapa.modificarEtiqueta(locacion, destino, distancia);
+
+            log(String.format("Se modificó la distancia del camino desde \"%s\" hasta \"%s\" a %d kms", locacion,
+                    destino, distancia));
+        }
+    }
+
+    /**
      * J. Consultas sobre locaciones:
      * Dado un nombre de locación, mostrar todas las locaciones a las que puede moverse un equipo después de ganar una
      * batalla en dicha locación.
@@ -1010,11 +1154,10 @@ public class Dungeons2019 {
 
                 log(String.format("Se consultaron las locaciones adyacentes a \"%s\"", locacion));
             } else {
-                log(String.format("Se consultaron las locaciones adyacentes de una locación inexistente \"%s\"",
-                        locacion));
+                System.out.println(String.format("No existe la locación \"%s\"", locacion));
             }
         } else {
-            log("No existen locaciones para consultar");
+            System.out.println("No existen locaciones para consultar");
         }
     }
 
@@ -1040,12 +1183,11 @@ public class Dungeons2019 {
 
                 log(String.format("Se consultó el camino más directo entre \"%s\" y \"%s\"", locacion1, locacion2));
             } else {
-                log(String.format(
-                        "Se consultó el camino más directo entre \"%s\" y \"%s\" siendo al menos una inexistente",
+                System.out.println(String.format("Alguna de las locaciones no existe, \"%s\" y/o \"%s\"",
                         locacion1, locacion2));
             }
         } else {
-            log("No existen locaciones para consultar");
+            System.out.println("No existen locaciones para consultar");
         }
     }
 
@@ -1222,7 +1364,7 @@ public class Dungeons2019 {
      */
     public void mostrarJugadores() {
         titulo("Jugadores");
-        System.out.println("Usuario; Tipo, Categoría, Dinero, Ítems");
+        System.out.println("Usuario;Tipo;Categoría;Dinero;Ítems");
         Lista<Jugador> listaJugadores = jugadores.listarDatos();
 
         for (int i = 1; i <= listaJugadores.longitud(); i++) {
@@ -1235,7 +1377,7 @@ public class Dungeons2019 {
      */
     public void mostrarItems() {
         titulo("Ítems");
-        System.out.println("Código; Nombre; Precio; Ataque; Defensa");
+        System.out.println("Código;Nombre;Precio;Ataque;Defensa;Cantidad;Cantidad Disponible");
         Lista<Item> items = this.items.listar();
 
         for (int i = 1; i <= items.longitud(); i++) {
