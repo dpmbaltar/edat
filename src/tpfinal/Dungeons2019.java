@@ -21,70 +21,17 @@ import utiles.TecladoIn;
 public class Dungeons2019 {
 
     /**
-     * El archivo del menú.
-     */
-    private static final String ARCHIVO_MENU = "menu.txt";
-
-    /**
-     * El archivo de estado del juego.
+     * El archivo donde se carga y/o guarda el estado del juego.
      */
     private static final String ARCHIVO_ESTADO = "estado.csv";
 
     /**
-     * El archivo de registro.
+     * El archivo de registro de acciones del juego (se reinicia por cada ejecución).
      */
     private static final String ARCHIVO_REGISTRO = "registro.log";
 
     /**
-     * Acciones de jugador.
-     */
-    public static final int AGREGAR_JUGADOR = 11;
-    public static final int BORRAR_JUGADOR = 12;
-    public static final int MODIFICAR_JUGADOR = 13;
-    public static final int CONSULTAR_JUGADOR = 14;
-    public static final int FILTRAR_JUGADORES = 15;
-    public static final int PONER_JUGADOR_EN_ESPERA = 16;
-    public static final int PONER_JUGADORES_EN_ESPERA = 17;
-
-    /**
-     * Acciones de ítem.
-     */
-    public static final int AGREGAR_ITEM = 21;
-    public static final int BORRAR_ITEM = 22;
-    public static final int MODIFICAR_ITEM = 23;
-    public static final int CONSULTAR_ITEM = 24;
-    public static final int MOSTRAR_ITEMS_HASTA_PRECIO = 25;
-    public static final int MOSTRAR_ITEMS_DESDE_HASTA_PRECIO = 26;
-
-    /**
-     * Acciones de locación.
-     */
-    public static final int AGREGAR_LOCACION = 31;
-    public static final int BORRAR_LOCACION = 32;
-    public static final int MODIFICAR_LOCACION = 33;
-    public static final int MOSTRAR_LOCACIONES_ADYACENTES = 34;
-    public static final int MOSTRAR_CAMINO_MAS_CORTO = 35;
-    public static final int MOSTRAR_CAMINO_MAS_DIRECTO = 36;
-    public static final int MOSTRAR_CAMINO_HASTA_DISTANCIA = 37;
-    public static final int MOSTRAR_CAMINO_SIN_LOCACION = 38;
-
-    /**
-     * Acciones de equipo.
-     */
-    public static final int CONSULTAR_EQUIPO = 41;
-    public static final int CREAR_EQUIPO = 42;
-    public static final int INICIAR_BATALLA_ENTRE_EQUIPOS = 43;
-
-    /**
-     * Acciones generales.
-     */
-    public static final int MOSTRAR_RANKING_JUGADORES = 51;
-    public static final int MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD = 52;
-    public static final int MOSTRAR_SISTEMA = 53;
-    public static final int SALIR = 0;
-
-    /**
-     * Equipos registrados (hashmap con clave tipo String y dato tipo Equipo).
+     * Equipos creados (HashMap con clave tipo String y dato tipo Equipo).
      */
     private HashMap<String, Equipo> equipos;
 
@@ -99,25 +46,28 @@ public class Dungeons2019 {
     private ColaPrioridad<Jugador, Categoria> esperando;
 
     /**
-     * Ítems disponibles en el juego.
+     * Ítems disponibles en el juego (AVL modificado para almacenar ítems de igual precio, y ordenados por precio).
      */
-    private AVLItems items; //TODO: El AVL debe aceptar ítems con precios iguales
+    private AVLItems items;
 
     /**
-     * El mapa del juego (grafo etiquetado con elementos tipo String y etiquetas tipo Integer).
+     * El mapa del juego (grafo etiquetado extendido con elementos tipo String y etiquetas tipo Integer).
      */
     private Mapa mapa;
 
     /**
-     * La cadena del menú.
-     */
-    private String menu;
-
-    /**
-     * Tabla hash para los códigos de los ítems.
+     * Tabla Hash para generar códigos de ítem únicos.
      */
     private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
+
+    /**
+     * Letra actual para generar códigos de ítem.
+     */
     private static char letra = 'A';
+
+    /**
+     * Número actual para generar códigos de ítem.
+     */
     private static int secuencia = 0;
 
     /**
@@ -127,7 +77,6 @@ public class Dungeons2019 {
      */
     public static void main(String[] args) {
         Dungeons2019 juego = new Dungeons2019();
-        juego.cargar("estado.csv");
         juego.iniciar();
     }
 
@@ -146,104 +95,14 @@ public class Dungeons2019 {
      * Inicia el juego.
      */
     public void iniciar() {
-        int accion = 0;
-
-        do {
-            accion = menu();
-
-            switch (accion) {
-                case AGREGAR_JUGADOR:
-                    agregarJugador();
-                    break;
-                case BORRAR_JUGADOR:
-                    borrarJugador();
-                    break;
-                case MODIFICAR_JUGADOR:
-                    modificarJugador();
-                    break;
-                case CONSULTAR_JUGADOR:
-                    consultarJugador();
-                    break;
-                case FILTRAR_JUGADORES:
-                    filtrarJugadores();
-                    break;
-                case PONER_JUGADOR_EN_ESPERA:
-                    ponerJugadorEnEspera();
-                    break;
-                case PONER_JUGADORES_EN_ESPERA:
-                    ponerJugadoresEnEspera();
-                    break;
-                case AGREGAR_ITEM:
-                    agregarItem();
-                    break;
-                case BORRAR_ITEM:
-                    borrarItem();
-                    break;
-                case MODIFICAR_ITEM:
-                    modificarItem();
-                    break;
-                case CONSULTAR_ITEM:
-                    consultarItem();
-                    break;
-                case MOSTRAR_ITEMS_HASTA_PRECIO:
-                    mostrarItemsHastaPrecio();
-                    break;
-                case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
-                    mostrarItemsDesdeHastaPrecio();
-                    break;
-                case AGREGAR_LOCACION:
-                    agregarLocacion();
-                    break;
-                case BORRAR_LOCACION:
-                    borrarLocacion();
-                    break;
-                case MODIFICAR_LOCACION:
-                    //TODO: modificarLocacion()
-                    break;
-                case MOSTRAR_LOCACIONES_ADYACENTES:
-                    mostrarLocacionesAdyacentes();
-                    break;
-                case MOSTRAR_CAMINO_MAS_CORTO:
-                    //TODO: mostrarCaminoMasCorto()
-                    break;
-                case MOSTRAR_CAMINO_MAS_DIRECTO:
-                    mostrarCaminoMasDirecto();
-                    break;
-                case MOSTRAR_CAMINO_HASTA_DISTANCIA:
-                    //TODO: mostrarCaminoHastaDistancia()
-                    break;
-                case MOSTRAR_CAMINO_SIN_LOCACION:
-                    //TODO: mostrarCaminoSinLocacion()
-                    break;
-                case CONSULTAR_EQUIPO:
-                    consultarEquipo();
-                    break;
-                case CREAR_EQUIPO:
-                    crearEquipo();
-                    break;
-                case INICIAR_BATALLA_ENTRE_EQUIPOS:
-                    //TODO: iniciarBatallaEntreEquipos();
-                case MOSTRAR_RANKING_JUGADORES:
-                    //TODO: mostrarRankingJugadores();
-                case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
-                    //TODO: mostrarItemsUltimaDisponibilidad();
-                    break;
-                case MOSTRAR_SISTEMA:
-                    mostrarSistema();
-                    break;
-                case SALIR:
-                    System.out.println("Fin");
-                    break;
-            }
-
-            if (accion != SALIR) {
-                pausar();
-            }
-        } while (accion != SALIR);
+        System.out.println("************************** Calabozos & Estructuras **************************");
+        cargar(ARCHIVO_ESTADO);
+        menu();
+        guardar(ARCHIVO_ESTADO);
     }
 
     /**
-     * Carga el estado del juego desde un archivo (se asume el formato válido).
+     * Carga el estado del juego desde un archivo CSV (se asume formato válido generado por el juego).
      */
     public void cargar(String nombreArchivo) {
         try {
@@ -254,10 +113,7 @@ public class Dungeons2019 {
             while (linea != null) {
                 switch (linea.charAt(0)) {
                     case 'I': // Cargar Ítem
-                        Item item = Item.crearDesdeCadena(linea.substring(2));
-                        if (item != null) {
-                            items.insertar(item);
-                        }
+                        items.insertar(crearItemDesdeCadena(linea.substring(2)));
                         break;
                     case 'J': // Cargar Jugador
                         Jugador jugador = Jugador.crearDesdeCadena(linea.substring(2));
@@ -290,121 +146,38 @@ public class Dungeons2019 {
         }
     }
 
+    private Item crearItemDesdeCadena(String cadena) {
+        Item nuevoItem = null;
+        String[] partes = cadena.split(";");
+
+        if (partes.length >= 7) {
+            String codigo = partes[0].trim();
+            String nombre = partes[1].trim();
+            int precio = 0;
+            int ataque = 0;
+            int defensa = 0;
+            int cantidad = 0;
+            int cantidadDisponible = 0;
+
+            try {
+                 precio = Integer.valueOf(partes[2].trim());
+                 ataque = Integer.valueOf(partes[3].trim());
+                 defensa = Integer.valueOf(partes[4].trim());
+                 cantidad = Integer.valueOf(partes[5].trim());
+                 cantidadDisponible = Integer.valueOf(partes[6].trim());
+            } catch (NumberFormatException e) {}
+
+            nuevoItem = new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidadDisponible);
+        }
+
+        return nuevoItem;
+    }
+
     /**
      * Guarda el estado del juego a un archivo CSV.
      */
-    public void guardar() {
+    public void guardar(String nombreArchivo) {
         //TODO: Guardar nuevo estado del juego
-    }
-
-    /**
-     * Muestra el menú principal.
-     */
-    public int menu() {
-        int accion = 0;
-
-        if (menu == null) {
-            try {
-                String url = Dungeons2019.class.getResource(ARCHIVO_MENU).getPath();
-                BufferedReader archivoMenu = new BufferedReader(new FileReader(url));
-                String linea = archivoMenu.readLine();
-                StringBuilder leido = new StringBuilder();
-
-                while (linea != null) {
-                    leido.append(linea).append("\r\n");
-                    linea = archivoMenu.readLine();
-                }
-
-                menu = leido.toString();
-                archivoMenu.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.print(menu);
-        System.out.print("Opción: ");
-        accion = TecladoIn.readLineInt();
-
-        while (!esAccionValida(accion)) {
-            System.out.println("La opción ingresada no es válida.");
-            System.out.print("Intente nuevamente: ");
-            accion = TecladoIn.readLineInt();
-        }
-
-        return accion;
-    }
-
-    /**
-     * TODO: Separar menús según tipo de operación
-     */
-    public void menuJugadores() {
-        System.out.println("~~~{ Jugadores }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("   <1> Agregar jugador");
-        System.out.println("   <2> Borrar jugador");
-        System.out.println("   <3> Modificar jugador");
-        System.out.println("   <4> Consultar jugador");
-        System.out.println("   <5> Filtrar jugadores");
-        System.out.println("   <6> Poner jugador en espera");
-        System.out.println("   <7> Poner todos los jugadores en espera");
-    }
-
-    /**
-     * Verifica si una acción es válida.
-     *
-     * @param accion la acción a verificar
-     * @return verdadero si la acción es válida, falso en caso contrario
-     */
-    private static boolean esAccionValida(int accion) {
-        boolean valida = false;
-
-        switch (accion) {
-            case AGREGAR_JUGADOR:
-            case BORRAR_JUGADOR:
-            case MODIFICAR_JUGADOR:
-            case CONSULTAR_JUGADOR:
-            case FILTRAR_JUGADORES:
-            case PONER_JUGADOR_EN_ESPERA:
-            case PONER_JUGADORES_EN_ESPERA:
-            case AGREGAR_ITEM:
-            case BORRAR_ITEM:
-            case MODIFICAR_ITEM:
-            case CONSULTAR_ITEM:
-            case MOSTRAR_ITEMS_HASTA_PRECIO:
-            case MOSTRAR_ITEMS_DESDE_HASTA_PRECIO:
-            case AGREGAR_LOCACION:
-            case BORRAR_LOCACION:
-            case MODIFICAR_LOCACION:
-            case MOSTRAR_LOCACIONES_ADYACENTES:
-            case MOSTRAR_CAMINO_MAS_CORTO:
-            case MOSTRAR_CAMINO_MAS_DIRECTO:
-            case MOSTRAR_CAMINO_HASTA_DISTANCIA:
-            case MOSTRAR_CAMINO_SIN_LOCACION:
-            case CONSULTAR_EQUIPO:
-            case CREAR_EQUIPO:
-            case INICIAR_BATALLA_ENTRE_EQUIPOS:
-            case MOSTRAR_RANKING_JUGADORES:
-            case MOSTRAR_ITEMS_ULTIMA_DISPONIBILIDAD:
-            case MOSTRAR_SISTEMA:
-            case SALIR:
-                valida = true;
-        }
-
-        return valida;
-    }
-
-    private static void titulo(String titulo) {
-        System.out.println(
-                String.format("~~~{ %s }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", titulo)
-                        .substring(0, 77));
-    }
-
-    /**
-     * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
-     */
-    private static void pausar() {
-        System.out.println("Presionar [Entrar] para continuar...");
-        TecladoIn.readLine();
     }
 
     /**
@@ -415,9 +188,106 @@ public class Dungeons2019 {
         //TODO: Registrar acciones en archivo LOG
     }
 
-    private static int leerDistancia() {
-        return Funciones.leerEnteroPositivo("Distancia: ",
-                "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
+    /**
+     * Menú principal.
+     */
+    public void menu() {
+        int opcion = 0;
+
+        do {
+            titulo("Menú");
+            opcion(1, "Jugadores");
+            opcion(2, "Ítems");
+            opcion(3, "Locaciones");
+            opcion(4, "Equipos");
+            opcion(5, "Sistema");
+            opcion(0, "Salir");
+
+            opcion = leerOpcion(0, 5);
+
+            switch (opcion) {
+                case 1:
+                    menuJugadores();
+                    break;
+                case 2:
+                    menuItems();
+                    break;
+                case 3:
+                    menuLocaciones();
+                    break;
+                case 4:
+                    menuEquipos();
+                    break;
+                case 5:
+                    menuSistema();
+                    break;
+            }
+        } while (opcion > 0);
+
+        System.out.println("Fin");
+    }
+
+    private static void titulo(String titulo) {
+        System.out.println(
+                String.format("~~~{ %s }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", titulo)
+                        .substring(0, 77));
+    }
+
+    private static void opcion(int numero, String nombre) {
+        System.out.println(String.format("   <%d> %s", numero, nombre));
+    }
+
+    private static int leerOpcion(int desde, int hasta) {
+        return Funciones.leerEntero("Opción: ", "La opción ingresada no es válida.\r\nReintentar: ", desde, hasta);
+    }
+
+    /**
+     * Menú de jugadores.
+     */
+    public void menuJugadores() {
+        int opcion = 0;
+
+        do {
+            titulo("Jugadores");
+            opcion(1, "Agregar jugador");
+            opcion(2, "Borrar jugador");
+            opcion(3, "Modificar jugador");
+            opcion(4, "Consultar jugador");
+            opcion(5, "Filtrar jugadores");
+            opcion(6, "Poner jugador en espera");
+            opcion(7, "Poner todos los jugadores en espera");
+            opcion(0, "Volver");
+
+            opcion = leerOpcion(0, 7);
+
+            switch (opcion) {
+                case 1:
+                    agregarJugador();
+                    break;
+                case 2:
+                    borrarJugador();
+                    break;
+                case 3:
+                    modificarJugador();
+                    break;
+                case 4:
+                    consultarJugador();
+                    break;
+                case 5:
+                    filtrarJugadores();
+                    break;
+                case 6:
+                    ponerJugadorEnEspera();
+                    break;
+                case 7:
+                    ponerJugadoresEnEspera();
+                    break;
+            }
+
+            if (opcion > 0) {
+                Funciones.pausar();
+            }
+        } while (opcion > 0);
     }
 
     /**
@@ -434,50 +304,6 @@ public class Dungeons2019 {
 
         jugadores.insertar(nombre.toLowerCase(), new Jugador(nombre, tipo, categoria, dinero));
         log(String.format("Se agregó el jugador \"%s\"", nombre));
-    }
-
-    /**
-     * Lee un nombre de usuario.
-     *
-     * @return el usuario leído
-     */
-    private static String leerNombreUsuario() {
-        return Funciones.leerPalabra("Nombre de usuario: ", "El nombre de usuario ingresado no es válido.\r\n"
-                + "Debe ser una palabra de 1 a 20 caracteres que inicie con letra.\r\nReintentar: ", 1, 20);
-    }
-
-    /**
-     * Lee el tipo de jugador.
-     *
-     * @return el tipo de jugador leído
-     */
-    private static TipoJugador leerTipo() {
-        System.out.print("Tipo de jugador (<0> Guerrero - <1> Defensor): ");
-        TipoJugador tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
-
-        while (tipo == null) {
-            System.out.println("El tipo de jugador ingresado no es válido.");
-            System.out.println("Debe ser un entero según se indica: <0> Guerrero, <1> Defensor.");
-            System.out.print("Reintentar: ");
-            tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
-        }
-
-        return tipo;
-    }
-
-    /**
-     * Solicita una categoría al usuario.
-     *
-     * @return la categoría leída
-     */
-    private static Categoria leerCategoria() {
-        return Categoria.desdeEntero(Funciones.leerEntero("Categoría <0> Profesional - <1> Aficionado - <2> Novato: ",
-                "La categoría ingresada no es válida.\r\nReintentar: ", 0, 2));
-    }
-
-    private static int leerDinero() {
-        return Funciones.leerEnteroPositivo("Dinero: ",
-                "El dinero ingresado no es válido.\r\nDebe ser un entero positivo o cero.\r\nReintentar: ");
     }
 
     /**
@@ -654,11 +480,6 @@ public class Dungeons2019 {
         }
     }
 
-    private static String leerPrefijoUsuario() {
-        return Funciones.leerPalabra("Prefijo: ",
-                "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
-    }
-
     /**
      * D. Alta de un jugador en la cola de espera por un equipo.
      */
@@ -718,73 +539,115 @@ public class Dungeons2019 {
     }
 
     /**
+     * Lee un nombre de usuario.
+     *
+     * @return el usuario leído
+     */
+    private static String leerNombreUsuario() {
+        return Funciones.leerPalabra("Nombre de usuario: ", "El nombre de usuario ingresado no es válido.\r\n"
+                + "Debe ser una palabra de 1 a 20 caracteres que inicie con letra.\r\nReintentar: ", 1, 20);
+    }
+
+    /**
+     * Lee el tipo de jugador.
+     *
+     * @return el tipo de jugador leído
+     */
+    private static TipoJugador leerTipo() {
+        System.out.print("Tipo de jugador (<0> Guerrero - <1> Defensor): ");
+        TipoJugador tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
+
+        while (tipo == null) {
+            System.out.println("El tipo de jugador ingresado no es válido.");
+            System.out.println("Debe ser un entero según se indica: <0> Guerrero, <1> Defensor.");
+            System.out.print("Reintentar: ");
+            tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
+        }
+
+        return tipo;
+    }
+
+    /**
+     * Solicita una categoría al usuario.
+     *
+     * @return la categoría leída
+     */
+    private static Categoria leerCategoria() {
+        return Categoria.desdeEntero(Funciones.leerEntero("Categoría <0> Profesional - <1> Aficionado - <2> Novato: ",
+                "La categoría ingresada no es válida.\r\nReintentar: ", 0, 2));
+    }
+
+    private static int leerDinero() {
+        return Funciones.leerEnteroPositivo("Dinero: ",
+                "El dinero ingresado no es válido.\r\nDebe ser un entero positivo o cero.\r\nReintentar: ");
+    }
+
+    private static String leerPrefijoUsuario() {
+        return Funciones.leerPalabra("Prefijo: ",
+                "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
+    }
+
+    /**
+     * Menú de ítems.
+     */
+    public void menuItems() {
+        int opcion;
+
+        do {
+            titulo("Ítems");
+            opcion(1, "Agregar ítem");
+            opcion(2, "Borrar ítem");
+            opcion(3, "Modificar ítem");
+            opcion(4, "Consultar ítem");
+            opcion(5, "Mostrar ítems para comprar (con precio max.)");
+            opcion(6, "Mostrar ítems para comprar (con precio min. y max.)");
+            opcion(0, "Volver");
+
+            opcion = leerOpcion(0, 6);
+
+            switch (opcion) {
+                case 1:
+                    agregarItem();
+                    break;
+                case 2:
+                    borrarItem();
+                    break;
+                case 3:
+                    modificarItem();
+                    break;
+                case 4:
+                    consultarItem();
+                    break;
+                case 5:
+                    mostrarItemsHastaPrecio();
+                    break;
+                case 6:
+                    mostrarItemsDesdeHastaPrecio();
+                    break;
+            }
+
+            if (opcion > 0) {
+                Funciones.pausar();
+            }
+        } while (opcion > 0);
+    }
+
+    /**
      * B. ABM de ítems:
      * Agregar ítem.
      */
     public void agregarItem() {
         titulo("Agregar ítem");
 
-        Item item = new Item();
-        item.setCodigo(generarCodigoItem());
-        item.setNombre(leerNombreItem());
-        item.setPrecio(leerPrecio());
-        item.setAtaque(leerAtaque());
-        item.setDefensa(leerDefensa());
-        item.setCantidad(leerDisponibilidad());
-        items.insertar(item);
+        String codigo = generarCodigoItem();
+        String nombre = leerNombreItem();
+        int precio = leerPrecio();
+        int ataque = leerAtaque();
+        int defensa = leerDefensa();
+        int cantidad = leerDisponibilidad();
+        items.insertar(new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidad));
 
-        log(String.format("Se agregó el ítem \"%s\" (%s)", item.getNombre(), item.getCodigo()));
-    }
-
-    public static String generarCodigoItem() {
-        String codigo = null;
-
-        if (Funciones.esLetraMayus(letra)) {
-            do {
-                codigo = String.format("%s%03d", letra, secuencia);
-                secuencia++;
-
-                if (secuencia > 99) {
-                    secuencia = 0;
-                    letra++;
-                }
-            } while (codigos.pertenece(codigo) && Funciones.esLetraMayus(letra));
-        }
-
-        codigos.insertar(codigo);
-
-        return codigo;
-    }
-
-    private static String leerNombreItem() {
-        return Funciones.leerFrase("Nombre del ítem: ",
-                "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
-                        + "\r\nReintentar: ",
-                2, 50);
-    }
-
-    private static int leerPrecio() {
-        return Funciones.leerEntero("Precio: ",
-                "El precio ingresado no es válido.\r\nDebe ser un entero positivo.\r\nReintentar: ",
-                1, Integer.MAX_VALUE);
-    }
-
-    private static int leerAtaque() {
-        return Funciones.leerEnteroPositivo("Puntos de ataque: ",
-                "Los puntos de ataque ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
-                        + "\r\nReintentar: ");
-    }
-
-    private static int leerDefensa() {
-        return Funciones.leerEnteroPositivo("Puntos de defensa: ",
-                "Los puntos de defensa ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
-                        + "\r\nReintentar: ");
-    }
-
-    private static int leerDisponibilidad() {
-        return Funciones.leerEntero("Disponibilidad: ",
-                "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
-                1, Integer.MAX_VALUE);
+        log(String.format("Se agregó el ítem \"%s\" (%s)", nombre, codigo));
     }
 
     /**
@@ -808,11 +671,6 @@ public class Dungeons2019 {
         } else {
             log("No existen ítems para borrar");
         }
-    }
-
-    private static String leerCodigoItem() {
-        return Funciones.leerPalabra("Código: ",
-                "El código ingresado no es válido.\r\nDebe ser una letra seguido de 3 dígitos.\r\nReintentar: ", 4, 4);
     }
 
     /**
@@ -920,10 +778,6 @@ public class Dungeons2019 {
         }
     }
 
-    private static String formatearDinero(int dinero) {
-        return Funciones.formatearDinero(dinero, '§');
-    }
-
     /**
      * Consultas sobre items:
      * Dado un monto de dinero mostrar todos los items que puede comprar el jugador.
@@ -978,6 +832,119 @@ public class Dungeons2019 {
         }
     }
 
+    private static String generarCodigoItem() {
+        String codigo = null;
+
+        if (Funciones.esLetraMayus(letra)) {
+            do {
+                codigo = String.format("%s%03d", letra, secuencia);
+                secuencia++;
+
+                if (secuencia > 99) {
+                    secuencia = 0;
+                    letra++;
+                }
+            } while (codigos.pertenece(codigo) && Funciones.esLetraMayus(letra));
+        }
+
+        codigos.insertar(codigo);
+
+        return codigo;
+    }
+
+    private static String leerCodigoItem() {
+        return Funciones.leerPalabra("Código: ",
+                "El código ingresado no es válido.\r\nDebe ser una letra seguido de 3 dígitos.\r\nReintentar: ", 4, 4);
+    }
+
+    private static String leerNombreItem() {
+        return Funciones.leerFrase("Nombre del ítem: ",
+                "El nombre ingresado no es válido.\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres."
+                        + "\r\nReintentar: ",
+                2, 50);
+    }
+
+    private static int leerPrecio() {
+        return Funciones.leerEntero("Precio: ",
+                "El precio ingresado no es válido.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
+    }
+
+    private static int leerAtaque() {
+        return Funciones.leerEnteroPositivo("Puntos de ataque: ",
+                "Los puntos de ataque ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
+    }
+
+    private static int leerDefensa() {
+        return Funciones.leerEnteroPositivo("Puntos de defensa: ",
+                "Los puntos de defensa ingresados no son válidos.\r\nDebe ser un entero positivo o cero."
+                        + "\r\nReintentar: ");
+    }
+
+    private static int leerDisponibilidad() {
+        return Funciones.leerEntero("Disponibilidad: ",
+                "La disponibilidad ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ",
+                1, Integer.MAX_VALUE);
+    }
+
+    private static String formatearDinero(int dinero) {
+        return Funciones.formatearDinero(dinero, '$');
+    }
+
+    /**
+     * Menú de locaciones.
+     */
+    public void menuLocaciones() {
+        int opcion = 0;
+
+        do {
+            titulo("Locaciones");
+            opcion(1, "Agregar locación");
+            opcion(2, "Borrar locación");
+            opcion(3, "Modificar locación");
+            opcion(4, "Mostrar locaciones adyacentes");
+            opcion(5, "Mostrar camino más corto (en kms)");
+            opcion(6, "Mostrar camino más directo");
+            opcion(7, "Mostrar camino con distancia máxima");
+            opcion(8, "Mostrar camino más directo sin pasar por una locación");
+            opcion(0, "Volver");
+
+            opcion = leerOpcion(0, 8);
+
+            switch (opcion) {
+                case 1:
+                    agregarLocacion();
+                    break;
+                case 2:
+                    borrarLocacion();
+                    break;
+                case 3:
+                    //TODO: modificarLocacion()
+                    break;
+                case 4:
+                    mostrarLocacionesAdyacentes();
+                    break;
+                case 5:
+                    //TODO: mostrarCaminoMasCorto()
+                    break;
+                case 6:
+                    mostrarCaminoMasDirecto();
+                    break;
+                case 7:
+                    //TODO: mostrarCaminoHastaDistancia()
+                    break;
+                case 8:
+                    //TODO: mostrarCaminoSinLocacion()
+                    break;
+            }
+
+            if (opcion > 0) {
+                Funciones.pausar();
+            }
+        } while (opcion > 0);
+    }
+
     /**
      * C. ABM de locaciones
      * Agregar locación.
@@ -989,13 +956,6 @@ public class Dungeons2019 {
         mapa.insertarVertice(locacion);
 
         log(String.format("Se agregó la locación \"%s\"", locacion));
-    }
-
-    private static String leerLocacion() {
-        return Funciones.leerFrase("Nombre de locación: ",
-                "El nombre de locación ingresado no es válido."
-                        + "\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres.\r\nReintentar: ",
-                2, 50);
     }
 
     /**
@@ -1076,6 +1036,50 @@ public class Dungeons2019 {
         }
     }
 
+    private static String leerLocacion() {
+        return Funciones.leerFrase("Nombre de locación: ",
+                "El nombre de locación ingresado no es válido."
+                        + "\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres.\r\nReintentar: ",
+                2, 50);
+    }
+
+    private static int leerDistancia() {
+        return Funciones.leerEnteroPositivo("Distancia: ",
+                "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
+    }
+
+    /**
+     * Menú de equipos.
+     */
+    public void menuEquipos() {
+        int opcion = 0;
+
+        do {
+            titulo("Equipos");
+            opcion(1, "Consultar equipo");
+            opcion(2, "Crear equipo");
+            opcion(3, "Iniciar batalla entre equipos");
+
+            opcion = leerOpcion(0, 3);
+
+            switch (opcion) {
+                case 1:
+                    consultarEquipo();
+                    break;
+                case 2:
+                    crearEquipo();
+                    break;
+                case 3:
+                    //TODO: iniciarBatallaEntreEquipos();
+                    break;
+            }
+
+            if (opcion > 0) {
+                Funciones.pausar();
+            }
+        } while (opcion > 0);
+    }
+
     /**
      * E. Creación automática de un equipo.
      */
@@ -1148,65 +1152,119 @@ public class Dungeons2019 {
     }
 
     /**
-     * Muestra el estado del juego.
+     * Menú de sistema.
      */
-    public void mostrarSistema() {
+    public void menuSistema() {
         int opcion = 0;
 
         do {
-            titulo("Mostrar sistema");
-            opcion = Funciones.leerEntero(
-                    "   <1> Jugadores\r\n"
-                            + "   <2> Ítems\r\n"
-                            + "   <3> Locaciones\r\n"
-                            + "   <4> Equipos\r\n"
-                            + "   <5> Jugadores esperando\r\n"
-                            + "   <0> Cancelar\r\n"
-                            + "Opción: ",
-                    "La opción no es válida.\r\n Reintentar: ", 0, 5);
+            titulo("Sistema");
+            opcion(1, "Mostrar ranking de jugadores");
+            opcion(2, "Mostrar ítems con última disponibilidad");
+            opcion(3, "Mostrar todos los jugadores");
+            opcion(4, "Mostrar todos los ítems");
+            opcion(5, "Mostrar todas las locaciones");
+            opcion(6, "Mostrar todos los equipos");
+            opcion(7, "Mostrar todos los jugadores en espera");
+            opcion(8, "Mostrar todo");
+            opcion(0, "Volver");
+
+            opcion = leerOpcion(0, 8);
 
             switch (opcion) {
                 case 1:
-                    System.out.println("Jugadores:");
-                    Lista<Jugador> listaJugadores = jugadores.listarDatos();
-
-                    for (int i = 1; i <= listaJugadores.longitud(); i++) {
-                        System.out.println(listaJugadores.recuperar(i));
-                    }
-
-                    pausar();
-                    break;
-                case 2: // Mostrar ítems
-                    System.out.println("Ítems:");
-                    System.out.println("Código; Nombre; Precio; Ataque; Defensa");
-                    Lista<Item> items = this.items.listar();
-
-                    for (int i = 1; i <= items.longitud(); i++) {
-                        System.out.println(items.recuperar(i));
-                    }
-
-                    pausar();
+                    //TODO: mostrarRankingJugadores();
+                case 2:
+                    //TODO: mostrarItemsUltimaDisponibilidad();
                     break;
                 case 3:
-                    System.out.println("Mapa:");
-                    System.out.println(mapa);
+                    mostrarJugadores();
                     break;
                 case 4:
-                    System.out.println("Equipos:");
-                    Iterator<Equipo> iterador = equipos.values().iterator();
-
-                    while (iterador.hasNext()) {
-                        System.out.println(iterador.next().getNombre());
-                    }
-
-                    pausar();
+                    mostrarItems();
                     break;
                 case 5:
-                    System.out.println("Jugadores en espera:");
-                    System.out.println(esperando);
-                    pausar();
+                    mostrarLocaciones();
+                    break;
+                case 6:
+                    mostrarEquipos();
+                    break;
+                case 7:
+                    mostrarEsperando();
+                    break;
+                case 8:
+                    mostrarTodo();
                     break;
             }
-        } while(opcion > 0);
+
+            if (opcion > 0) {
+                Funciones.pausar();
+            }
+        } while (opcion > 0);
+    }
+
+    /**
+     * Muestra estado de todos los jugadores.
+     */
+    public void mostrarJugadores() {
+        titulo("Jugadores");
+        System.out.println("Usuario; Tipo, Categoría, Dinero, Ítems");
+        Lista<Jugador> listaJugadores = jugadores.listarDatos();
+
+        for (int i = 1; i <= listaJugadores.longitud(); i++) {
+            System.out.println(listaJugadores.recuperar(i));
+        }
+    }
+
+    /**
+     * Muestra estado de todos los ítems.
+     */
+    public void mostrarItems() {
+        titulo("Ítems");
+        System.out.println("Código; Nombre; Precio; Ataque; Defensa");
+        Lista<Item> items = this.items.listar();
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            System.out.println(items.recuperar(i));
+        }
+    }
+
+    /**
+     * Muestra estado de todos las locaciones.
+     */
+    public void mostrarLocaciones() {
+        titulo("Locaciones");
+        System.out.println(mapa);
+    }
+
+    /**
+     * Muestra estado de todos los equipos.
+     */
+    public void mostrarEquipos() {
+        titulo("Equipos");
+        Iterator<Equipo> iterador = equipos.values().iterator();
+
+        while (iterador.hasNext()) {
+            System.out.println(iterador.next().getNombre());
+        }
+    }
+
+    /**
+     * Muestra estado de todos los jugadores en espera.
+     */
+    public void mostrarEsperando() {
+        titulo("Jugadores en espera");
+        System.out.println(esperando);
+    }
+
+    /**
+     * Muestra el estado completo del juego.
+     */
+    public void mostrarTodo() {
+        mostrarJugadores();
+        mostrarItems();
+        mostrarLocaciones();
+        mostrarEquipos();
+        mostrarEsperando();
     }
 }

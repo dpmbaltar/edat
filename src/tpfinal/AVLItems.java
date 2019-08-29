@@ -30,11 +30,13 @@ public class AVLItems {
     public boolean insertar(Item elemento) {
         boolean insertado = false;
 
-        if (raiz == null) {
-            raiz = new NodoItem(elemento);
-            insertado = true;
-        } else {
-            insertado = insertar(elemento, raiz, null);
+        if (elemento != null) {
+            if (raiz == null) {
+                raiz = new NodoItem(elemento);
+                insertado = true;
+            } else {
+                insertado = insertar(elemento, raiz, null);
+            }
         }
 
         return insertado;

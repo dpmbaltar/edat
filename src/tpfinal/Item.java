@@ -44,13 +44,6 @@ public class Item implements Comparable<Item> {
     private int cantidadDisponible;
 
     /**
-     * Constructor vacío.
-     */
-    public Item() {
-        this(null, null, 0, 0, 0, 0);
-    }
-
-    /**
      * Constructor con nombre, precio, ataque, defensa y cantidad.
      *
      * @param codigo el código del ítem
@@ -58,16 +51,17 @@ public class Item implements Comparable<Item> {
      * @param precio el precio del ítem
      * @param ataque los puntos de ataque del ítem
      * @param defensa los puntos de defensa del ítem
-     * @param cantidad la cantidad disponible del ítem
+     * @param cantidad la cantidad total disponible del ítem
+     * @param cantidadDisp la cantidad disponible del ítem
      */
-    public Item(String codigo, String nombre, int precio, int ataque, int defensa, int cantidad) {
+    public Item(String codigo, String nombre, int precio, int ataque, int defensa, int cantidad, int cantidadDisp) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.precio = precio;
         this.ataque = ataque;
         this.defensa = defensa;
         this.cantidad = cantidad;
-        this.cantidadDisponible = cantidad;
+        this.cantidadDisponible = cantidadDisp;
     }
 
     /**
@@ -197,42 +191,42 @@ public class Item implements Comparable<Item> {
     }
 
     /**
+     * Aumenta en una unidad la cantidad disponible, según la cantidad máxima.
+     *
+     * @return verdadero si fue aumentada, falso en caso contrario
+     */
+    public boolean aumentarDisponibilidad() {
+        boolean aumentada = false;
+
+        if (cantidadDisponible < cantidad) {
+            cantidadDisponible++;
+        }
+
+        return aumentada;
+    }
+
+    /**
+     * Disminuye en una unidad la cantidad disponible, según la cantidad máxima.
+     *
+     * @return verdadero si fue disminuída, falso en caso contrario
+     */
+    public boolean disminuirDisponibilidad() {
+        boolean disminuida = false;
+
+        if (cantidadDisponible > 0) {
+            cantidadDisponible--;
+        }
+
+        return disminuida;
+    }
+
+    /**
      * Devuelve verdadero si el ítem es único (si cantidad es igual a uno).
      *
      * @return verdadero si el ítem es único, falso en caso contrario
      */
     public boolean esUnico() {
         return cantidad == 1;
-    }
-
-    /**
-     * Crea un ítem desde una cadena de acorde al formato:
-     * <code>
-     * I: código;nombre;precio;ataque;defensa;disponibilidad
-     * </code>
-     *
-     * @param cadena la cadena representando el ítem
-     * @return el ítem si pudo ser creado, nulo en caso contrario
-     */
-    public static Item crearDesdeCadena(String cadena) {
-        Item nuevoItem = null;
-        String[] partes = cadena.split(";");
-
-        if (partes.length >= 6) {
-            nuevoItem = new Item();
-            nuevoItem.codigo = partes[0].trim();
-            nuevoItem.nombre = partes[1].trim();
-
-            try {
-                nuevoItem.precio = Integer.valueOf(partes[2].trim());
-                nuevoItem.ataque = Integer.valueOf(partes[3].trim());
-                nuevoItem.defensa = Integer.valueOf(partes[4].trim());
-                nuevoItem.cantidad = Integer.valueOf(partes[5].trim());
-                nuevoItem.cantidadDisponible = nuevoItem.cantidad;
-            } catch (NumberFormatException e) {}
-        }
-
-        return nuevoItem;
     }
 
     @Override

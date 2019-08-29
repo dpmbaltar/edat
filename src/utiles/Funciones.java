@@ -413,7 +413,7 @@ public class Funciones {
     /**
      * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
      */
-    private static void pausar() {
+    public static void pausar() {
         System.out.println("Presionar [Entrar] para continuar...");
         TecladoIn.readLine();
     }
