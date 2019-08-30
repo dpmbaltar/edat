@@ -100,7 +100,7 @@ public class Dungeons2019 {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        menu();
+        menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
 
@@ -223,11 +223,11 @@ public class Dungeons2019 {
     /**
      * Menú principal.
      */
-    public void menu() {
+    public void menuPrincipal() {
         int opcion = 0;
 
         do {
-            titulo("Menú");
+            titulo("Menú principal");
             opcion(1, "Jugadores");
             opcion(2, "Ítems");
             opcion(3, "Locaciones");
@@ -409,7 +409,7 @@ public class Dungeons2019 {
                 case 4:
                     jugador.setDinero(leerDinero());
                     log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
-                            formatearDinero(jugador.getDinero())));
+                            formDinero(jugador.getDinero())));
                     break;
             }
         } while (opcion != 0);
@@ -438,8 +438,8 @@ public class Dungeons2019 {
                 datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
                 datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
                 datos.append("Categoría: ").append(jugador.getCategoria()).append("\r\n");
-                datos.append("Dinero:    ").append(formatearDinero(jugador.getDinero())).append("\r\n");
-                datos.append("Salud:     ").append(jugador.getSalud()).append("\r\n");
+                datos.append("Dinero:    ").append(formDinero(jugador.getDinero())).append("\r\n");
+                datos.append("Salud:     ").append(formSalud(jugador.getSalud())).append("\r\n");
                 datos.append("Victorias: ").append(jugador.getVictorias()).append("\r\n");
                 datos.append("Derrotas:  ").append(jugador.getDerrotas()).append("\r\n");
                 datos.append("Equipo:    ");
@@ -457,7 +457,11 @@ public class Dungeons2019 {
 
                 if (!itemsJugador.esVacia()) {
                     for (int i = 1; i <= itemsJugador.longitud(); i++) {
-                        datos.append(itemsJugador.recuperar(i).getNombre()).append("\r\n");
+                        datos.append(formItem(itemsJugador.recuperar(i)));
+
+                        if (i < itemsJugador.longitud()) {
+                            datos.append("\r\n           ");
+                        }
                     }
                 } else {
                     datos.append("-");
@@ -619,6 +623,10 @@ public class Dungeons2019 {
                 "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
     }
 
+    private static String formSalud(double salud) {
+        return Funciones.porcentaje(salud);
+    }
+
     /**
      * Menú de ítems.
      */
@@ -748,7 +756,7 @@ public class Dungeons2019 {
                     item.setPrecio(precioNuevo);
 
                     log(String.format("Se modificó el precio del ítem \"%s\" de %s a %s", item.getNombre(),
-                            formatearDinero(precioAnterior), formatearDinero(precioNuevo)));
+                            formDinero(precioAnterior), formDinero(precioNuevo)));
                     break;
                 case 3: // Modificar puntos de ataque del ítem
                     int ataqueAnterior = item.getAtaque();
@@ -793,7 +801,7 @@ public class Dungeons2019 {
                 datos.append("Información del ítem:\r\n");
                 datos.append("Código:         ").append(item.getCodigo()).append("\r\n");
                 datos.append("Nombre:         ").append(item.getNombre()).append("\r\n");
-                datos.append("Precio:         ").append(formatearDinero(item.getPrecio())).append("\r\n");
+                datos.append("Precio:         ").append(formDinero(item.getPrecio())).append("\r\n");
                 datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
                 datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
                 datos.append("Disponibilidad: ").append(item.getCantidadDisponible()).append('/');
@@ -828,7 +836,7 @@ public class Dungeons2019 {
                         item.getNombre(),
                         item.getAtaque(),
                         item.getDefensa(),
-                        formatearDinero(item.getPrecio())));
+                        formDinero(item.getPrecio())));
             }
         } else {
             log("No existen ítems para consultar");
@@ -857,7 +865,7 @@ public class Dungeons2019 {
                         item.getNombre(),
                         item.getAtaque(),
                         item.getDefensa(),
-                        formatearDinero(item.getPrecio())));
+                        formDinero(item.getPrecio())));
             }
         } else {
             log("No existen ítems para consultar");
@@ -920,8 +928,13 @@ public class Dungeons2019 {
                 1, Integer.MAX_VALUE);
     }
 
-    private static String formatearDinero(int dinero) {
-        return Funciones.formatearDinero(dinero, '$');
+    private static String formDinero(int dinero) {
+        return Funciones.dinero(dinero, '$');
+    }
+
+    private static String formItem(Item item) {
+        return String.format("(%s) %s - Atq.: %,d - Def.: %,d - Precio: %s", item.getCodigo(), item.getNombre(),
+                item.getAtaque(), item.getDefensa(), formDinero(item.getPrecio()));
     }
 
     /**
@@ -1331,7 +1344,7 @@ public class Dungeons2019 {
                 case 1:
                     //TODO: mostrarRankingJugadores();
                 case 2:
-                    //TODO: mostrarItemsUltimaDisponibilidad();
+                    mostrarItemsUltimaDisponibilidad();
                     break;
                 case 3:
                     mostrarJugadores();
@@ -1357,6 +1370,32 @@ public class Dungeons2019 {
                 Funciones.pausar();
             }
         } while (opcion > 0);
+    }
+
+    /**
+     * K. (*) Consultas generales (considerar utilizar estructuras adicionales):
+     * (*) Mostrar un ranking de los jugadores con más batallas individuales ganadas.
+     */
+    public void mostrarItemsUltimaDisponibilidad() {
+        titulo("Ítems con última disponibilidad");
+
+        if (!items.esVacio()) {
+            Lista<Item> ultimosDisponibles = items.listarUltimosDisponibles();
+            Item item;
+
+            for (int i = 1; i <= ultimosDisponibles.longitud(); i++) {
+                item = ultimosDisponibles.recuperar(i);
+                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
+                        item.getNombre(),
+                        item.getAtaque(),
+                        item.getDefensa(),
+                        formDinero(item.getPrecio())));
+            }
+
+            log("Se consultaron ítems con última disponibilidad");
+        } else {
+            System.out.println("No existen ítems para consultar");
+        }
     }
 
     /**
