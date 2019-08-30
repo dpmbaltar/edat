@@ -14,7 +14,6 @@ import conjuntistas.TablaHashAbierto;
 import lineales.dinamicas.ColaPrioridad;
 import lineales.dinamicas.Lista;
 import utiles.Funciones;
-import utiles.TecladoIn;
 
 /**
  * Juego.
@@ -256,7 +255,7 @@ public class Dungeons2019 {
             }
         } while (opcion > 0);
 
-        System.out.println("Fin");
+        titulo("Fin");
     }
 
     private static void titulo(String titulo) {
@@ -351,10 +350,10 @@ public class Dungeons2019 {
             if (jugadores.eliminar(usuario)) {
                 log(String.format("Se borró el jugador \"%s\"", usuario));
             } else {
-                log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
+                System.out.println(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
             }
         } else {
-            log("No existen jugadores para borrar");
+            System.out.println("No existen jugadores para borrar");
         }
     }
 
@@ -371,10 +370,10 @@ public class Dungeons2019 {
             if (jugadores.existeClave(usuario)) {
                 modificarJugadorSegunOpcion(usuario);
             } else {
-                log(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
+                System.out.println(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
             }
         } else {
-            log("No existen jugadores para modificar");
+            System.out.println("No existen jugadores para modificar");
         }
     }
 
@@ -467,15 +466,13 @@ public class Dungeons2019 {
                     datos.append("-");
                 }
 
-                datos.append("\r\n");
                 System.out.println(datos);
-
                 log(String.format("Se consultó el jugador \"%s\"", jugador.getUsuario()));
             } else {
-                log(String.format("Se intentó consultar un jugador inexistente \"%s\"", usuario));
+                System.out.println(String.format("Se intentó consultar un jugador inexistente \"%s\"", usuario));
             }
         } else {
-            log("No existen jugadores para consultar");
+            System.out.println("No existen jugadores para consultar");
         }
     }
 
@@ -492,18 +489,15 @@ public class Dungeons2019 {
 
             if (datos.longitud() > 0) {
                 System.out.println(String.format("Usuarios que comienzan con \"%s\":", prefijo));
-
                 String usuario;
-                int i = 1;
 
-                while (i <= datos.longitud()) {
+                for (int i = 1; i <= datos.longitud(); i++) {
                     usuario = datos.recuperar(i).getUsuario();
 
                     if (!usuario.regionMatches(true, 0, prefijo, 0, prefijo.length())) {
                         datos.eliminar(i);
                     } else {
-                        System.out.println(i + ": " + usuario);
-                        i++;
+                        System.out.println(String.format("%d: %s", i, usuario));
                     }
                 }
 
@@ -512,7 +506,7 @@ public class Dungeons2019 {
                 }
             }
         } else {
-            log("No existen jugadores para filtrar");
+            System.out.println("No existen jugadores para filtrar");
         }
     }
 
@@ -534,14 +528,14 @@ public class Dungeons2019 {
 
                     log(String.format("Se colocó el jugador \"%s\" en espera", jugador.getUsuario()));
                 } else {
-                    log(String.format("El jugador \"%s\" ya tiene un equipo (%s)", jugador.getUsuario(),
+                    System.out.println(String.format("El jugador \"%s\" ya tiene un equipo (%s)", jugador.getUsuario(),
                             jugador.getEquipo().getNombre()));
                 }
             } else {
-                log(String.format("No existe el jugador \"%s\" para colocarlo en espera", usuario));
+                System.out.println(String.format("No existe el jugador \"%s\" para colocarlo en espera", usuario));
             }
         } else {
-            log("No existen jugadores para poner en espera");
+            System.out.println("No existen jugadores para poner en espera");
         }
     }
 
@@ -568,9 +562,13 @@ public class Dungeons2019 {
                 }
             }
 
-            log(String.format("Se colocaron %d jugadores en espera", agregados));
+            if (agregados > 0) {
+                log(String.format("Se colocaron %d jugadores en espera", agregados));
+            } else {
+                System.out.println("Todos los jugadores ya están en espera o tienen un equipo");
+            }
         } else {
-            log("No existen jugadores para ponerlos en espera");
+            System.out.println("No existen jugadores para ponerlos en espera");
         }
     }
 
@@ -590,17 +588,8 @@ public class Dungeons2019 {
      * @return el tipo de jugador leído
      */
     private static TipoJugador leerTipo() {
-        System.out.print("Tipo de jugador (<0> Guerrero - <1> Defensor): ");
-        TipoJugador tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
-
-        while (tipo == null) {
-            System.out.println("El tipo de jugador ingresado no es válido.");
-            System.out.println("Debe ser un entero según se indica: <0> Guerrero, <1> Defensor.");
-            System.out.print("Reintentar: ");
-            tipo = TipoJugador.desdeEntero(TecladoIn.readLineInt());
-        }
-
-        return tipo;
+        return TipoJugador.desdeEntero(Funciones.leerEntero("Tipo de jugador <0> Guerrero - <1> Defensor: ",
+                "El tipo de jugador ingresado no es válido.\r\nReintentar: ", 0, 1));
     }
 
     /**
@@ -706,10 +695,10 @@ public class Dungeons2019 {
             if (borrado) {
                 log(String.format("Se borró el ítem \"%s\"", codigo));
             } else {
-                log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+                System.out.println(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
             }
         } else {
-            log("No existen ítems para borrar");
+            System.out.println("No existen ítems para borrar");
         }
     }
 
@@ -727,10 +716,10 @@ public class Dungeons2019 {
             if (item != null) {
                 modificarItemsegunOpcion(item);
             } else {
-                log(String.format("Se intentó modificar un ítem inexistente \"%s\"", codigo));
+                System.out.println(String.format("Se intentó modificar un ítem inexistente \"%s\"", codigo));
             }
         } else {
-            log("No existen ítems para modificar");
+            System.out.println("No existen ítems para modificar");
         }
     }
 
@@ -805,16 +794,15 @@ public class Dungeons2019 {
                 datos.append("Ataque:         ").append(item.getAtaque()).append("\r\n");
                 datos.append("Defensa:        ").append(item.getDefensa()).append("\r\n");
                 datos.append("Disponibilidad: ").append(item.getCantidadDisponible()).append('/');
-                datos.append(item.getCantidad()).append("\r\n");
+                datos.append(item.getCantidad());
 
                 System.out.println(datos);
-
                 log(String.format("Se consultó el ítem \"%s\"", codigo));
             } else {
-                log(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
+                System.out.println(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
             }
         } else {
-            log("No existen ítems para consultar");
+            System.out.println("No existen ítems para consultar");
         }
     }
 
@@ -832,14 +820,10 @@ public class Dungeons2019 {
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
                 item = itemsPosibles.recuperar(i);
-                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
-                        item.getNombre(),
-                        item.getAtaque(),
-                        item.getDefensa(),
-                        formDinero(item.getPrecio())));
+                System.out.println(String.format("%d: %s", i, formItem(item)));
             }
         } else {
-            log("No existen ítems para consultar");
+            System.out.println("No existen ítems para consultar");
         }
     }
 
@@ -861,14 +845,10 @@ public class Dungeons2019 {
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
                 item = itemsPosibles.recuperar(i);
-                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
-                        item.getNombre(),
-                        item.getAtaque(),
-                        item.getDefensa(),
-                        formDinero(item.getPrecio())));
+                System.out.println(String.format("%d: %s", i, formItem(item)));
             }
         } else {
-            log("No existen ítems para consultar");
+            System.out.println("No existen ítems para consultar");
         }
     }
 
@@ -1016,10 +996,10 @@ public class Dungeons2019 {
             if (mapa.eliminarVertice(locacion)) {
                 log(String.format("Se borró la locación \"%s\"", locacion));
             } else {
-                log(String.format("Se intentó borrar la locación inexistente \"%s\"", locacion));
+                System.out.println(String.format("Se intentó borrar la locación inexistente \"%s\"", locacion));
             }
         } else {
-            log("No existen locaciones para borrar");
+            System.out.println("No existen locaciones para borrar");
         }
     }
 
@@ -1208,7 +1188,7 @@ public class Dungeons2019 {
         return Funciones.leerFrase("Nombre de locación: ",
                 "El nombre de locación ingresado no es válido."
                         + "\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres.\r\nReintentar: ",
-                2, 50);
+                2, 30);
     }
 
     private static int leerDistancia() {
@@ -1272,13 +1252,13 @@ public class Dungeons2019 {
 
             log(String.format("Se creó el equipo \"%s\" de categoría \"%s\"", nombre, equipo.getCategoria()));
         } else {
-            log("No hay suficientes equipos en espera para crear un equipo");
+            System.out.println("No hay suficientes equipos en espera para crear un equipo");
         }
     }
 
     private static String leerNombreEquipo() {
         return Funciones.leerFrase("Nombre del equipo: ",
-                "El nombre de equipo ingresado no es válido.\r\nReintentar: ", 1, 30);
+                "El nombre de equipo ingresado no es válido.\r\nReintentar: ", 1, 20);
     }
 
     /**
@@ -1296,10 +1276,10 @@ public class Dungeons2019 {
                 Lista<Jugador> jugadores = equipo.getJugadores();
                 StringBuilder cadena = new StringBuilder();
 
-                cadena.append("Nombre:         ").append(equipo.getNombre()).append("\r\n");
-                cadena.append("Categoría:      ").append(equipo.getCategoria()).append("\r\n");
-                cadena.append("Locación:       ").append(equipo.getLocacion()).append("\r\n");
-                cadena.append("Jugadores:      ");
+                cadena.append("Nombre:    ").append(equipo.getNombre()).append("\r\n");
+                cadena.append("Categoría: ").append(equipo.getCategoria()).append("\r\n");
+                cadena.append("Locación:  ").append(equipo.getLocacion()).append("\r\n");
+                cadena.append("Jugadores: ");
 
                 for (int i = 1; i <= jugadores.longitud(); i++) {
                     cadena.append(jugadores.recuperar(i).getUsuario());
@@ -1309,14 +1289,13 @@ public class Dungeons2019 {
                     }
                 }
 
-                cadena.append("\r\n");
                 System.out.println(cadena.toString());
                 log(String.format("Se consultó el equipo \"%s\"", nombre));
             } else {
-                log(String.format("No existe un equipo con nombre \"%s\"", nombre));
+                System.out.println(String.format("No existe un equipo con nombre \"%s\"", nombre));
             }
         } else {
-            log("No existen equipos para consultar");
+            System.out.println("No existen equipos para consultar");
         }
     }
 
@@ -1385,11 +1364,7 @@ public class Dungeons2019 {
 
             for (int i = 1; i <= ultimosDisponibles.longitud(); i++) {
                 item = ultimosDisponibles.recuperar(i);
-                System.out.println(String.format("%d: (%s) %s - Ataque: %,d - Defensa: %,d - %s", i, item.getCodigo(),
-                        item.getNombre(),
-                        item.getAtaque(),
-                        item.getDefensa(),
-                        formDinero(item.getPrecio())));
+                System.out.println(String.format("%d: %s", i, formItem(item)));
             }
 
             log("Se consultaron ítems con última disponibilidad");
@@ -1416,7 +1391,7 @@ public class Dungeons2019 {
      */
     public void mostrarItems() {
         titulo("Ítems");
-        System.out.println("Código;Nombre;Precio;Ataque;Defensa;Cantidad;Cantidad Disponible");
+        System.out.println("Código;Nombre;Precio;Ataque;Defensa;Cantidad;CantidadDisponible");
         Lista<Item> items = this.items.listar();
 
         for (int i = 1; i <= items.longitud(); i++) {
