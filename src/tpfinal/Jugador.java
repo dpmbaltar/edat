@@ -30,7 +30,7 @@ public class Jugador implements Comparable<Jugador> {
     private int dinero;
 
     /**
-     * Salud del jugador (0 a 100).
+     * Salud del jugador (0% a 100%).
      */
     private double salud;
 
@@ -60,7 +60,7 @@ public class Jugador implements Comparable<Jugador> {
     private boolean esperando;
 
     /**
-     * Constructor con nombre de usuario, categoría y equipo.
+     * Constructor con nombre de usuario, tipo, categoría y dinero.
      *
      * @param usuario el nombre de usuario
      * @param tipo el tipo de jugador
@@ -72,7 +72,7 @@ public class Jugador implements Comparable<Jugador> {
         this.tipo = tipo;
         this.categoria = categoria;
         this.dinero = dinero;
-        this.salud = 100.00;
+        this.salud = 1.00;
         this.derrotas = 0;
         this.victorias = 0;
         this.equipo = null;
@@ -80,90 +80,200 @@ public class Jugador implements Comparable<Jugador> {
         this.esperando = false;
     }
 
+    /**
+     * Devuelve el nombre de usuario.
+     *
+     * @return el nombre de usuario
+     */
     public String getUsuario() {
         return usuario;
     }
 
+    /**
+     * Establece el nombre de usuario.
+     *
+     * @param usuario el nuevo nombre de usuario
+     */
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     * Devuelve el tipo de jugador.
+     *
+     * @return el tipo de jugador
+     */
     public TipoJugador getTipo() {
         return tipo;
     }
 
+    /**
+     * Establece el tipo de jugador.
+     *
+     * @param tipo el nuevo tipo de jugador
+     */
     public void setTipo(TipoJugador tipo) {
         this.tipo = tipo;
     }
 
+    /**
+     * Devuelve la categoría del jugador.
+     *
+     * @return la categoría del jugador
+     */
     public Categoria getCategoria() {
         return categoria;
     }
 
+    /**
+     * Establece la categoría del jugador.
+     *
+     * @param categoria la nueva categoría del jugador
+     */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
+    /**
+     * Devuelve el dinero del jugador.
+     *
+     * @return el dinero del jugador
+     */
     public int getDinero() {
         return dinero;
     }
 
+    /**
+     * Establece el dinero del jugador.
+     *
+     * @param dinero el nuevo dinero del jugador
+     */
     public void setDinero(int dinero) {
         this.dinero = dinero;
     }
 
+    /**
+     * Devuelve la salud del jugador.
+     *
+     * @return la salud del jugador
+     */
     public double getSalud() {
         return salud;
     }
 
+    /**
+     * Establece la salud del jugador.
+     *
+     * @param salud la nueva salud del jugador
+     */
     public void setSalud(double salud) {
         this.salud = salud;
     }
 
+    /**
+     * Devuelve la cantidad de derrotas del jugador.
+     *
+     * @return la cantidad de derrotas del jugador
+     */
     public int getDerrotas() {
         return derrotas;
     }
 
+    /**
+     * Establece la cantidad de derrotas del jugador.
+     *
+     * @param derrotas la nueva cantidad de derrotas del jugador
+     */
     public void setDerrotas(int derrotas) {
         this.derrotas = derrotas;
     }
 
+    /**
+     * Devuelve la cantidad de victorias del jugador.
+     *
+     * @return la cantidad de victorias del jugador
+     */
     public int getVictorias() {
         return victorias;
     }
 
+    /**
+     * Establece la cantidad de victorias del jugador.
+     *
+     * @param victorias la nueva cantidad de victorias del jugador
+     */
     public void setVictorias(int victorias) {
         this.victorias = victorias;
     }
 
+    /**
+     * Devuelve el equipo del jugador.
+     *
+     * @return el equipo del jugador
+     */
     public Equipo getEquipo() {
         return equipo;
     }
 
+    /**
+     * Establece el equipo del jugador.
+     *
+     * @param equipo el nuevo equipo del jugador
+     */
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
 
+    /**
+     * Devuelve los ítems del jugador.
+     *
+     * @return los ítems del jugador
+     */
     public Lista<Item> getItems() {
         return items;
     }
 
+    /**
+     * Establece los ítems del jugador.
+     *
+     * @param items los nuevos ítems del jugador
+     */
     public void setItems(Lista<Item> items) {
         this.items = items;
     }
 
+    /**
+     * Devuelve verdadero si el jugador está en espera, falso en caso contrario.
+     *
+     * @return verdadero si el jugador está en espera, falso en caso contrario
+     */
+    public boolean getEsperando() {
+        return esperando;
+    }
+
+    /**
+     * Establece si el jugador está en espera o no.
+     *
+     * @param esperando verdadero si el jugador está en espera, falso en caso contrario
+     */
     public void setEsperando(boolean esperando) {
         this.esperando = esperando;
     }
 
+    /**
+     * Devuelve verdadero si el jugador tiene equipo, falso en caso contrario.
+     *
+     * @return verdadero si el jugador tiene equipo, falso en caso contrario
+     */
     public boolean tieneEquipo() {
         return equipo != null;
     }
 
-    public boolean esperaEquipo() {
-        return esperando;
-    }
-
+    /**
+     * Calcula el ataque del jugador.
+     *
+     * @return el ataque del jugador
+     */
     public int calcularAtaque() {
         return (ataqueBase() * ataqueCategoria()) + ataqueItems();
     }

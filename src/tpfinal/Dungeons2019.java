@@ -446,7 +446,7 @@ public class Dungeons2019 {
 
                 if (jugador.tieneEquipo()) {
                     datos.append(jugador.getEquipo().getNombre());
-                } else if (jugador.esperaEquipo()) {
+                } else if (jugador.getEsperando()) {
                     datos.append("(esperando equipo...)");
                 } else {
                     datos.append("-");
@@ -524,7 +524,7 @@ public class Dungeons2019 {
             if (jugadores.existeClave(usuario)) {
                 Jugador jugador = jugadores.obtenerInformacion(usuario);
 
-                if (!jugador.esperaEquipo()) {
+                if (!jugador.getEsperando()) {
                     jugador.setEsperando(true);
                     esperando.insertar(jugador, jugador.getCategoria());
 
@@ -557,7 +557,7 @@ public class Dungeons2019 {
             for (int i = 1; i <= cantidad; i++) {
                 jugador = todos.recuperar(i);
 
-                if (!jugador.esperaEquipo()) {
+                if (!jugador.getEsperando()) {
                     jugador.setEsperando(true);
                     esperando.insertar(jugador, jugador.getCategoria());
                     agregados++;
