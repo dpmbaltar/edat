@@ -34,7 +34,7 @@ public class Item implements Comparable<Item> {
     private int defensa;
 
     /**
-     * Cantidad de ítem (1 indica que el ítem es único).
+     * Cantidad del ítem (1 indica que el ítem es único).
      */
     private int cantidad;
 
@@ -252,9 +252,9 @@ public class Item implements Comparable<Item> {
     public int compareTo(Item otroItem) {
         int resultado = 0;
 
-        if (precio < otroItem.getPrecio()) {
+        if (precio < otroItem.precio) {
             resultado = -1;
-        } else if (precio > otroItem.getPrecio()) {
+        } else if (precio > otroItem.precio) {
             resultado = 1;
         }
 
