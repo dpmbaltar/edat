@@ -582,6 +582,40 @@ public class AVLItems {
         }
     }
 
+    public Lista<Item> listarUltimosDisponibles() {
+        Lista<Item> lista = new Lista<>();
+        listarUltimosDisponibles(raiz, lista);
+
+        return lista;
+    }
+
+    private void listarUltimosDisponibles(NodoItem nodo, Lista<Item> lista) {
+        if (nodo != null) {
+            NodoItem izquierdo = nodo.getIzquierdo();
+            NodoItem derecho = nodo.getDerecho();
+            Item item = nodo.getElemento();
+
+            listarUltimosDisponibles(izquierdo, lista);
+
+            if (item.getCantidadDisponible() == 1) {
+                lista.insertar(item, lista.longitud() + 1);
+                NodoItem siguiente = nodo.getSiguiente();
+
+                while (siguiente != null) {
+                    item = siguiente.getElemento();
+
+                    if (item.getCantidadDisponible() == 1) {
+                        lista.insertar(item, lista.longitud() + 1);
+                    }
+
+                    siguiente = siguiente.getSiguiente();
+                }
+            }
+
+            listarUltimosDisponibles(derecho, lista);
+        }
+    }
+
     @Override
     public AVLItems clone() {
         AVLItems clon = new AVLItems();
