@@ -406,8 +406,12 @@ public class Funciones {
         return entero;
     }
 
-    public static String formatearDinero(int dinero, char simbolo) {
+    public static String dinero(int dinero, char simbolo) {
         return String.format("%c %,d", simbolo, dinero);
+    }
+
+    public static String porcentaje(double porcentaje) {
+        return String.format("%3.2f%%", porcentaje * 100);
     }
 
     /**
