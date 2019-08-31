@@ -48,9 +48,14 @@ public class Dungeons2019 {
     private ColaPrioridad<Jugador, Categoria> esperando;
 
     /**
-     * Ítems disponibles en el juego (AVL modificado para almacenar ítems de igual precio, y ordenados por precio).
+     * Los ítems disponibles en el juego (tabla de búsqueda por código).
      */
-    private AVLItems items;
+    private Diccionario<String, Item> items;
+
+    /**
+     * El inventario de ítems para la venta (ordenados por precio).
+     */
+    private Inventario inventario;
 
     /**
      * El mapa del juego (grafo etiquetado extendido con elementos tipo String y etiquetas tipo Integer).
@@ -89,7 +94,8 @@ public class Dungeons2019 {
         equipos = new HashMap<>();
         jugadores = new Diccionario<>();
         esperando = new ColaPrioridad<>();
-        items = new AVLItems();
+        items = new Diccionario<>();
+        inventario = new Inventario();
         mapa = new Mapa();
     }
 
@@ -115,7 +121,9 @@ public class Dungeons2019 {
             while (linea != null) {
                 switch (linea.charAt(0)) {
                     case 'I': // Cargar Ítem
-                        items.insertar(crearItemDesdeCadena(linea.substring(2)));
+                        Item item = crearItemDesdeCadena(linea.substring(2));
+                        items.insertar(item.getCodigo(), item);
+                        inventario.insertar(item);
                         break;
                     case 'J': // Cargar Jugador
                         Jugador jugador = crearJugadorDesdeCadena(linea.substring(2));
@@ -183,7 +191,7 @@ public class Dungeons2019 {
                 Lista<Item> itemsJugador = nuevoJugador.getItems();
 
                 for (int i = 0; i < codigos.length; i++) {
-                    Item item = items.obtener(codigos[i]);
+                    Item item = items.obtenerInformacion(codigos[i]);
 
                     if (item != null) {
                         itemsJugador.insertar(item, itemsJugador.longitud() + 1);
@@ -674,7 +682,9 @@ public class Dungeons2019 {
         int ataque = leerAtaque();
         int defensa = leerDefensa();
         int cantidad = leerDisponibilidad();
-        items.insertar(new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidad));
+        Item item = new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidad);
+        items.insertar(codigo, item);
+        inventario.insertar(item);
 
         log(String.format("Se agregó el ítem \"%s\" (%s)", nombre, codigo));
     }
@@ -688,8 +698,8 @@ public class Dungeons2019 {
 
         if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
-            Item item = items.obtener(codigo);
-            boolean borrado = items.eliminar(item);
+            Item item = items.obtenerInformacion(codigo);
+            boolean borrado = items.eliminar(codigo) && inventario.eliminar(item);
             //TODO: Borrar ítem de los jugadores
 
             if (borrado) {
@@ -711,7 +721,7 @@ public class Dungeons2019 {
 
         if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
-            Item item = items.obtener(codigo);
+            Item item = items.obtenerInformacion(codigo);
 
             if (item != null) {
                 modificarItemsegunOpcion(item);
@@ -743,6 +753,8 @@ public class Dungeons2019 {
                     System.out.println("Precio actual: " + precioAnterior);
                     int precioNuevo = leerPrecio();
                     item.setPrecio(precioNuevo);
+                    inventario.eliminar(item);
+                    inventario.insertar(item);
 
                     log(String.format("Se modificó el precio del ítem \"%s\" de %s a %s", item.getNombre(),
                             formDinero(precioAnterior), formDinero(precioNuevo)));
@@ -783,7 +795,7 @@ public class Dungeons2019 {
 
         if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
-            Item item = items.obtener(codigo);
+            Item item = items.obtenerInformacion(codigo);
 
             if (item != null) {
                 StringBuilder datos = new StringBuilder();
@@ -813,9 +825,9 @@ public class Dungeons2019 {
     public void mostrarItemsHastaPrecio() {
         titulo("Mostrar ítems para comprar (según cantidad de dinero)");
 
-        if (!items.esVacio()) {
+        if (!inventario.esVacio()) {
             int dinero = leerDinero();
-            Lista<Item> itemsPosibles = items.listarRangoPorPrecio(0, dinero);
+            Lista<Item> itemsPosibles = inventario.listarRangoPorPrecio(0, dinero);
             Item item;
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
@@ -835,12 +847,12 @@ public class Dungeons2019 {
     public void mostrarItemsDesdeHastaPrecio() {
         titulo("Mostrar ítems para comprar (con precio min. y max.)");
 
-        if (!items.esVacio()) {
+        if (!inventario.esVacio()) {
             System.out.print("Mínimo ");
             int minimo = leerDinero();
             System.out.print("Máximo ");
             int maximo = leerDinero();
-            Lista<Item> itemsPosibles = items.listarRangoPorPrecio(minimo, maximo);
+            Lista<Item> itemsPosibles = inventario.listarRangoPorPrecio(minimo, maximo);
             Item item;
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
@@ -1358,8 +1370,8 @@ public class Dungeons2019 {
     public void mostrarItemsUltimaDisponibilidad() {
         titulo("Ítems con última disponibilidad");
 
-        if (!items.esVacio()) {
-            Lista<Item> ultimosDisponibles = items.listarUltimosDisponibles();
+        if (!inventario.esVacio()) {
+            Lista<Item> ultimosDisponibles = inventario.listarUltimosDisponibles();
             Item item;
 
             for (int i = 1; i <= ultimosDisponibles.longitud(); i++) {
@@ -1392,7 +1404,7 @@ public class Dungeons2019 {
     public void mostrarItems() {
         titulo("Ítems");
         System.out.println("Código;Nombre;Precio;Ataque;Defensa;Cantidad;CantidadDisponible");
-        Lista<Item> items = this.items.listar();
+        Lista<Item> items = this.items.listarDatos();
 
         for (int i = 1; i <= items.longitud(); i++) {
             System.out.println(items.recuperar(i));
