@@ -1,15 +1,15 @@
-I:A001;Armadura de Cuero;500;0;10;20;19
-I:A002;Armadura de Cota de Malla;1500;0;15;20;17
-I:A003;Armadura de Placas;3000;0;25;15;14
-I:A004;Armadura Adamantina;5000;0;40;15;14
-I:E001;Escudo de madera;400;0;5;20;19
-I:E002;Escudo de captura flechas;2000;0;15;15;14
-I:S001;Daga;400;6;0;20;19
-I:S002;Espada defensora;1200;12;0;20;18
-I:S003;Gran espada;3600;18;0;15;14
-I:S004;Espada en llamas;6400;28;0;15;14
-I:H001;Hacha de mano;600;8;0;20;20
-I:H002;Hacha de batalla;2400;30;0;15;15
+I:A001;Armadura de cuero;500;0;10;10;9
+I:A002;Armadura de cota de malla;1500;0;15;10;7
+I:A003;Armadura de placas;3000;0;25;5;4
+I:A004;Armadura adamantina;5000;0;40;5;4
+I:E001;Escudo de madera;400;0;5;10;9
+I:E002;Escudo de captura flechas;2000;0;15;5;4
+I:S001;Daga;400;6;0;10;9
+I:S002;Espada defensora;1200;12;0;10;8
+I:S003;Gran espada;3600;18;0;5;4
+I:S004;Espada en llamas;6400;28;0;5;4
+I:H001;Hacha de mano;600;8;0;10;10
+I:H002;Hacha de batalla;2400;30;0;5;5
 I:U001;Armadura de escamas de dragon;10000;0;65;1;0
 I:U002;Armadura de cota de malla elfica;9000;0;55;1;0
 I:U003;Armadura de plata enana;9500;0;60;1;1
