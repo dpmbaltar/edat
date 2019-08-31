@@ -1,7 +1,8 @@
 package pruebas.conjuntistas;
 
-import conjuntistas.ArbolAVLMultiple;
 import java.util.concurrent.ThreadLocalRandom;
+
+import conjuntistas.ArbolAVLMultiple;
 import lineales.dinamicas.Lista;
 
 /**
@@ -61,6 +62,13 @@ public final class PruebaArbolAVLMultiple {
                 : "Debe listar la secuencia de enteros del 2 al 16 sin el 5, 8, 11 y 15";
         assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
         assert !avl.eliminar(null) : "No debe eliminar nulo del árbol (siempre inexistente)";
+        avl.insertar(8);
+        avl.insertar(8);
+        avl.insertar(8);
+        assert avl.eliminar(8) : "Debe eliminar 8 del árbol";
+        assert avl.eliminar(8) : "Debe eliminar 8 del árbol (duplicado)";
+        assert avl.eliminar(8) : "Debe eliminar 8 del árbol (triplicado)";
+        assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
     }
 
     /**
