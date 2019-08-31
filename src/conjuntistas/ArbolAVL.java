@@ -34,7 +34,7 @@ public class ArbolAVL<T extends Comparable<T>> {
 
         if (elemento != null) {
             if (raiz == null) {
-                raiz = new NodoAVL<T>(elemento);
+                raiz = new NodoAVL<>(elemento);
                 insertado = true;
             } else {
                 insertado = insertar(elemento, raiz, null);
@@ -56,37 +56,27 @@ public class ArbolAVL<T extends Comparable<T>> {
         boolean insertado = false;
 
         if (nodo != null) {
-            NodoAVL<T> izquierdo, derecho, nuevo;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
+            NodoAVL<T> nuevo;
 
             // Si el elemento es menor al del nodo, insertar en el sub-árbol izquierdo
             // Si el elemento es mayor al del nodo, insertar en el sub-árbol derecho
             // Si el elemento es igual al del nodo, el resultado será falso y no continuará hacia los nodos hijos
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
-                    nuevo = new NodoAVL<T>(elemento);
+                    nuevo = new NodoAVL<>(elemento);
                     nodo.setIzquierdo(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (derecho == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, izquierdo, nodo);
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
-                    nuevo = new NodoAVL<T>(elemento);
+                    nuevo = new NodoAVL<>(elemento);
                     nodo.setDerecho(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (izquierdo == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, derecho, nodo);
@@ -117,8 +107,10 @@ public class ArbolAVL<T extends Comparable<T>> {
     private void balancear(NodoAVL<T> nodo, NodoAVL<T> padre) {
         if (nodo != null) {
             boolean balanceado = false;
-            NodoAVL<T> nodoHijo, reemplazo = null;
-            int balanceHijo, balanceNodo = nodo.balance();
+            NodoAVL<T> nodoHijo;
+            NodoAVL<T> reemplazo = null;
+            int balanceHijo;
+            int balanceNodo = nodo.balance();
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
             // rotaciones necesarias para que éste quede balanceado
@@ -151,9 +143,8 @@ public class ArbolAVL<T extends Comparable<T>> {
                 if (padre == null) {
                     raiz = reemplazo;
                 } else {
-                    T elementoPadre, elementoReemplazo;
-                    elementoPadre = padre.getElemento();
-                    elementoReemplazo = reemplazo.getElemento();
+                    T elementoPadre = padre.getElemento();
+                    T elementoReemplazo = reemplazo.getElemento();
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
@@ -242,7 +233,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(T elemento) {
-        return elemento != null ? eliminar(elemento, raiz, null, null) : false;
+        return elemento == null ? false : eliminar(elemento, raiz, null, null);
     }
 
     /**
@@ -256,39 +247,35 @@ public class ArbolAVL<T extends Comparable<T>> {
         boolean eliminado = false;
 
         if (nodo != null) {
-            T elemPadre;
-            NodoAVL<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
 
             // Buscar el elemento a eliminar
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo, padre);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo, padre);
-            } else {
-                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
+            } else if (elemento.equals(nodo.getElemento())) {
+                // Elemento encontrado
+                // Eliminarlo según los siguientes 3 casos posibles:
                 if (izquierdo == null && derecho == null) { // Caso 1: nodo hoja
-                    elemPadre = padre.getElemento();
-
-                    if (elemento.compareTo(elemPadre) < 0) {
+                    if (elemento.compareTo(padre.getElemento()) < 0) {
                         padre.setIzquierdo(null);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
                         padre.setDerecho(null);
                     }
 
                     eliminado = true;
-                } else if (izquierdo != null && derecho != null) { // Caso 3: nodo con ambos hijos
-                    T elemMinDerecho = minimo(derecho);
-                    eliminado = eliminar(elemMinDerecho, derecho, nodo, padre);
-                    nodo.setElemento(elemMinDerecho);
-                } else { // Caso 2: nodo con un solo hijo
+                } else if (izquierdo != null && derecho != null) { // Caso 2: nodo con ambos hijos
+                    T minimoDerecho = minimo(derecho);
+                    eliminado = eliminar(minimoDerecho, derecho, nodo, padre);
+                    nodo.setElemento(minimoDerecho);
+                } else { // Caso 3: nodo con un solo hijo
                     NodoAVL<T> reemplazo = derecho == null ? izquierdo : derecho;
-                    elemPadre = padre.getElemento();
 
-                    if (elemento.compareTo(elemPadre) < 0) {
+                    if (elemento.compareTo(padre.getElemento()) < 0) {
                         padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
                         padre.setDerecho(reemplazo);
                     }
 
@@ -318,7 +305,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
-        return elemento != null ? pertenece(elemento, raiz) : false;
+        return elemento == null ? false : pertenece(elemento, raiz);
     }
 
     /**
@@ -333,15 +320,14 @@ public class ArbolAVL<T extends Comparable<T>> {
         boolean existe = false;
 
         if (nodo != null) {
-            NodoAVL<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
 
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 existe = pertenece(elemento, izquierdo);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 existe = pertenece(elemento, derecho);
-            } else {
+            } else if (elemento.equals(nodo.getElemento())) {
                 existe = true;
             }
         }
@@ -365,7 +351,8 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return el elemento máximo
      */
     private T maximo(NodoAVL<T> nodo) {
-        NodoAVL<T> derecho = nodo, maximo = null;
+        NodoAVL<T> derecho = nodo;
+        NodoAVL<T> maximo = null;
 
         while (derecho != null) {
             maximo = derecho;
@@ -391,7 +378,8 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return el elemento mínimo
      */
     private T minimo(NodoAVL<T> nodo) {
-        NodoAVL<T> izquierdo = nodo, minimo = null;
+        NodoAVL<T> izquierdo = nodo;
+        NodoAVL<T> minimo = null;
 
         while (izquierdo != null) {
             minimo = izquierdo;
@@ -423,7 +411,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return la lista con los elementos ordenados de menor a mayor
      */
     public Lista<T> listar() {
-        Lista<T> lista = new Lista<T>();
+        Lista<T> lista = new Lista<>();
         listar(raiz, lista);
 
         return lista;
@@ -438,9 +426,8 @@ public class ArbolAVL<T extends Comparable<T>> {
      */
     private void listar(NodoAVL<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            NodoAVL<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
 
             listar(izquierdo, lista);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
@@ -457,7 +444,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return la lista de elementos
      */
     public Lista<T> listarRango(T minimo, T maximo) {
-        Lista<T> lista = new Lista<T>();
+        Lista<T> lista = new Lista<>();
         listarRango(minimo, maximo, raiz, lista);
 
         return lista;
@@ -474,11 +461,9 @@ public class ArbolAVL<T extends Comparable<T>> {
      */
     private void listarRango(T minimo, T maximo, NodoAVL<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            NodoAVL<T> izquierdo, derecho;
-            T elemento;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-            elemento = nodo.getElemento();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
+            T elemento = nodo.getElemento();
 
             listarRango(minimo, maximo, izquierdo, lista);
 
@@ -496,7 +481,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return la lista por niveles
      */
     public Lista<T> listarNiveles() {
-        Lista<T> lista = new Lista<T>();
+        Lista<T> lista = new Lista<>();
 
         if (raiz != null) {
             NodoAVL<T> nodo, hijoIzquierdo, hijoDerecho;
@@ -518,8 +503,6 @@ public class ArbolAVL<T extends Comparable<T>> {
                     if (hijoDerecho != null) {
                         cola.poner(hijoDerecho);
                     }
-                } else {
-                    lista.insertar(null, lista.longitud() + 1);
                 }
 
                 cola.sacar();
@@ -574,11 +557,12 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     /**
      * Devuelve una lista de listas por niveles con las alturas de los elementos del árbol, incluyendo nulos.
+     * Método de utilidad para pruebas.
      *
      * @param hastaNivel el nivel máximo a listar
      * @return la lista de lista de niveles
      */
-    public Lista<Lista<Integer>> listarNivelesAltura(int hastaNivel) {
+    public Lista<Lista<Integer>> listarNivelesCompletosAltura(int hastaNivel) {
         Lista<Lista<Integer>> lista = new Lista<>();
 
         if (raiz != null) {
@@ -617,7 +601,7 @@ public class ArbolAVL<T extends Comparable<T>> {
 
     @Override
     public ArbolAVL<T> clone() {
-        ArbolAVL<T> clon = new ArbolAVL<T>();
+        ArbolAVL<T> clon = new ArbolAVL<>();
 
         if (!esVacio()) {
             clon.raiz = new NodoAVL<T>(raiz.getElemento());
@@ -641,12 +625,12 @@ public class ArbolAVL<T extends Comparable<T>> {
             nodoClon.setAltura(nodo.getAltura());
 
             if (hijoIzquierdo != null) {
-                nodoClon.setIzquierdo(new NodoAVL<T>(hijoIzquierdo.getElemento()));
+                nodoClon.setIzquierdo(new NodoAVL<>(hijoIzquierdo.getElemento()));
                 clonarNodo(hijoIzquierdo, nodoClon.getIzquierdo());
             }
 
             if (hijoDerecho != null) {
-                nodoClon.setDerecho(new NodoAVL<T>(hijoDerecho.getElemento()));
+                nodoClon.setDerecho(new NodoAVL<>(hijoDerecho.getElemento()));
                 clonarNodo(hijoDerecho, nodoClon.getDerecho());
             }
         }
