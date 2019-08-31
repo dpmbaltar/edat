@@ -34,7 +34,8 @@ public final class PruebaArbolAVLMultiple {
     public void pruebaInsertar() {
         ArbolAVLMultiple<Integer> avl = new ArbolAVLMultiple<>();
         assert avl.insertar(8) : "Debe insertar 8 al árbol";
-        assert !avl.insertar(8) : "No debe insertar 8 al árbol (ya existe)";
+        assert avl.insertar(8) : "Debe insertar 8 al árbol (duplicado)";
+        assert avl.insertar(8) : "Debe insertar 8 al árbol (triplicado)";
         assert !avl.insertar(null) : "No debe insertar nulo al árbol";
     }
 
@@ -118,6 +119,14 @@ public final class PruebaArbolAVLMultiple {
         ArbolAVLMultiple<Integer> avl = crearArbolAVLMultiple();
         assert avl.listar().toString().equals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]")
               : "Debe listar la secuencia de enteros del 1 al 16";
+        avl.vaciar();
+        avl.insertar(1);
+        avl.insertar(2);
+        avl.insertar(3);
+        avl.insertar(1);
+        avl.insertar(3);
+        assert avl.listar().toString().equals("[1, 1, 2, 3, 3]")
+              : "Debe listar la secuencia de enteros [1, 1, 2, 3, 3]";
     }
 
     /**
