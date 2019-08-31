@@ -1,13 +1,15 @@
 package pruebas.conjuntistas;
 
 import conjuntistas.ArbolAVL;
+import java.util.concurrent.ThreadLocalRandom;
+import lineales.dinamicas.Lista;
 
 /**
  * Prueba implementación de Árbol AVL.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
-public class PruebaArbolAVL {
+public final class PruebaArbolAVL {
 
     /**
      * Constructor ejecuta todas las pruebas de la clase.
@@ -30,9 +32,10 @@ public class PruebaArbolAVL {
      * Prueba {@link conjuntistas.ArbolAVL#insertar(Comparable)}.
      */
     public void pruebaInsertar() {
-        ArbolAVL<Integer> avl = new ArbolAVL<Integer>();
+        ArbolAVL<Integer> avl = new ArbolAVL<>();
         assert avl.insertar(8) : "Debe insertar 8 al árbol";
         assert !avl.insertar(8) : "No debe insertar 8 al árbol (ya existe)";
+        assert !avl.insertar(null) : "No debe insertar nulo al árbol";
     }
 
     /**
@@ -56,6 +59,7 @@ public class PruebaArbolAVL {
         assert avl.listar().toString().equals("[2, 3, 4, 6, 7, 9, 10, 12, 13, 14, 16]")
                 : "Debe listar la secuencia de enteros del 2 al 16 sin el 5, 8, 11 y 15";
         assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
+        assert !avl.eliminar(null) : "No debe eliminar nulo del árbol (siempre inexistente)";
     }
 
     /**
@@ -65,6 +69,7 @@ public class PruebaArbolAVL {
         ArbolAVL<Integer> avl = crearArbolAVL();
         assert avl.pertenece(8) : "8 debe pertenecer al árbol";
         assert !avl.pertenece(20) : "20 no debe pertenecer al árbol (inexistente)";
+        assert !avl.pertenece(null) : "null no debe pertenecer al árbol (siempre inexistente)";
     }
 
     /**
@@ -88,13 +93,13 @@ public class PruebaArbolAVL {
     }
 
     /**
-     * Prueba {@link conjuntistas.ArbolAVL#vacio()}.
+     * Prueba {@link conjuntistas.ArbolAVL#esVacio()}.
      */
     public void pruebaVacio() {
-        ArbolAVL<Integer> avl = new ArbolAVL<Integer>();
-        assert avl.vacio() : "Árbol debe ser vacío";
+        ArbolAVL<Integer> avl = new ArbolAVL<>();
+        assert avl.esVacio() : "Árbol debe ser vacío";
         avl.insertar(8);
-        assert !avl.vacio() : "Árbol no debe ser vacío";
+        assert !avl.esVacio() : "Árbol no debe ser vacío";
     }
 
     /**
@@ -103,7 +108,7 @@ public class PruebaArbolAVL {
     public void pruebaVaciar() {
         ArbolAVL<Integer> avl = crearArbolAVL();
         avl.vaciar();
-        assert avl.vacio() : "Árbol debe ser vacío";
+        assert avl.esVacio() : "Árbol debe ser vacío";
     }
 
     /**
@@ -138,63 +143,91 @@ public class PruebaArbolAVL {
      * Prueba {@link conjuntistas.ArbolAVL} (funcionamiento interno).
      */
     public void pruebaArbolAVL() {
-        ArbolAVL<Integer> avl;
-        avl = new ArbolAVL<Integer>();
+        ArbolAVL<Integer> avl = new ArbolAVL<>();
         avl.insertar(10);
         avl.insertar(5);
         avl.insertar(3);
+        
         assert avl.listarNiveles().toString().equals("[5, 3, 10]")
                 : "Debe listar [5, 3, 10]";
         assert avl.listar().toString().equals("[3, 5, 10]")
                 : "Debe listar [3, 5, 10]";
+        
         // Rotación izquierda
-        avl = new ArbolAVL<Integer>();
+        avl.vaciar();
         avl.insertar(8);
         avl.insertar(5);
         avl.insertar(15);
         avl.insertar(13);
         avl.insertar(20);
         avl.insertar(29);
+        
         assert avl.listarNiveles().toString().equals("[15, 8, 20, 5, 13, 29]")
                 : "Debe listar [15, 8, 20, 5, 13, 29]";
         assert avl.listar().toString().equals("[5, 8, 13, 15, 20, 29]")
                 : "Debe listar [5, 8, 13, 15, 20, 29]";
+        
         // Rotación derecha
-        avl = new ArbolAVL<Integer>();
+        avl.vaciar();
         avl.insertar(10);
         avl.insertar(5);
         avl.insertar(15);
         avl.insertar(3);
         avl.insertar(7);
         avl.insertar(4);
+        
         assert avl.listarNiveles().toString().equals("[5, 3, 10, 4, 7, 15]")
                 : "Debe listar [5, 3, 10, 4, 7, 15]";
         assert avl.listar().toString().equals("[3, 4, 5, 7, 10, 15]")
                 : "Debe listar [3, 4, 5, 7, 10, 15]";
+        
         // Rotación derecha-izquierda
-        avl = new ArbolAVL<Integer>();
+        avl.vaciar();
         avl.insertar(10);
         avl.insertar(5);
         avl.insertar(15);
         avl.insertar(12);
         avl.insertar(17);
         avl.insertar(13);
+        
         assert avl.listarNiveles().toString().equals("[12, 10, 15, 5, 13, 17]")
                 : "Debe listar [12, 10, 15, 5, 13, 17]";
         assert avl.listar().toString().equals("[5, 10, 12, 13, 15, 17]")
                 : "Debe listar [5, 10, 12, 13, 15, 17]";
+        
         // Rotación izquierda-derecha
-        avl = new ArbolAVL<Integer>();
+        avl.vaciar();
         avl.insertar(12);
         avl.insertar(5);
         avl.insertar(23);
         avl.insertar(3);
         avl.insertar(8);
         avl.insertar(10);
+        
         assert avl.listarNiveles().toString().equals("[8, 5, 12, 3, 10, 23]")
                 : "Debe listar [8, 5, 12, 3, 10, 23]";
         assert avl.listar().toString().equals("[3, 5, 8, 10, 12, 23]")
                 : "Debe listar [3, 5, 8, 10, 12, 23]";
+        
+        // Balanceo correcto:
+        // Se inserta en el AVL una lista de enteros en orden aleatorio
+        // Al listar los enteros del AVL deben estar ordenados
+        avl.vaciar();
+        Lista<Integer> lista = new Lista<>();
+        
+        for (int i = 1; i <= 100; i++) {
+            lista.insertar(i, ThreadLocalRandom.current().nextInt(0, lista.longitud() + 1) + 1);
+        }
+        
+        for (int i = 1; i <= 100; i++) {
+            avl.insertar(lista.recuperar(i));
+        }
+        
+        lista = avl.listar();
+        
+        for (int i = 1; i <= 100; i++) {
+            assert lista.recuperar(i).equals(i) : "El balanceo del AVL debe ser correcto";
+        }
     }
 
     /**
@@ -224,7 +257,7 @@ public class PruebaArbolAVL {
      * @return el árbol AVL de prueba
      */
     public static ArbolAVL<Integer> crearArbolAVL() {
-        ArbolAVL<Integer> avl = new ArbolAVL<Integer>();
+        ArbolAVL<Integer> avl = new ArbolAVL<>();
         avl.insertar(8);
         avl.insertar(15);
         avl.insertar(4);

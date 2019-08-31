@@ -32,11 +32,13 @@ public class ArbolAVL<T extends Comparable<T>> {
     public boolean insertar(T elemento) {
         boolean insertado = false;
 
-        if (raiz == null) {
-            raiz = new NodoAVL<T>(elemento);
-            insertado = true;
-        } else {
-            insertado = insertar(elemento, raiz, null);
+        if (elemento != null) {
+            if (raiz == null) {
+                raiz = new NodoAVL<T>(elemento);
+                insertado = true;
+            } else {
+                insertado = insertar(elemento, raiz, null);
+            }
         }
 
         return insertado;
@@ -95,28 +97,15 @@ public class ArbolAVL<T extends Comparable<T>> {
             // Balancear el nodo si es necesario (lo determina el método balancear())
             // Actualizar altura de los nodos padre
             if (insertado) {
-                actualizarAltura(padre);
+                if (padre != null) {
+                    padre.recalcularAltura();
+                }
+
                 balancear(nodo, padre);
             }
         }
 
         return insertado;
-    }
-
-    /**
-     * Actualiza la altura de un nodo dado.
-     *
-     * @see Nodo#getAltura
-     * @param nodo el nodo a actualizar la altura
-     */
-    private void actualizarAltura(NodoAVL<T> nodo) {
-        if (nodo != null) {
-            NodoAVL<T> izquierdo = nodo.getIzquierdo();
-            NodoAVL<T> derecho = nodo.getDerecho();
-            int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
-            int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
-            nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
-        }
     }
 
     /**
@@ -129,13 +118,13 @@ public class ArbolAVL<T extends Comparable<T>> {
         if (nodo != null) {
             boolean balanceado = false;
             NodoAVL<T> nodoHijo, reemplazo = null;
-            int balanceHijo, balanceNodo = balance(nodo);
+            int balanceHijo, balanceNodo = nodo.balance();
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
             // rotaciones necesarias para que éste quede balanceado
             if (balanceNodo == 2) {
                 nodoHijo = nodo.getIzquierdo();
-                balanceHijo = balance(nodoHijo);
+                balanceHijo = nodoHijo.balance();
 
                 if (balanceHijo == 1 || balanceHijo == 0) { // 0 cuando es una eliminación
                     reemplazo = rotarDerecha(nodo);
@@ -146,7 +135,7 @@ public class ArbolAVL<T extends Comparable<T>> {
                 balanceado = true;
             } else if (balanceNodo == -2) {
                 nodoHijo = nodo.getDerecho();
-                balanceHijo = balance(nodoHijo);
+                balanceHijo = nodoHijo.balance();
 
                 if (balanceHijo == 1) {
                     reemplazo = rotarDerechaIzquierda(nodo);
@@ -172,62 +161,10 @@ public class ArbolAVL<T extends Comparable<T>> {
                         padre.setDerecho(reemplazo);
                     }
 
-                    actualizarAltura(padre);
+                    padre.recalcularAltura();
                 }
             }
         }
-    }
-
-    /**
-     * Devuelve el balance del nodo dado.
-     *
-     * @param nodo el nodo a calcular su balance
-     * @return el balance del nodo
-     */
-    private int balance(NodoAVL<T> nodo) {
-        int alturaIzquierdo, alturaDerecho;
-        NodoAVL<T> izquierdo, derecho;
-
-        izquierdo = nodo.getIzquierdo();
-        derecho = nodo.getDerecho();
-        alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
-        alturaDerecho = derecho != null ? derecho.getAltura() : -1;
-
-        return alturaIzquierdo - alturaDerecho;
-    }
-
-    /**
-     * Devuelve la altura de un nodo.
-     *
-     * @deprecated
-     * Utilizar {@link jerarquicas.Nodo#getAltura}
-     *
-     * @param nodo el nodo a calcular su altura
-     * @return la altura del nodo
-     */
-    @SuppressWarnings("unused")
-    @Deprecated
-    private int altura(NodoAVL<T> nodo) {
-        int altura = -1;
-
-        if (nodo != null) {
-            int alturaIzquierdo, alturaDerecho;
-            NodoAVL<T> hijoIzquierdo, hijoDerecho;
-
-            hijoIzquierdo = nodo.getIzquierdo();
-            hijoDerecho = nodo.getDerecho();
-            alturaIzquierdo = altura(hijoIzquierdo);
-            alturaDerecho = altura(hijoDerecho);
-            altura = 0;
-
-            if (alturaIzquierdo > alturaDerecho) {
-                altura += alturaIzquierdo;
-            } else {
-                altura += alturaDerecho;
-            }
-        }
-
-        return altura;
     }
 
     /**
@@ -244,8 +181,8 @@ public class ArbolAVL<T extends Comparable<T>> {
         izquierdoHD = izquierdo == null ? null : izquierdo.getDerecho();
         izquierdo.setDerecho(nodo);
         nodo.setIzquierdo(izquierdoHD);
-        actualizarAltura(nodo);
-        actualizarAltura(izquierdo);
+        nodo.recalcularAltura();
+        izquierdo.recalcularAltura();
 
         return izquierdo;
     }
@@ -264,8 +201,8 @@ public class ArbolAVL<T extends Comparable<T>> {
         derechoHI = derecho == null ? null : derecho.getIzquierdo();
         derecho.setIzquierdo(nodo);
         nodo.setDerecho(derechoHI);
-        actualizarAltura(nodo);
-        actualizarAltura(derecho);
+        nodo.recalcularAltura();
+        derecho.recalcularAltura();
 
         return derecho;
     }
@@ -305,7 +242,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(T elemento) {
-        return eliminar(elemento, raiz, null, null);
+        return elemento != null ? eliminar(elemento, raiz, null, null) : false;
     }
 
     /**
@@ -363,7 +300,10 @@ public class ArbolAVL<T extends Comparable<T>> {
             // Balancear el nodo si es necesario (lo determina el método balancear())
             // Actualizar altura de los nodos padre
             if (eliminado) {
-                actualizarAltura(padre);
+                if (padre != null) {
+                    padre.recalcularAltura();
+                }
+
                 balancear(padre, padreAnterior);
             }
         }
@@ -378,7 +318,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
-        return pertenece(elemento, raiz);
+        return elemento != null ? pertenece(elemento, raiz) : false;
     }
 
     /**
@@ -466,7 +406,7 @@ public class ArbolAVL<T extends Comparable<T>> {
      *
      * @return verdadero si el árbol está vacío, falso en caso contrario
      */
-    public boolean vacio() {
+    public boolean esVacio() {
         return raiz == null;
     }
 
@@ -679,7 +619,7 @@ public class ArbolAVL<T extends Comparable<T>> {
     public ArbolAVL<T> clone() {
         ArbolAVL<T> clon = new ArbolAVL<T>();
 
-        if (!vacio()) {
+        if (!esVacio()) {
             clon.raiz = new NodoAVL<T>(raiz.getElemento());
             clon.raiz.setAltura(raiz.getAltura());
             clonarNodo(raiz, clon.raiz);

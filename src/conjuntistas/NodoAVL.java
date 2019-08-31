@@ -29,13 +29,6 @@ public class NodoAVL<E> {
     private int altura;
 
     /**
-     * Constructor vacío.
-     */
-    public NodoAVL() {
-        this(null, null, null, -1);
-    }
-
-    /**
      * Constructor con el elemento.
      *
      * @param elemento el elemento
@@ -52,7 +45,8 @@ public class NodoAVL<E> {
      * @param derecho el nodo derecho
      */
     public NodoAVL(E elemento, NodoAVL<E> izquierdo, NodoAVL<E> derecho) {
-        this(elemento, izquierdo, derecho, Math.max(izquierdo.getAltura(), derecho.getAltura()) + 1);
+        this(elemento, izquierdo, derecho, 0);
+        recalcularAltura();
     }
 
     /**
@@ -140,5 +134,26 @@ public class NodoAVL<E> {
      */
     public void setAltura(int altura) {
         this.altura = altura;
+    }
+
+    /**
+     * Recalcula la altura del nodo.
+     */
+    public void recalcularAltura() {
+        int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+        int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
+        altura = Math.max(alturaIzquierdo, alturaDerecho) + 1;
+    }
+
+    /**
+     * Devuelve el balance del nodo.
+     *
+     * @return el balance del nodo
+     */
+    public int balance() {
+        int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+        int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
+
+        return alturaIzquierdo - alturaDerecho;
     }
 }
