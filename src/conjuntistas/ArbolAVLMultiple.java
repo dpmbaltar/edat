@@ -335,39 +335,30 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
-        return elemento == null ? false : pertenece(elemento, raiz);
-    }
-
-    /**
-     * Devuelve verdadero si el elemento dado pertenece al sub-árbol correspondiente al nodo dado, falso en caso
-     * contrario.
-     *
-     * @param elemento el elemento a buscar
-     * @param nodo el nodo desde donde buscar el elemento
-     * @return verdadero si el elemento fue encontrado, falso en caso contrario
-     */
-    private boolean pertenece(T elemento, NodoAVLMultiple<T> nodo) {
         boolean existe = false;
 
-        if (nodo != null) {
-            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
-            NodoAVLMultiple<T> derecho = nodo.getDerecho();
+        if (elemento != null && raiz != null) {
+            NodoAVLMultiple<T> nodo = raiz;
 
-            if (elemento.compareTo(nodo.getElemento()) < 0) {
-                existe = pertenece(elemento, izquierdo);
-            } else if (elemento.compareTo(nodo.getElemento()) > 0) {
-                existe = pertenece(elemento, derecho);
-            } else if (elemento.equals(nodo.getElemento())) {
-                existe = true;
-            } else {
-                Nodo<T> enlace = nodo.getEnlace();
+            while (!existe && nodo != null) {
+                if (elemento.compareTo(nodo.getElemento()) < 0) {
+                    nodo = nodo.getIzquierdo();
+                } else if (elemento.compareTo(nodo.getElemento()) > 0) {
+                    nodo = nodo.getDerecho();
+                } else if (elemento.equals(nodo.getElemento())) {
+                    existe = true;
+                } else {
+                    Nodo<T> enlace = nodo.getEnlace();
 
-                while (!existe && enlace != null) {
-                    if (elemento.equals(enlace.getElemento())) {
-                        existe = true;
-                    } else {
-                        enlace = enlace.getEnlace();
+                    while (!existe && enlace != null) {
+                        if (elemento.equals(enlace.getElemento())) {
+                            existe = true;
+                        } else {
+                            enlace = enlace.getEnlace();
+                        }
                     }
+
+                    nodo = null;
                 }
             }
         }
