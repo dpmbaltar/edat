@@ -466,7 +466,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
         }
     }
 
-    private void listarMultiple(NodoAVLMultiple<T> nodo, Lista<T> lista) {
+    protected void listarMultiple(NodoAVLMultiple<T> nodo, Lista<T> lista) {
         int posicion = lista.longitud() + 1;
         Nodo<T> enlace = nodo.getEnlace();
         lista.insertar(nodo.getElemento(), posicion);
