@@ -11,7 +11,7 @@ public class Nodo<E> {
     /**
      * El elemento del nodo.
      */
-    private E elem;
+    private E elemento;
 
     /**
      * El enlace del nodo.
@@ -19,23 +19,16 @@ public class Nodo<E> {
     private Nodo<E> enlace;
 
     /**
-     * Constructor sin enlace y elemento nulo.
-     */
-    public Nodo() {
-        this(null, null);
-    }
-
-    /**
-     * Constructor sin enlace, y el elemento.
+     * Constructor con elemento.
      *
-     * @param elem el elemento
+     * @param elemento el elemento
      */
-    public Nodo(E elem) {
-        this(elem, null);
+    public Nodo(E elemento) {
+        this(elemento, null);
     }
 
     /**
-     * Constructor sin elemento, y el enlace.
+     * Constructor con enlace.
      *
      * @param enlace el enlace
      */
@@ -44,13 +37,13 @@ public class Nodo<E> {
     }
 
     /**
-     * Constructor con el elemento y enlace.
+     * Constructor con elemento y enlace.
      *
-     * @param elem el elemento
+     * @param elemento el elemento
      * @param enlace el enlace
      */
-    public Nodo(E elem, Nodo<E> enlace) {
-        this.elem = elem;
+    public Nodo(E elemento, Nodo<E> enlace) {
+        this.elemento = elemento;
         this.enlace = enlace;
     }
 
@@ -59,8 +52,8 @@ public class Nodo<E> {
      *
      * @return el elemento
      */
-    public E getElem() {
-        return elem;
+    public E getElemento() {
+        return elemento;
     }
 
     /**
@@ -75,10 +68,10 @@ public class Nodo<E> {
     /**
      * Establece el elemento del nodo.
      *
-     * @param elem el elemento
+     * @param elemento el elemento
      */
-    public void setElemento(E elem) {
-        this.elem = elem;
+    public void setElemento(E elemento) {
+        this.elemento = elemento;
     }
 
     /**

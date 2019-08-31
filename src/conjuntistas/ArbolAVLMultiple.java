@@ -265,7 +265,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 // Elemento encontrado
                 // Eliminarlo según los siguientes 4 casos posibles:
                 if (enlace != null) { // Caso 1: elemento agrupado
-                    nodo.setElemento(enlace.getElem());
+                    nodo.setElemento(enlace.getElemento());
                     nodo.setEnlace(enlace.getEnlace());
                     eliminado = true;
                     agrupado = true;
@@ -297,7 +297,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 Nodo<T> enlacePrevio = null;
 
                 while (!eliminado && enlace != null) {
-                    if (elemento.equals(enlace.getElem())) {
+                    if (elemento.equals(enlace.getElemento())) {
                         if (enlacePrevio != null) {
                             enlacePrevio.setEnlace(enlace.getEnlace());
                         } else {
@@ -363,7 +363,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 Nodo<T> enlace = nodo.getEnlace();
 
                 while (!existe && enlace != null) {
-                    if (elemento.equals(enlace.getElem())) {
+                    if (elemento.equals(enlace.getElemento())) {
                         existe = true;
                     } else {
                         enlace = enlace.getEnlace();
@@ -482,7 +482,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
         posicion++;
 
         while (enlace != null) {
-            lista.insertar(enlace.getElem(), posicion);
+            lista.insertar(enlace.getElemento(), posicion);
             enlace = enlace.getEnlace();
         }
     }

@@ -117,7 +117,7 @@ public class Lista<T> {
                 pos++;
             }
 
-            elemento = nodo.getElem();
+            elemento = nodo.getElemento();
         }
 
         return elemento;
@@ -139,7 +139,7 @@ public class Lista<T> {
         // No utilizar "if": "while" verificará si el nodo cabecera es nulo
         // if (cabecera != null) {
         while (nodo != null && posicion < 0) {
-            actual = nodo.getElem();
+            actual = nodo.getElemento();
 
             if (actual != null && actual.equals(elemento)) {
                 posicion = i;
@@ -191,12 +191,12 @@ public class Lista<T> {
 
         if (cabecera != null) {
             Nodo<T> nodoSiguiente = cabecera.getEnlace();
-            Nodo<T> nodoClon = new Nodo<>(cabecera.getElem());
+            Nodo<T> nodoClon = new Nodo<>(cabecera.getElemento());
             clon.cabecera = nodoClon;
             clon.longitud = 1;
 
             while (nodoSiguiente != null) {
-                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElemento()));
                 nodoClon = nodoClon.getEnlace();
                 nodoSiguiente = nodoSiguiente.getEnlace();
                 clon.longitud++;
@@ -216,7 +216,7 @@ public class Lista<T> {
         Nodo<T> nodo = cabecera;
 
         while (nodo != null) {
-            cadena.append(String.valueOf(nodo.getElem()));
+            cadena.append(String.valueOf(nodo.getElemento()));
             nodo = nodo.getEnlace();
 
             if (nodo != null) {

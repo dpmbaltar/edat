@@ -92,7 +92,7 @@ public class TablaHashAbierto<T> {
             Nodo<T> nodoAnterior = null;
 
             while (!eliminado && nodo != null) {
-                if (nodo.getElem().equals(elemento)) {
+                if (nodo.getElemento().equals(elemento)) {
                     if (nodoAnterior == null) {
                         hash[posicion] = nodo.getEnlace();
                     } else {
@@ -126,7 +126,7 @@ public class TablaHashAbierto<T> {
             Nodo<T> nodo = (Nodo<T>) hash[posicion];
 
             while (!encontrado && nodo != null) {
-                encontrado = nodo.getElem().equals(elemento);
+                encontrado = nodo.getElemento().equals(elemento);
                 nodo = nodo.getEnlace();
             }
         }
@@ -150,7 +150,7 @@ public class TablaHashAbierto<T> {
             nodo = (Nodo<T>) hash[posicion];
 
             while (nodo != null) {
-                lista.insertar(nodo.getElem(), lista.longitud() + 1);
+                lista.insertar(nodo.getElemento(), lista.longitud() + 1);
                 nodo = nodo.getEnlace();
             }
 
@@ -181,7 +181,7 @@ public class TablaHashAbierto<T> {
                     elems = new Lista<>();
                 }
 
-                elems.insertar(nodo.getElem(), elems.longitud() + 1);
+                elems.insertar(nodo.getElemento(), elems.longitud() + 1);
                 nodo = nodo.getEnlace();
             }
 
@@ -221,12 +221,12 @@ public class TablaHashAbierto<T> {
 
         for (int i = 0; i < hash.length; i++) {
             if (hash[i] != null) {
-                clon.hash[i] = new Nodo<T>(((Nodo<T>) hash[i]).getElem());
+                clon.hash[i] = new Nodo<T>(((Nodo<T>) hash[i]).getElemento());
                 nodoClon = (Nodo<T>) clon.hash[i];
                 nodo = ((Nodo<T>) hash[i]).getEnlace();
 
                 while (nodo != null) {
-                    nodoClon.setEnlace(new Nodo<T>(nodo.getElem()));
+                    nodoClon.setEnlace(new Nodo<T>(nodo.getElemento()));
                     nodoClon = nodoClon.getEnlace();
                     nodo = nodo.getEnlace();
                 }

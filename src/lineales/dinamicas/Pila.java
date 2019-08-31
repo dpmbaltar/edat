@@ -55,7 +55,7 @@ public class Pila<T> {
      * @return el elemento tope si existe, nulo en caso contrario
      */
     public T obtenerTope() {
-        return tope != null ? tope.getElem() : null;
+        return tope != null ? tope.getElemento() : null;
     }
 
     /**
@@ -85,11 +85,11 @@ public class Pila<T> {
 
         if (tope != null) {
             Nodo<T> nodoSiguiente = tope.getEnlace();
-            Nodo<T> nodoClon = new Nodo<>(tope.getElem());
+            Nodo<T> nodoClon = new Nodo<>(tope.getElemento());
             clon.tope = nodoClon;
 
             while (nodoSiguiente != null) {
-                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElemento()));
                 nodoClon = nodoClon.getEnlace();
                 nodoSiguiente = nodoSiguiente.getEnlace();
             }
@@ -110,7 +110,7 @@ public class Pila<T> {
             Nodo<T> nodo = tope;
 
             while (nodo != null) {
-                cadena.append(String.valueOf(nodo.getElem()));
+                cadena.append(String.valueOf(nodo.getElemento()));
                 nodo = nodo.getEnlace();
 
                 if (nodo != null) {

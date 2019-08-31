@@ -75,7 +75,7 @@ public class Cola<T> {
      * @return el elemento del frente si existe, nulo en caso contrario
      */
     public T obtenerFrente() {
-        return frente != null ? frente.getElem() : null;
+        return frente != null ? frente.getElemento() : null;
     }
 
     /**
@@ -106,11 +106,11 @@ public class Cola<T> {
 
         if (frente != null) {
             Nodo<T> nodoSiguiente = frente.getEnlace();
-            Nodo<T> nodoClon = new Nodo<>(frente.getElem());
+            Nodo<T> nodoClon = new Nodo<>(frente.getElemento());
             clon.frente = nodoClon;
 
             while (nodoSiguiente != null) {
-                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElem()));
+                nodoClon.setEnlace(new Nodo<T>(nodoSiguiente.getElemento()));
                 nodoClon = nodoClon.getEnlace();
                 nodoSiguiente = nodoSiguiente.getEnlace();
             }
@@ -131,7 +131,7 @@ public class Cola<T> {
             Nodo<T> nodo = frente;
 
             while (nodo != null) {
-                cadena.append(String.valueOf(nodo.getElem()));
+                cadena.append(String.valueOf(nodo.getElemento()));
                 nodo = nodo.getEnlace();
 
                 if (nodo != null) {
