@@ -1,10 +1,9 @@
 package conjuntistas;
 
-import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
 /**
- * Implementación de Diccionario (impl. como Árbol AVL).
+ * Implementación de Diccionario (implementación como Árbol AVL).
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  *
@@ -39,7 +38,7 @@ public class Diccionario<C extends Comparable<C>, E> {
 
         if (clave != null && elemento != null) {
             if (raiz == null) {
-                raiz = new NodoAVLDicc<C, E>(clave, elemento);
+                raiz = new NodoAVLDicc<>(clave, elemento);
                 insertado = true;
             } else {
                 insertado = insertar(clave, elemento, raiz, null);
@@ -53,37 +52,27 @@ public class Diccionario<C extends Comparable<C>, E> {
         boolean insertado = false;
 
         if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo, derecho, nuevo;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
+            NodoAVLDicc<C, E> nuevo;
 
-            // Si la clave es menor a la del nodo, insertar en el sub-árbol izquierdo
-            // Si la clave es mayor a la del nodo, insertar en el sub-árbol derecho
+            // Si la clave es menor a la del nodo, insertar en el subárbol izquierdo
+            // Si la clave es mayor a la del nodo, insertar en el subárbol derecho
             // Si la clave es igual a la del nodo, el resultado será falso y no continuará hacia los nodos hijos
             if (clave.compareTo(nodo.getClave()) < 0) {
                 if (izquierdo == null) {
-                    nuevo = new NodoAVLDicc<C, E>(clave, elemento);
+                    nuevo = new NodoAVLDicc<>(clave, elemento);
                     nodo.setIzquierdo(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (derecho == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(clave, elemento, izquierdo, nodo);
                 }
             } else if (clave.compareTo(nodo.getClave()) > 0) {
                 if (derecho == null) {
-                    nuevo = new NodoAVLDicc<C, E>(clave, elemento);
+                    nuevo = new NodoAVLDicc<>(clave, elemento);
                     nodo.setDerecho(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (izquierdo == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(clave, elemento, derecho, nodo);
@@ -94,7 +83,10 @@ public class Diccionario<C extends Comparable<C>, E> {
             // Balancear el nodo si es necesario (lo determina el método balancear())
             // Actualizar altura de los nodos padre
             if (insertado) {
-                actualizarAltura(padre);
+                if (padre != null) {
+                    padre.recalcularAltura();
+                }
+
                 balancear(nodo, padre);
             }
         }
@@ -103,23 +95,7 @@ public class Diccionario<C extends Comparable<C>, E> {
     }
 
     /**
-     * Actualiza la altura de un nodo dado.
-     *
-     * @see Nodo#getAltura
-     * @param nodo el nodo a actualizar la altura
-     */
-    private void actualizarAltura(NodoAVLDicc<C, E> nodo) {
-        if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
-            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
-            int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
-            int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
-            nodo.setAltura(Math.max(alturaIzquierdo, alturaDerecho) + 1);
-        }
-    }
-
-    /**
-     * Balancea el sub-árbol correspondiente al nodo dado.
+     * Balancea el subárbol correspondiente al nodo dado.
      *
      * @param nodo el nodo a balancear
      * @param padre el nodo padre
@@ -127,14 +103,16 @@ public class Diccionario<C extends Comparable<C>, E> {
     private void balancear(NodoAVLDicc<C, E> nodo, NodoAVLDicc<C, E> padre) {
         if (nodo != null) {
             boolean balanceado = false;
-            NodoAVLDicc<C, E> nodoHijo, reemplazo = null;
-            int balanceHijo, balanceNodo = balance(nodo);
+            NodoAVLDicc<C, E> nodoHijo;
+            NodoAVLDicc<C, E> reemplazo = null;
+            int balanceHijo;
+            int balanceNodo = nodo.balance();
 
-            // Detectar si el nodo está balanceado. De no estarlo, hacer las
-            // rotaciones necesarias para que éste quede balanceado
+            // Detectar si el nodo está balanceado
+            // De no estarlo, hacer las rotaciones necesarias para que éste quede balanceado
             if (balanceNodo == 2) {
                 nodoHijo = nodo.getIzquierdo();
-                balanceHijo = balance(nodoHijo);
+                balanceHijo = nodoHijo.balance();
 
                 if (balanceHijo == 1 || balanceHijo == 0) { // 0 cuando es una eliminación
                     reemplazo = rotarDerecha(nodo);
@@ -145,7 +123,7 @@ public class Diccionario<C extends Comparable<C>, E> {
                 balanceado = true;
             } else if (balanceNodo == -2) {
                 nodoHijo = nodo.getDerecho();
-                balanceHijo = balance(nodoHijo);
+                balanceHijo = nodoHijo.balance();
 
                 if (balanceHijo == 1) {
                     reemplazo = rotarDerechaIzquierda(nodo);
@@ -161,9 +139,8 @@ public class Diccionario<C extends Comparable<C>, E> {
                 if (padre == null) {
                     raiz = reemplazo;
                 } else {
-                    C elementoPadre, elementoReemplazo;
-                    elementoPadre = padre.getClave();
-                    elementoReemplazo = reemplazo.getClave();
+                    C elementoPadre = padre.getClave();
+                    C elementoReemplazo = reemplazo.getClave();
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
@@ -171,33 +148,15 @@ public class Diccionario<C extends Comparable<C>, E> {
                         padre.setDerecho(reemplazo);
                     }
 
-                    actualizarAltura(padre);
+                    padre.recalcularAltura();
                 }
             }
         }
     }
 
     /**
-     * Devuelve el balance del nodo dado.
-     *
-     * @param nodo el nodo a calcular su balance
-     * @return el balance del nodo
-     */
-    private int balance(NodoAVLDicc<C, E> nodo) {
-        int alturaIzquierdo, alturaDerecho;
-        NodoAVLDicc<C, E> izquierdo, derecho;
-
-        izquierdo = nodo.getIzquierdo();
-        derecho = nodo.getDerecho();
-        alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
-        alturaDerecho = derecho != null ? derecho.getAltura() : -1;
-
-        return alturaIzquierdo - alturaDerecho;
-    }
-
-    /**
-     * Aplica una rotación simple a la derecha al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
-     * raíz del sub-árbol.
+     * Aplica una rotación simple a la derecha al subárbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del subárbol.
      *
      * @param nodo el nodo a rotar
      * @return el nodo rotado
@@ -209,15 +168,15 @@ public class Diccionario<C extends Comparable<C>, E> {
         izquierdoHD = izquierdo == null ? null : izquierdo.getDerecho();
         izquierdo.setDerecho(nodo);
         nodo.setIzquierdo(izquierdoHD);
-        actualizarAltura(nodo);
-        actualizarAltura(izquierdo);
+        nodo.recalcularAltura();
+        izquierdo.recalcularAltura();
 
         return izquierdo;
     }
 
     /**
-     * Aplica una rotación simple a la izquierda al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
-     * raíz del sub-árbol.
+     * Aplica una rotación simple a la izquierda al subárbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del subárbol.
      *
      * @param nodo el nodo a rotar
      * @return el nodo rotado
@@ -229,15 +188,15 @@ public class Diccionario<C extends Comparable<C>, E> {
         derechoHI = derecho == null ? null : derecho.getIzquierdo();
         derecho.setIzquierdo(nodo);
         nodo.setDerecho(derechoHI);
-        actualizarAltura(nodo);
-        actualizarAltura(derecho);
+        nodo.recalcularAltura();
+        derecho.recalcularAltura();
 
         return derecho;
     }
 
     /**
-     * Aplica una rotación doble derecha-izquierda al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
-     * raíz del sub-árbol.
+     * Aplica una rotación doble derecha-izquierda al subárbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del subárbol.
      *
      * @param nodo el nodo a rotar
      * @return el nodo rotado
@@ -250,8 +209,8 @@ public class Diccionario<C extends Comparable<C>, E> {
     }
 
     /**
-     * Aplica una rotación doble izquierda-derecha al sub-árbol correspondiente al nodo dado, y devuelve el nuevo nodo
-     * raíz del sub-árbol.
+     * Aplica una rotación doble izquierda-derecha al subárbol correspondiente al nodo dado, y devuelve el nuevo nodo
+     * raíz del subárbol.
      *
      * @param nodo el nodo a rotar
      * @return el nodo rotado
@@ -270,47 +229,43 @@ public class Diccionario<C extends Comparable<C>, E> {
      * @param clave la clave del elemento a eliminar
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
-    public boolean eliminar(C elemento) {
-        return elemento != null ? eliminar(elemento, raiz, null, null) : false;
+    public boolean eliminar(C clave) {
+        return clave == null ? false : eliminar(clave, raiz, null, null);
     }
 
-    private boolean eliminar(C elemento, NodoAVLDicc<C, E> nodo, NodoAVLDicc<C, E> padre, NodoAVLDicc<C, E> padreAnterior) {
+    private boolean eliminar(C clave, NodoAVLDicc<C, E> nodo, NodoAVLDicc<C, E> padre, NodoAVLDicc<C, E> padreAnterior) {
         boolean eliminado = false;
 
         if (nodo != null) {
-            C elemPadre;
-            NodoAVLDicc<C, E> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
 
-            // Buscar el elemento a eliminar
-            if (elemento.compareTo(nodo.getClave()) < 0) {
-                eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo, padre);
-            } else if (elemento.compareTo(nodo.getClave()) > 0) {
-                eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo, padre);
-            } else {
-                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
+            // Buscar la clave a eliminar
+            if (clave.compareTo(nodo.getClave()) < 0) {
+                eliminado = izquierdo == null ? false : eliminar(clave, izquierdo, nodo, padre);
+            } else if (clave.compareTo(nodo.getClave()) > 0) {
+                eliminado = derecho == null ? false : eliminar(clave, derecho, nodo, padre);
+            } else if (clave.equals(nodo.getClave())) {
+                // Elemento encontrado
+                // Eliminarlo según los siguientes 3 casos posibles:
                 if (izquierdo == null && derecho == null) { // Caso 1: nodo hoja
-                    elemPadre = padre.getClave();
-
-                    if (elemento.compareTo(elemPadre) < 0) {
+                    if (clave.compareTo(padre.getClave()) < 0) {
                         padre.setIzquierdo(null);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (clave.compareTo(padre.getClave()) > 0) {
                         padre.setDerecho(null);
                     }
 
                     eliminado = true;
-                } else if (izquierdo != null && derecho != null) { // Caso 3: nodo con ambos hijos
-                    C elemMinDerecho = minimo(derecho);
-                    eliminado = eliminar(elemMinDerecho, derecho, nodo, padre);
-                    nodo.setClave(elemMinDerecho);
-                } else { // Caso 2: nodo con un solo hijo
-                    NodoAVLDicc<C, E> reemplazo = derecho == null ? izquierdo : derecho;
-                    elemPadre = padre.getClave();
+                } else if (izquierdo != null && derecho != null) { // Caso 2: nodo con ambos hijos
+                    C minimoDerecho = minimo(derecho);
+                    eliminado = eliminar(minimoDerecho, derecho, nodo, padre);
+                    nodo.setClave(minimoDerecho);
+                } else { // Caso 3: nodo con un solo hijo
+                    NodoAVLDicc<C, E> reemplazo = derecho != null ? derecho : izquierdo;
 
-                    if (elemento.compareTo(elemPadre) < 0) {
+                    if (clave.compareTo(padre.getClave()) < 0) {
                         padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (clave.compareTo(padre.getClave()) > 0) {
                         padre.setDerecho(reemplazo);
                     }
 
@@ -322,7 +277,10 @@ public class Diccionario<C extends Comparable<C>, E> {
             // Balancear el nodo si es necesario (lo determina el método balancear())
             // Actualizar altura de los nodos padre
             if (eliminado) {
-                actualizarAltura(padre);
+                if (padre != null) {
+                    padre.recalcularAltura();
+                }
+
                 balancear(padre, padreAnterior);
             }
         }
@@ -330,8 +288,15 @@ public class Diccionario<C extends Comparable<C>, E> {
         return eliminado;
     }
 
+    /**
+     * Devuelve la clave mínima a partir del nodo dado (método para obtener candidato para eliminación).
+     *
+     * @param nodo el nodo
+     * @return la clave mínima si existe, nulo en caso contrario
+     */
     private C minimo(NodoAVLDicc<C, E> nodo) {
-        NodoAVLDicc<C, E> izquierdo = nodo, minimo = null;
+        NodoAVLDicc<C, E> izquierdo = nodo;
+        NodoAVLDicc<C, E> minimo = null;
 
         while (izquierdo != null) {
             minimo = izquierdo;
@@ -344,30 +309,12 @@ public class Diccionario<C extends Comparable<C>, E> {
     /**
      * Devuelve verdadero si en la estructura se encuentra almacenado un elemento con la clave recibida por parámetro,
      * caso contrario devuelve falso.
-
      *
      * @param clave la clave a buscar
      * @return verdadero si la clave fue encontrada, falso en caso contrario
      */
     public boolean existeClave(C clave) {
-        boolean existe = false;
-
-        if (clave != null && raiz != null) {
-            NodoAVLDicc<C, E> nodo = raiz;
-
-            while (nodo != null) {
-                if (clave.compareTo(nodo.getClave()) < 0) {
-                    nodo = nodo.getIzquierdo();
-                } else if (clave.compareTo(nodo.getClave()) > 0) {
-                    nodo = nodo.getDerecho();
-                } else {
-                    existe = true;
-                    nodo = null;
-                }
-            }
-        }
-
-        return existe;
+        return obtenerInformacion(clave) != null;
     }
 
     /**
@@ -384,14 +331,13 @@ public class Diccionario<C extends Comparable<C>, E> {
         if (clave != null && raiz != null) {
             NodoAVLDicc<C, E> nodo = raiz;
 
-            while (nodo != null) {
+            while (elemento == null && nodo != null) {
                 if (clave.compareTo(nodo.getClave()) < 0) {
                     nodo = nodo.getIzquierdo();
                 } else if (clave.compareTo(nodo.getClave()) > 0) {
                     nodo = nodo.getDerecho();
-                } else {
+                } else if (clave.equals(nodo.getClave())) {
                     elemento = nodo.getElemento();
-                    nodo = null;
                 }
             }
         }
@@ -400,16 +346,16 @@ public class Diccionario<C extends Comparable<C>, E> {
     }
 
     /**
-     * Devuelve verdadero si el árbol está vacío, o falso en caso contrario.
+     * Devuelve verdadero si el diccionario está vacío, o falso en caso contrario.
      *
-     * @return verdadero si el árbol está vacío, falso en caso contrario
+     * @return verdadero si el diccionario está vacío, falso en caso contrario
      */
     public boolean esVacio() {
         return raiz == null;
     }
 
     /**
-     * Elimina todos los elementos del árbol.
+     * Elimina todos los elementos del diccionario.
      */
     public void vaciar() {
         raiz = null;
@@ -422,7 +368,7 @@ public class Diccionario<C extends Comparable<C>, E> {
      * @return la lista con las claves
      */
     public Lista<C> listarClaves() {
-        Lista<C> lista = new Lista<C>();
+        Lista<C> lista = new Lista<>();
         listarClaves(raiz, lista);
 
         return lista;
@@ -430,9 +376,8 @@ public class Diccionario<C extends Comparable<C>, E> {
 
     private void listarClaves(NodoAVLDicc<C, E> nodo, Lista<C> lista) {
         if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
 
             listarClaves(izquierdo, lista);
             lista.insertar(nodo.getClave(), lista.longitud() + 1);
@@ -455,172 +400,13 @@ public class Diccionario<C extends Comparable<C>, E> {
 
     private void listarDatos(NodoAVLDicc<C, E> nodo, Lista<E> lista) {
         if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
 
             listarDatos(izquierdo, lista);
             lista.insertar(nodo.getElemento(), lista.longitud() + 1);
             listarDatos(derecho, lista);
         }
-    }
-
-    /**
-     * Devuelve una lista con las claves del árbol - ordenados de menor a mayor - mientras que la clave se encuentre
-     * dentro del rango mínimo y máximo especificado.
-     *
-     * @param minimo la clave mínima del rango
-     * @param maximo la clave máxima del rango
-     * @return la lista de claves
-     */
-    public Lista<C> listarRango(C minima, C maxima) {
-        Lista<C> lista = new Lista<C>();
-        listarRango(minima, maxima, raiz, lista);
-
-        return lista;
-    }
-
-    private void listarRango(C minima, C maxima, NodoAVLDicc<C, E> nodo, Lista<C> lista) {
-        if (nodo != null) {
-            NodoAVLDicc<C, E> izquierdo, derecho;
-            C elemento;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-            elemento = nodo.getClave();
-
-            listarRango(minima, maxima, izquierdo, lista);
-
-            if (elemento.compareTo(minima) >= 0 && elemento.compareTo(maxima) <= 0) {
-                lista.insertar(elemento, lista.longitud() + 1);
-            }
-
-            listarRango(minima, maxima, derecho, lista);
-        }
-    }
-
-    /**
-     * Devuelve una lista por niveles con los elementos del árbol.
-     *
-     * @return la lista por niveles
-     */
-    public Lista<C> listarNiveles() {
-        Lista<C> lista = new Lista<C>();
-
-        if (raiz != null) {
-            NodoAVLDicc<C, E> nodo, hijoIzquierdo, hijoDerecho;
-            Cola<NodoAVLDicc<C, E>> cola = new Cola<>();
-            cola.poner(raiz);
-
-            while (!cola.esVacia()) {
-                nodo = cola.obtenerFrente();
-
-                if (nodo != null) {
-                    lista.insertar(nodo.getClave(), lista.longitud() + 1);
-                    hijoIzquierdo = nodo.getIzquierdo();
-                    hijoDerecho = nodo.getDerecho();
-
-                    if (hijoIzquierdo != null) {
-                        cola.poner(hijoIzquierdo);
-                    }
-
-                    if (hijoDerecho != null) {
-                        cola.poner(hijoDerecho);
-                    }
-                } else {
-                    lista.insertar(null, lista.longitud() + 1);
-                }
-
-                cola.sacar();
-            }
-        }
-
-        return lista;
-    }
-
-    /**
-     * Devuelve una lista de listas por niveles con los elementos del árbol, incluyendo nulos.
-     *
-     * @param hastaNivel el nivel máximo a listar
-     * @return la lista de lista de niveles
-     */
-    public Lista<Lista<C>> listarNivelesCompletos(int hastaNivel) {
-        Lista<Lista<C>> lista = new Lista<>();
-
-        if (raiz != null) {
-            int nivelActual = 0;
-            int nivelMaxElementos = 1;
-            NodoAVLDicc<C, E> nodo;
-            Lista<C> nivel = new Lista<>();
-            Cola<NodoAVLDicc<C, E>> cola = new Cola<>();
-            cola.poner(raiz);
-
-            while (!cola.esVacia() && nivelActual <= hastaNivel) {
-                nodo = cola.obtenerFrente();
-                cola.sacar();
-
-                if (nodo != null) {
-                    nivel.insertar(nodo.getClave(), nivel.longitud() + 1);
-                    cola.poner(nodo.getIzquierdo());
-                    cola.poner(nodo.getDerecho());
-                } else {
-                    nivel.insertar(null, nivel.longitud() + 1);
-                    cola.poner(null);
-                    cola.poner(null);
-                }
-
-                if (nivel.longitud() == nivelMaxElementos) {
-                    lista.insertar(nivel, lista.longitud() + 1);
-                    nivel = new Lista<>();
-                    nivelMaxElementos *= 2;
-                    nivelActual++;
-                }
-            }
-        }
-
-        return lista;
-    }
-
-    /**
-     * Devuelve una lista de listas por niveles con las alturas de los elementos del árbol, incluyendo nulos.
-     *
-     * @param hastaNivel el nivel máximo a listar
-     * @return la lista de lista de niveles
-     */
-    public Lista<Lista<Integer>> listarNivelesAltura(int hastaNivel) {
-        Lista<Lista<Integer>> lista = new Lista<>();
-
-        if (raiz != null) {
-            int nivelActual = 0;
-            int nivelMaxElementos = 1;
-            NodoAVLDicc<C, E> nodo;
-            Lista<Integer> nivel = new Lista<>();
-            Cola<NodoAVLDicc<C, E>> cola = new Cola<>();
-            cola.poner(raiz);
-
-            while (!cola.esVacia() && nivelActual <= hastaNivel) {
-                nodo = cola.obtenerFrente();
-                cola.sacar();
-
-                if (nodo != null) {
-                    nivel.insertar(nodo.getAltura(), nivel.longitud() + 1);
-                    cola.poner(nodo.getIzquierdo());
-                    cola.poner(nodo.getDerecho());
-                } else {
-                    nivel.insertar(-1, nivel.longitud() + 1);
-                    cola.poner(null);
-                    cola.poner(null);
-                }
-
-                if (nivel.longitud() == nivelMaxElementos) {
-                    lista.insertar(nivel, lista.longitud() + 1);
-                    nivel = new Lista<>();
-                    nivelMaxElementos *= 2;
-                    nivelActual++;
-                }
-            }
-        }
-
-        return lista;
     }
 
     @Override
@@ -643,12 +429,12 @@ public class Diccionario<C extends Comparable<C>, E> {
             nodoClon.setAltura(nodo.getAltura());
 
             if (hijoIzquierdo != null) {
-                nodoClon.setIzquierdo(new NodoAVLDicc<C, E>(hijoIzquierdo.getClave(), hijoIzquierdo.getElemento()));
+                nodoClon.setIzquierdo(new NodoAVLDicc<>(hijoIzquierdo.getClave(), hijoIzquierdo.getElemento()));
                 clonarNodo(hijoIzquierdo, nodoClon.getIzquierdo());
             }
 
             if (hijoDerecho != null) {
-                nodoClon.setDerecho(new NodoAVLDicc<C, E>(hijoDerecho.getClave(), hijoDerecho.getElemento()));
+                nodoClon.setDerecho(new NodoAVLDicc<>(hijoDerecho.getClave(), hijoDerecho.getElemento()));
                 clonarNodo(hijoDerecho, nodoClon.getDerecho());
             }
         }

@@ -1,7 +1,7 @@
 package conjuntistas;
 
 /**
- * Implementación de un nodo para Diccionario (impl. como Árbol AVL).
+ * Implementación de un nodo para Diccionario (implementación como Árbol AVL).
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  *
@@ -36,14 +36,7 @@ public class NodoAVLDicc<C extends Comparable<C>, E> {
     private int altura;
 
     /**
-     * Constructor vacío.
-     */
-    public NodoAVLDicc() {
-        this(null, null, null, null, -1);
-    }
-
-    /**
-     * Constructor con la clave.
+     * Constructor con clave y elemento.
      *
      * @param clave la clave
      * @param elemento el elemento
@@ -53,7 +46,7 @@ public class NodoAVLDicc<C extends Comparable<C>, E> {
     }
 
     /**
-     * Constructor con la clave y los enlaces izquierdo y derecho.
+     * Constructor con clave, elemento y los enlaces izquierdo y derecho.
      *
      * @param clave la clave
      * @param elemento el elemento
@@ -61,12 +54,12 @@ public class NodoAVLDicc<C extends Comparable<C>, E> {
      * @param derecho el nodo derecho
      */
     public NodoAVLDicc(C clave, E elemento, NodoAVLDicc<C, E> izquierdo, NodoAVLDicc<C, E> derecho) {
-        this(clave, elemento, izquierdo, derecho, 1 +
-                Math.max(izquierdo != null ? izquierdo.getAltura() : -1, derecho != null ? derecho.getAltura() : -1));
+        this(clave, elemento, izquierdo, derecho, 0);
+        recalcularAltura();
     }
 
     /**
-     * Constructor con la clave, los enlaces izquierdo y derecho, y su altura.
+     * Constructor con clave, elemento, los enlaces izquierdo y derecho, y altura.
      *
      * @param clave la clave
      * @param elemento el elemento
@@ -170,5 +163,26 @@ public class NodoAVLDicc<C extends Comparable<C>, E> {
      */
     public void setAltura(int altura) {
         this.altura = altura;
+    }
+
+    /**
+     * Recalcula la altura del nodo.
+     */
+    public void recalcularAltura() {
+        int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+        int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
+        altura = Math.max(alturaIzquierdo, alturaDerecho) + 1;
+    }
+
+    /**
+     * Devuelve el balance del nodo.
+     *
+     * @return el balance del nodo
+     */
+    public int balance() {
+        int alturaIzquierdo = izquierdo != null ? izquierdo.getAltura() : -1;
+        int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
+
+        return alturaIzquierdo - alturaDerecho;
     }
 }
