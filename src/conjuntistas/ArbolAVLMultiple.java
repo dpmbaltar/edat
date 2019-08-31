@@ -63,7 +63,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
 
             // Si el elemento es menor al del nodo, insertar en el sub-árbol izquierdo
             // Si el elemento es mayor al del nodo, insertar en el sub-árbol derecho
-            // Si el elemento es igual al del nodo, el resultado será falso y no continuará hacia los nodos hijos
+            // Si el elemento es igual al del nodo, insertar como enlace al elemento o aumentar referencias
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
                     nuevo = new NodoAVLMultiple<>(elemento);
@@ -80,7 +80,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 }
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 if (derecho == null) {
-                    nuevo = new NodoAVLMultiple<T>(elemento);
+                    nuevo = new NodoAVLMultiple<>(elemento);
                     nodo.setDerecho(nuevo);
 
                     // Actualizar altura del nodo si corresponde
@@ -92,6 +92,8 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 } else {
                     insertado = insertar(elemento, derecho, nodo);
                 }
+            } else {
+                insertarMultiple(elemento, nodo);
             }
 
             // Vuelta de la recursión:
@@ -106,7 +108,38 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
             }
         }
 
-        return insertado;
+        return true;
+    }
+
+    /**
+     * Inserta un elemento que ya existe o que representa un valor igual a un
+     * elemento existente.
+     *
+     * @param elemento el elemento
+     * @param nodo el nodo
+     */
+    private void insertarMultiple(T elemento, NodoAVLMultiple<T> nodo) {
+        if (elemento.equals(nodo.getElemento())) {
+            nodo.aumentarCantidad();
+        } else if (nodo.getEnlace() == null) {
+            nodo.setEnlace(new NodoMultiple<>(elemento));
+        } else {
+            NodoMultiple<T> enlaceActual = nodo.getEnlace();
+            NodoMultiple<T> enlacePrevio;
+
+            while (enlaceActual != null) {
+                if (elemento.equals(enlaceActual.getElemento())) {
+                    enlaceActual.aumentarCantidad();
+                } else {
+                    enlacePrevio = enlaceActual;
+                    enlaceActual = enlaceActual.getEnlace();
+
+                    if (enlaceActual == null) {
+                        enlacePrevio.setEnlace(new NodoMultiple<>(elemento));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -253,7 +286,8 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @param nodo el nodo desde donde buscar el elemento a eliminar
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
-    private boolean eliminar(T elemento, NodoAVLMultiple<T> nodo, NodoAVLMultiple<T> padre, NodoAVLMultiple<T> padreAnterior) {
+    private boolean eliminar(T elemento, NodoAVLMultiple<T> nodo, NodoAVLMultiple<T> padre,
+            NodoAVLMultiple<T> padreAnterior) {
         boolean eliminado = false;
 
         if (nodo != null) {
@@ -334,16 +368,27 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
         boolean existe = false;
 
         if (nodo != null) {
-            NodoAVLMultiple<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
+            NodoAVLMultiple<T> derecho = nodo.getDerecho();
 
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 existe = pertenece(elemento, izquierdo);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 existe = pertenece(elemento, derecho);
             } else {
-                existe = true;
+                if (elemento.equals(nodo.getElemento())) {
+                    existe = true;
+                } else if (nodo.getEnlace() != null) {
+                    NodoMultiple<T> enlace = nodo.getEnlace();
+
+                    while (!existe && enlace != null) {
+                        if (elemento.equals(enlace.getElemento())) {
+                            existe = true;
+                        } else {
+                            enlace = enlace.getEnlace();
+                        }
+                    }
+                }
             }
         }
 
@@ -439,13 +484,29 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      */
     private void listar(NodoAVLMultiple<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            NodoAVLMultiple<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
+            NodoAVLMultiple<T> derecho = nodo.getDerecho();
+            NodoMultiple<T> enlace = nodo.getEnlace();
 
             listar(izquierdo, lista);
-            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+            listarMultiple(nodo, lista);
             listar(derecho, lista);
+        }
+    }
+
+    private void listarMultiple(NodoAVLMultiple<T> nodo, Lista<T> lista) {
+        NodoMultiple<T> enlace = nodo.getEnlace();
+
+        for (int i = 0; i < nodo.getCantidad(); i++) {
+            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+        }
+
+        while (enlace != null) {
+            for (int i = 0; i < enlace.getCantidad(); i++) {
+                lista.insertar(enlace.getElemento(), lista.longitud() + 1);
+            }
+
+            enlace = enlace.getEnlace();
         }
     }
 
