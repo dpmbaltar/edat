@@ -1,5 +1,7 @@
 package conjuntistas;
 
+import lineales.dinamicas.Nodo;
+
 /**
  * Implementación de un nodo para un AVL que acepta elementos duplicados o
  * elementos distintos que al ser comparados representan el mismo valor.
@@ -27,7 +29,7 @@ public class NodoAVLMultiple<E> {
     /**
      * El enlace a otro elemento que representa un mismo valor comparable.
      */
-    private NodoMultiple<E> enlace;
+    private Nodo<E> enlace;
 
     /**
      * La altura del nodo.
@@ -35,17 +37,12 @@ public class NodoAVLMultiple<E> {
     private int altura;
 
     /**
-     * Cantidad de referencias al elemento.
-     */
-    private int cantidad;
-
-    /**
      * Constructor con elemento.
      *
      * @param elemento el elemento
      */
     public NodoAVLMultiple(E elemento) {
-        this(elemento, null, null, null, 0, 1);
+        this(elemento, null, null, null, 0);
     }
 
     /**
@@ -54,8 +51,8 @@ public class NodoAVLMultiple<E> {
      * @param elemento el elemento
      * @param enlace el enlace
      */
-    public NodoAVLMultiple(E elemento, NodoMultiple<E> enlace) {
-        this(elemento, null, null, enlace, 0, 1);
+    public NodoAVLMultiple(E elemento, Nodo<E> enlace) {
+        this(elemento, null, null, enlace, 0);
     }
 
     /**
@@ -66,28 +63,26 @@ public class NodoAVLMultiple<E> {
      * @param derecho el nodo derecho
      */
     public NodoAVLMultiple(E elemento, NodoAVLMultiple<E> izquierdo, NodoAVLMultiple<E> derecho) {
-        this(elemento, izquierdo, derecho, null, 0, 1);
+        this(elemento, izquierdo, derecho, null, 0);
         recalcularAltura();
     }
 
     /**
-     * Constructor con elemento, izquierdo, derecho, enlace, altura y cantidad.
+     * Constructor con elemento, izquierdo, derecho, enlace y altura.
      *
      * @param elemento el elemento
      * @param izquierdo el nodo izquierdo
      * @param derecho el nodo derecho
      * @param enlace el enlace
      * @param altura la altura
-     * @param cantidad la cantidad de referencias
      */
-    public NodoAVLMultiple(E elemento, NodoAVLMultiple<E> izquierdo, NodoAVLMultiple<E> derecho,
-            NodoMultiple<E> enlace, int altura, int cantidad) {
+    public NodoAVLMultiple(E elemento, NodoAVLMultiple<E> izquierdo, NodoAVLMultiple<E> derecho, Nodo<E> enlace,
+            int altura) {
         this.elemento = elemento;
         this.izquierdo = izquierdo;
         this.derecho = derecho;
         this.enlace = enlace;
         this.altura = altura;
-        this.cantidad = cantidad;
     }
 
     /**
@@ -149,7 +144,7 @@ public class NodoAVLMultiple<E> {
      *
      * @return el enlace
      */
-    public NodoMultiple<E> getEnlace() {
+    public Nodo<E> getEnlace() {
         return enlace;
     }
 
@@ -158,7 +153,7 @@ public class NodoAVLMultiple<E> {
      *
      * @param enlace el enlace
      */
-    public void setEnlace(NodoMultiple<E> enlace) {
+    public void setEnlace(Nodo<E> enlace) {
         this.enlace = enlace;
     }
 
@@ -181,24 +176,6 @@ public class NodoAVLMultiple<E> {
     }
 
     /**
-     * Devuelve la cantidad de referencias al elemento.
-     *
-     * @return la cantidad de referencias al elemento
-     */
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    /**
-     * Establece la cantidad de referencias al elemento.
-     *
-     * @param cantidad la nueva cantidad de referencias al elemento
-     */
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    /**
      * Recalcula la altura del nodo.
      */
     public void recalcularAltura() {
@@ -217,21 +194,5 @@ public class NodoAVLMultiple<E> {
         int alturaDerecho = derecho != null ? derecho.getAltura() : -1;
 
         return alturaIzquierdo - alturaDerecho;
-    }
-
-    /**
-     * Aumenta la cantidad del elemento en 1.
-     */
-    public void aumentarCantidad() {
-        cantidad++;
-    }
-
-    /**
-     * Disminuye la cantidad del elemento en 1.
-     */
-    public void disminuirCantidad() {
-        if (cantidad > 1) {
-            cantidad--;
-        }
     }
 }

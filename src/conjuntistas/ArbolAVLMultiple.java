@@ -2,10 +2,10 @@ package conjuntistas;
 
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
+import lineales.dinamicas.Nodo;
 
 /**
- * Implementación de Árbol AVL que acepta elementos duplicados o elementos
- * distintos que al ser comparados representan el mismo valor.
+ * Implementación de Árbol AVL que acepta elementos duplicados o que tienen el mismo orden.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  * @param <T> el tipo de los elementos
@@ -51,29 +51,24 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @param elemento el elemento a insertar
      * @param nodo el nodo del sub-árbol izquierdo o derecho
      * @param padre el nodo padre
-     * @return verdadero si el elemento fue insertado, falso en caso contrario
+     * @return siempre verdadero
      */
     private boolean insertar(T elemento, NodoAVLMultiple<T> nodo, NodoAVLMultiple<T> padre) {
         boolean insertado = false;
 
         if (nodo != null) {
-            NodoAVLMultiple<T> izquierdo, derecho, nuevo;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
+            NodoAVLMultiple<T> derecho = nodo.getDerecho();
+            NodoAVLMultiple<T> nuevo;
 
             // Si el elemento es menor al del nodo, insertar en el sub-árbol izquierdo
             // Si el elemento es mayor al del nodo, insertar en el sub-árbol derecho
-            // Si el elemento es igual al del nodo, insertar como enlace al elemento o aumentar referencias
+            // Si el elemento es igual al del nodo, agrupar con elementos de igual orden
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 if (izquierdo == null) {
                     nuevo = new NodoAVLMultiple<>(elemento);
                     nodo.setIzquierdo(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (derecho == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, izquierdo, nodo);
@@ -82,18 +77,13 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 if (derecho == null) {
                     nuevo = new NodoAVLMultiple<>(elemento);
                     nodo.setDerecho(nuevo);
-
-                    // Actualizar altura del nodo si corresponde
-                    if (izquierdo == null) {
-                        nodo.setAltura(1);
-                    }
-
+                    nodo.recalcularAltura();
                     insertado = true;
                 } else {
                     insertado = insertar(elemento, derecho, nodo);
                 }
             } else {
-                insertarMultiple(elemento, nodo);
+                nodo.setEnlace(new Nodo<>(elemento, nodo.getEnlace()));
             }
 
             // Vuelta de la recursión:
@@ -112,37 +102,6 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
     }
 
     /**
-     * Inserta un elemento que ya existe o que representa un valor igual a un
-     * elemento existente.
-     *
-     * @param elemento el elemento
-     * @param nodo el nodo
-     */
-    private void insertarMultiple(T elemento, NodoAVLMultiple<T> nodo) {
-        if (elemento.equals(nodo.getElemento())) {
-            nodo.aumentarCantidad();
-        } else if (nodo.getEnlace() == null) {
-            nodo.setEnlace(new NodoMultiple<>(elemento));
-        } else {
-            NodoMultiple<T> enlaceActual = nodo.getEnlace();
-            NodoMultiple<T> enlacePrevio;
-
-            while (enlaceActual != null) {
-                if (elemento.equals(enlaceActual.getElemento())) {
-                    enlaceActual.aumentarCantidad();
-                } else {
-                    enlacePrevio = enlaceActual;
-                    enlaceActual = enlaceActual.getEnlace();
-
-                    if (enlaceActual == null) {
-                        enlacePrevio.setEnlace(new NodoMultiple<>(elemento));
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Balancea el sub-árbol correspondiente al nodo dado.
      *
      * @param nodo el nodo a balancear
@@ -151,8 +110,10 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
     private void balancear(NodoAVLMultiple<T> nodo, NodoAVLMultiple<T> padre) {
         if (nodo != null) {
             boolean balanceado = false;
-            NodoAVLMultiple<T> nodoHijo, reemplazo = null;
-            int balanceHijo, balanceNodo = nodo.balance();
+            NodoAVLMultiple<T> nodoHijo;
+            NodoAVLMultiple<T> reemplazo = null;
+            int balanceHijo;
+            int balanceNodo = nodo.balance();
 
             // Detectar si el nodo está balanceado. De no estarlo, hacer las
             // rotaciones necesarias para que éste quede balanceado
@@ -185,9 +146,8 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 if (padre == null) {
                     raiz = reemplazo;
                 } else {
-                    T elementoPadre, elementoReemplazo;
-                    elementoPadre = padre.getElemento();
-                    elementoReemplazo = reemplazo.getElemento();
+                    T elementoPadre = padre.getElemento();
+                    T elementoReemplazo = reemplazo.getElemento();
 
                     if (elementoReemplazo.compareTo(elementoPadre) < 0) {
                         padre.setIzquierdo(reemplazo);
@@ -276,7 +236,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @return verdadero si el elemento fue eliminado, falso en caso contrario
      */
     public boolean eliminar(T elemento) {
-        return elemento != null ? eliminar(elemento, raiz, null, null) : false;
+        return elemento == null ? false: eliminar(elemento, raiz, null, null);
     }
 
     /**
@@ -289,52 +249,74 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
     private boolean eliminar(T elemento, NodoAVLMultiple<T> nodo, NodoAVLMultiple<T> padre,
             NodoAVLMultiple<T> padreAnterior) {
         boolean eliminado = false;
+        boolean agrupado = false;
 
         if (nodo != null) {
-            T elemPadre;
-            NodoAVLMultiple<T> izquierdo, derecho;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
+            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
+            NodoAVLMultiple<T> derecho = nodo.getDerecho();
+            Nodo<T> enlace = nodo.getEnlace();
 
             // Buscar el elemento a eliminar
             if (elemento.compareTo(nodo.getElemento()) < 0) {
                 eliminado = izquierdo == null ? false : eliminar(elemento, izquierdo, nodo, padre);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 eliminado = derecho == null ? false : eliminar(elemento, derecho, nodo, padre);
-            } else {
-                // Elemento encontrado. Eliminarlo según los 3 casos posibles:
-                if (izquierdo == null && derecho == null) { // Caso 1: nodo hoja
-                    elemPadre = padre.getElemento();
-
-                    if (elemento.compareTo(elemPadre) < 0) {
+            } else if (elemento.equals(nodo.getElemento())) {
+                // Elemento encontrado
+                // Eliminarlo según los siguientes 4 casos posibles:
+                if (enlace != null) { // Caso 1: elemento agrupado
+                    nodo.setElemento(enlace.getElem());
+                    nodo.setEnlace(enlace.getEnlace());
+                    eliminado = true;
+                    agrupado = true;
+                } else if (izquierdo == null && derecho == null) { // Caso 2: nodo hoja
+                    if (elemento.compareTo(padre.getElemento()) < 0) {
                         padre.setIzquierdo(null);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
                         padre.setDerecho(null);
                     }
 
                     eliminado = true;
                 } else if (izquierdo != null && derecho != null) { // Caso 3: nodo con ambos hijos
-                    T elemMinDerecho = minimo(derecho);
-                    eliminado = eliminar(elemMinDerecho, derecho, nodo, padre);
-                    nodo.setElemento(elemMinDerecho);
-                } else { // Caso 2: nodo con un solo hijo
+                    T minimoDerecho = minimo(derecho);
+                    eliminado = eliminar(minimoDerecho, derecho, nodo, padre);
+                    nodo.setElemento(minimoDerecho);
+                } else { // Caso 4: nodo con un solo hijo
                     NodoAVLMultiple<T> reemplazo = derecho == null ? izquierdo : derecho;
-                    elemPadre = padre.getElemento();
 
-                    if (elemento.compareTo(elemPadre) < 0) {
+                    if (elemento.compareTo(padre.getElemento()) < 0) {
                         padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(elemPadre) > 0) {
+                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
                         padre.setDerecho(reemplazo);
                     }
 
                     eliminado = true;
+                }
+            } else {
+                // Elemento posiblemente agrupado con otros del mismo orden
+                Nodo<T> enlacePrevio = null;
+
+                while (!eliminado && enlace != null) {
+                    if (elemento.equals(enlace.getElem())) {
+                        if (enlacePrevio != null) {
+                            enlacePrevio.setEnlace(enlace.getEnlace());
+                        } else {
+                            nodo.setEnlace(enlace.getEnlace());
+                        }
+
+                        eliminado = true;
+                        agrupado = true;
+                    } else {
+                        enlacePrevio = enlace;
+                        enlace = enlace.getEnlace();
+                    }
                 }
             }
 
             // Vuelta de la recursión:
             // Balancear el nodo si es necesario (lo determina el método balancear())
             // Actualizar altura de los nodos padre
-            if (eliminado) {
+            if (!agrupado && eliminado) {
                 if (padre != null) {
                     padre.recalcularAltura();
                 }
@@ -353,7 +335,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @return verdadero si el elemento fue encontrado, falso en caso contrario
      */
     public boolean pertenece(T elemento) {
-        return elemento != null ? pertenece(elemento, raiz) : false;
+        return elemento == null ? false : pertenece(elemento, raiz);
     }
 
     /**
@@ -375,18 +357,16 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 existe = pertenece(elemento, izquierdo);
             } else if (elemento.compareTo(nodo.getElemento()) > 0) {
                 existe = pertenece(elemento, derecho);
+            } else if (elemento.equals(nodo.getElemento())) {
+                existe = true;
             } else {
-                if (elemento.equals(nodo.getElemento())) {
-                    existe = true;
-                } else if (nodo.getEnlace() != null) {
-                    NodoMultiple<T> enlace = nodo.getEnlace();
+                Nodo<T> enlace = nodo.getEnlace();
 
-                    while (!existe && enlace != null) {
-                        if (elemento.equals(enlace.getElemento())) {
-                            existe = true;
-                        } else {
-                            enlace = enlace.getEnlace();
-                        }
+                while (!existe && enlace != null) {
+                    if (elemento.equals(enlace.getElem())) {
+                        existe = true;
+                    } else {
+                        enlace = enlace.getEnlace();
                     }
                 }
             }
@@ -411,7 +391,8 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @return el elemento máximo
      */
     private T maximo(NodoAVLMultiple<T> nodo) {
-        NodoAVLMultiple<T> derecho = nodo, maximo = null;
+        NodoAVLMultiple<T> derecho = nodo;
+        NodoAVLMultiple<T> maximo = null;
 
         while (derecho != null) {
             maximo = derecho;
@@ -437,7 +418,8 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      * @return el elemento mínimo
      */
     private T minimo(NodoAVLMultiple<T> nodo) {
-        NodoAVLMultiple<T> izquierdo = nodo, minimo = null;
+        NodoAVLMultiple<T> izquierdo = nodo;
+        NodoAVLMultiple<T> minimo = null;
 
         while (izquierdo != null) {
             minimo = izquierdo;
@@ -486,7 +468,6 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
         if (nodo != null) {
             NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
             NodoAVLMultiple<T> derecho = nodo.getDerecho();
-            NodoMultiple<T> enlace = nodo.getEnlace();
 
             listar(izquierdo, lista);
             listarMultiple(nodo, lista);
@@ -495,17 +476,13 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
     }
 
     private void listarMultiple(NodoAVLMultiple<T> nodo, Lista<T> lista) {
-        NodoMultiple<T> enlace = nodo.getEnlace();
-
-        for (int i = 0; i < nodo.getCantidad(); i++) {
-            lista.insertar(nodo.getElemento(), lista.longitud() + 1);
-        }
+        int posicion = lista.longitud() + 1;
+        Nodo<T> enlace = nodo.getEnlace();
+        lista.insertar(nodo.getElemento(), posicion);
+        posicion++;
 
         while (enlace != null) {
-            for (int i = 0; i < enlace.getCantidad(); i++) {
-                lista.insertar(enlace.getElemento(), lista.longitud() + 1);
-            }
-
+            lista.insertar(enlace.getElem(), posicion);
             enlace = enlace.getEnlace();
         }
     }
@@ -536,16 +513,14 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
      */
     private void listarRango(T minimo, T maximo, NodoAVLMultiple<T> nodo, Lista<T> lista) {
         if (nodo != null) {
-            NodoAVLMultiple<T> izquierdo, derecho;
-            T elemento;
-            izquierdo = nodo.getIzquierdo();
-            derecho = nodo.getDerecho();
-            elemento = nodo.getElemento();
+            NodoAVLMultiple<T> izquierdo = nodo.getIzquierdo();
+            NodoAVLMultiple<T> derecho = nodo.getDerecho();
+            T elemento = nodo.getElemento();
 
             listarRango(minimo, maximo, izquierdo, lista);
 
             if (elemento.compareTo(minimo) >= 0 && elemento.compareTo(maximo) <= 0) {
-                lista.insertar(elemento, lista.longitud() + 1);
+                listarMultiple(nodo, lista);
             }
 
             listarRango(minimo, maximo, derecho, lista);
@@ -569,7 +544,7 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 nodo = cola.obtenerFrente();
 
                 if (nodo != null) {
-                    lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+                    listarMultiple(nodo, lista);
                     hijoIzquierdo = nodo.getIzquierdo();
                     hijoDerecho = nodo.getDerecho();
 
@@ -580,8 +555,6 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                     if (hijoDerecho != null) {
                         cola.poner(hijoDerecho);
                     }
-                } else {
-                    lista.insertar(null, lista.longitud() + 1);
                 }
 
                 cola.sacar();
@@ -618,49 +591,6 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                     cola.poner(nodo.getDerecho());
                 } else {
                     nivel.insertar(null, nivel.longitud() + 1);
-                    cola.poner(null);
-                    cola.poner(null);
-                }
-
-                if (nivel.longitud() == nivelMaxElementos) {
-                    lista.insertar(nivel, lista.longitud() + 1);
-                    nivel = new Lista<>();
-                    nivelMaxElementos *= 2;
-                    nivelActual++;
-                }
-            }
-        }
-
-        return lista;
-    }
-
-    /**
-     * Devuelve una lista de listas por niveles con las alturas de los elementos del árbol, incluyendo nulos.
-     *
-     * @param hastaNivel el nivel máximo a listar
-     * @return la lista de lista de niveles
-     */
-    public Lista<Lista<Integer>> listarNivelesAltura(int hastaNivel) {
-        Lista<Lista<Integer>> lista = new Lista<>();
-
-        if (raiz != null) {
-            int nivelActual = 0;
-            int nivelMaxElementos = 1;
-            NodoAVLMultiple<T> nodo;
-            Lista<Integer> nivel = new Lista<>();
-            Cola<NodoAVLMultiple<T>> cola = new Cola<>();
-            cola.poner(raiz);
-
-            while (!cola.esVacia() && nivelActual <= hastaNivel) {
-                nodo = cola.obtenerFrente();
-                cola.sacar();
-
-                if (nodo != null) {
-                    nivel.insertar(nodo.getAltura(), nivel.longitud() + 1);
-                    cola.poner(nodo.getIzquierdo());
-                    cola.poner(nodo.getDerecho());
-                } else {
-                    nivel.insertar(-1, nivel.longitud() + 1);
                     cola.poner(null);
                     cola.poner(null);
                 }
