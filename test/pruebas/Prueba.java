@@ -37,6 +37,7 @@ public class Prueba {
             exito(new pruebas.conjuntistas.PruebaHeapMinimo());
             exito(new pruebas.conjuntistas.PruebaArbolBB());
             exito(new pruebas.conjuntistas.PruebaArbolAVL());
+            exito(new pruebas.conjuntistas.PruebaArbolAVLMultiple());
             exito(new pruebas.conjuntistas.PruebaTablaHashAbierto());
             exito(new pruebas.conjuntistas.PruebaTablaHashCerrado());
             exito(new pruebas.conjuntistas.PruebaDiccionario());
