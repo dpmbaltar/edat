@@ -338,6 +338,8 @@ public class Diccionario<C extends Comparable<C>, E> {
                     nodo = nodo.getDerecho();
                 } else if (clave.equals(nodo.getClave())) {
                     elemento = nodo.getElemento();
+                } else {
+                    nodo = null;
                 }
             }
         }
