@@ -63,6 +63,11 @@ public class Dungeons2019 {
     private Mapa mapa;
 
     /**
+     * El ranking de jugadores (ordenados por cantidad de victorias de mayor a menor).
+     */
+    private Ranking ranking;
+
+    /**
      * Tabla Hash para generar códigos de ítem únicos.
      */
     private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
@@ -97,6 +102,7 @@ public class Dungeons2019 {
         items = new Diccionario<>();
         inventario = new Inventario();
         mapa = new Mapa();
+        ranking = new Ranking();
     }
 
     /**
@@ -130,6 +136,7 @@ public class Dungeons2019 {
 
                         if (jugador != null) {
                             jugadores.insertar(jugador.getUsuario().toLowerCase(), jugador);
+                            ranking.insertar(jugador);
                         }
                         break;
                     case 'L': // Cargar Locación
@@ -340,8 +347,10 @@ public class Dungeons2019 {
         TipoJugador tipo = leerTipo();
         Categoria categoria = leerCategoria();
         int dinero = leerDinero();
+        Jugador jugador = new Jugador(nombre, tipo, categoria, dinero);
+        jugadores.insertar(nombre.toLowerCase(), jugador);
+        ranking.insertar(jugador);
 
-        jugadores.insertar(nombre.toLowerCase(), new Jugador(nombre, tipo, categoria, dinero));
         log(String.format("Se agregó el jugador \"%s\"", nombre));
     }
 
@@ -354,8 +363,10 @@ public class Dungeons2019 {
 
         if (!jugadores.esVacio()) {
             String usuario = leerNombreUsuario().toLowerCase();
+            Jugador jugador = jugadores.obtenerInformacion(usuario);
 
             if (jugadores.eliminar(usuario)) {
+                ranking.eliminar(jugador);
                 log(String.format("Se borró el jugador \"%s\"", usuario));
             } else {
                 System.out.println(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
@@ -1333,7 +1344,8 @@ public class Dungeons2019 {
 
             switch (opcion) {
                 case 1:
-                    //TODO: mostrarRankingJugadores();
+                    mostrarRankingJugadores();
+                    break;
                 case 2:
                     mostrarItemsUltimaDisponibilidad();
                     break;
@@ -1361,6 +1373,23 @@ public class Dungeons2019 {
                 Funciones.pausar();
             }
         } while (opcion > 0);
+    }
+
+    public void mostrarRankingJugadores() {
+        titulo("Ranking de jugadores");
+
+        if (!ranking.esVacio()) {
+            Lista<Jugador> rankingJugadores = ranking.listarJugadores();
+            Jugador jugador;
+
+            for (int i = 1; i <= rankingJugadores.longitud(); i++) {
+                jugador = rankingJugadores.recuperar(i);
+                System.out.println(String.format("%d: %s - Victorias: %d - Derrotas: %d", i, jugador.getUsuario(),
+                        jugador.getVictorias(), jugador.getDerrotas()));
+            }
+        } else {
+            System.out.println("No existen jugadores para consultar ranking");
+        }
     }
 
     /**
