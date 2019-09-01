@@ -1,5 +1,7 @@
 package tpfinal;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import lineales.dinamicas.Lista;
 
 /**
@@ -86,5 +88,15 @@ public class Equipo {
         }
 
         return agregado;
+    }
+
+    public Jugador jugadorAleatorio() {
+        Jugador jugador = null;
+
+        if (jugadores.longitud() > 1) {
+            jugador = jugadores.recuperar(ThreadLocalRandom.current().nextInt(1, jugadores.longitud()));
+        }
+
+        return jugador;
     }
 }
