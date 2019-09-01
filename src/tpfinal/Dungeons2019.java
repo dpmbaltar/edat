@@ -129,7 +129,10 @@ public class Dungeons2019 {
                     case 'I': // Cargar Ítem
                         Item item = crearItemDesdeCadena(linea.substring(2));
                         items.insertar(item.getCodigo(), item);
-                        inventario.insertar(item);
+
+                        if (item.getCantidadDisponible() > 0) {
+                            inventario.insertar(item);
+                        }
                         break;
                     case 'J': // Cargar Jugador
                         Jugador jugador = crearJugadorDesdeCadena(linea.substring(2));
@@ -647,7 +650,7 @@ public class Dungeons2019 {
             opcion(2, "Borrar ítem");
             opcion(3, "Modificar ítem");
             opcion(4, "Consultar ítem");
-            opcion(5, "Mostrar ítems para comprar (con precio max.)");
+            opcion(5, "Mostrar ítems para comprar según jugador");
             opcion(6, "Mostrar ítems para comprar (con precio min. y max.)");
             opcion(0, "Volver");
 
@@ -834,16 +837,17 @@ public class Dungeons2019 {
      * Dado un monto de dinero mostrar todos los items que puede comprar el jugador.
      */
     public void mostrarItemsHastaPrecio() {
-        titulo("Mostrar ítems para comprar (según cantidad de dinero)");
+        titulo("Ítems para comprar según el jugador");
 
         if (!inventario.esVacio()) {
-            int dinero = leerDinero();
-            Lista<Item> itemsPosibles = inventario.listarRangoPorPrecio(0, dinero);
-            Item item;
+            String usuario = leerNombreUsuario().toLowerCase();
 
-            for (int i = 1; i <= itemsPosibles.longitud(); i++) {
-                item = itemsPosibles.recuperar(i);
-                System.out.println(String.format("%d: %s", i, formItem(item)));
+            if (jugadores.existeClave(usuario)) {
+                Jugador jugador = jugadores.obtenerInformacion(usuario);
+                int dinero = jugador.getDinero();
+                mostrarItemsParaComprar(jugador, inventario.listarRangoPorPrecio(0, dinero));
+            } else {
+                System.out.println("No existen jugadores para consultar");
             }
         } else {
             System.out.println("No existen ítems para consultar");
@@ -856,7 +860,7 @@ public class Dungeons2019 {
      * comprar con un monto de dinero entre min y max (incluyendo ambos límites) ordenado de menor a mayor.
      */
     public void mostrarItemsDesdeHastaPrecio() {
-        titulo("Mostrar ítems para comprar (con precio min. y max.)");
+        titulo("Ítems para comprar (con precio min. y max.)");
 
         if (!inventario.esVacio()) {
             System.out.print("Mínimo ");
@@ -872,6 +876,37 @@ public class Dungeons2019 {
             }
         } else {
             System.out.println("No existen ítems para consultar");
+        }
+    }
+
+    private void mostrarItemsParaComprar(Jugador jugador, Lista<Item> listaItems) {
+        if (!listaItems.esVacia()) {
+            titulo(String.format("Comprar ítem para \"%s\"", jugador.getUsuario()));
+
+            for (int i = 1; i <= listaItems.longitud(); i++) {
+                opcion(i, formItem(listaItems.recuperar(i)));
+            }
+
+            opcion(0, "Cancelar");
+            int opcion = leerOpcion(0, listaItems.longitud());
+
+            if (opcion > 0) {
+                comprarItem(jugador, listaItems.recuperar(opcion));
+            }
+        } else {
+            System.out.println("No hay ítems disponibles para comprar");
+        }
+    }
+
+    private void comprarItem(Jugador jugador, Item item) {
+        if (jugador.comprarItem(item)) {
+            if (item.getCantidadDisponible() == 0) {
+                inventario.eliminar(item);
+            }
+
+            log(String.format("El jugador \"%s\" compró \"%s\"", jugador.getUsuario(), item.getNombre()));
+        } else {
+            System.out.println(String.format("No hay disponibilidad para comprar el ítem %s", item.getNombre()));
         }
     }
 

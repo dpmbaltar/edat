@@ -270,6 +270,53 @@ public class Jugador implements Comparable<Jugador> {
     }
 
     /**
+     * Agrega dinero al jugador.
+     *
+     * @param dinero la cantidad de dinero
+     * @return siempre verdadero
+     */
+    public boolean agregarDinero(int dinero) {
+        this.dinero += dinero;
+        return true;
+    }
+
+    /**
+     * Saca dinero del jugador.
+     *
+     * @param dinero la cantidad de dinero
+     * @return verdadero si el dinero pudo ser quitado, falso en caso contrario
+     */
+    public boolean quitarDinero(int dinero) {
+        boolean quitado = false;
+
+        if (this.dinero >= dinero) {
+            this.dinero -= dinero;
+            quitado = true;
+        }
+
+        return quitado;
+    }
+
+    /**
+     * Intenta comprar un un ítem y devuelve verdadero si lo pudo comprar, falso en caso contrario.
+     *
+     * @param item el ítem a comprar
+     * @return verdadero si pudo comprar el ítem, falso en caso contrario
+     */
+    public boolean comprarItem(Item item) {
+        boolean comprado = false;
+
+        if (item.getCantidadDisponible() > 0 && item.getPrecio() <= dinero) {
+            item.disminuirDisponibilidad();
+            items.insertar(item, items.longitud() + 1);
+            dinero -= item.getPrecio();
+            comprado = true;
+        }
+
+        return comprado;
+    }
+
+    /**
      * Calcula el ataque del jugador.
      *
      * @return el ataque del jugador
