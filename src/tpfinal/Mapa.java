@@ -5,6 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import grafos.dinamicas.Grafo;
 import grafos.dinamicas.NodoAdyacente;
 import grafos.dinamicas.NodoVertice;
+import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
 
 /**
@@ -135,5 +136,89 @@ public class Mapa extends Grafo<String, Integer> {
         }
 
         return locacion;
+    }
+
+    /**
+     * Camino más corto según el peso de la etiqueta.
+     *
+     * @param origen el origen
+     * @param destino el destino
+     * @return el camino más corto
+     */
+    public Lista<String> caminoMasCortoKms(String origen, String destino) {
+        Lista<String> camino = new Lista<>();
+        NodoVertice<String, Integer> vertice = buscarVertice(origen);
+        //TODO: caminoMasCortoKms() realizar pruebas y adaptar impl.
+        if (vertice != null && destino != null) {
+
+            // Agregar adyacente temporal
+            // Apunta al nodo predecesor con menor distancia en kms
+            NodoVertice<String, Integer> v = inicio;
+            while (v != null) {
+                v.setPrimerAdyacente(new NodoAdyacente<>(null, v.getPrimerAdyacente(), null));
+                v = v.getSiguienteVertice();
+            }
+
+            NodoVertice<String, Integer> verticeDestino = null;
+            NodoAdyacente<String, Integer> adyacente;
+            Cola<NodoVertice<String, Integer>> cola = new Cola<>();
+            Lista<NodoVertice<String, Integer>> visitados = new Lista<>();
+            cola.poner(vertice);
+            visitados.insertar(vertice, visitados.longitud() + 1);
+            vertice.getPrimerAdyacente().setEtiqueta(0);
+
+            while (!cola.esVacia()) {
+                vertice = cola.obtenerFrente();
+                cola.sacar();
+                adyacente = vertice.getPrimerAdyacente();
+                int distancia = adyacente.getEtiqueta();
+                adyacente = adyacente.getSiguienteAdyacente();
+
+                while (adyacente != null) {
+                    if (visitados.localizar(adyacente.getVertice()) < 0) {
+                        visitados.insertar(vertice, visitados.longitud() + 1);
+                        cola.poner(adyacente.getVertice());
+                        int distanciaTotal = adyacente.getEtiqueta() + distancia;
+
+                        // Actualizar predecesor y distancia si es necesario
+                        if (adyacente.getVertice().getPrimerAdyacente().getEtiqueta() == null
+                                || adyacente.getVertice().getPrimerAdyacente().getEtiqueta() > distanciaTotal) {
+                            adyacente.getVertice().getPrimerAdyacente().setVertice(vertice);
+                            adyacente.getVertice().getPrimerAdyacente().setEtiqueta(distanciaTotal);
+                        }
+
+                        // Obtener vertice destino
+                        if (adyacente.getVertice().getElemento().equals(destino)) {
+                            verticeDestino = adyacente.getVertice();
+                        }
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            // Obtener camino
+            if (verticeDestino != null) {
+                camino.insertar(verticeDestino.getElemento(), 1);
+                adyacente = verticeDestino.getPrimerAdyacente();
+                while (adyacente != null) {
+                    if (adyacente.getVertice() != null) {
+                        camino.insertar(adyacente.getVertice().getElemento(), 1);
+                        adyacente = adyacente.getVertice().getPrimerAdyacente();
+                    } else {
+                        adyacente = null;
+                    }
+                }
+            }
+
+            // Sacar adyacente temporal
+            v = inicio;
+            while (v != null) {
+                v.setPrimerAdyacente(v.getPrimerAdyacente().getSiguienteAdyacente());
+                v = v.getSiguienteVertice();
+            }
+        }
+
+        return camino;
     }
 }
