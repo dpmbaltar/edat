@@ -103,18 +103,6 @@ public class Dungeons2019 {
         inventario = new Inventario();
         mapa = new Mapa();
         ranking = new Ranking();
-
-        mapa.insertarVertice("A");
-        mapa.insertarVertice("B");
-        mapa.insertarVertice("C");
-        mapa.insertarVertice("D");
-        mapa.insertarArco("A", "B", 5);
-        mapa.insertarArco("A", "C", 2);
-        mapa.insertarArco("B", "D", 4);
-        mapa.insertarArco("C", "D", 1);
-        mapa.insertarArco("B", "C", 1);
-        System.out.println(mapa.caminoMasCortoKms("A", "D"));
-        System.exit(0);
     }
 
     /**
@@ -164,6 +152,10 @@ public class Dungeons2019 {
                             int etiqueta = Integer.valueOf(partes[2]);
                             mapa.insertarArco(partes[0], partes[1], etiqueta);
                         }
+                        break;
+                    case '#':
+                        // Ignorar comentario
+                        System.out.println(linea);
                         break;
                 }
 
