@@ -322,10 +322,11 @@ public class Jugador implements Comparable<Jugador> {
      * @return el ataque del jugador
      */
     public int calcularAtaque() {
-        return (ataqueBase() * ataqueCategoria()) + ataqueItems();
+        return (ataqueBase() * multiplicador()) + ataqueItems();
     }
 
     private int ataqueBase() {
+        //TODO: Aplicar a través de herencia
         int ataque = 0;
 
         switch (tipo) {
@@ -340,25 +341,26 @@ public class Jugador implements Comparable<Jugador> {
         return ataque;
     }
 
-    private int ataqueCategoria() {
-        int ataque = 0;
+    protected int multiplicador() {
+        return 5 - categoria.ordinal();
+        /*int multiplicador = 0;
 
         switch (categoria) {
             case PROFESIONAL:
-                ataque *= 5;
+                multiplicador = 5;
                 break;
             case AFICIONADO:
-                ataque *= 4;
+                multiplicador = 4;
                 break;
             case NOVATO:
-                ataque *= 3;
+                multiplicador = 3;
                 break;
         }
 
-        return ataque;
+        return multiplicador;*/
     }
 
-    private int ataqueItems() {
+    protected int ataqueItems() {
         int ataque = 0;
 
         for (int i = 1; i <= items.longitud(); i++) {
@@ -366,6 +368,41 @@ public class Jugador implements Comparable<Jugador> {
         }
 
         return ataque;
+    }
+
+    /**
+     * Calcula la defensa del jugador.
+     *
+     * @return la defensa del jugador
+     */
+    public int calcularDefensa() {
+        return (defensaBase() * multiplicador()) + defensaItems();
+    }
+
+    private int defensaBase() {
+        //TODO: Aplicar a través de herencia
+        int defensa = 0;
+
+        switch (tipo) {
+            case GUERRERO:
+                defensa += 100;
+                break;
+            case DEFENSOR:
+                defensa += 25;
+                break;
+        }
+
+        return defensa;
+    }
+
+    protected int defensaItems() {
+        int defensa = 0;
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            defensa += items.recuperar(i).getDefensa();
+        }
+
+        return defensa;
     }
 
     @Override
