@@ -405,6 +405,10 @@ public class Jugador implements Comparable<Jugador> {
         return defensa;
     }
 
+    public void lastimar(int danio) {
+        salud -= danio;
+    }
+
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();

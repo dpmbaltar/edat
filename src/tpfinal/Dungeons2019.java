@@ -1292,7 +1292,7 @@ public class Dungeons2019 {
                     crearEquipo();
                     break;
                 case 3:
-                    //TODO: iniciarBatallaEntreEquipos();
+                    iniciarBatallaEntreEquipos();
                     break;
             }
 
@@ -1332,6 +1332,49 @@ public class Dungeons2019 {
     private static String leerNombreEquipo() {
         return Funciones.leerFrase("Nombre del equipo: ",
                 "El nombre de equipo ingresado no es válido.\r\nReintentar: ", 1, 20);
+    }
+
+    /**
+     * F. Dados dos equipos X e Y, mostrar el paso a paso de una batalla entre ambos equipos y cómo quedan los estados
+     * de los jugadores participantes al finalizar la batalla.
+     */
+    public void iniciarBatallaEntreEquipos() {
+        titulo("Batalla entre equipos");
+
+        if (!equipos.isEmpty()) {
+            String nombreEquipo1 = leerNombreEquipo().toLowerCase();
+            String nombreEquipo2 = leerNombreEquipo().toLowerCase();
+
+            if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
+                Equipo equipo1 = equipos.get(nombreEquipo1);
+                Equipo equipo2 = equipos.get(nombreEquipo2);
+
+                Batalla batalla = new Batalla(equipo1, equipo2);
+                batalla.iniciar();
+            }
+        } else {
+            System.out.println("Deben existir al menos 2 equipos para una batalla");
+        }
+    }
+
+    private Equipo seleccionarEquipo() {
+        Equipo equipo = null;
+        Object[] arregloEquipos = equipos.values().toArray();
+
+        System.out.println("Seleccionar equipo:");
+
+        for (int i = 0; i < arregloEquipos.length; i++) {
+            opcion(i + 1, ((Equipo) arregloEquipos[i]).getNombre());
+        }
+
+        opcion(0, "Cancelar");
+        int opcion = leerOpcion(0, arregloEquipos.length);
+
+        if (opcion > 0) {
+            equipo = (Equipo) arregloEquipos[opcion - 1];
+        }
+
+        return equipo;
     }
 
     /**
