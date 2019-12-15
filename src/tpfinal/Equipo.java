@@ -90,6 +90,23 @@ public class Equipo {
         return agregado;
     }
 
+    /**
+     * Verifica si el equipo fue derrotado en una batalla.
+     *
+     * @return verdadero si fue derrotado, falso en caso contrario
+     */
+    public boolean fueDerrotado() {
+        int saludJugadores = 0;
+        int i = 1;
+
+        while (saludJugadores == 0 && i <= jugadores.longitud()) {
+            saludJugadores += jugadores.recuperar(i).getSalud();
+            i++;
+        }
+
+        return saludJugadores == 0;
+    }
+
     public Jugador jugadorAleatorio() {
         Jugador jugador = null;
 

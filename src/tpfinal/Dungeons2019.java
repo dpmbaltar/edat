@@ -1330,7 +1330,11 @@ public class Dungeons2019 {
     }
 
     private static String leerNombreEquipo() {
-        return Funciones.leerFrase("Nombre del equipo: ",
+        return leerNombreEquipo(null);
+    }
+
+    private static String leerNombreEquipo(String etiqueta) {
+        return Funciones.leerFrase(etiqueta != null ? etiqueta : "Nombre del equipo: ",
                 "El nombre de equipo ingresado no es válido.\r\nReintentar: ", 1, 20);
     }
 
@@ -1341,9 +1345,9 @@ public class Dungeons2019 {
     public void iniciarBatallaEntreEquipos() {
         titulo("Batalla entre equipos");
 
-        if (!equipos.isEmpty()) {
-            String nombreEquipo1 = leerNombreEquipo().toLowerCase();
-            String nombreEquipo2 = leerNombreEquipo().toLowerCase();
+        if (equipos.size() > 1) {
+            String nombreEquipo1 = leerNombreEquipo("Equipo 1: ").toLowerCase();
+            String nombreEquipo2 = leerNombreEquipo("Equipo 2: ").toLowerCase();
 
             if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
                 Equipo equipo1 = equipos.get(nombreEquipo1);
@@ -1351,30 +1355,12 @@ public class Dungeons2019 {
 
                 Batalla batalla = new Batalla(equipo1, equipo2);
                 batalla.iniciar();
+            } else {
+                System.out.println("Uno o ambos equipos indicados no existe");
             }
         } else {
             System.out.println("Deben existir al menos 2 equipos para una batalla");
         }
-    }
-
-    private Equipo seleccionarEquipo() {
-        Equipo equipo = null;
-        Object[] arregloEquipos = equipos.values().toArray();
-
-        System.out.println("Seleccionar equipo:");
-
-        for (int i = 0; i < arregloEquipos.length; i++) {
-            opcion(i + 1, ((Equipo) arregloEquipos[i]).getNombre());
-        }
-
-        opcion(0, "Cancelar");
-        int opcion = leerOpcion(0, arregloEquipos.length);
-
-        if (opcion > 0) {
-            equipo = (Equipo) arregloEquipos[opcion - 1];
-        }
-
-        return equipo;
     }
 
     /**

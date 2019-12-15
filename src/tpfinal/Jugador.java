@@ -30,9 +30,14 @@ public class Jugador implements Comparable<Jugador> {
     private int dinero;
 
     /**
-     * Salud del jugador (0% a 100%).
+     * Salud actual del jugador.
      */
-    private double salud;
+    private int salud;
+
+    /**
+     * Salud total del jugador.
+     */
+    private int saludTotal;
 
     /**
      * Cantidad de veces que el personaje ha sido derrotado.
@@ -72,7 +77,8 @@ public class Jugador implements Comparable<Jugador> {
         this.tipo = tipo;
         this.categoria = categoria;
         this.dinero = dinero;
-        this.salud = 1.00;
+        this.salud = 1000;
+        this.saludTotal = 1000;
         this.derrotas = 0;
         this.victorias = 0;
         this.equipo = null;
@@ -157,7 +163,7 @@ public class Jugador implements Comparable<Jugador> {
      *
      * @return la salud del jugador
      */
-    public double getSalud() {
+    public int getSalud() {
         return salud;
     }
 
@@ -166,8 +172,26 @@ public class Jugador implements Comparable<Jugador> {
      *
      * @param salud la nueva salud del jugador
      */
-    public void setSalud(double salud) {
+    public void setSalud(int salud) {
         this.salud = salud;
+    }
+
+    /**
+     * Devuelve la salud total del jugador.
+     *
+     * @return la salud total del jugador
+     */
+    public int getSaludTotal() {
+        return saludTotal;
+    }
+
+    /**
+     * Establece la salud total del jugador.
+     *
+     * @param salud la nueva salud total del jugador
+     */
+    public void setSaludTotal(int saludTotal) {
+        this.saludTotal = saludTotal;
     }
 
     /**
@@ -405,8 +429,13 @@ public class Jugador implements Comparable<Jugador> {
         return defensa;
     }
 
+    /**
+     * Decrementa la salud del jugador según los puntos dados.
+     *
+     * @param danio la cantidad de salud a quitar
+     */
     public void lastimar(int danio) {
-        salud -= danio;
+        salud = danio > salud ? 0 : salud - danio;
     }
 
     @Override
