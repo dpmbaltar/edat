@@ -229,6 +229,16 @@ public class Item implements Comparable<Item> {
         return cantidad == 1;
     }
 
+    /**
+     * Reduce los puntos de ataque y defensa del ítem, según la cantidad dada (el punto límite es cero).
+     *
+     * @param puntos la cantidad de puntos a disminuir
+     */
+    public void deteriorar(int puntos) {
+        ataque = ataque > puntos ? ataque - puntos : 0;
+        defensa = defensa > puntos ? defensa - puntos : 0;
+    }
+
     @Override
     public boolean equals(Object otro) {
         return codigo.equalsIgnoreCase(((Item) otro).getCodigo());

@@ -438,6 +438,20 @@ public class Jugador implements Comparable<Jugador> {
         salud = danio > salud ? 0 : salud - danio;
     }
 
+    public void usarItems() {
+        Item item;
+
+        for (int i = 1; i <= items.longitud(); i++) {
+            item = items.recuperar(i);
+            item.deteriorar(10);
+
+            if (item.getAtaque() == 0 && item.getDefensa() == 0) {
+                items.eliminar(i);
+                i--;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();

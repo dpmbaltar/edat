@@ -90,6 +90,15 @@ public class Equipo {
         return agregado;
     }
 
+    public void reestablecerSalud() {
+        Jugador jugador;
+
+        for (int i = 1; i <= jugadores.longitud(); i++) {
+            jugador = jugadores.recuperar(i);
+            jugador.setSalud(jugador.getSaludTotal());
+        }
+    }
+
     /**
      * Verifica si el equipo fue derrotado en una batalla.
      *

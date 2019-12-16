@@ -78,6 +78,9 @@ public class Batalla {
         } else { // Hay un ganador
             System.out.println(String.format("El equipo %s gana la batalla", ganador.getNombre()));
         }
+
+        equipo1.reestablecerSalud();
+        equipo2.reestablecerSalud();
     }
 
     /**
@@ -104,7 +107,7 @@ public class Batalla {
 
             // Evitar que los jugadores atacantes derrotados participen
             if (jugadorAtacante.getSalud() > 0) {
-                while (!equipoDerrotado && j < jugadoresDefensores.longitud()) {
+                while (!equipoDerrotado && j <= jugadoresDefensores.longitud()) {
                     jugadorDefensor = jugadoresDefensores.recuperar(j);
 
                     // Atacar jugadores no derrotados
@@ -125,6 +128,8 @@ public class Batalla {
 
                     j++;
                 }
+
+                j = 1;
             }
 
             i++;
@@ -146,6 +151,9 @@ public class Batalla {
         ataque = atacante.calcularAtaque() * coeficienteAtaque();
         defensa = atacado.calcularDefensa();
         danio = ataque - defensa;
+
+        atacante.usarItems();
+        atacado.usarItems();
 
         System.out.println(String.format("%s ataca a %s", atacante, atacado));
         System.out.println(String.format("%s - ataque: %.2f ", atacante.getUsuario(), ataque));
