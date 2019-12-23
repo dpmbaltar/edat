@@ -55,9 +55,9 @@ public class Puesto implements Comparable<Puesto> {
     public int compareTo(Puesto otroPuesto) {
         int resultado = 0;
 
-        if (jugador.getVictorias() < otroPuesto.getJugador().getVictorias()) {
+        if (jugador.getVictorias() > otroPuesto.getJugador().getVictorias()) {
             resultado = 1;
-        } else if (jugador.getVictorias() > otroPuesto.getJugador().getVictorias()) {
+        } else if (jugador.getVictorias() < otroPuesto.getJugador().getVictorias()) {
             resultado = -1;
         }
 

@@ -90,6 +90,9 @@ public class Equipo {
         return agregado;
     }
 
+    /**
+     * Reestablece la salud de todos los jugadores.
+     */
     public void reestablecerSalud() {
         Jugador jugador;
 

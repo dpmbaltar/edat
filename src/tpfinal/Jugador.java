@@ -1,5 +1,7 @@
 package tpfinal;
 
+import java.util.Random;
+
 import lineales.dinamicas.Lista;
 
 /**
@@ -77,8 +79,8 @@ public class Jugador implements Comparable<Jugador> {
         this.tipo = tipo;
         this.categoria = categoria;
         this.dinero = dinero;
-        this.salud = 1000;
-        this.saludTotal = 1000;
+        this.salud = 500;
+        this.saludTotal = 500;
         this.derrotas = 0;
         this.victorias = 0;
         this.equipo = null;
@@ -430,6 +432,52 @@ public class Jugador implements Comparable<Jugador> {
     }
 
     /**
+     * Ataca a un jugador, aumentando la cantidad de victorias, y la cantidad de derrotas del oponente, si gana.
+     *
+     * @param oponente el jugador atacado
+     * @return un entero indicando el danio causado (positivo), o el daño absorbido (negativo, incluyendo el cero)
+     */
+    public int atacar(Jugador oponente) {
+        int danio;
+        double ataque, defensa;
+        ataque = calcularAtaque() * coeficienteAtaque();
+        defensa = oponente.calcularDefensa();
+        danio = (int) (ataque - defensa);
+
+        // Deteriorar items
+        deteriorarItems();
+        oponente.deteriorarItems();
+
+        //TODO: limpiar prints
+        System.out.println(String.format("%s ataca a %s", this, oponente));
+        System.out.println(String.format("  %s - ataque: %.0f ", getUsuario(), ataque));
+        System.out.println(String.format("  %s - defensa: %.0f ", oponente.getUsuario(), defensa));
+
+        // Ataque exitoso
+        if (danio > 0) {
+            oponente.lastimar(danio);
+
+            // Oponente vencido
+            if (oponente.getSalud() == 0) {
+                agregarDinero(1000);
+                incrementarVictorias();
+                oponente.incrementarDerrotas();
+            }
+        }
+
+        return danio;
+    }
+
+    /**
+     * Calcula un valor aleatorio entre 0,5 y 1,5.
+     *
+     * @return el número aleatorio
+     */
+    private static double coeficienteAtaque() {
+        return (Math.round((new Random()).nextDouble() * 10) / 10) + 0.5;
+    }
+
+    /**
      * Decrementa la salud del jugador según los puntos dados.
      *
      * @param danio la cantidad de salud a quitar
@@ -438,18 +486,36 @@ public class Jugador implements Comparable<Jugador> {
         salud = danio > salud ? 0 : salud - danio;
     }
 
-    public void usarItems() {
+    /**
+     * Reduce el ataque y defensa de cada ítem del jugador en 10 puntos.
+     */
+    public void deteriorarItems() {
         Item item;
 
         for (int i = 1; i <= items.longitud(); i++) {
             item = items.recuperar(i);
             item.deteriorar(10);
 
+            // Descargar ítems totalmente gastados
             if (item.getAtaque() == 0 && item.getDefensa() == 0) {
                 items.eliminar(i);
                 i--;
             }
         }
+    }
+
+    /**
+     * Incrementa la cantidad de victorias en 1.
+     */
+    public void incrementarVictorias() {
+        victorias++;
+    }
+
+    /**
+     * Incrementa la cantidad de derrotas en 1.
+     */
+    public void incrementarDerrotas() {
+        derrotas++;
     }
 
     @Override

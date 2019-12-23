@@ -1,7 +1,5 @@
 package tpfinal;
 
-import java.util.Random;
-
 import lineales.dinamicas.Lista;
 
 /**
@@ -147,45 +145,27 @@ public class Batalla {
      */
     private boolean atacarJugador(Jugador atacante, Jugador atacado) {
         boolean derrotado = false;
-        double ataque, defensa, danio;
-        ataque = atacante.calcularAtaque() * coeficienteAtaque();
-        defensa = atacado.calcularDefensa();
-        danio = ataque - defensa;
-
-        atacante.usarItems();
-        atacado.usarItems();
-
-        System.out.println(String.format("%s ataca a %s", atacante, atacado));
-        System.out.println(String.format("%s - ataque: %.2f ", atacante.getUsuario(), ataque));
-        System.out.println(String.format("%s - defensa: %.2f ", atacado.getUsuario(), defensa));
+        int danio = atacante.atacar(atacado);
 
         if (danio > 0) { // Ataque exitoso
-            atacado.lastimar((int) danio);
-            System.out.println(String.format("Jugador %s (%d/%d) ataca con éxito a %s (%d/%d) causandole %.2f de daño",
+            System.out.println(String.format(
+                    "Jugador %s (%d/%d) ataca con éxito a %s (%d/%d) causandole %d de daño",
                     atacante.getUsuario(), atacante.getSalud(), atacante.getSaludTotal(),
                     atacado.getUsuario(), atacado.getSalud(), atacado.getSaludTotal(), danio));
 
+            // Oponente derrotado
             if (atacado.getSalud() == 0) {
                 derrotado = true;
                 System.out.println(String.format("El jugador %s fue derrotado", atacado.getUsuario()));
             }
         } else { // Ataque no exitoso
             System.out.println(String.format(
-                    "Jugador %s (%d/%d) se defiende con éxito de %s (%d/%d) absorbiendo %.2f de ataque",
+                    "Jugador %s (%d/%d) se defiende con éxito de %s (%d/%d)",
                     atacado.getUsuario(), atacado.getSalud(), atacado.getSaludTotal(),
-                    atacante.getUsuario(), atacante.getSalud(), atacante.getSaludTotal(), ataque));
+                    atacante.getUsuario(), atacante.getSalud(), atacante.getSaludTotal()));
         }
 
         return derrotado;
-    }
-
-    /**
-     * Calcula un valor aleatorio entre 0,5 y 1,5.
-     *
-     * @return el número aleatorio
-     */
-    private double coeficienteAtaque() {
-        return (Math.round((new Random()).nextDouble() * 10) / 10) + 0.5;
     }
 
 }

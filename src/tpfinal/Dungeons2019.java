@@ -1325,7 +1325,7 @@ public class Dungeons2019 {
 
             log(String.format("Se creó el equipo \"%s\" de categoría \"%s\"", nombre, equipo.getCategoria()));
         } else {
-            System.out.println("No hay suficientes equipos en espera para crear un equipo");
+            System.out.println("No hay suficientes jugadores en espera para crear un equipo");
         }
     }
 
