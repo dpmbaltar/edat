@@ -203,10 +203,17 @@ public class Dungeons2019 {
 
         if (partes.length >= 5) {
             String usuario = partes[0];
-            TipoJugador tipo = TipoJugador.valueOf(partes[1].toUpperCase());
             Categoria categoria = Categoria.valueOf(partes[2].toUpperCase());
             int dinero = Integer.valueOf(partes[3]);
-            nuevoJugador = new Jugador(usuario, tipo, categoria, dinero);
+
+            switch (partes[1]) {
+            case "Guerrero":
+                nuevoJugador = new Guerrero(usuario, categoria, dinero);
+                break;
+            case "Defensor":
+                nuevoJugador = new Defensor(usuario, categoria, dinero);
+                break;
+            }
 
             // Leer y agregar ítems del jugador
             String cadenaItems = partes[4].substring(1, partes[4].length() - 1);
@@ -361,15 +368,25 @@ public class Dungeons2019 {
     public void agregarJugador() {
         titulo("Agregar jugador");
 
-        String nombre = leerNombreUsuario();
-        TipoJugador tipo = leerTipo();
+        int tipo = leerTipo();
+        String usuario = leerNombreUsuario();
         Categoria categoria = leerCategoria();
         int dinero = leerDinero();
-        Jugador jugador = new Jugador(nombre, tipo, categoria, dinero);
-        jugadores.insertar(nombre.toLowerCase(), jugador);
+        Jugador jugador = null;
+
+        switch (tipo) {
+        case 0:
+            jugador = new Guerrero(usuario, categoria, dinero);
+            break;
+        case 1:
+            jugador = new Defensor(usuario, categoria, dinero);
+            break;
+        }
+
+        jugadores.insertar(usuario.toLowerCase(), jugador);
         ranking.insertar(jugador);
 
-        log(String.format("Se agregó el jugador \"%s\"", nombre));
+        log(String.format("Se agregó el jugador \"%s\"", usuario));
     }
 
     /**
@@ -434,8 +451,23 @@ public class Dungeons2019 {
                     log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnterior, usuario));
                     break;
                 case 2:
-                    jugador.setTipo(leerTipo());
-                    log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, jugador.getTipo()));
+                    //TODO: arreglar y probar
+                    int nuevoTipo = leerTipo();
+                    String[] tipos = { "Guerrero", "Defensor" };
+
+                    if (!jugador.getClass().getSimpleName().equals(tipos[nuevoTipo])) {
+                        switch (nuevoTipo) {
+                        case 0:
+                            jugador = new Guerrero(usuario, jugador.getCategoria(), jugador.getDinero());
+                            break;
+                        case 1:
+                            jugador = new Defensor(usuario, jugador.getCategoria(), jugador.getDinero());
+                            break;
+                        }
+                    }
+
+                    jugadores.insertar(claveUsuario, jugador);
+                    log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, tipos[nuevoTipo]));
                     break;
                 case 3:
                     jugador.setCategoria(leerCategoria());
@@ -472,10 +504,10 @@ public class Dungeons2019 {
                 StringBuilder datos = new StringBuilder();
 
                 datos.append("Usuario:   ").append(jugador.getUsuario()).append("\r\n");
-                datos.append("Tipo:      ").append(jugador.getTipo()).append("\r\n");
+                datos.append("Tipo:      ").append(jugador.getClass().getSimpleName()).append("\r\n");
                 datos.append("Categoría: ").append(jugador.getCategoria()).append("\r\n");
                 datos.append("Dinero:    ").append(formDinero(jugador.getDinero())).append("\r\n");
-                datos.append("Salud:     ").append(formSalud(jugador.getSalud())).append("\r\n");
+                datos.append("Salud:     ").append(jugador.getSalud() + "/" + jugador.getSaludTotal()).append("\r\n");
                 datos.append("Victorias: ").append(jugador.getVictorias()).append("\r\n");
                 datos.append("Derrotas:  ").append(jugador.getDerrotas()).append("\r\n");
                 datos.append("Equipo:    ");
@@ -624,9 +656,9 @@ public class Dungeons2019 {
      *
      * @return el tipo de jugador leído
      */
-    private static TipoJugador leerTipo() {
-        return TipoJugador.desdeEntero(Funciones.leerEntero("Tipo de jugador <0> Guerrero - <1> Defensor: ",
-                "El tipo de jugador ingresado no es válido.\r\nReintentar: ", 0, 1));
+    private static int leerTipo() {
+        return Funciones.leerEntero("Tipo de jugador <0> Guerrero - <1> Defensor: ",
+                "El tipo de jugador ingresado no es válido.\r\nReintentar: ", 0, 1);
     }
 
     /**

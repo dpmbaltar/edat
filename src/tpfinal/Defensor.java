@@ -2,28 +2,24 @@ package tpfinal;
 
 public class Defensor extends Jugador {
 
-    public Defensor(String usuario, TipoJugador tipo, Categoria categoria, int dinero) {
-        super(usuario, tipo, categoria, dinero);
+    public Defensor(String usuario, Categoria categoria, int dinero) {
+        super(usuario, categoria, dinero);
     }
 
     /**
-     * Calcula el ataque del jugador.
-     *
-     * @return el ataque del jugador
+     * Devuelve el ataque base del jugador.
      */
     @Override
-    public int calcularAtaque() {
-        return (25 * multiplicador()) + ataqueItems();
+    protected int ataqueBase() {
+        return 25;
     }
 
     /**
-     * Calcula la defensa del jugador.
-     *
-     * @return la defensa del jugador
+     * Devuelve la defensa base del jugador.
      */
     @Override
-    public int calcularDefensa() {
-        return (90 * multiplicador()) + defensaItems();
+    protected int defensaBase() {
+        return 90;
     }
 
 }

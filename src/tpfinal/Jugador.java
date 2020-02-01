@@ -17,11 +17,6 @@ public class Jugador implements Comparable<Jugador> {
     private String usuario;
 
     /**
-     * Tipo de jugador (guerrero o defensor).
-     */
-    private TipoJugador tipo;
-
-    /**
      * Categoría (novato, aficionado o profesional).
      */
     private Categoria categoria;
@@ -67,16 +62,14 @@ public class Jugador implements Comparable<Jugador> {
     private boolean esperando;
 
     /**
-     * Constructor con nombre de usuario, tipo, categoría y dinero.
+     * Constructor con nombre de usuario, categoría y dinero.
      *
      * @param usuario el nombre de usuario
-     * @param tipo el tipo de jugador
      * @param categoria la categoría
      * @param dinero el dinero inicial
      */
-    public Jugador(String usuario, TipoJugador tipo, Categoria categoria, int dinero) {
+    public Jugador(String usuario, Categoria categoria, int dinero) {
         this.usuario = usuario;
-        this.tipo = tipo;
         this.categoria = categoria;
         this.dinero = dinero;
         this.salud = 500;
@@ -104,24 +97,6 @@ public class Jugador implements Comparable<Jugador> {
      */
     public void setUsuario(String usuario) {
         this.usuario = usuario;
-    }
-
-    /**
-     * Devuelve el tipo de jugador.
-     *
-     * @return el tipo de jugador
-     */
-    public TipoJugador getTipo() {
-        return tipo;
-    }
-
-    /**
-     * Establece el tipo de jugador.
-     *
-     * @param tipo el nuevo tipo de jugador
-     */
-    public void setTipo(TipoJugador tipo) {
-        this.tipo = tipo;
     }
 
     /**
@@ -351,20 +326,8 @@ public class Jugador implements Comparable<Jugador> {
         return (ataqueBase() * multiplicador()) + ataqueItems();
     }
 
-    private int ataqueBase() {
-        //TODO: Aplicar a través de herencia
-        int ataque = 0;
-
-        switch (tipo) {
-            case GUERRERO:
-                ataque += 100;
-                break;
-            case DEFENSOR:
-                ataque += 25;
-                break;
-        }
-
-        return ataque;
+    protected int ataqueBase() {
+        return 1;
     }
 
     protected int multiplicador() {
@@ -405,20 +368,8 @@ public class Jugador implements Comparable<Jugador> {
         return (defensaBase() * multiplicador()) + defensaItems();
     }
 
-    private int defensaBase() {
-        //TODO: Aplicar a través de herencia
-        int defensa = 0;
-
-        switch (tipo) {
-            case GUERRERO:
-                defensa += 100;
-                break;
-            case DEFENSOR:
-                defensa += 25;
-                break;
-        }
-
-        return defensa;
+    protected int defensaBase() {
+       return 1;
     }
 
     protected int defensaItems() {
@@ -522,7 +473,7 @@ public class Jugador implements Comparable<Jugador> {
     public String toString() {
         StringBuilder cadena = new StringBuilder();
         cadena.append(usuario).append(';');
-        cadena.append(tipo).append(';');
+        cadena.append(getClass().getSimpleName()).append(';');
         cadena.append(categoria).append(';');
         cadena.append(dinero).append(';');
         cadena.append('<');
