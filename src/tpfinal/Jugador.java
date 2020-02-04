@@ -394,7 +394,9 @@ public class Jugador implements Comparable<Jugador> {
         ataque = calcularAtaque() * coeficienteAtaque();
         defensa = oponente.calcularDefensa();
         danio = (int) (ataque - defensa);
-
+for(int i = 0; i < 99; i++) {
+    System.out.println(coeficienteAtaque());
+}
         // Deteriorar items
         deteriorarItems();
         oponente.deteriorarItems();
@@ -425,7 +427,7 @@ public class Jugador implements Comparable<Jugador> {
      * @return el número aleatorio
      */
     private static double coeficienteAtaque() {
-        return (Math.round((new Random()).nextDouble() * 10) / 10) + 0.5;
+        return ((Math.round((new Random()).nextDouble() * 10)) + 5) / 10.0;
     }
 
     /**
