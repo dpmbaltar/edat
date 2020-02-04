@@ -242,6 +242,46 @@ public class Dungeons2019 {
      */
     public void guardar(String nombreArchivo) {
         //TODO: Guardar nuevo estado del juego
+        try {
+            PrintWriter salida = new PrintWriter(new FileOutputStream(nombreArchivo+".csv"));
+
+            // Guardar items
+            Lista<Item> listaItems = items.listarDatos();
+            for (int i = 1; i <= listaItems.longitud(); i++) {
+                salida.println("I:" + listaItems.recuperar(i));
+            }
+
+            // Guardiar jugadores
+            Lista<Jugador> listaJugadores = jugadores.listarDatos();
+            for (int i = 1; i <= listaJugadores.longitud(); i++) {
+                salida.println("J:" + listaJugadores.recuperar(i) + ";;");
+            }
+
+            // Guardar locaciones
+            Lista<String> locaciones = mapa.listarVertices();
+            for (int i = 1; i <= locaciones.longitud(); i++) {
+                String locacion = locaciones.recuperar(i);
+                salida.println(String.format("L:%s;;;;;;", locacion));
+            }
+
+            //TODO: completar Guardar caminos
+            for (int i = 1; i <= locaciones.longitud(); i++) {
+                String locacion = locaciones.recuperar(i);
+                Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
+
+                for (int j = 1; j <= adyacentes.longitud(); j++) {
+                    salida.println(String.format("C:%s;%s;%d;;;", locacion, adyacentes.recuperar(j), 0));
+                }
+            }
+
+            /*LocalDateTime fechaHora = LocalDateTime.now();
+            DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            salida.println(String.format("[%s] %s", formatoFechaHora.format(fechaHora), info));
+            System.out.println(info);*/
+            salida.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
