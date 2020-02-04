@@ -394,9 +394,7 @@ public class Jugador implements Comparable<Jugador> {
         ataque = calcularAtaque() * coeficienteAtaque();
         defensa = oponente.calcularDefensa();
         danio = (int) (ataque - defensa);
-for(int i = 0; i < 99; i++) {
-    System.out.println(coeficienteAtaque());
-}
+
         // Deteriorar items
         deteriorarItems();
         oponente.deteriorarItems();
