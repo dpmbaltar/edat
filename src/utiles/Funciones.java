@@ -414,6 +414,14 @@ public class Funciones {
         return String.format("%3.2f%%", porcentaje * 100);
     }
 
+    public static String rellenarDerecha(String cadena, int nEspacios) {
+        return String.format("%-" + nEspacios + "s", cadena);
+    }
+
+    public static String rellenarIzquierda(String cadena, int nEspacios) {
+        return String.format("%" + nEspacios + "s", cadena);
+    }
+
     /**
      * Método de utilidad para esperar hasta que el usuario quiera continuar presionando "Entrar".
      */
