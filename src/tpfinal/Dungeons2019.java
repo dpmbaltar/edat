@@ -451,7 +451,6 @@ public class Dungeons2019 {
                     log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnterior, usuario));
                     break;
                 case 2:
-                    //TODO: arreglar y probar
                     int nuevoTipo = leerTipo();
                     String[] tipos = { "Guerrero", "Defensor" };
 
@@ -466,6 +465,7 @@ public class Dungeons2019 {
                         }
                     }
 
+                    jugadores.eliminar(claveUsuario);
                     jugadores.insertar(claveUsuario, jugador);
                     log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, tipos[nuevoTipo]));
                     break;
@@ -679,10 +679,6 @@ public class Dungeons2019 {
     private static String leerPrefijoUsuario() {
         return Funciones.leerPalabra("Prefijo: ",
                 "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
-    }
-
-    private static String formSalud(double salud) {
-        return Funciones.porcentaje(salud);
     }
 
     /**
