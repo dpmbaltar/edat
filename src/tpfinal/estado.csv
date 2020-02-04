@@ -20,16 +20,16 @@ I:U007;Espada del santo vengador;14000;40;0;1;0
 I:U008;Cuchilla de la suerte;13000;36;0;1;0
 I:U009;Hacha frenetica;13500;34;0;1;1
 I:U010;Gran hacha viciosa;14500;44;0;1;0
-J:Jugador1;Guerrero;Novato;4000;<A002,S002>;
-J:Jugador2;Guerrero;Aficionado;6000;<A003,S003>;
+J:Jugador1;Guerrero;Novato;4000;<A002,S002>;;
+J:Jugador2;Guerrero;Aficionado;6000;<A003,S003>;;
 J:Jugador3;Guerrero;Aficionado;800;<A002,S004>;;
-J:Jugador4;Guerrero;Profesional;12000;<A004,U006>;
-J:Jugador5;Guerrero;Profesional;10000;<U001,U010>;
-J:Jugador6;Defensor;Novato;5000;<A001,E001,S001>;
-J:Jugador7;Defensor;Aficionado;8000;<A002,E002,S002>;
-J:Jugador8;Defensor;Profesional;14000;<U002,U005,U008>;
-J:Jugador9;Guerrero;Novato;2000;<>;
-J:Jugador10;Defensor;Novato;2000;<>;
+J:Jugador4;Guerrero;Profesional;12000;<A004,U006>;;
+J:Jugador5;Guerrero;Profesional;10000;<U001,U010>;;
+J:Jugador6;Defensor;Novato;5000;<A001,E001,S001>;;
+J:Jugador7;Defensor;Aficionado;8000;<A002,E002,S002>;;
+J:Jugador8;Defensor;Profesional;14000;<U002,U005,U008>;;
+J:Jugador9;Guerrero;Novato;2000;<>;;
+J:Jugador10;Defensor;Novato;2000;<>;;
 L:El Hielo Alto;;;;;
 L:Agujas de Hielo;;;;;
 L:Gran Caverna de Gusanos;;;;;
