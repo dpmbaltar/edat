@@ -1484,7 +1484,7 @@ public class Dungeons2019 {
 
     public void mostrarRankingJugadores() {
         titulo("Ranking de jugadores");
-
+        //TODO: actualizar el ranking después de las batallas
         if (!ranking.esVacio()) {
             Lista<Jugador> rankingJugadores = ranking.listarJugadores();
             Jugador jugador;
