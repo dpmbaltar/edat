@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -246,12 +248,13 @@ public class Dungeons2019 {
      * Agrega información al registro del juego.
      */
     private void log(String info) {
-        //TODO: Guardar info. en registro LOG
         try {
             String url = Dungeons2019.class.getResource(ARCHIVO_REGISTRO).getPath();
             //System.out.println(url);
-            PrintWriter salida = new PrintWriter(new FileOutputStream(url));
-            salida.println(info);
+            PrintWriter salida = new PrintWriter(new FileOutputStream(url, true));
+            LocalDateTime fechaHora = LocalDateTime.now();
+            DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            salida.println(String.format("[%s] %s", formatoFechaHora.format(fechaHora), info));
             System.out.println(info);
             salida.close();
         } catch (FileNotFoundException e) {

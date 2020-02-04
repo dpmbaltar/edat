@@ -49,7 +49,7 @@ public class Batalla {
         Equipo ganador = null;
         Jugador jugador1, jugador2;
         Lista<Jugador> jugadores1, jugadores2;
-
+        //TODO: registrar batalla en archivo LOG
         System.out.println(String.format("Batalla entre %s y %s:", equipo1.getNombre(), equipo2.getNombre()));
 
         // Realizar ataques
