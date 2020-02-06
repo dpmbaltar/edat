@@ -258,21 +258,7 @@ public class Dungeons2019 {
             }
 
             // Guardar locaciones
-            Lista<String> locaciones = mapa.listarVertices();
-            for (int i = 1; i <= locaciones.longitud(); i++) {
-                String locacion = locaciones.recuperar(i);
-                salida.println(String.format("L:%s;;;;;;", locacion));
-            }
-
-            //TODO: completar Guardar caminos
-            for (int i = 1; i <= locaciones.longitud(); i++) {
-                String locacion = locaciones.recuperar(i);
-                Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
-
-                for (int j = 1; j <= adyacentes.longitud(); j++) {
-                    salida.println(String.format("C:%s;%s;%d;;;", locacion, adyacentes.recuperar(j), 0));
-                }
-            }
+            salida.print(mapa.exportar());
 
             /*LocalDateTime fechaHora = LocalDateTime.now();
             DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

@@ -221,4 +221,37 @@ public class Mapa extends Grafo<String, Integer> {
 
         return camino;
     }
+
+    public String exportar() {
+        StringBuilder cadena = new StringBuilder();
+        StringBuilder cadenaCaminos = new StringBuilder();
+        String locacionOrigen = null;
+        String locacionDestino = null;
+        String caminoOpuesto = null;
+        NodoVertice<String, Integer> vertice = inicio;
+        NodoAdyacente<String, Integer> adyacente;
+
+        while (vertice != null) {
+            locacionOrigen = String.valueOf(vertice.getElemento());
+            cadena.append(String.format("L:%s;;;;;;\r\n", locacionOrigen));
+            adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                locacionDestino = String.valueOf(adyacente.getVertice().getElemento());
+                caminoOpuesto = locacionDestino + ";" + locacionOrigen;
+
+                if (cadenaCaminos.indexOf(caminoOpuesto) == -1) {
+                    cadenaCaminos.append("C:").append(locacionOrigen).append(";");
+                    cadenaCaminos.append(locacionDestino).append(";");
+                    cadenaCaminos.append(String.valueOf(adyacente.getEtiqueta())).append(";;;;\r\n");
+                }
+
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return cadena.append(cadenaCaminos.toString()).toString();
+    }
 }
