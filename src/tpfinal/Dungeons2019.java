@@ -124,7 +124,7 @@ public class Dungeons2019 {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        System.out.println(mapa.caminoMasCortoKms("Roca Cuervo", "La Llanura de Piedras"));
+        System.out.println(mapa.caminoMasCortoKms("Roca Cuervo", "La Llanura de Piedras"));//TODO: sacar linea
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
@@ -241,29 +241,21 @@ public class Dungeons2019 {
      * Guarda el estado del juego a un archivo CSV.
      */
     public void guardar(String nombreArchivo) {
-        //TODO: Guardar nuevo estado del juego
+        //TODO: probar guardado de juego
         try {
-            PrintWriter salida = new PrintWriter(new FileOutputStream(nombreArchivo+".csv"));
-
-            // Guardar items
+            PrintWriter salida = new PrintWriter(new FileOutputStream(nombreArchivo));
             Lista<Item> listaItems = items.listarDatos();
+            Lista<Jugador> listaJugadores = jugadores.listarDatos();
+
             for (int i = 1; i <= listaItems.longitud(); i++) {
                 salida.println("I:" + listaItems.recuperar(i));
             }
 
-            // Guardiar jugadores
-            Lista<Jugador> listaJugadores = jugadores.listarDatos();
             for (int i = 1; i <= listaJugadores.longitud(); i++) {
                 salida.println("J:" + listaJugadores.recuperar(i) + ";;");
             }
 
-            // Guardar locaciones
             salida.print(mapa.exportar());
-
-            /*LocalDateTime fechaHora = LocalDateTime.now();
-            DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            salida.println(String.format("[%s] %s", formatoFechaHora.format(fechaHora), info));
-            System.out.println(info);*/
             salida.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
