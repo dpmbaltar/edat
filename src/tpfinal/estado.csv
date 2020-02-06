@@ -4,12 +4,12 @@ I:A003;Armadura de placas;3000;0;15;5;4
 I:A004;Armadura adamantina;5000;0;25;5;4
 I:E001;Escudo de madera;400;0;2;10;9
 I:E002;Escudo de captura flechas;2000;0;8;5;4
+I:H001;Hacha de mano;600;10;0;10;10
+I:H002;Hacha de batalla;2400;35;0;5;5
 I:S001;Daga;400;8;0;10;9
 I:S002;Espada defensora;1200;15;0;10;8
 I:S003;Gran espada;3600;22;0;5;4
 I:S004;Espada en llamas;6400;34;0;5;4
-I:H001;Hacha de mano;600;10;0;10;10
-I:H002;Hacha de batalla;2400;35;0;5;5
 I:U001;Armadura de escamas de dragon;10000;0;60;1;0
 I:U002;Armadura de cota de malla elfica;9000;0;50;1;0
 I:U003;Armadura de plata enana;9500;0;45;1;1
@@ -29,20 +29,19 @@ J:Jugador6;Defensor;Novato;5000;<A001,E001,S001>;;
 J:Jugador7;Defensor;Aficionado;8000;<A002,E002,S002>;;
 J:Jugador8;Defensor;Profesional;14000;<U002,U005,U008>;;
 J:Jugador9;Guerrero;Novato;2000;<>;;
-J:Jugador10;Defensor;Novato;2000;<>;;
-L:El Hielo Alto;;;;;
-L:Agujas de Hielo;;;;;
-L:Gran Caverna de Gusanos;;;;;
-L:Roca Cuervo;;;;;
-L:Cumbre de las Espadas;;;;;
-L:El Bosque Alto;;;;;
-L:El Mar Congelado;;;;;
-L:El Bosque Congelado;;;;;
-L:La Llanura de Piedras;;;;;
-L:Las Tierras Torturadas;;;;;
-L:El Bosque Brumoso;;;;;
-L:El Paramo Alto;;;;;
-L:Colinas de Serpiente;;;;;
+L:El Hielo Alto;;;;;;
+L:Agujas de Hielo;;;;;;
+L:Gran Caverna de Gusanos;;;;;;
+L:Roca Cuervo;;;;;;
+L:Cumbre de las Espadas;;;;;;
+L:El Bosque Alto;;;;;;
+L:El Mar Congelado;;;;;;
+L:El Bosque Congelado;;;;;;
+L:La Llanura de Piedras;;;;;;
+L:Las Tierras Torturadas;;;;;;
+L:El Bosque Brumoso;;;;;;
+L:El Paramo Alto;;;;;;
+L:Colinas de Serpiente;;;;;;
 #L:Los Campos de los Muertos;;;;;
 #L:Las Colinas Lejanas;;;;;
 #L:Lago de los Dragones;;;;;
