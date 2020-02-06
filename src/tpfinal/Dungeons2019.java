@@ -241,7 +241,6 @@ public class Dungeons2019 {
      * Guarda el estado del juego a un archivo CSV.
      */
     public void guardar(String nombreArchivo) {
-        //TODO: probar guardado de juego
         try {
             PrintWriter salida = new PrintWriter(new FileOutputStream(nombreArchivo));
             Lista<Item> listaItems = items.listarDatos();
