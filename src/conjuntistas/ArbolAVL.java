@@ -273,10 +273,14 @@ public class ArbolAVL<T extends Comparable<T>> {
                 } else { // Caso 3: nodo con un solo hijo
                     NodoAVL<T> reemplazo = derecho == null ? izquierdo : derecho;
 
-                    if (elemento.compareTo(padre.getElemento()) < 0) {
-                        padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
-                        padre.setDerecho(reemplazo);
+                    if (padre == null) {
+                        raiz = reemplazo;
+                    } else {
+                        if (elemento.compareTo(padre.getElemento()) < 0) {
+                            padre.setIzquierdo(reemplazo);
+                        } else if (elemento.compareTo(padre.getElemento()) > 0) {
+                            padre.setDerecho(reemplazo);
+                        }
                     }
 
                     eliminado = true;

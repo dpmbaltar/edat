@@ -1,7 +1,8 @@
 package pruebas.conjuntistas;
 
-import conjuntistas.ArbolAVL;
 import java.util.concurrent.ThreadLocalRandom;
+
+import conjuntistas.ArbolAVL;
 import lineales.dinamicas.Lista;
 
 /**
@@ -60,6 +61,10 @@ public final class PruebaArbolAVL {
                 : "Debe listar la secuencia de enteros del 2 al 16 sin el 5, 8, 11 y 15";
         assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
         assert !avl.eliminar(null) : "No debe eliminar nulo del árbol (siempre inexistente)";
+        avl = new ArbolAVL<Integer>();
+        avl.insertar(1);
+        avl.insertar(2);
+        assert avl.eliminar(1) : "Debe eliminar raíz con un solo hijo";
     }
 
     /**
@@ -147,12 +152,12 @@ public final class PruebaArbolAVL {
         avl.insertar(10);
         avl.insertar(5);
         avl.insertar(3);
-        
+
         assert avl.listarNiveles().toString().equals("[5, 3, 10]")
                 : "Debe listar [5, 3, 10]";
         assert avl.listar().toString().equals("[3, 5, 10]")
                 : "Debe listar [3, 5, 10]";
-        
+
         // Rotación izquierda
         avl.vaciar();
         avl.insertar(8);
@@ -161,12 +166,12 @@ public final class PruebaArbolAVL {
         avl.insertar(13);
         avl.insertar(20);
         avl.insertar(29);
-        
+
         assert avl.listarNiveles().toString().equals("[15, 8, 20, 5, 13, 29]")
                 : "Debe listar [15, 8, 20, 5, 13, 29]";
         assert avl.listar().toString().equals("[5, 8, 13, 15, 20, 29]")
                 : "Debe listar [5, 8, 13, 15, 20, 29]";
-        
+
         // Rotación derecha
         avl.vaciar();
         avl.insertar(10);
@@ -175,12 +180,12 @@ public final class PruebaArbolAVL {
         avl.insertar(3);
         avl.insertar(7);
         avl.insertar(4);
-        
+
         assert avl.listarNiveles().toString().equals("[5, 3, 10, 4, 7, 15]")
                 : "Debe listar [5, 3, 10, 4, 7, 15]";
         assert avl.listar().toString().equals("[3, 4, 5, 7, 10, 15]")
                 : "Debe listar [3, 4, 5, 7, 10, 15]";
-        
+
         // Rotación derecha-izquierda
         avl.vaciar();
         avl.insertar(10);
@@ -189,12 +194,12 @@ public final class PruebaArbolAVL {
         avl.insertar(12);
         avl.insertar(17);
         avl.insertar(13);
-        
+
         assert avl.listarNiveles().toString().equals("[12, 10, 15, 5, 13, 17]")
                 : "Debe listar [12, 10, 15, 5, 13, 17]";
         assert avl.listar().toString().equals("[5, 10, 12, 13, 15, 17]")
                 : "Debe listar [5, 10, 12, 13, 15, 17]";
-        
+
         // Rotación izquierda-derecha
         avl.vaciar();
         avl.insertar(12);
@@ -203,28 +208,28 @@ public final class PruebaArbolAVL {
         avl.insertar(3);
         avl.insertar(8);
         avl.insertar(10);
-        
+
         assert avl.listarNiveles().toString().equals("[8, 5, 12, 3, 10, 23]")
                 : "Debe listar [8, 5, 12, 3, 10, 23]";
         assert avl.listar().toString().equals("[3, 5, 8, 10, 12, 23]")
                 : "Debe listar [3, 5, 8, 10, 12, 23]";
-        
+
         // Balanceo correcto:
         // Se inserta en el AVL una lista de enteros en orden aleatorio
         // Al listar los enteros del AVL deben estar ordenados
         avl.vaciar();
         Lista<Integer> lista = new Lista<>();
-        
+
         for (int i = 1; i <= 100; i++) {
             lista.insertar(i, ThreadLocalRandom.current().nextInt(0, lista.longitud() + 1) + 1);
         }
-        
+
         for (int i = 1; i <= 100; i++) {
             avl.insertar(lista.recuperar(i));
         }
-        
+
         lista = avl.listar();
-        
+
         for (int i = 1; i <= 100; i++) {
             assert lista.recuperar(i).equals(i) : "El balanceo del AVL debe ser correcto";
         }
