@@ -52,6 +52,13 @@ public class Mapa extends Grafo<String, Integer> {
         return eliminado;
     }
 
+    /**
+     * Actualiza una locación existente en el mapa.
+     *
+     * @param locacion el nombre de la locación
+     * @param nuevaLocacion el nombre nuevo
+     * @return verdadero si fue cambiado, falso en caso contrario
+     */
     public boolean modificarVertice(String locacion, String nuevaLocacion) {
         boolean modificado = false;
         NodoVertice<String, Integer> vertice = buscarVertice(locacion);
@@ -64,6 +71,14 @@ public class Mapa extends Grafo<String, Integer> {
         return modificado;
     }
 
+    /**
+     * Actualiza la etiqueta (distancia) de un arco entre una locación y otra.
+     *
+     * @param locacion la locación origen
+     * @param locacionAdyacente la locación destino
+     * @param nuevaEtiqueta el nuevo valor de la etiqueta (distancia)
+     * @return verdadero si fue modificada, falso en caso contrario
+     */
     public boolean modificarEtiqueta(String locacion, String locacionAdyacente, Integer nuevaEtiqueta) {
         boolean modificada = false;
         NodoVertice<String, Integer> vertice = buscarVertice(locacion);
@@ -82,6 +97,11 @@ public class Mapa extends Grafo<String, Integer> {
         return modificada;
     }
 
+    /**
+     * Devuelve una lista de las locaciones del mapa.
+     *
+     * @return la lista de locaciones
+     */
     public Lista<String> listarVertices() {
         Lista<String> vertices = new Lista<>();
         NodoVertice<String, Integer> vertice = inicio;
@@ -222,6 +242,11 @@ public class Mapa extends Grafo<String, Integer> {
         return camino;
     }
 
+    /**
+     * Devuelve la representación del mapa en formato CSV.
+     *
+     * @return el mapa en CSV
+     */
     public String exportar() {
         StringBuilder cadena = new StringBuilder();
         StringBuilder cadenaCaminos = new StringBuilder();

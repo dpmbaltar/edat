@@ -30,7 +30,7 @@ public class Dungeons2019 {
     private static final String ARCHIVO_ESTADO = "estado.csv";
 
     /**
-     * El archivo de registro de acciones del juego (se reinicia por cada ejecución).
+     * El archivo de registro de acciones del juego.
      */
     private static final String ARCHIVO_REGISTRO = "registro.log";
 
@@ -124,7 +124,7 @@ public class Dungeons2019 {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        System.out.println(mapa.caminoMasCortoKms("Roca Cuervo", "La Llanura de Piedras"));//TODO: sacar linea
+        System.out.println(mapa.caminoMasCortoKms("Roca Cuervo", "La Llanura de Piedras"));//FIXME: sacar linea
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
@@ -262,17 +262,19 @@ public class Dungeons2019 {
     }
 
     /**
-     * Agrega información al registro del juego.
+     * Muestra información del juego y la guarda en el archivo de registro.
+     *
+     * @param info la información a mostrar y guardar
      */
-    private void log(String info) {
+    public void log(String info) {
+        System.out.println(info);
+
         try {
             String url = Dungeons2019.class.getResource(ARCHIVO_REGISTRO).getPath();
-            //System.out.println(url);
             PrintWriter salida = new PrintWriter(new FileOutputStream(url, true));
             LocalDateTime fechaHora = LocalDateTime.now();
             DateTimeFormatter formatoFechaHora = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             salida.println(String.format("[%s] %s", formatoFechaHora.format(fechaHora), info));
-            System.out.println(info);
             salida.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -318,17 +320,35 @@ public class Dungeons2019 {
         titulo("Fin");
     }
 
-    private static void titulo(String titulo) {
+    /**
+     * Muestra un texto con formato de título.
+     *
+     * @param titulo el texto
+     */
+    public static void titulo(String titulo) {
         System.out.println(
                 String.format("~~~{ %s }~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", titulo)
                         .substring(0, 77));
     }
 
-    private static void opcion(int numero, String nombre) {
+    /**
+     * Muestra una opción numerada con formato.
+     *
+     * @param numero el número de la opción
+     * @param nombre el texto de la opción
+     */
+    public static void opcion(int numero, String nombre) {
         System.out.println(String.format("   <%d> %s", numero, nombre));
     }
 
-    private static int leerOpcion(int desde, int hasta) {
+    /**
+     * Lee una opción numérica de un rango de enteros dados.
+     *
+     * @param desde la opción mínima
+     * @param hasta la opción máxima
+     * @return el número de la opción indicada
+     */
+    public static int leerOpcion(int desde, int hasta) {
         return Funciones.leerEntero("Opción: ", "La opción ingresada no es válida.\r\nReintentar: ", desde, hasta);
     }
 
@@ -424,7 +444,7 @@ public class Dungeons2019 {
                 ranking.eliminar(jugador);
                 log(String.format("Se borró el jugador \"%s\"", usuario));
             } else {
-                System.out.println(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
+                log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
             }
         } else {
             System.out.println("No existen jugadores para borrar");
@@ -444,7 +464,7 @@ public class Dungeons2019 {
             if (jugadores.existeClave(usuario)) {
                 modificarJugadorSegunOpcion(usuario);
             } else {
-                System.out.println(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
+                log(String.format("Se intentó modificar un jugador inexistente \"%s\"", usuario));
             }
         } else {
             System.out.println("No existen jugadores para modificar");
@@ -457,20 +477,31 @@ public class Dungeons2019 {
         int opcion = 0;
 
         do {
-            opcion = leerOpcionModificarJugador();
+            titulo(String.format("Modificar jugador \"%s\"", usuario));
+            opcion(1, "Usuario");
+            opcion(2, "Tipo");
+            opcion(3, "Categoría");
+            opcion(4, "Dinero");
+            opcion(0, "Cancelar");
+
+            opcion = leerOpcion(0, 4);
 
             switch (opcion) {
-                case 1:
+                case 1: // Modificar usuario de jugador
                     jugadores.eliminar(claveUsuario);
                     String usuarioAnterior = usuario;
-                    usuario = leerNombreUsuario();
-                    claveUsuario = usuario.toLowerCase();
+
+                    do {
+                        usuario = leerNombreUsuario();
+                        claveUsuario = usuario.toLowerCase();
+                    } while (jugadores.existeClave(claveUsuario));
+
                     jugador.setUsuario(usuario);
                     jugadores.insertar(claveUsuario, jugador);
 
                     log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnterior, usuario));
                     break;
-                case 2:
+                case 2: // Modificar tipo de jugador
                     int nuevoTipo = leerTipo();
                     String[] tipos = { "Guerrero", "Defensor" };
 
@@ -489,23 +520,18 @@ public class Dungeons2019 {
                     jugadores.insertar(claveUsuario, jugador);
                     log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, tipos[nuevoTipo]));
                     break;
-                case 3:
+                case 3: // Modificar categoría de jugador
                     jugador.setCategoria(leerCategoria());
                     log(String.format("Se modificó la categoría del jugador \"%s\" a %s", usuario,
                             jugador.getCategoria()));
                     break;
-                case 4:
+                case 4: // Modificar dinero de jugador
                     jugador.setDinero(leerDinero());
-                    log(String.format("Se modificó el dinero del jugador \"%s\" a %d", usuario,
+                    log(String.format("Se modificó el dinero del jugador \"%s\" a %s", usuario,
                             formDinero(jugador.getDinero())));
                     break;
             }
         } while (opcion != 0);
-    }
-
-    private static int leerOpcionModificarJugador() {
-        return Funciones.leerEntero("Modificar <1> Usuario - <2> Tipo - <3> Categoría - <4> Dinero - <0> Cancelar: ",
-                "La opción ingresada no es válida.\r\nReintentar: ", 0, 4);
     }
 
     /**
@@ -558,7 +584,7 @@ public class Dungeons2019 {
                 System.out.println(datos);
                 log(String.format("Se consultó el jugador \"%s\"", jugador.getUsuario()));
             } else {
-                System.out.println(String.format("Se intentó consultar un jugador inexistente \"%s\"", usuario));
+                log(String.format("Se intentó consultar un jugador inexistente \"%s\"", usuario));
             }
         } else {
             System.out.println("No existen jugadores para consultar");
@@ -662,7 +688,7 @@ public class Dungeons2019 {
     }
 
     /**
-     * Lee un nombre de usuario.
+     * Solicita y lee un nombre de usuario.
      *
      * @return el usuario leído
      */
@@ -672,7 +698,7 @@ public class Dungeons2019 {
     }
 
     /**
-     * Lee el tipo de jugador.
+     * Solicita y lee el tipo de jugador.
      *
      * @return el tipo de jugador leído
      */
@@ -682,7 +708,7 @@ public class Dungeons2019 {
     }
 
     /**
-     * Solicita una categoría al usuario.
+     * Solicita y lee una categoría al usuario.
      *
      * @return la categoría leída
      */
@@ -691,11 +717,21 @@ public class Dungeons2019 {
                 "La categoría ingresada no es válida.\r\nReintentar: ", 0, 2));
     }
 
+    /**
+     * Solicita y lee una cantidad de dinero al usuario.
+     *
+     * @return la cantidad de dinero leída
+     */
     private static int leerDinero() {
         return Funciones.leerEnteroPositivo("Dinero: ",
                 "El dinero ingresado no es válido.\r\nDebe ser un entero positivo o cero.\r\nReintentar: ");
     }
 
+    /**
+     * Solicita y lee una cantidad de dinero al usuario.
+     *
+     * @return el prefijo de usuario leído
+     */
     private static String leerPrefijoUsuario() {
         return Funciones.leerPalabra("Prefijo: ",
                 "El prefijo ingresado no es válido.\r\nReintentar: ", 1, 20);
@@ -782,7 +818,7 @@ public class Dungeons2019 {
             if (borrado) {
                 log(String.format("Se borró el ítem \"%s\"", codigo));
             } else {
-                System.out.println(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
+                log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
             }
         } else {
             System.out.println("No existen ítems para borrar");
@@ -803,7 +839,7 @@ public class Dungeons2019 {
             if (item != null) {
                 modificarItemsegunOpcion(item);
             } else {
-                System.out.println(String.format("Se intentó modificar un ítem inexistente \"%s\"", codigo));
+                log(String.format("Se intentó modificar un ítem inexistente \"%s\"", codigo));
             }
         } else {
             System.out.println("No existen ítems para modificar");
@@ -814,7 +850,15 @@ public class Dungeons2019 {
         int opcion = 0;
 
         do {
-            opcion = leerOpcionModificarItem();
+            //opcion = leerOpcionModificarItem();
+            titulo(String.format("Modificar ítem \"%s\"", item.getNombre()));
+            opcion(1, "Nombre");
+            opcion(2, "Precio");
+            opcion(3, "Ataque");
+            opcion(4, "Defensa");
+            opcion(0, "Cancelar");
+
+            opcion = leerOpcion(0, 4);
 
             switch (opcion) {
                 case 1: // Modificar nombre del ítem
@@ -858,11 +902,6 @@ public class Dungeons2019 {
         } while (opcion != 0);
     }
 
-    private static int leerOpcionModificarItem() {
-        return Funciones.leerEntero("Modificar <1> Nombre - <2> Precio - <3> Ataque - <4> Defensa - <0> Cancelar: ",
-                "La opción ingresada no es válida.\r\nReintentar: ", 0, 4);
-    }
-
     /**
      * H. Consultas sobre items:
      * Dado un código de ítem, mostrar sus atributos.
@@ -888,7 +927,7 @@ public class Dungeons2019 {
                 System.out.println(datos);
                 log(String.format("Se consultó el ítem \"%s\"", codigo));
             } else {
-                System.out.println(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
+                log(String.format("Se intentó consultar un ítem inexistente \"%s\"", codigo));
             }
         } else {
             System.out.println("No existen ítems para consultar");

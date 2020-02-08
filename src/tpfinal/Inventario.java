@@ -6,7 +6,7 @@ import lineales.dinamicas.Lista;
 import lineales.dinamicas.Nodo;
 
 /**
- * Implementación inventario de ítems ordenados y agrupados por precio.
+ * Implementación de inventario de ítems ordenados y agrupados por precio.
  *
  * @author Diego P. M. Baltar {@literal <dpmbaltar@gmail.com>}
  */
