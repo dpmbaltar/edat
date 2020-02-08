@@ -266,7 +266,7 @@ public class Dungeons2019 {
      *
      * @param info la información a mostrar y guardar
      */
-    public void log(String info) {
+    public static void log(String info) {
         System.out.println(info);
 
         try {
@@ -813,9 +813,22 @@ public class Dungeons2019 {
             String codigo = leerCodigoItem().toUpperCase();
             Item item = items.obtenerInformacion(codigo);
             boolean borrado = items.eliminar(codigo) && inventario.eliminar(item);
-            //TODO: Borrar ítem de los jugadores
 
             if (borrado) {
+                Lista<Jugador> listaJugadores = jugadores.listarDatos();
+                Lista<Item> listaItems;
+                int posicionItem = -1;
+
+                for (int i = 1; i <= listaJugadores.longitud(); i++) {
+                    listaItems = listaJugadores.recuperar(i).getItems();
+                    posicionItem = listaItems.localizar(item);
+
+                    do {
+                        listaItems.eliminar(posicionItem);
+                        posicionItem = listaItems.localizar(item);
+                    } while (posicionItem > -1);
+                }
+
                 log(String.format("Se borró el ítem \"%s\"", codigo));
             } else {
                 log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
