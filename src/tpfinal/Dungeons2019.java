@@ -1448,7 +1448,9 @@ public class Dungeons2019 {
             String nombreEquipo1 = leerNombreEquipo("Equipo 1: ").toLowerCase();
             String nombreEquipo2 = leerNombreEquipo("Equipo 2: ").toLowerCase();
 
-            if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
+            if (nombreEquipo1.contentEquals(nombreEquipo2)) {
+                System.out.println("Un equipo no puede atacarse a si mismo");
+            } else if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
                 Equipo equipo1 = equipos.get(nombreEquipo1);
                 Equipo equipo2 = equipos.get(nombreEquipo2);
                 Lista<Jugador> jugadores1 = equipo1.getJugadores();
@@ -1469,7 +1471,7 @@ public class Dungeons2019 {
                     ranking.insertar(jugadores2.recuperar(i));
                 }
             } else {
-                System.out.println("Uno o ambos equipos indicados no existe");
+                System.out.println("Al menus un equipo indicado no existe");
             }
         } else {
             System.out.println("Deben existir al menos 2 equipos para una batalla");

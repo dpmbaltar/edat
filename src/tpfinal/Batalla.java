@@ -30,7 +30,9 @@ public class Batalla {
      */
     public Batalla(Equipo equipo1, Equipo equipo2) {
         // Comienza la batalla el equipo de menor categoría
-        if (equipo1.getCategoria().compareTo(equipo2.getCategoria()) >= 0) {
+        if (equipo1.equals(equipo2)) {
+            throw new IllegalArgumentException("Un equipo no puede atacarse a si mismo");
+        } else if (equipo1.getCategoria().compareTo(equipo2.getCategoria()) >= 0) {
             this.equipo1 = equipo1;
             this.equipo2 = equipo2;
         } else {
@@ -43,8 +45,8 @@ public class Batalla {
      * Inicia la batalla.
      */
     public void iniciar() {
-        boolean ganaAtacante = false;
-        boolean ganaAtacado = false;
+        int derrotadosAtacante = 0;
+        int derrotadosAtacado = 0;
         int ronda = 1;
         Equipo ganador = null;
         Jugador jugador1, jugador2;
@@ -53,14 +55,14 @@ public class Batalla {
         Dungeons2019.log(String.format("Se inicia batalla entre %s y %s:", equipo1.getNombre(), equipo2.getNombre()));
 
         // Realizar ataques
-        while (!ganaAtacante && !ganaAtacado && ronda <= RONDAS) {
+        while (derrotadosAtacante < 3 && derrotadosAtacado < 3 && ronda <= RONDAS) {
             Dungeons2019.log(String.format("Se inicia la ronda %d:", ronda));
-            ganaAtacante = atacarEquipo(equipo1, equipo2);
+            derrotadosAtacante += atacarEquipo(equipo1, equipo2);
 
-            if (!ganaAtacante) {
-                ganaAtacado = atacarEquipo(equipo2, equipo1);
+            if (derrotadosAtacante < 3) {
+                derrotadosAtacado += atacarEquipo(equipo2, equipo1);
 
-                if (!ganaAtacado) {
+                if (derrotadosAtacado < 3) {
                     ronda++;
                 } else {
                     ganador = equipo2;
@@ -109,13 +111,13 @@ public class Batalla {
      *
      * @param equipoAtacante el equipo atacante
      * @param equipoDefensor el equipo atacado
-     * @return
+     * @return la cantidad de jugadores derrotados
      */
-    private boolean atacarEquipo(Equipo equipoAtacante, Equipo equipoDefensor) {
+    private int atacarEquipo(Equipo equipoAtacante, Equipo equipoDefensor) {
+        int jugadoresDerrotados = 0;
         boolean equipoDerrotado = false;
         int i = 1;
         int j = 1;
-        int jugadoresDerrotados = 0;
         Jugador jugadorAtacante = null;
         Jugador jugadorDefensor = null;
         Lista<Jugador> jugadoresAtacantes = equipoAtacante.getJugadores();
@@ -149,8 +151,8 @@ public class Batalla {
         if (equipoDerrotado) {
             Dungeons2019.log(String.format("El equipo %s fue derrotado", equipoDefensor.getNombre()));
         }
-        //TODO: los jugadores derrotados deben persistir por ronda
-        return equipoDerrotado;
+
+        return jugadoresDerrotados;
     }
 
     /**
