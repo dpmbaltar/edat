@@ -470,6 +470,23 @@ public class Jugador implements Comparable<Jugador> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Jugador other = (Jugador) obj;
+        if (usuario == null) {
+            if (other.usuario != null)
+                return false;
+        } else if (!usuario.equals(other.usuario))
+            return false;
+        return true;
+    }
+
+    @Override
     public String toString() {
         StringBuilder cadena = new StringBuilder();
         cadena.append(usuario).append(';');

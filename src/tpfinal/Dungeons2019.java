@@ -850,7 +850,6 @@ public class Dungeons2019 {
         int opcion = 0;
 
         do {
-            //opcion = leerOpcionModificarItem();
             titulo(String.format("Modificar ítem \"%s\"", item.getNombre()));
             opcion(1, "Nombre");
             opcion(2, "Precio");
@@ -1156,7 +1155,7 @@ public class Dungeons2019 {
             if (mapa.eliminarVertice(locacion)) {
                 log(String.format("Se borró la locación \"%s\"", locacion));
             } else {
-                System.out.println(String.format("Se intentó borrar la locación inexistente \"%s\"", locacion));
+                log(String.format("Se intentó borrar la locación inexistente \"%s\"", locacion));
             }
         } else {
             System.out.println("No existen locaciones para borrar");
@@ -1176,7 +1175,7 @@ public class Dungeons2019 {
             if (mapa.existeVertice(locacion)) {
                 modificarLocacionSegunOpcion(locacion);
             } else {
-                System.out.println(String.format("No existe la locación \"%s\"", locacion));
+                log(String.format("Se intentó modificar la locación inexistente \"%s\"", locacion));
             }
         } else {
             System.out.println("No existen locaciones para modificar");
@@ -1439,9 +1438,23 @@ public class Dungeons2019 {
             if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
                 Equipo equipo1 = equipos.get(nombreEquipo1);
                 Equipo equipo2 = equipos.get(nombreEquipo2);
+                Lista<Jugador> jugadores1 = equipo1.getJugadores();
+                Lista<Jugador> jugadores2 = equipo2.getJugadores();
+
+                // Eliminar jugadores del ranking, ya que posiblemente cambien sus victorias
+                for (int i = 1; i <= 3; i++) {
+                    ranking.eliminar(jugadores1.recuperar(i));
+                    ranking.eliminar(jugadores2.recuperar(i));
+                }
 
                 Batalla batalla = new Batalla(equipo1, equipo2);
                 batalla.iniciar();
+
+                // Actualizar ranking
+                for (int i = 1; i <= 3; i++) {
+                    ranking.insertar(jugadores1.recuperar(i));
+                    ranking.insertar(jugadores2.recuperar(i));
+                }
             } else {
                 System.out.println("Uno o ambos equipos indicados no existe");
             }
@@ -1481,7 +1494,7 @@ public class Dungeons2019 {
                 System.out.println(cadena.toString());
                 log(String.format("Se consultó el equipo \"%s\"", nombre));
             } else {
-                System.out.println(String.format("No existe un equipo con nombre \"%s\"", nombre));
+                log(String.format("Se intentó consultar un equipo inexistente \"%s\"", nombre));
             }
         } else {
             System.out.println("No existen equipos para consultar");
@@ -1543,7 +1556,7 @@ public class Dungeons2019 {
 
     public void mostrarRankingJugadores() {
         titulo("Ranking de jugadores");
-        //TODO: actualizar el ranking después de las batallas
+
         if (!ranking.esVacio()) {
             Lista<Jugador> rankingJugadores = ranking.listarJugadores();
             Jugador jugador;
