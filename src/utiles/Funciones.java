@@ -357,7 +357,7 @@ public class Funciones {
         System.out.print(mensajeInfo);
         String frase = TecladoIn.readLine();
 
-        while (frase.length() < longMin || longMax < frase.length()) { //TODO: Validar frase
+        while (frase.length() < longMin || longMax < frase.length()) {
             System.out.print(mensajeError);
             frase = TecladoIn.readLine();
         }
