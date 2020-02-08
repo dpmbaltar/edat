@@ -284,10 +284,14 @@ public class ArbolAVLMultiple<T extends Comparable<T>> {
                 } else { // Caso 4: nodo con un solo hijo
                     NodoAVLMultiple<T> reemplazo = derecho == null ? izquierdo : derecho;
 
-                    if (elemento.compareTo(padre.getElemento()) < 0) {
-                        padre.setIzquierdo(reemplazo);
-                    } else if (elemento.compareTo(padre.getElemento()) > 0) {
-                        padre.setDerecho(reemplazo);
+                    if (padre == null) {
+                        raiz = reemplazo;
+                    } else {
+                        if (elemento.compareTo(padre.getElemento()) < 0) {
+                            padre.setIzquierdo(reemplazo);
+                        } else if (elemento.compareTo(padre.getElemento()) > 0) {
+                            padre.setDerecho(reemplazo);
+                        }
                     }
 
                     eliminado = true;
