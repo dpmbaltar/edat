@@ -69,6 +69,10 @@ public final class PruebaArbolAVLMultiple {
         assert avl.eliminar(8) : "Debe eliminar 8 del árbol (duplicado)";
         assert avl.eliminar(8) : "Debe eliminar 8 del árbol (triplicado)";
         assert !avl.eliminar(8) : "No debe eliminar 8 del árbol (inexistente)";
+        avl = new ArbolAVLMultiple<>();
+        avl.insertar(1);
+        avl.insertar(2);
+        assert avl.eliminar(1) : "Debe eliminar la raíz con un solo hijo";
     }
 
     /**
