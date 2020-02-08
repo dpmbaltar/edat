@@ -242,7 +242,8 @@ public class Dungeons2019 {
      */
     public void guardar(String nombreArchivo) {
         try {
-            PrintWriter salida = new PrintWriter(new FileOutputStream(nombreArchivo));
+            String url = Dungeons2019.class.getResource(nombreArchivo).getPath();
+            PrintWriter salida = new PrintWriter(new FileOutputStream(url));
             Lista<Item> listaItems = items.listarDatos();
             Lista<Jugador> listaJugadores = jugadores.listarDatos();
 
