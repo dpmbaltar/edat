@@ -1502,27 +1502,30 @@ public class Dungeons2019 {
             String nombreEquipo1 = leerNombreEquipo("Equipo 1: ").toLowerCase();
             String nombreEquipo2 = leerNombreEquipo("Equipo 2: ").toLowerCase();
 
-            if (nombreEquipo1.contentEquals(nombreEquipo2)) {
-                System.out.println("Un equipo no puede atacarse a si mismo");
-            } else if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
+            if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
                 Equipo equipo1 = equipos.get(nombreEquipo1);
                 Equipo equipo2 = equipos.get(nombreEquipo2);
-                Lista<Jugador> jugadores1 = equipo1.getJugadores();
-                Lista<Jugador> jugadores2 = equipo2.getJugadores();
 
-                // Eliminar jugadores del ranking, ya que posiblemente cambien sus victorias
-                for (int i = 1; i <= 3; i++) {
-                    ranking.eliminar(jugadores1.recuperar(i));
-                    ranking.eliminar(jugadores2.recuperar(i));
-                }
+                try {
+                    Batalla batalla = new Batalla(equipo1, equipo2);
+                    Lista<Jugador> jugadores1 = equipo1.getJugadores();
+                    Lista<Jugador> jugadores2 = equipo2.getJugadores();
 
-                Batalla batalla = new Batalla(equipo1, equipo2);
-                batalla.iniciar();
+                    // Eliminar jugadores del ranking, ya que posiblemente cambien sus victorias y derrotas
+                    for (int i = 1; i <= Equipo.CANTIDAD_JUGADORES; i++) {
+                        ranking.eliminar(jugadores1.recuperar(i));
+                        ranking.eliminar(jugadores2.recuperar(i));
+                    }
 
-                // Actualizar ranking
-                for (int i = 1; i <= 3; i++) {
-                    ranking.insertar(jugadores1.recuperar(i));
-                    ranking.insertar(jugadores2.recuperar(i));
+                    batalla.iniciar();
+
+                    // Actualizar ranking
+                    for (int i = 1; i <= Equipo.CANTIDAD_JUGADORES; i++) {
+                        ranking.insertar(jugadores1.recuperar(i));
+                        ranking.insertar(jugadores2.recuperar(i));
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
                 }
             } else {
                 System.out.println("Al menus un equipo indicado no existe");
