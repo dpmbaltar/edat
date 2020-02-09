@@ -10,6 +10,9 @@ import utiles.Funciones;
  */
 public class Batalla {
 
+    /**
+     * Cantidad de rondas por batalla.
+     */
     public static final int RONDAS = 2;
 
     /**
@@ -23,12 +26,18 @@ public class Batalla {
     private Equipo equipo2;
 
     /**
-     * Constructor con ambos equipos.
+     * Instancia del juego.
+     */
+    private Juego juego;
+
+    /**
+     * Constructor con el juego y ambos equipos.
      *
+     * @param juego el juego
      * @param primerEquipo el 1er equipo
      * @param segundoEquipo el 2do equipo
      */
-    public Batalla(Equipo equipo1, Equipo equipo2) {
+    public Batalla(Juego juego, Equipo equipo1, Equipo equipo2) {
         // Comienza la batalla el equipo de menor categoría
         if (equipo1.equals(equipo2)) {
             throw new IllegalArgumentException(
@@ -44,6 +53,8 @@ public class Batalla {
             this.equipo1 = equipo2;
             this.equipo2 = equipo1;
         }
+
+        this.juego = juego;
     }
 
     /**
@@ -57,11 +68,13 @@ public class Batalla {
         Jugador jugador1, jugador2;
         Lista<Jugador> jugadores1, jugadores2;
 
-        Dungeons2019.log(String.format("Se inicia batalla entre %s y %s:", equipo1.getNombre(), equipo2.getNombre()));
+        juego.log(String.format("Se inicia batalla entre %s y %s:", equipo1.getNombre(), equipo2.getNombre()));
+        System.out.println();
 
         // Realizar ataques
-        while (derrotadosAtacante < Equipo.CANTIDAD_JUGADORES && derrotadosAtacado < 3 && ronda <= RONDAS) {
-            Dungeons2019.log(String.format("Se inicia la ronda %d:", ronda));
+        while (derrotadosAtacante < Equipo.CANTIDAD_JUGADORES && derrotadosAtacado < Equipo.CANTIDAD_JUGADORES
+                && ronda <= RONDAS) {
+            juego.log(String.format("Se inicia la ronda %d:", ronda));
             derrotadosAtacante += atacarEquipo(equipo1, equipo2);
 
             if (derrotadosAtacante < Equipo.CANTIDAD_JUGADORES) {
@@ -107,7 +120,7 @@ public class Batalla {
                 jugadores2.recuperar(i).agregarDinero(500);
             }
 
-            Dungeons2019.log(String.format("La batalla entre \"%s\" y \"%s\" resultó en empate",
+            juego.log(String.format("La batalla entre \"%s\" y \"%s\" resultó en empate",
                     equipo1.getNombre(), equipo2.getNombre()));
         } else { // Hay un ganador
             jugadores1 = ganador.getJugadores(); // Ganadores
@@ -119,9 +132,10 @@ public class Batalla {
                 jugadores2.recuperar(i).quitarDinero(500);
             }
 
-            Dungeons2019.log(String.format("El equipo \"%s\" gana la batalla", ganador.getNombre()));
+            juego.log(String.format("El equipo \"%s\" gana la batalla", ganador.getNombre()));
         }
 
+        // Reestablecer salud de los jugadores
         equipo1.reestablecerSalud();
         equipo2.reestablecerSalud();
     }
@@ -169,7 +183,7 @@ public class Batalla {
 
         // Indicar que el atacado fue derrotado
         if (equipoDerrotado) {
-            Dungeons2019.log(String.format("El equipo \"%s\" fue derrotado", equipoDefensor.getNombre()));
+            juego.log(String.format("El equipo \"%s\" fue derrotado", equipoDefensor.getNombre()));
         }
 
         return jugadoresDerrotados;
@@ -187,7 +201,7 @@ public class Batalla {
         int danio = atacante.atacar(atacado);
 
         if (danio > 0) { // Ataque exitoso
-            Dungeons2019.log(String.format(
+            juego.log(String.format(
                     "%s (%d/%d) ataca con éxito a %s (%d/%d) causandole %d de daño",
                     atacante.getUsuario(), atacante.getSalud(), atacante.getSaludTotal(),
                     atacado.getUsuario(), atacado.getSalud(), atacado.getSaludTotal(), danio));
@@ -195,11 +209,11 @@ public class Batalla {
             // Oponente derrotado
             if (atacado.getSalud() == 0) {
                 derrotado = true;
-                Dungeons2019.log(String.format("El jugador \"%s\" fue derrotado por \"%s\"", atacado.getUsuario(),
+                juego.log(String.format("El jugador \"%s\" fue derrotado por \"%s\"", atacado.getUsuario(),
                         atacante.getUsuario()));
             }
         } else { // Ataque no exitoso
-            Dungeons2019.log(String.format(
+            juego.log(String.format(
                     "%s (%d/%d) se defiende con éxito de %s (%d/%d)",
                     atacado.getUsuario(), atacado.getSalud(), atacado.getSaludTotal(),
                     atacante.getUsuario(), atacante.getSalud(), atacante.getSaludTotal()));
