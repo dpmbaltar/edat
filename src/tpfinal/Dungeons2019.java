@@ -1411,16 +1411,23 @@ public class Dungeons2019 {
         if (esperando.longitud() >= 3) {
             String nombre = leerNombreEquipo();
             Equipo equipo = new Equipo(nombre, mapa.locacionAleatoria());
+            Lista<Jugador> jugadores = equipo.getJugadores();
+            Categoria categoria = null;
             Jugador jugador;
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < Equipo.CANTIDAD_JUGADORES; i++) {
                 jugador = esperando.obtenerFrente();
                 esperando.eliminarFrente();
                 jugador.setEsperando(false);
                 jugador.setEquipo(equipo);
-                equipo.agregarJugador(jugador);
+                jugadores.insertar(jugador, jugadores.longitud() + 1);
+
+                if (categoria == null || categoria.compareTo(jugador.getCategoria()) < 0) {
+                    categoria = jugador.getCategoria();
+                }
             }
 
+            equipo.setCategoria(categoria);
             equipos.put(nombre.toLowerCase(), equipo);
 
             log(String.format("Se creó el equipo \"%s\" de categoría \"%s\"", nombre, equipo.getCategoria()));
@@ -1651,7 +1658,7 @@ public class Dungeons2019 {
         Iterator<Equipo> iterador = equipos.values().iterator();
 
         while (iterador.hasNext()) {
-            System.out.println(iterador.next().getNombre());
+            System.out.println(String.valueOf(iterador.next()));
         }
     }
 

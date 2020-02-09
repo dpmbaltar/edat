@@ -12,6 +12,11 @@ import lineales.dinamicas.Lista;
 public class Equipo {
 
     /**
+     * Cantidad requerida de jugadores.
+     */
+    public static final int CANTIDAD_JUGADORES = 3;
+
+    /**
      * El nombre del equipo (único).
      */
     private String nombre;
@@ -44,50 +49,67 @@ public class Equipo {
         this.jugadores = new Lista<Jugador>();
     }
 
+    /**
+     * Devuelve el nombre del equipo.
+     *
+     * @return el nombre del equipo
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Establece el nombre del equipo.
+     *
+     * @param nombre el nombre del equipo
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Devuelve la categoría del equipo.
+     *
+     * @return la categoría del equipo
+     */
     public Categoria getCategoria() {
         return categoria;
     }
 
+    /**
+     * Establece la categoría del equipo.
+     *
+     * @param categoria la categoría del equipo
+     */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
+    /**
+     * Devuelve la locación donde se encuentra el equipo.
+     *
+     * @return la locación donde se encuentra el equipo
+     */
     public String getLocacion() {
         return locacion;
     }
 
+    /**
+     * Establece la locación donde se encuentra el equipo.
+     *
+     * @param locacion la locación donde se encuentra el equipo
+     */
     public void setLocacion(String locacion) {
         this.locacion = locacion;
     }
 
+    /**
+     * Devuelve los jugadores del equipo.
+     *
+     * @return los jugadores del equipo
+     */
     public Lista<Jugador> getJugadores() {
         return jugadores;
-    }
-
-    public void setJugadores(Lista<Jugador> jugadores) {
-        this.jugadores = jugadores;
-    }
-
-    public boolean agregarJugador(Jugador jugador) {
-        boolean agregado = false;
-
-        if (jugadores.longitud() < 3) {
-            jugadores.insertar(jugador, jugadores.longitud() + 1);
-
-            if (categoria == null || categoria.compareTo(jugador.getCategoria()) < 0) {
-                categoria = jugador.getCategoria();
-            }
-        }
-
-        return agregado;
     }
 
     /**
@@ -119,6 +141,11 @@ public class Equipo {
         return saludJugadores == 0;
     }
 
+    /**
+     * Devuelve un jugador aleatorio del equipo.
+     *
+     * @return el jugador aleatorio
+     */
     public Jugador jugadorAleatorio() {
         Jugador jugador = null;
 
@@ -127,5 +154,25 @@ public class Equipo {
         }
 
         return jugador;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder cadena = new StringBuilder();
+        cadena.append(nombre).append(';');
+        cadena.append(categoria).append(';');
+        cadena.append('<');
+
+        for (int i = 1; i <= jugadores.longitud(); i++) {
+            cadena.append(jugadores.recuperar(i).getUsuario());
+
+            if (i < jugadores.longitud()) {
+                cadena.append(',');
+            }
+        }
+
+        cadena.append('>');
+
+        return cadena.toString();
     }
 }
