@@ -399,11 +399,6 @@ public class Jugador implements Comparable<Jugador> {
         deteriorarItems();
         oponente.deteriorarItems();
 
-        //TODO: limpiar prints
-        System.out.println(String.format("%s ataca a %s", this, oponente));
-        System.out.println(String.format("  %s - ataque: %.0f ", getUsuario(), ataque));
-        System.out.println(String.format("  %s - defensa: %.0f ", oponente.getUsuario(), defensa));
-
         // Ataque exitoso
         if (danio > 0) {
             oponente.lastimar(danio);
