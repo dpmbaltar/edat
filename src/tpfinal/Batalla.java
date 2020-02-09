@@ -1,7 +1,6 @@
 package tpfinal;
 
 import lineales.dinamicas.Lista;
-import utiles.Funciones;
 
 /**
  * Batalla entre equipos.
@@ -65,8 +64,8 @@ public class Batalla {
         int derrotadosAtacado = 0;
         int ronda = 1;
         Equipo ganador = null;
-        Jugador jugador1, jugador2;
-        Lista<Jugador> jugadores1, jugadores2;
+        Lista<Jugador> jugadores1 = equipo1.getJugadores();
+        Lista<Jugador> jugadores2 = equipo2.getJugadores();
 
         juego.log(String.format("Se inicia batalla entre %s y %s:", equipo1.getNombre(), equipo2.getNombre()));
         System.out.println();
@@ -89,26 +88,6 @@ public class Batalla {
                 ganador = equipo1;
             }
 
-            System.out.println();
-        }
-
-        // Mostrar estado final
-        jugadores1 = equipo1.getJugadores();
-        jugadores2 = equipo2.getJugadores();
-        System.out.print(Funciones.rellenarIzquierda("Equipo " + equipo1.getNombre(), 30));
-        System.out.print(" | ");
-        System.out.println(Funciones.rellenarDerecha("Equipo " + equipo2.getNombre(), 30));
-
-        for (int i = 1; i <= 3; i++) {
-            jugador1 = jugadores1.recuperar(i);
-            jugador2 = jugadores2.recuperar(i);
-            System.out.print(Funciones.rellenarIzquierda(
-                    String.format("%s (%d/%d)", jugador1.getUsuario(), jugador1.getSalud(), jugador1.getSaludTotal()),
-                    30));
-            System.out.print(" | ");
-            System.out.print(Funciones.rellenarDerecha(
-                    String.format("(%d/%d) %s", jugador2.getSalud(), jugador2.getSaludTotal(), jugador2.getUsuario()),
-                    30));
             System.out.println();
         }
 
