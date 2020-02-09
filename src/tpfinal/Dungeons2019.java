@@ -138,7 +138,7 @@ public class Dungeons2019 {
             BufferedReader archivoEstado = new BufferedReader(new FileReader(url));
             String linea = archivoEstado.readLine();
 
-            while (linea != null) {
+            while (linea != null && !linea.isEmpty()) {
                 switch (linea.charAt(0)) {
                     case 'I': // Cargar Ítem
                         Item item = crearItemDesdeCadena(linea.substring(2));
@@ -165,6 +165,13 @@ public class Dungeons2019 {
                         if (partes.length >= 3) {
                             int etiqueta = Integer.valueOf(partes[2]);
                             mapa.insertarArco(partes[0], partes[1], etiqueta);
+                        }
+                        break;
+                    case 'E': // Cargar Equipo
+                        Equipo equipo = crearEquipoDesdeCadena(linea.substring(2));
+
+                        if (equipo != null) {
+                            equipos.put(equipo.getNombre().toLowerCase(), equipo);
                         }
                         break;
                     case '#':
@@ -222,7 +229,6 @@ public class Dungeons2019 {
 
                 for (int i = 0; i < codigos.length; i++) {
                     Item item = items.obtenerInformacion(codigos[i]);
-
                     if (item != null) {
                         itemsJugador.insertar(item, itemsJugador.longitud() + 1);
                     }
@@ -231,6 +237,37 @@ public class Dungeons2019 {
         }
 
         return nuevoJugador;
+    }
+
+    private Equipo crearEquipoDesdeCadena(String cadena) {
+        Equipo nuevoEquipo = null;
+        String[] partes = cadena.split(";");
+
+        if (partes.length >= 4) {
+            String nombre = partes[0];
+            Categoria categoria = Categoria.valueOf(partes[1].toUpperCase());
+            String locacion = partes[2];
+            String cadenaJugadores = partes[3].substring(1, partes[3].length() - 1);
+            nuevoEquipo = new Equipo(nombre, locacion);
+            nuevoEquipo.setCategoria(categoria);
+
+            // Leer y agregar jugadores del equipo
+            if (!cadenaJugadores.isEmpty()) {
+                String[] usuarios = cadenaJugadores.split(",");
+                Lista<Jugador> jugadoresEquipo = nuevoEquipo.getJugadores();
+
+                for (int i = 0; i < usuarios.length; i++) {
+                    Jugador jugador = jugadores.obtenerInformacion(usuarios[i].toLowerCase());
+                    if (jugador != null) {
+                        jugador.setEsperando(false);
+                        jugador.setEquipo(nuevoEquipo);
+                        jugadoresEquipo.insertar(jugador, jugadoresEquipo.longitud() + 1);
+                    }
+                }
+            }
+        }
+
+        return nuevoEquipo;
     }
 
     private Jugador crearJugadorSegunTipo(int tipo, String usuario, Categoria categoria, int dinero) {
@@ -262,16 +299,26 @@ public class Dungeons2019 {
             PrintWriter salida = new PrintWriter(new FileOutputStream(url));
             Lista<Item> listaItems = items.listarDatos();
             Lista<Jugador> listaJugadores = jugadores.listarDatos();
+            Iterator<Equipo> iteradorEquipos = equipos.values().iterator();
 
+            // Ítems
             for (int i = 1; i <= listaItems.longitud(); i++) {
                 salida.println("I:" + listaItems.recuperar(i));
             }
 
+            // Jugadores
             for (int i = 1; i <= listaJugadores.longitud(); i++) {
                 salida.println("J:" + listaJugadores.recuperar(i));
             }
 
+            // Mapa
             salida.print(mapa.exportar());
+
+            // Equipos
+            while (iteradorEquipos.hasNext()) {
+                salida.println("E:" + iteradorEquipos.next());
+            }
+
             salida.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -637,7 +684,7 @@ public class Dungeons2019 {
             if (jugadores.existeClave(usuario)) {
                 Jugador jugador = jugadores.obtenerInformacion(usuario);
 
-                if (!jugador.getEsperando()) {
+                if (!jugador.tieneEquipo() && !jugador.getEsperando()) {
                     jugador.setEsperando(true);
                     esperando.insertar(jugador, jugador.getCategoria());
 
@@ -670,7 +717,7 @@ public class Dungeons2019 {
             for (int i = 1; i <= cantidad; i++) {
                 jugador = todos.recuperar(i);
 
-                if (!jugador.getEsperando()) {
+                if (!jugador.tieneEquipo() && !jugador.getEsperando()) {
                     jugador.setEsperando(true);
                     esperando.insertar(jugador, jugador.getCategoria());
                     agregados++;
@@ -1654,6 +1701,7 @@ public class Dungeons2019 {
      */
     public void mostrarEquipos() {
         titulo("Equipos");
+        System.out.println("Nombre;Categoría;Jugadores");
         Iterator<Equipo> iterador = equipos.values().iterator();
 
         while (iterador.hasNext()) {

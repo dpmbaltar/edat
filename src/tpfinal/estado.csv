@@ -65,3 +65,5 @@ C:Gran Caverna de Gusanos;Roca Cuervo;220;;;;
 C:La Llanura de Piedras;El Mar Congelado;290;;;;
 C:La Llanura de Piedras;Las Tierras Torturadas;360;;;;
 C:Roca Cuervo;Cumbre de las Espadas;510;;;;
+E:A;Profesional;El Bosque Congelado;<Jugador4,Jugador5,Jugador8>;;;
+E:B;Aficionado;El Bosque Congelado;<Jugador2,Jugador3,Jugador7>;;;

@@ -161,6 +161,7 @@ public class Equipo {
         StringBuilder cadena = new StringBuilder();
         cadena.append(nombre).append(';');
         cadena.append(categoria).append(';');
+        cadena.append(locacion).append(';');
         cadena.append('<');
 
         for (int i = 1; i <= jugadores.longitud(); i++) {
