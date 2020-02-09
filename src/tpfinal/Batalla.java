@@ -125,6 +125,7 @@ public class Batalla {
         } else { // Hay un ganador
             jugadores1 = ganador.getJugadores(); // Ganadores
             jugadores2 = ganador.equals(equipo1) ? equipo2.getJugadores() : equipo1.getJugadores(); // Perdedores
+            Lista<String> locacionesAdyacentes = juego.getMapa().listarAdyacentes(ganador.getLocacion());
 
             // Sumar dinero extra al ganador, y quitar la mitad al perdedor
             for (int i = 1; i <= Equipo.CANTIDAD_JUGADORES; i++) {
@@ -133,6 +134,16 @@ public class Batalla {
             }
 
             juego.log(String.format("El equipo \"%s\" gana la batalla", ganador.getNombre()));
+            Juego.titulo(String.format("Elegir nueva ubicación para el equipo \"%s\"", ganador.getNombre()));
+
+            for (int i = 1; i <= locacionesAdyacentes.longitud(); i++) {
+                Juego.opcion(i, locacionesAdyacentes.recuperar(i));
+            }
+
+            int opcion = Juego.leerOpcion(1, locacionesAdyacentes.longitud());
+            ganador.setLocacion(locacionesAdyacentes.recuperar(opcion));
+            juego.log(String.format("El equipo \"%s\" se ha movido a \"%s\"", ganador.getNombre(),
+                    ganador.getLocacion()));
         }
 
         // Reestablecer salud de los jugadores

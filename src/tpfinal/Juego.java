@@ -109,6 +109,15 @@ public class Juego {
     }
 
     /**
+     * Devuelve el mapa del juego.
+     *
+     * @return el mapa
+     */
+    public Mapa getMapa() {
+        return mapa;
+    }
+
+    /**
      * Inicia el juego.
      */
     public void iniciar() {
