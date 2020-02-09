@@ -503,7 +503,9 @@ public class Jugador implements Comparable<Jugador> {
             }
         }
 
-        cadena.append('>');
+        cadena.append('>').append(';');
+        cadena.append(victorias).append(';');
+        cadena.append(derrotas);
 
         return cadena.toString();
     }

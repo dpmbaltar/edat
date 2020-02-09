@@ -203,23 +203,19 @@ public class Dungeons2019 {
         Jugador nuevoJugador = null;
         String[] partes = cadena.split(";");
 
-        if (partes.length >= 5) {
+        if (partes.length >= 7) {
             String usuario = partes[0];
             Categoria categoria = Categoria.valueOf(partes[2].toUpperCase());
             int dinero = Integer.valueOf(partes[3]);
-
-            switch (partes[1]) {
-            case "Guerrero":
-                nuevoJugador = new Guerrero(usuario, categoria, dinero);
-                break;
-            case "Defensor":
-                nuevoJugador = new Defensor(usuario, categoria, dinero);
-                break;
-            }
-
-            // Leer y agregar ítems del jugador
+            int victorias = Integer.valueOf(partes[5]);
+            int derrotas = Integer.valueOf(partes[6]);
             String cadenaItems = partes[4].substring(1, partes[4].length() - 1);
 
+            nuevoJugador = crearJugadorSegunTipo(partes[1], usuario, categoria, dinero);
+            nuevoJugador.setVictorias(victorias);
+            nuevoJugador.setDerrotas(derrotas);
+
+            // Leer y agregar ítems del jugador
             if (!cadenaItems.isEmpty()) {
                 String[] codigos = cadenaItems.split(",");
                 Lista<Item> itemsJugador = nuevoJugador.getItems();
@@ -237,6 +233,26 @@ public class Dungeons2019 {
         return nuevoJugador;
     }
 
+    private Jugador crearJugadorSegunTipo(int tipo, String usuario, Categoria categoria, int dinero) {
+        String[] tipos = { "Guerrero", "Defensor"};
+        return crearJugadorSegunTipo(tipos[tipo], usuario, categoria, dinero);
+    }
+
+    private Jugador crearJugadorSegunTipo(String tipo, String usuario, Categoria categoria, int dinero) {
+        Jugador jugador = null;
+
+        switch (tipo) {
+        case "Guerrero":
+            jugador = new Guerrero(usuario, categoria, dinero);
+            break;
+        case "Defensor":
+            jugador = new Defensor(usuario, categoria, dinero);
+            break;
+        }
+
+        return jugador;
+    }
+
     /**
      * Guarda el estado del juego a un archivo CSV.
      */
@@ -252,7 +268,7 @@ public class Dungeons2019 {
             }
 
             for (int i = 1; i <= listaJugadores.longitud(); i++) {
-                salida.println("J:" + listaJugadores.recuperar(i) + ";;");
+                salida.println("J:" + listaJugadores.recuperar(i));
             }
 
             salida.print(mapa.exportar());
@@ -413,17 +429,7 @@ public class Dungeons2019 {
         String usuario = leerNombreUsuario();
         Categoria categoria = leerCategoria();
         int dinero = leerDinero();
-        Jugador jugador = null;
-
-        switch (tipo) {
-        case 0:
-            jugador = new Guerrero(usuario, categoria, dinero);
-            break;
-        case 1:
-            jugador = new Defensor(usuario, categoria, dinero);
-            break;
-        }
-
+        Jugador jugador = crearJugadorSegunTipo(tipo, usuario, categoria, dinero);
         jugadores.insertar(usuario.toLowerCase(), jugador);
         ranking.insertar(jugador);
 
@@ -503,23 +509,16 @@ public class Dungeons2019 {
                     log(String.format("Se modificó el usuario del jugador \"%s\" a \"%s\"", usuarioAnterior, usuario));
                     break;
                 case 2: // Modificar tipo de jugador
-                    int nuevoTipo = leerTipo();
+                    int tipo = leerTipo();
                     String[] tipos = { "Guerrero", "Defensor" };
 
-                    if (!jugador.getClass().getSimpleName().equals(tipos[nuevoTipo])) {
-                        switch (nuevoTipo) {
-                        case 0:
-                            jugador = new Guerrero(usuario, jugador.getCategoria(), jugador.getDinero());
-                            break;
-                        case 1:
-                            jugador = new Defensor(usuario, jugador.getCategoria(), jugador.getDinero());
-                            break;
-                        }
+                    if (!jugador.getClass().getSimpleName().equals(tipos[tipo])) {
+                        jugador = crearJugadorSegunTipo(tipo, usuario, jugador.getCategoria(), jugador.getDinero());
                     }
 
                     jugadores.eliminar(claveUsuario);
                     jugadores.insertar(claveUsuario, jugador);
-                    log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, tipos[nuevoTipo]));
+                    log(String.format("Se modificó el tipo del jugador \"%s\" a %s", usuario, tipos[tipo]));
                     break;
                 case 3: // Modificar categoría de jugador
                     jugador.setCategoria(leerCategoria());

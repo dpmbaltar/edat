@@ -20,15 +20,15 @@ I:U007;Espada del santo vengador;14000;40;0;1;0
 I:U008;Cuchilla de la suerte;13000;36;0;1;0
 I:U009;Hacha frenetica;13500;34;0;1;1
 I:U010;Gran hacha viciosa;14500;44;0;1;0
-J:Jugador1;Guerrero;Novato;4000;<A002,S002>;;
-J:Jugador2;Guerrero;Aficionado;6000;<A003,S003>;;
-J:Jugador3;Guerrero;Aficionado;800;<A002,S004>;;
-J:Jugador4;Guerrero;Profesional;12000;<A004,U006>;;
-J:Jugador5;Guerrero;Profesional;10000;<U001,U010>;;
-J:Jugador6;Defensor;Novato;5000;<A001,E001,S001>;;
-J:Jugador7;Defensor;Aficionado;8000;<A002,E002,S002>;;
-J:Jugador8;Defensor;Profesional;14000;<U002,U005,U008>;;
-J:Jugador9;Guerrero;Novato;2000;<>;;
+J:Jugador1;Guerrero;Novato;4000;<A002,S002>;0;0
+J:Jugador2;Guerrero;Aficionado;6000;<A003,S003>;0;0
+J:Jugador3;Guerrero;Aficionado;800;<A002,S004>;0;0
+J:Jugador4;Guerrero;Profesional;12000;<A004,U006>;0;0
+J:Jugador5;Guerrero;Profesional;10000;<U001,U010>;0;0
+J:Jugador6;Defensor;Novato;5000;<A001,E001,S001>;0;0
+J:Jugador7;Defensor;Aficionado;8000;<A002,E002,S002>;0;0
+J:Jugador8;Defensor;Profesional;14000;<U002,U005,U008>;0;0
+J:Jugador9;Guerrero;Novato;1600;<S001>;0;0
 L:Agujas de Hielo;;;;;;
 L:Colinas de Serpiente;;;;;;
 L:Cumbre de las Espadas;;;;;;
@@ -42,26 +42,26 @@ L:Gran Caverna de Gusanos;;;;;;
 L:La Llanura de Piedras;;;;;;
 L:Las Tierras Torturadas;;;;;;
 L:Roca Cuervo;;;;;;
-C:Agujas de Hielo;Gran Caverna de Gusanos;400;;;
-C:Agujas de Hielo;El Bosque Alto;350;;;
-C:Colinas de Serpiente;La Llanura de Piedras;880;;;
-C:Cumbre de las Espadas;Gran Caverna de Gusanos;480;;;
-C:Cumbre de las Espadas;El Bosque Alto;390;;;
-C:Cumbre de las Espadas;El Bosque Brumoso;500;;;
-C:El Bosque Alto;El Mar Congelado;340;;;
-C:El Bosque Alto;El Bosque Brumoso;620;;;
-C:El Bosque Brumoso;El Paramo Alto;100;;;
-C:El Bosque Congelado;El Mar Congelado;860;;;
-C:El Bosque Congelado;La Llanura de Piedras;570;;;
-C:El Bosque Congelado;Las Tierras Torturadas;310;;;
-C:El Hielo Alto;Agujas de Hielo;310;;;
-C:El Hielo Alto;El Bosque Alto;560;;;
-C:El Hielo Alto;El Mar Congelado;330;;;
-C:El Hielo Alto;El Bosque Congelado;380;;;
-C:El Hielo Alto;La Llanura de Piedras;390;;;
-C:El Paramo Alto;Colinas de Serpiente;40;;;
-C:El Paramo Alto;La Llanura de Piedras;890;;;
-C:Gran Caverna de Gusanos;Roca Cuervo;220;;;
-C:La Llanura de Piedras;El Mar Congelado;290;;;
-C:La Llanura de Piedras;Las Tierras Torturadas;360;;;
-C:Roca Cuervo;Cumbre de las Espadas;510;;;
+C:Agujas de Hielo;Gran Caverna de Gusanos;400;;;;
+C:Agujas de Hielo;El Bosque Alto;350;;;;
+C:Colinas de Serpiente;La Llanura de Piedras;880;;;;
+C:Cumbre de las Espadas;Gran Caverna de Gusanos;480;;;;
+C:Cumbre de las Espadas;El Bosque Alto;390;;;;
+C:Cumbre de las Espadas;El Bosque Brumoso;500;;;;
+C:El Bosque Alto;El Mar Congelado;340;;;;
+C:El Bosque Alto;El Bosque Brumoso;620;;;;
+C:El Bosque Brumoso;El Paramo Alto;100;;;;
+C:El Bosque Congelado;El Mar Congelado;860;;;;
+C:El Bosque Congelado;La Llanura de Piedras;570;;;;
+C:El Bosque Congelado;Las Tierras Torturadas;310;;;;
+C:El Hielo Alto;Agujas de Hielo;310;;;;
+C:El Hielo Alto;El Bosque Alto;560;;;;
+C:El Hielo Alto;El Mar Congelado;330;;;;
+C:El Hielo Alto;El Bosque Congelado;380;;;;
+C:El Hielo Alto;La Llanura de Piedras;390;;;;
+C:El Paramo Alto;Colinas de Serpiente;40;;;;
+C:El Paramo Alto;La Llanura de Piedras;890;;;;
+C:Gran Caverna de Gusanos;Roca Cuervo;220;;;;
+C:La Llanura de Piedras;El Mar Congelado;290;;;;
+C:La Llanura de Piedras;Las Tierras Torturadas;360;;;;
+C:Roca Cuervo;Cumbre de las Espadas;510;;;;
