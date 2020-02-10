@@ -333,7 +333,6 @@ public class Grafo<T, E extends Comparable<E>> {
             while (!colaVertices.esVacia() && !finalizar) {
                 vertice = colaVertices.obtenerFrente();
                 colaVertices.sacar();
-                //TODO: Se agregó NodoVertice<T, E>.equals() para localizar vértices por elemento. ¿Buscar alternativa?
                 predecesor = visitados.recuperar(visitados.localizar(vertice));
                 adyacente = vertice.getPrimerAdyacente();
 
