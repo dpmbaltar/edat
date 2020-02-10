@@ -261,10 +261,60 @@ public class Mapa extends Grafo<String, Integer> {
         return camino;
     }
 
-    public Lista<Camino> caminosMasCortosHastaDistancia(String origen, String destino, int distanciaMaxima) {
+    public Lista<Camino> caminosHastaDistancia(String origen, String destino, int distanciaMaxima) {
         Lista<Camino> caminos = new Lista<>();
-        //TODO: caminosMasCortosHastaDistancia()
+
+        // Evitar buscar caminos de origen igual al destino
+        if (!origen.equals(destino)) {
+            NodoVertice<String, Integer> verticeOrigen = buscarVertice(origen);
+            NodoVertice<String, Integer> verticeDestino = buscarVertice(destino);
+
+            // Proceder a buscar sólo si existe el origen y destino
+            if (verticeOrigen != null && verticeDestino != null) {
+                caminosHastaDistanciaDesde(verticeOrigen, destino, distanciaMaxima, new Camino(), caminos);
+            }
+        }
+
         return caminos;
+    }
+
+    private void caminosHastaDistanciaDesde(
+            NodoVertice<String, Integer> vertice,
+            String destino,
+            int distanciaMax,
+            Camino caminoActual,
+            Lista<Camino> caminosValidos) {
+        Lista<String> locaciones = caminoActual.getLocaciones();
+        int distanciaRecorrida = caminoActual.getDistancia();
+        int distancia;
+
+        if (vertice != null) {
+            locaciones.insertar(vertice.getElemento(), locaciones.longitud() + 1);
+
+            if (vertice.getElemento().equals(destino)) { // Destino encontrado
+                if (distanciaRecorrida <= distanciaMax) {
+                    caminosValidos.insertar(caminoActual.clone(), caminosValidos.longitud());
+                }
+            } else { // Destino no encontrado; buscar en los adyacentes
+                NodoVertice<String, Integer> verticeAdy;
+                NodoAdyacente<String, Integer> adyacente = vertice.getPrimerAdyacente();
+
+                while (adyacente != null) {
+                    verticeAdy = adyacente.getVertice();
+                    distancia = distanciaRecorrida + adyacente.getEtiqueta();
+
+                    // Continuar buscando caminos solo cuando no supere la distancia máxima
+                    if (distancia <= distanciaMax
+                            && locaciones.localizar(verticeAdy.getElemento()) < 0) {
+                        caminosHastaDistanciaDesde(verticeAdy, destino, distanciaMax, caminoActual, caminosValidos);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            locaciones.eliminar(locaciones.longitud());
+        }
     }
 
     /**

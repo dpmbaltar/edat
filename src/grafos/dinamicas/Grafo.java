@@ -317,7 +317,7 @@ public class Grafo<T, E extends Comparable<E>> {
         NodoVertice<T, E> vertice = buscarVertice(origen);
 
         if (vertice != null) {
-            boolean finalizar = false;
+            boolean encontrado = false;
             T elementoAdy;
             NodoVertice<T, E> predecesor;
             NodoAdyacente<T, E> adyacente;
@@ -330,14 +330,14 @@ public class Grafo<T, E extends Comparable<E>> {
             colaVertices.poner(vertice);
 
             // Recorrer cada vértice como en listar en anchura
-            while (!colaVertices.esVacia() && !finalizar) {
+            while (!colaVertices.esVacia() && !encontrado) {
                 vertice = colaVertices.obtenerFrente();
                 colaVertices.sacar();
                 predecesor = visitados.recuperar(visitados.localizar(vertice));
                 adyacente = vertice.getPrimerAdyacente();
 
                 // Visitar cada vértice adyacente guardando su predecesor
-                while (adyacente != null && !finalizar) {
+                while (adyacente != null && !encontrado) {
                     elementoAdy = adyacente.getVertice().getElemento();
 
                     if (visitados.localizar(adyacente.getVertice()) < 0) {
@@ -346,7 +346,7 @@ public class Grafo<T, E extends Comparable<E>> {
 
                         // Finalizar si el destino fue encontrado
                         if (elementoAdy.equals(destino)) {
-                            finalizar = true;
+                            encontrado = true;
                         }
                     }
 
@@ -354,12 +354,13 @@ public class Grafo<T, E extends Comparable<E>> {
                 }
             }
 
-            vertice = visitados.recuperar(visitados.longitud());
-
             // Obtener el camino más corto a través de la lista auxiliar de predecesores
-            while (vertice != null) {
-                camino.insertar(vertice.getElemento(), 1);
-                vertice = vertice.getSiguienteVertice();
+            if (encontrado) {
+                vertice = visitados.recuperar(visitados.longitud());
+                while (vertice != null) {
+                    camino.insertar(vertice.getElemento(), 1);
+                    vertice = vertice.getSiguienteVertice();
+                }
             }
         }
 

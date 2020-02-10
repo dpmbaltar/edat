@@ -86,4 +86,10 @@ public class Camino {
     public String toString() {
         return String.format("[%d:%s]", distancia, locaciones.toString());
     }
+
+    @Override
+    public Camino clone() {
+        return new Camino(distancia, locaciones.clone());
+    }
+    
 }

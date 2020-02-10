@@ -113,24 +113,18 @@ public class Juego {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
         //TODO: Quitar fragmento de prueba
-        /*Mapa m = new Mapa();
+        Mapa m = new Mapa();
         m.insertarVertice("A");
         m.insertarVertice("B");
         m.insertarVertice("C");
         m.insertarVertice("D");
-        m.insertarVertice("E");
-        m.insertarVertice("F");
-        m.insertarVertice("G");
         m.insertarArco("A", "B", 2);
         m.insertarArco("A", "C", 4);
-        m.insertarArco("A", "D", 1);
-        m.insertarArco("B", "E", 1);
-        m.insertarArco("D", "G", 7);
-        m.insertarArco("E", "F", 2);
-        m.insertarArco("G", "F", 2);
-        m.insertarArco("C", "F", 2);
-        System.out.println(m.caminoMasCortoExcepto("A", "A", "A"));
-        System.exit(0);*/
+        m.insertarArco("B", "C", 1);
+        m.insertarArco("B", "D", 7);
+        m.insertarArco("C", "D", 2);
+        System.out.println(m.caminosHastaDistancia("A", "D", 7));
+        System.exit(0);
         System.out.println(mapa.caminoMasCortoExcepto("Roca Cuervo", "El Mar Congelado", "El Mar Congelado"));
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
@@ -1453,7 +1447,7 @@ public class Juego {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
             int distanciaMaxima = leerDistancia("Distancia máxima: ");
-            Lista<Camino> caminos = mapa.caminosMasCortosHastaDistancia(locacion1, locacion2, distanciaMaxima);
+            Lista<Camino> caminos = mapa.caminosHastaDistancia(locacion1, locacion2, distanciaMaxima);
 
             if (!caminos.esVacia()) {
                 Camino camino;
