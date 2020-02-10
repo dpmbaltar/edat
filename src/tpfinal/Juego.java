@@ -112,7 +112,8 @@ public class Juego {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        Mapa m = new Mapa();
+        //TODO: Quitar fragmento de prueba
+        /*Mapa m = new Mapa();
         m.insertarVertice("A");
         m.insertarVertice("B");
         m.insertarVertice("C");
@@ -123,7 +124,7 @@ public class Juego {
         m.insertarArco("B", "D", 7);
         m.insertarArco("C", "D", 2);
         System.out.println(m.caminoMasCortoKms("A", "D"));//FIXME: sacar linea
-        System.exit(0);
+        System.exit(0);*/
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
@@ -1169,7 +1170,7 @@ public class Juego {
                     mostrarLocacionesAdyacentes();
                     break;
                 case 5:
-                    //TODO: mostrarCaminoMasCorto();
+                    mostrarCaminoMasCortoKms();
                     break;
                 case 6:
                     mostrarCaminoMasDirecto();
@@ -1366,6 +1367,41 @@ public class Juego {
                 log(String.format("Se consultaron las locaciones adyacentes a \"%s\"", locacion));
             } else {
                 System.out.println(String.format("No existe la locación \"%s\"", locacion));
+            }
+        } else {
+            System.out.println("No existen locaciones para consultar");
+        }
+    }
+
+    /**
+     * J. Consultas sobre locaciones:
+     * Dados dos nombres de locaciones A y B:
+     * i. Obtener el camino para ir desde A hasta B de menor distancia en km.
+     */
+    public void mostrarCaminoMasCortoKms() {
+        titulo("Mostrar camino más corto (en kms)");
+
+        if (!mapa.esVacio()) {
+            System.out.print("Origen - ");
+            String locacion1 = leerLocacion();
+            System.out.print("Destino - ");
+            String locacion2 = leerLocacion();
+            Camino caminoMasCortoKms = mapa.caminoMasCortoKms(locacion1, locacion2);
+            Lista<String> locaciones = caminoMasCortoKms.getLocaciones();
+            int distancia = caminoMasCortoKms.getDistancia();
+            
+            System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es de %d kms:",
+                    locacion1, locacion2, distancia));
+
+            if (!locaciones.esVacia()) {
+                for (int i = 1; i <= locaciones.longitud(); i++) {
+                    System.out.println(i + ": " + locaciones.recuperar(i));
+                }
+
+                log(String.format("Se consultó el camino más corto entre \"%s\" y \"%s\"", locacion1, locacion2));
+            } else {
+                System.out.println(String.format("Alguna de las locaciones no existe, \"%s\" y/o \"%s\"",
+                        locacion1, locacion2));
             }
         } else {
             System.out.println("No existen locaciones para consultar");

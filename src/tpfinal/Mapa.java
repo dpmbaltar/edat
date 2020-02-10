@@ -166,10 +166,10 @@ public class Mapa extends Grafo<String, Integer> {
      * @param destino el destino
      * @return el camino más corto
      */
-    public Lista<String> caminoMasCortoKms(String origen, String destino) {
-        Lista<String> camino = new Lista<>();
+    public Camino caminoMasCortoKms(String origen, String destino) {
+        Camino camino = new Camino();
         NodoVertice<String, Integer> vertice = buscarVertice(origen);
-        //TODO: caminoMasCortoKms() realizar pruebas y adaptar impl.
+
         if (vertice != null && destino != null) {
             int distancia, distanciaAdy;
             int posicionPredecesorAdy;
@@ -240,15 +240,19 @@ public class Mapa extends Grafo<String, Integer> {
 
             // Obtener camino
             if (verticeDestino != null) {
-                camino.insertar(verticeDestino.getElemento(), 1);
+                distancia = 0;
+                visitados = camino.getLocaciones();
+                visitados.insertar(verticeDestino.getElemento(), 1);
                 adyacente = verticeDestino.getPrimerAdyacente();
 
                 while (adyacente != null) {
                     if (adyacente.getVertice() != null) {
-                        camino.insertar(adyacente.getVertice().getElemento(), 1);
+                        distancia += adyacente.getEtiqueta();
+                        visitados.insertar(adyacente.getVertice().getElemento(), 1);
                         adyacente = adyacente.getVertice().getPrimerAdyacente();
                     } else {
                         adyacente = null;
+                        camino.setDistancia(distancia);
                     }
                 }
             }
