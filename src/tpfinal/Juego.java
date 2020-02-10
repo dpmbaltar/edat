@@ -118,13 +118,20 @@ public class Juego {
         m.insertarVertice("B");
         m.insertarVertice("C");
         m.insertarVertice("D");
+        m.insertarVertice("E");
+        m.insertarVertice("F");
+        m.insertarVertice("G");
         m.insertarArco("A", "B", 2);
         m.insertarArco("A", "C", 4);
-        m.insertarArco("B", "C", 1);
-        m.insertarArco("B", "D", 7);
-        m.insertarArco("C", "D", 2);
-        System.out.println(m.caminoMasCortoKms("A", "D"));//FIXME: sacar linea
+        m.insertarArco("A", "D", 1);
+        m.insertarArco("B", "E", 1);
+        m.insertarArco("D", "G", 7);
+        m.insertarArco("E", "F", 2);
+        m.insertarArco("G", "F", 2);
+        m.insertarArco("C", "F", 2);
+        System.out.println(m.caminoMasCortoExcepto("A", "A", "A"));
         System.exit(0);*/
+        System.out.println(mapa.caminoMasCortoExcepto("Roca Cuervo", "El Mar Congelado", "El Mar Congelado"));
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
@@ -1179,7 +1186,7 @@ public class Juego {
                     //TODO: mostrarCaminoHastaDistancia();
                     break;
                 case 8:
-                    //TODO: mostrarCaminoSinLocacion();
+                    mostrarCaminoSinLocacion();
                     break;
             }
 
@@ -1389,7 +1396,7 @@ public class Juego {
             Camino caminoMasCortoKms = mapa.caminoMasCortoKms(locacion1, locacion2);
             Lista<String> locaciones = caminoMasCortoKms.getLocaciones();
             int distancia = caminoMasCortoKms.getDistancia();
-            
+
             System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es de %d kms:",
                     locacion1, locacion2, distancia));
 
@@ -1438,11 +1445,56 @@ public class Juego {
         }
     }
 
-    private static String leerLocacion() {
-        return Funciones.leerFrase("Nombre de locación: ",
+    /**
+     * J. Consultas sobre locaciones:
+     * Dados dos nombres de locaciones A y B:
+     * iv. Obtener el camino para llegar de A a B que pase por menos locaciones y que no pase por una locación C dada.
+     */
+    private void mostrarCaminoSinLocacion() {
+        titulo("Mostrar camino más directo sin pasar por una locación");
+
+        if (!mapa.esVacio()) {
+            String locacion1, locacion2, locacion3 = null;
+            Lista<String> camino;
+
+            do {
+                if (locacion3 != null) {
+                    System.out.println("La locación evitada no debe ser la de origen ni destino");
+                }
+
+                locacion1 = leerLocacion("Locación origen: ");
+                locacion2 = leerLocacion("Locación destino: ");
+                locacion3 = leerLocacion("Locación evitada: ");
+            } while (locacion1.equals(locacion3) || locacion2.equals(locacion3));
+
+            // Obtener camino
+            camino = mapa.caminoMasCortoExcepto(locacion1, locacion2, locacion3);
+
+            if (!camino.esVacia()) {
+                for (int i = 1; i <= camino.longitud(); i++) {
+                    System.out.println(i + ": " + camino.recuperar(i));
+                }
+
+                log(String.format("Se consultó el camino más directo entre \"%s\" y \"%s\" y sin pasar por \"%s\"",
+                        locacion1, locacion2, locacion3));
+            } else {
+                System.out.println(String.format("Alguna de las locaciones no existe, \"%s\", \"%s\" y/o \"%s\"",
+                        locacion1, locacion2, locacion3));
+            }
+        } else {
+            System.out.println("No existen locaciones para consultar");
+        }
+    }
+
+    private static String leerLocacion(String etiqueta) {
+        return Funciones.leerFrase(etiqueta != null ? etiqueta : "Nombre de locación: ",
                 "El nombre de locación ingresado no es válido."
                         + "\r\nDebe ser una frase alfanumérica de 2 a 50 caracteres.\r\nReintentar: ",
                 2, 30);
+    }
+
+    private static String leerLocacion() {
+        return leerLocacion(null);
     }
 
     private static int leerDistancia() {
