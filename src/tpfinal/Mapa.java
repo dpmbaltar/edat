@@ -62,8 +62,9 @@ public class Mapa extends Grafo<String, Integer> {
     public boolean modificarVertice(String locacion, String nuevaLocacion) {
         boolean modificado = false;
         NodoVertice<String, Integer> vertice = buscarVertice(locacion);
+        NodoVertice<String, Integer> verticeNuevaLocacion = buscarVertice(nuevaLocacion);
 
-        if (vertice != null) {
+        if (vertice != null && verticeNuevaLocacion == null) {
             vertice.setElemento(nuevaLocacion);
             modificado = true;
         }
@@ -170,46 +171,57 @@ public class Mapa extends Grafo<String, Integer> {
         NodoVertice<String, Integer> vertice = buscarVertice(origen);
         //TODO: caminoMasCortoKms() realizar pruebas y adaptar impl.
         if (vertice != null && destino != null) {
-
-            // Agregar adyacente temporal
-            // Apunta al nodo predecesor con menor distancia en kms
-            NodoVertice<String, Integer> v = inicio;
-            while (v != null) {
-                v.setPrimerAdyacente(new NodoAdyacente<>(null, v.getPrimerAdyacente(), null));
-                v = v.getSiguienteVertice();
-            }
-
+            int distancia, distanciaAdy;
+            int posicionPredecesorAdy;
+            NodoVertice<String, Integer> predecesor, predecesorAdy;
             NodoVertice<String, Integer> verticeDestino = null;
             NodoAdyacente<String, Integer> adyacente;
-            Cola<NodoVertice<String, Integer>> cola = new Cola<>();
-            Lista<NodoVertice<String, Integer>> visitados = new Lista<>();
-            cola.poner(vertice);
-            visitados.insertar(vertice, visitados.longitud() + 1);
-            vertice.getPrimerAdyacente().setEtiqueta(0);
 
+            // Estructuras auxiliares
+            Lista<String> visitados = new Lista<>();
+            Lista<NodoVertice<String, Integer>> predecesores = new Lista<>();
+            Cola<NodoVertice<String, Integer>> cola = new Cola<>();
+
+            // Crear origen con predecesor nulo y distancia 0, y luego visitarlo
+            predecesor = new NodoVertice<>(vertice.getElemento());
+            predecesor.setPrimerAdyacente(new NodoAdyacente<>(null, null, 0));
+            predecesores.insertar(predecesor, 1);
+            cola.poner(vertice);
+
+            // Visitar elementos no visitados
             while (!cola.esVacia()) {
                 vertice = cola.obtenerFrente();
                 cola.sacar();
+                visitados.insertar(vertice.getElemento(), visitados.longitud() + 1);
                 adyacente = vertice.getPrimerAdyacente();
-                int distancia = adyacente.getEtiqueta();
-                adyacente = adyacente.getSiguienteAdyacente();
+                predecesor = predecesores.recuperar(predecesores.localizar(vertice));
+                distancia = predecesor.getPrimerAdyacente().getEtiqueta();
 
                 while (adyacente != null) {
-                    if (visitados.localizar(adyacente.getVertice()) < 0) {
-                        visitados.insertar(vertice, visitados.longitud() + 1);
-                        cola.poner(adyacente.getVertice());
-                        int distanciaTotal = adyacente.getEtiqueta() + distancia;
+                    if (visitados.localizar(adyacente.getVertice().getElemento()) < 0) {
+                        distanciaAdy = adyacente.getEtiqueta() + distancia;
+                        posicionPredecesorAdy = predecesores.localizar(adyacente.getVertice());
+
+                        if (posicionPredecesorAdy < 0) {
+                            predecesorAdy = new NodoVertice<>(adyacente.getVertice().getElemento());
+                            predecesorAdy.setPrimerAdyacente(new NodoAdyacente<>(predecesor, null, distanciaAdy));
+                            predecesores.insertar(predecesorAdy, predecesores.longitud() + 1);
+                            cola.poner(adyacente.getVertice());
+                        } else {
+                            predecesorAdy = predecesores.recuperar(posicionPredecesorAdy);
+
+                        }
 
                         // Actualizar predecesor y distancia si es necesario
-                        if (adyacente.getVertice().getPrimerAdyacente().getEtiqueta() == null
-                                || adyacente.getVertice().getPrimerAdyacente().getEtiqueta() > distanciaTotal) {
-                            adyacente.getVertice().getPrimerAdyacente().setVertice(vertice);
-                            adyacente.getVertice().getPrimerAdyacente().setEtiqueta(distanciaTotal);
+                        if (/*predecesorAdy.getPrimerAdyacente().getEtiqueta() == null
+                                    || */(predecesorAdy.getPrimerAdyacente().getEtiqueta() + adyacente.getEtiqueta()) < distancia) {
+                            predecesor.getPrimerAdyacente().setVertice(predecesorAdy);
+                            predecesor.getPrimerAdyacente().setEtiqueta((predecesorAdy.getPrimerAdyacente().getEtiqueta() + adyacente.getEtiqueta()));
                         }
 
                         // Obtener vertice destino
                         if (adyacente.getVertice().getElemento().equals(destino)) {
-                            verticeDestino = adyacente.getVertice();
+                            verticeDestino = predecesorAdy;
                         }
                     }
 
@@ -217,10 +229,20 @@ public class Mapa extends Grafo<String, Integer> {
                 }
             }
 
+            //TODO: Quitar fragmento de prueba
+            for (int i = 1; i <= predecesores.longitud(); i++) {
+                System.out.print(predecesores.recuperar(i).getElemento() + ":");
+                if (predecesores.recuperar(i).getPrimerAdyacente().getVertice() != null)
+                    System.out.print(predecesores.recuperar(i).getPrimerAdyacente().getVertice().getElemento() + "=");
+                else System.out.print(" =");
+                System.out.println(predecesores.recuperar(i).getPrimerAdyacente().getEtiqueta());
+            }
+
             // Obtener camino
             if (verticeDestino != null) {
                 camino.insertar(verticeDestino.getElemento(), 1);
                 adyacente = verticeDestino.getPrimerAdyacente();
+
                 while (adyacente != null) {
                     if (adyacente.getVertice() != null) {
                         camino.insertar(adyacente.getVertice().getElemento(), 1);
@@ -230,20 +252,13 @@ public class Mapa extends Grafo<String, Integer> {
                     }
                 }
             }
-
-            // Sacar adyacente temporal
-            v = inicio;
-            while (v != null) {
-                v.setPrimerAdyacente(v.getPrimerAdyacente().getSiguienteAdyacente());
-                v = v.getSiguienteVertice();
-            }
         }
 
         return camino;
     }
 
     /**
-     * Devuelve la representación del mapa en formato CSV.
+     * Devuelve la representación del mapa en formato CSV (de 7 columnas).
      *
      * @return el mapa en CSV
      */

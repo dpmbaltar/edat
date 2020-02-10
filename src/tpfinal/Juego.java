@@ -95,17 +95,6 @@ public class Juego {
         inventario = new Inventario();
         mapa = new Mapa();
         ranking = new Ranking();
-        /*mapa.insertarVertice("A");
-        mapa.insertarVertice("B");
-        mapa.insertarVertice("C");
-        mapa.insertarVertice("D");
-        mapa.insertarArco("A", "B", 5);
-        mapa.insertarArco("A", "C", 2);
-        mapa.insertarArco("B", "D", 4);
-        mapa.insertarArco("C", "D", 1);
-        mapa.insertarArco("B", "C", 1);
-        System.out.println(mapa.caminoMasCortoKms("A", "D"));
-        System.exit(0);*/
     }
 
     /**
@@ -123,7 +112,18 @@ public class Juego {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        System.out.println(mapa.caminoMasCortoKms("Roca Cuervo", "La Llanura de Piedras"));//FIXME: sacar linea
+        Mapa m = new Mapa();
+        m.insertarVertice("A");
+        m.insertarVertice("B");
+        m.insertarVertice("C");
+        m.insertarVertice("D");
+        m.insertarArco("A", "B", 2);
+        m.insertarArco("A", "C", 4);
+        m.insertarArco("B", "C", 1);
+        m.insertarArco("B", "D", 7);
+        m.insertarArco("C", "D", 2);
+        System.out.println(m.caminoMasCortoKms("A", "D"));//FIXME: sacar linea
+        System.exit(0);
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
