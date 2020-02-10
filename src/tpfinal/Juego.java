@@ -1157,7 +1157,7 @@ public class Juego {
             opcion(4, "Mostrar locaciones adyacentes");
             opcion(5, "Mostrar camino más corto (en kms)");
             opcion(6, "Mostrar camino más directo");
-            opcion(7, "Mostrar camino con distancia máxima");
+            opcion(7, "Mostrar caminos con distancia máxima");
             opcion(8, "Mostrar camino más directo sin pasar por una locación");
             opcion(0, "Volver");
 
@@ -1183,7 +1183,7 @@ public class Juego {
                     mostrarCaminoMasDirecto();
                     break;
                 case 7:
-                    //TODO: mostrarCaminoHastaDistancia();
+                    mostrarCaminosHastaDistancia();
                     break;
                 case 8:
                     mostrarCaminoSinLocacion();
@@ -1389,10 +1389,8 @@ public class Juego {
         titulo("Mostrar camino más corto (en kms)");
 
         if (!mapa.esVacio()) {
-            System.out.print("Origen - ");
-            String locacion1 = leerLocacion();
-            System.out.print("Destino - ");
-            String locacion2 = leerLocacion();
+            String locacion1 = leerLocacion("Locación origen: ");
+            String locacion2 = leerLocacion("Locación destino: ");
             Camino caminoMasCortoKms = mapa.caminoMasCortoKms(locacion1, locacion2);
             Lista<String> locaciones = caminoMasCortoKms.getLocaciones();
             int distancia = caminoMasCortoKms.getDistancia();
@@ -1424,10 +1422,8 @@ public class Juego {
         titulo("Mostrar camino más directo entre locaciones");
 
         if (!mapa.esVacio()) {
-            System.out.print("Origen - ");
-            String locacion1 = leerLocacion();
-            System.out.print("Destino - ");
-            String locacion2 = leerLocacion();
+            String locacion1 = leerLocacion("Locación origen: ");
+            String locacion2 = leerLocacion("Locación destino: ");
             Lista<String> caminoMasDirecto = mapa.caminoMasCorto(locacion1, locacion2);
 
             if (!caminoMasDirecto.esVacia()) {
@@ -1448,9 +1444,50 @@ public class Juego {
     /**
      * J. Consultas sobre locaciones:
      * Dados dos nombres de locaciones A y B:
+     * iii. Obtener todos los caminos para llegar de A a B con menos de una cantidad X de km dada.
+     */
+    public void mostrarCaminosHastaDistancia() {
+        titulo("Mostrar caminos con distancia máxima");
+
+        if (!mapa.esVacio()) {
+            String locacion1 = leerLocacion("Locación origen: ");
+            String locacion2 = leerLocacion("Locación destino: ");
+            int distanciaMaxima = leerDistancia("Distancia máxima: ");
+            Lista<Camino> caminos = mapa.caminosMasCortosHastaDistancia(locacion1, locacion2, distanciaMaxima);
+
+            if (!caminos.esVacia()) {
+                Camino camino;
+                Lista<String> locaciones;
+                System.out.println("Se encontraron los siguientes caminos:");
+
+                for (int i = 1; i <= caminos.longitud(); i++) {
+                    camino = caminos.recuperar(i);
+                    locaciones = camino.getLocaciones();
+                    System.out.println(String.format("Camino %d:", i));
+                    System.out.println(String.format("  Distancia: %d", camino.getDistancia()));
+
+                    for (int j = 1; j <= locaciones.longitud(); j++) {
+                        System.out.println(String.format("  Locaciones: %s", locaciones.recuperar(j)));
+                    }
+                }
+
+                log(String.format("Se consultaron los caminos más cortos entre \"%s\" y \"%s\" de hasta %d kms",
+                        locacion1, locacion2, distanciaMaxima));
+            } else {
+                System.out.println(String.format("Alguna de las locaciones no existe, \"%s\" y/o \"%s\"",
+                        locacion1, locacion2));
+            }
+        } else {
+            System.out.println("No existen locaciones para consultar");
+        }
+    }
+
+    /**
+     * J. Consultas sobre locaciones:
+     * Dados dos nombres de locaciones A y B:
      * iv. Obtener el camino para llegar de A a B que pase por menos locaciones y que no pase por una locación C dada.
      */
-    private void mostrarCaminoSinLocacion() {
+    public void mostrarCaminoSinLocacion() {
         titulo("Mostrar camino más directo sin pasar por una locación");
 
         if (!mapa.esVacio()) {
@@ -1497,9 +1534,13 @@ public class Juego {
         return leerLocacion(null);
     }
 
-    private static int leerDistancia() {
-        return Funciones.leerEnteroPositivo("Distancia: ",
+    private static int leerDistancia(String etiqueta) {
+        return Funciones.leerEnteroPositivo(etiqueta != null ? etiqueta : "Distancia: ",
                 "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
+    }
+
+    private static int leerDistancia() {
+        return leerDistancia(null);
     }
 
     /**

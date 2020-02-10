@@ -261,6 +261,12 @@ public class Mapa extends Grafo<String, Integer> {
         return camino;
     }
 
+    public Lista<Camino> caminosMasCortosHastaDistancia(String origen, String destino, int distanciaMaxima) {
+        Lista<Camino> caminos = new Lista<>();
+        //TODO: caminosMasCortosHastaDistancia()
+        return caminos;
+    }
+
     /**
      * Devuelve la representación del mapa en formato CSV (de 7 columnas).
      *
