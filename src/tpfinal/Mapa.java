@@ -229,15 +229,6 @@ public class Mapa extends Grafo<String, Integer> {
                 }
             }
 
-            //TODO: Quitar fragmento de prueba
-            for (int i = 1; i <= predecesores.longitud(); i++) {
-                System.out.print(predecesores.recuperar(i).getElemento() + ":");
-                if (predecesores.recuperar(i).getPrimerAdyacente().getVertice() != null)
-                    System.out.print(predecesores.recuperar(i).getPrimerAdyacente().getVertice().getElemento() + "=");
-                else System.out.print(" =");
-                System.out.println(predecesores.recuperar(i).getPrimerAdyacente().getEtiqueta());
-            }
-
             // Obtener camino
             if (verticeDestino != null) {
                 distancia = 0;
@@ -293,7 +284,7 @@ public class Mapa extends Grafo<String, Integer> {
 
             if (vertice.getElemento().equals(destino)) { // Destino encontrado
                 if (distanciaRecorrida <= distanciaMax) {
-                    caminosValidos.insertar(caminoActual.clone(), caminosValidos.longitud());
+                    caminosValidos.insertar(caminoActual.clone(), caminosValidos.longitud() + 1);
                 }
             } else { // Destino no encontrado; buscar en los adyacentes
                 NodoVertice<String, Integer> verticeAdy;
@@ -306,6 +297,7 @@ public class Mapa extends Grafo<String, Integer> {
                     // Continuar buscando caminos solo cuando no supere la distancia máxima
                     if (distancia <= distanciaMax
                             && locaciones.localizar(verticeAdy.getElemento()) < 0) {
+                        caminoActual.setDistancia(distancia);
                         caminosHastaDistanciaDesde(verticeAdy, destino, distanciaMax, caminoActual, caminosValidos);
                     }
 

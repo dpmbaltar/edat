@@ -112,20 +112,6 @@ public class Juego {
     public void iniciar() {
         System.out.println("************************** Calabozos & Estructuras **************************");
         cargar(ARCHIVO_ESTADO);
-        //TODO: Quitar fragmento de prueba
-        Mapa m = new Mapa();
-        m.insertarVertice("A");
-        m.insertarVertice("B");
-        m.insertarVertice("C");
-        m.insertarVertice("D");
-        m.insertarArco("A", "B", 2);
-        m.insertarArco("A", "C", 4);
-        m.insertarArco("B", "C", 1);
-        m.insertarArco("B", "D", 7);
-        m.insertarArco("C", "D", 2);
-        System.out.println(m.caminosHastaDistancia("A", "D", 7));
-        System.exit(0);
-        System.out.println(mapa.caminoMasCortoExcepto("Roca Cuervo", "El Mar Congelado", "El Mar Congelado"));
         menuPrincipal();
         guardar(ARCHIVO_ESTADO);
     }
@@ -1451,18 +1437,13 @@ public class Juego {
 
             if (!caminos.esVacia()) {
                 Camino camino;
-                Lista<String> locaciones;
                 System.out.println("Se encontraron los siguientes caminos:");
 
                 for (int i = 1; i <= caminos.longitud(); i++) {
                     camino = caminos.recuperar(i);
-                    locaciones = camino.getLocaciones();
                     System.out.println(String.format("Camino %d:", i));
                     System.out.println(String.format("  Distancia: %d", camino.getDistancia()));
-
-                    for (int j = 1; j <= locaciones.longitud(); j++) {
-                        System.out.println(String.format("  Locaciones: %s", locaciones.recuperar(j)));
-                    }
+                    System.out.println(String.format("  Locaciones: %s", camino.getLocaciones()));
                 }
 
                 log(String.format("Se consultaron los caminos más cortos entre \"%s\" y \"%s\" de hasta %d kms",
