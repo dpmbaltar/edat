@@ -171,7 +171,7 @@ public class Mapa extends Grafo<String, Integer> {
         NodoVertice<String, Integer> vertice = buscarVertice(origen);
 
         if (vertice != null && destino != null) {
-            int distancia, distanciaAdy;
+            int distancia, distanciaAdy, distanciaPredAdy;
             int posicionPredecesorAdy;
             NodoVertice<String, Integer> predecesor, predecesorAdy;
             NodoVertice<String, Integer> verticeDestino = null;
@@ -202,6 +202,7 @@ public class Mapa extends Grafo<String, Integer> {
                         distanciaAdy = adyacente.getEtiqueta() + distancia;
                         posicionPredecesorAdy = predecesores.localizar(adyacente.getVertice());
 
+                        // Crear/obtener el vertice auxilar (adyacente, predecesor)
                         if (posicionPredecesorAdy < 0) {
                             predecesorAdy = new NodoVertice<>(adyacente.getVertice().getElemento());
                             predecesorAdy.setPrimerAdyacente(new NodoAdyacente<>(predecesor, null, distanciaAdy));
@@ -209,14 +210,15 @@ public class Mapa extends Grafo<String, Integer> {
                             cola.poner(adyacente.getVertice());
                         } else {
                             predecesorAdy = predecesores.recuperar(posicionPredecesorAdy);
-
                         }
 
+                        // Distancia del adyacente al predecesor
+                        distanciaPredAdy = predecesorAdy.getPrimerAdyacente().getEtiqueta() + adyacente.getEtiqueta();
+
                         // Actualizar predecesor y distancia si es necesario
-                        if (/*predecesorAdy.getPrimerAdyacente().getEtiqueta() == null
-                                    || */(predecesorAdy.getPrimerAdyacente().getEtiqueta() + adyacente.getEtiqueta()) < distancia) {
+                        if (distanciaPredAdy < distancia) {
                             predecesor.getPrimerAdyacente().setVertice(predecesorAdy);
-                            predecesor.getPrimerAdyacente().setEtiqueta((predecesorAdy.getPrimerAdyacente().getEtiqueta() + adyacente.getEtiqueta()));
+                            predecesor.getPrimerAdyacente().setEtiqueta(distanciaPredAdy);
                         }
 
                         // Obtener vertice destino
