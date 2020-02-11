@@ -254,6 +254,14 @@ public class Mapa extends Grafo<String, Integer> {
         return camino;
     }
 
+    /**
+     * Devuelve una lista de caminos desde origen a destino con una distancia máxima dada.
+     *
+     * @param origen el origen
+     * @param destino el destino
+     * @param distanciaMaxima la distancia máxima
+     * @return la lista de caminos
+     */
     public Lista<Camino> caminosHastaDistancia(String origen, String destino, int distanciaMaxima) {
         Lista<Camino> caminos = new Lista<>();
 
