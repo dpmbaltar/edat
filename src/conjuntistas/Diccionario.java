@@ -411,6 +411,45 @@ public class Diccionario<C extends Comparable<C>, E> {
         }
     }
 
+    /**
+     * Devuelve una lista con los elementos del árbol - ordenados por clave de menor a mayor - mientras que la clave se
+     * encuentre dentro del rango mínimo y máximo especificado.
+     *
+     * @param minimo la clave mínimo del rango
+     * @param maximo la clave máximo del rango
+     * @return la lista de elementos
+     */
+    public Lista<E> listarRango(C minimo, C maximo) {
+        Lista<E> lista = new Lista<>();
+
+        if (minimo.compareTo(maximo) <= 0) {
+            listarRango(minimo, maximo, raiz, lista);
+        }
+
+        return lista;
+    }
+
+    private void listarRango(C minimo, C maximo, NodoAVLDicc<C, E> nodo, Lista<E> lista) {
+        if (nodo != null) {
+            C clave = nodo.getClave();
+
+            if (minimo.compareTo(clave) <= 0 && clave.compareTo(maximo) <= 0) {
+                NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+                NodoAVLDicc<C, E> derecho = nodo.getDerecho();
+
+                if (minimo.compareTo(clave) < 0 && izquierdo != null) {
+                    listarRango(minimo, maximo, izquierdo, lista);
+                }
+
+                lista.insertar(nodo.getElemento(), lista.longitud() + 1);
+
+                if (clave.compareTo(maximo) < 0 && derecho != null) {
+                    listarRango(minimo, maximo, derecho, lista);
+                }
+            }
+        }
+    }
+
     @Override
     public Diccionario<C, E> clone() {
         Diccionario<C, E> clon = new Diccionario<>();
