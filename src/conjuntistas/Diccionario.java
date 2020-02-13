@@ -432,21 +432,21 @@ public class Diccionario<C extends Comparable<C>, E> {
     private void listarRango(C minimo, C maximo, NodoAVLDicc<C, E> nodo, Lista<E> lista) {
         if (nodo != null) {
             C clave = nodo.getClave();
+            NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
+            NodoAVLDicc<C, E> derecho = nodo.getDerecho();
+
+            if (minimo.compareTo(clave) < 0 && izquierdo != null) {
+                listarRango(minimo, maximo, izquierdo, lista);
+            }
 
             if (minimo.compareTo(clave) <= 0 && clave.compareTo(maximo) <= 0) {
-                NodoAVLDicc<C, E> izquierdo = nodo.getIzquierdo();
-                NodoAVLDicc<C, E> derecho = nodo.getDerecho();
-
-                if (minimo.compareTo(clave) < 0 && izquierdo != null) {
-                    listarRango(minimo, maximo, izquierdo, lista);
-                }
-
                 lista.insertar(nodo.getElemento(), lista.longitud() + 1);
-
-                if (clave.compareTo(maximo) < 0 && derecho != null) {
-                    listarRango(minimo, maximo, derecho, lista);
-                }
             }
+
+            if (clave.compareTo(maximo) < 0 && derecho != null) {
+                listarRango(minimo, maximo, derecho, lista);
+            }
+
         }
     }
 

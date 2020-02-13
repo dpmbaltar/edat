@@ -460,20 +460,19 @@ public class ArbolAVL<T extends Comparable<T>> {
     private void listarRango(T minimo, T maximo, NodoAVL<T> nodo, Lista<T> lista) {
         if (nodo != null) {
             T elemento = nodo.getElemento();
+            NodoAVL<T> izquierdo = nodo.getIzquierdo();
+            NodoAVL<T> derecho = nodo.getDerecho();
+
+            if (minimo.compareTo(elemento) < 0 && izquierdo != null) {
+                listarRango(minimo, maximo, izquierdo, lista);
+            }
 
             if (minimo.compareTo(elemento) <= 0 && elemento.compareTo(maximo) <= 0) {
-                NodoAVL<T> izquierdo = nodo.getIzquierdo();
-                NodoAVL<T> derecho = nodo.getDerecho();
-
-                if (minimo.compareTo(elemento) < 0 && izquierdo != null) {
-                    listarRango(minimo, maximo, izquierdo, lista);
-                }
-
                 lista.insertar(elemento, lista.longitud() + 1);
+            }
 
-                if (elemento.compareTo(maximo) < 0 && derecho != null) {
-                    listarRango(minimo, maximo, derecho, lista);
-                }
+            if (elemento.compareTo(maximo) < 0 && derecho != null) {
+                listarRango(minimo, maximo, derecho, lista);
             }
         }
     }
