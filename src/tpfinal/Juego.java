@@ -1786,7 +1786,7 @@ public class Juego {
 
     /**
      * K. (*) Consultas generales (considerar utilizar estructuras adicionales):
-     * (*) Mostrar un ranking de los jugadores con más batallas individuales ganadas.
+     * (*) Mostrar un listado de todos los ítems de los que hay sólo uno disponible.
      */
     public void mostrarItemsUltimaDisponibilidad() {
         titulo("Ítems con última disponibilidad");
