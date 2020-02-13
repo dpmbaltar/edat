@@ -21,6 +21,7 @@ public class PruebaDiccionario {
         pruebaVaciar();
         pruebaListarClaves();
         pruebaListarDatos();
+        pruebaListarRango();
         pruebaClonar();
 //        pruebaDiccionario();
     }
@@ -113,6 +114,15 @@ public class PruebaDiccionario {
                 "[Uno, Dos, Tres, Cuatro, Cinco, Seis, Siete, Ocho, Nueve, Diez, Once, Doce, Trece, Catorce, Quince, "
                         + "Dieciseis]")
                 : "Debe listar la secuencia de cadenas \"Uno\", \"Dos\", ..., \"Dieciseis\"";
+    }
+
+    /**
+     * Prueba {@link conjuntistas.Diccionario#listarRango(Comparable, Comparable)}.
+     */
+    public void pruebaListarRango() {
+        Diccionario<Integer, String> dicc = crearDiccionario();
+        assert dicc.listarRango(8, 13).toString().equals("[Ocho, Nueve, Diez, Once, Doce, Trece]")
+              : "Debe listar la secuencia de cadenas asociadas a las claves del 8 al 13 (inclusive)";
     }
 
     /**
