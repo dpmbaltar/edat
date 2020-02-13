@@ -65,11 +65,6 @@ public class Juego {
     private Mapa mapa;
 
     /**
-     * El ranking de jugadores (ordenados por cantidad de victorias de mayor a menor).
-     */
-    private Ranking ranking;
-
-    /**
      * Tabla Hash para generar códigos de ítem únicos.
      */
     private static final TablaHashAbierto<String> codigos = new TablaHashAbierto<>();
@@ -94,7 +89,6 @@ public class Juego {
         items = new Diccionario<>();
         inventario = new Diccionario<>();
         mapa = new Mapa();
-        ranking = new Ranking();
     }
 
     /**
@@ -135,7 +129,6 @@ public class Juego {
 
                         if (jugador != null) {
                             jugadores.insertar(jugador.getUsuario().toLowerCase(), jugador);
-                            ranking.insertar(jugador);
                         }
                         break;
                     case 'L': // Cargar Locación
@@ -460,7 +453,6 @@ public class Juego {
         int dinero = leerDinero();
         Jugador jugador = crearJugadorSegunTipo(tipo, usuario, categoria, dinero);
         jugadores.insertar(usuario.toLowerCase(), jugador);
-        ranking.insertar(jugador);
 
         log(String.format("Se agregó el jugador \"%s\"", usuario));
     }
@@ -477,7 +469,6 @@ public class Juego {
             Jugador jugador = jugadores.obtenerInformacion(usuario);
 
             if (jugadores.eliminar(usuario)) {
-                ranking.eliminar(jugador);
                 log(String.format("Se borró el jugador \"%s\"", usuario));
             } else {
                 log(String.format("Se intentó borrar un jugador inexistente \"%s\"", usuario));
@@ -1641,27 +1632,9 @@ public class Juego {
             String nombreEquipo2 = leerNombreEquipo("Equipo 2: ").toLowerCase();
 
             if (equipos.containsKey(nombreEquipo1) && equipos.containsKey(nombreEquipo2)) {
-                Equipo equipo1 = equipos.get(nombreEquipo1);
-                Equipo equipo2 = equipos.get(nombreEquipo2);
-
                 try {
-                    Batalla batalla = new Batalla(this, equipo1, equipo2);
-                    Lista<Jugador> jugadores1 = equipo1.getJugadores();
-                    Lista<Jugador> jugadores2 = equipo2.getJugadores();
-
-                    // Eliminar jugadores del ranking, ya que posiblemente cambien sus victorias y derrotas
-                    for (int i = 1; i <= Equipo.CANTIDAD_JUGADORES; i++) {
-                        ranking.eliminar(jugadores1.recuperar(i));
-                        ranking.eliminar(jugadores2.recuperar(i));
-                    }
-
+                    Batalla batalla = new Batalla(this, equipos.get(nombreEquipo1), equipos.get(nombreEquipo2));
                     batalla.iniciar();
-
-                    // Actualizar ranking
-                    for (int i = 1; i <= Equipo.CANTIDAD_JUGADORES; i++) {
-                        ranking.insertar(jugadores1.recuperar(i));
-                        ranking.insertar(jugadores2.recuperar(i));
-                    }
                 } catch (IllegalArgumentException e) {
                     System.out.println(e.getMessage());
                 }
@@ -1764,17 +1737,47 @@ public class Juego {
         } while (opcion > 0);
     }
 
+    /**
+     * K. (*) Consultas generales (considerar utilizar estructuras adicionales):
+     * (*) Mostrar un ranking de los jugadores con más batallas individuales ganadas.
+     */
     public void mostrarRankingJugadores() {
         titulo("Ranking de jugadores");
 
-        if (!ranking.esVacio()) {
-            Lista<Jugador> rankingJugadores = ranking.listarJugadores();
-            Jugador jugador;
+        if (!jugadores.esVacio()) {
+            Lista<Jugador> listaJugadores = jugadores.listarDatos();
+            Diccionario<Integer, Jugador> ranking = new Diccionario<>();
+            Jugador jugador, jugadorIgualPuesto;
+            int puntaje;
 
-            for (int i = 1; i <= rankingJugadores.longitud(); i++) {
-                jugador = rankingJugadores.recuperar(i);
-                System.out.println(String.format("%d: %s - Victorias: %d - Derrotas: %d", i, jugador.getUsuario(),
-                        jugador.getVictorias(), jugador.getDerrotas()));
+            // Armar ranking por puntaje, tomando en cuenta las victorias y derrotas:
+            // puntaje = victorias + (victorias - derrotas)
+            for (int i = 1; i <= listaJugadores.longitud(); i++) {
+                jugador = listaJugadores.recuperar(i);
+                puntaje = jugador.getVictorias() + (jugador.getVictorias() - jugador.getDerrotas());
+                jugador.setSiguienteIgualPuesto(null);
+                jugadorIgualPuesto = ranking.obtenerInformacion(puntaje);
+
+                if (jugadorIgualPuesto == null) {
+                    ranking.insertar(puntaje, jugador);
+                } else if (!jugador.equals(jugadorIgualPuesto)) {
+                    jugador.setSiguienteIgualPuesto(jugadorIgualPuesto.getSiguienteIgualPuesto());
+                    jugadorIgualPuesto.setSiguienteIgualPuesto(jugador);
+                }
+            }
+
+            listaJugadores = ranking.listarDatos();
+            int puesto = 1;
+
+            // Mostrar ranking
+            for (int i = listaJugadores.longitud(); i >= 1; i--) {
+                jugador = listaJugadores.recuperar(i);
+                while (jugador != null) { // Mostrar jugadores de igual puntaje
+                    System.out.println(String.format("%d: %s - Victorias: %d - Derrotas: %d", puesto,
+                            jugador.getUsuario(), jugador.getVictorias(), jugador.getDerrotas()));
+                    jugador = jugador.getSiguienteIgualPuesto();
+                    puesto++;
+                }
             }
         } else {
             System.out.println("No existen jugadores para consultar ranking");

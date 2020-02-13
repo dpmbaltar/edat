@@ -62,6 +62,11 @@ public class Jugador implements Comparable<Jugador> {
     private boolean esperando;
 
     /**
+     * Jugador de igual puesto en el ranking de jugadores.
+     */
+    private Jugador siguienteIgualPuesto;
+
+    /**
      * Constructor con nombre de usuario, categoría y dinero.
      *
      * @param usuario el nombre de usuario
@@ -259,6 +264,24 @@ public class Jugador implements Comparable<Jugador> {
      */
     public void setEsperando(boolean esperando) {
         this.esperando = esperando;
+    }
+
+    /**
+     * Devuelve el siguiente jugador de igual puesto en el ranking.
+     *
+     * @return el jugador siguiente
+     */
+    public Jugador getSiguienteIgualPuesto() {
+        return siguienteIgualPuesto;
+    }
+
+    /**
+     * Establece el siguiente jugador de igual puesto en el ranking.
+     *
+     * @param siguienteIgualPuesto el jugador siguiente
+     */
+    public void setSiguienteIgualPuesto(Jugador siguienteIgualPuesto) {
+        this.siguienteIgualPuesto = siguienteIgualPuesto;
     }
 
     /**
