@@ -44,6 +44,11 @@ public class Item implements Comparable<Item> {
     private int cantidadDisponible;
 
     /**
+     * Siguiente ítem asociado por precio.
+     */
+    private Item siguienteIgualPrecio;
+
+    /**
      * Constructor con nombre, precio, ataque, defensa y cantidad.
      *
      * @param codigo el código del ítem
@@ -188,6 +193,24 @@ public class Item implements Comparable<Item> {
      */
     public void setCantidadDisponible(int cantidadDisponible) {
         this.cantidadDisponible = cantidadDisponible;
+    }
+
+    /**
+     * Devuelve el siguiente ítem asociado por precio.
+     *
+     * @return el siguiente ítem
+     */
+    public Item getSiguienteIgualPrecio() {
+        return siguienteIgualPrecio;
+    }
+
+    /**
+     * Establece el siguiente ítem asociado por precio.
+     *
+     * @param siguienteIgualPrecio el siguiente ítem
+     */
+    public void setSiguienteIgualPrecio(Item siguienteIgualPrecio) {
+        this.siguienteIgualPrecio = siguienteIgualPrecio;
     }
 
     /**

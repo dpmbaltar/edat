@@ -57,7 +57,7 @@ public class Juego {
     /**
      * El inventario de ítems para la venta (ordenados por precio).
      */
-    private Inventario inventario;
+    private Diccionario<Integer, Item> inventario;
 
     /**
      * El mapa del juego (grafo etiquetado extendido con elementos tipo String y etiquetas tipo Integer).
@@ -92,7 +92,7 @@ public class Juego {
         jugadores = new Diccionario<>();
         esperando = new ColaPrioridad<>();
         items = new Diccionario<>();
-        inventario = new Inventario();
+        inventario = new Diccionario<>();
         mapa = new Mapa();
         ranking = new Ranking();
     }
@@ -128,12 +128,7 @@ public class Juego {
             while (linea != null && !linea.isEmpty()) {
                 switch (linea.charAt(0)) {
                     case 'I': // Cargar Ítem
-                        Item item = crearItemDesdeCadena(linea.substring(2));
-                        items.insertar(item.getCodigo(), item);
-
-                        if (item.getCantidadDisponible() > 0) {
-                            inventario.insertar(item);
-                        }
+                        insertarItem(crearItemDesdeCadena(linea.substring(2)));
                         break;
                     case 'J': // Cargar Jugador
                         Jugador jugador = crearJugadorDesdeCadena(linea.substring(2));
@@ -816,6 +811,65 @@ public class Juego {
         } while (opcion > 0);
     }
 
+    private boolean insertarItem(Item item) {
+        Item itemSiguiente = inventario.obtenerInformacion(item.getPrecio());
+
+        // Agregar al inventario de ítems agrupados por precio
+        if (itemSiguiente == null) {
+            inventario.insertar(item.getPrecio(), item);
+        } else {
+            item.setSiguienteIgualPrecio(itemSiguiente.getSiguienteIgualPrecio());
+            itemSiguiente.setSiguienteIgualPrecio(item);
+        }
+
+        return items.insertar(item.getCodigo(), item);
+    }
+
+    private boolean eliminarItem(Item item) {
+        Item itemSiguiente = inventario.obtenerInformacion(item.getPrecio());
+
+        // Quitar del inventario de ítems agrupados por precio
+        if (itemSiguiente != null) {
+            if (item.equals(itemSiguiente)) { // Es el primero del grupo de igual precio
+                inventario.eliminar(item.getPrecio());
+                itemSiguiente = itemSiguiente.getSiguienteIgualPrecio();
+
+                // Si tenía ítems asociados por precio, deben quedar en el inventario
+                if (itemSiguiente != null) {
+                    inventario.insertar(itemSiguiente.getPrecio(), itemSiguiente);
+                }
+            } else { // El ítem esta asociado a otro de igual precio
+                Item itemAnterior = itemSiguiente;
+                itemSiguiente = itemSiguiente.getSiguienteIgualPrecio();
+                boolean itemBorrado = false;
+
+                while (itemSiguiente != null && !itemBorrado) {
+                    if (itemSiguiente.equals(item)) {
+                        itemAnterior.setSiguienteIgualPrecio(itemSiguiente.getSiguienteIgualPrecio());
+                        itemBorrado = true;
+                    }
+                }
+            }
+        }
+
+        // Borrar ítem del inventario de los jugadores
+        Lista<Jugador> listaJugadores = jugadores.listarDatos();
+        Lista<Item> listaItems;
+        int posicionItem = -1;
+
+        for (int i = 1; i <= listaJugadores.longitud(); i++) {
+            listaItems = listaJugadores.recuperar(i).getItems();
+            posicionItem = listaItems.localizar(item);
+
+            do {
+                listaItems.eliminar(posicionItem);
+                posicionItem = listaItems.localizar(item);
+            } while (posicionItem > -1);
+        }
+
+        return items.eliminar(item.getCodigo());
+    }
+
     /**
      * B. ABM de ítems:
      * Agregar ítem.
@@ -830,8 +884,7 @@ public class Juego {
         int defensa = leerDefensa();
         int cantidad = leerDisponibilidad();
         Item item = new Item(codigo, nombre, precio, ataque, defensa, cantidad, cantidad);
-        items.insertar(codigo, item);
-        inventario.insertar(item);
+        insertarItem(item);
 
         log(String.format("Se agregó el ítem \"%s\" (%s)", nombre, codigo));
     }
@@ -846,23 +899,9 @@ public class Juego {
         if (!items.esVacio()) {
             String codigo = leerCodigoItem().toUpperCase();
             Item item = items.obtenerInformacion(codigo);
-            boolean borrado = items.eliminar(codigo) && inventario.eliminar(item);
+            boolean borrado = eliminarItem(item);
 
             if (borrado) {
-                Lista<Jugador> listaJugadores = jugadores.listarDatos();
-                Lista<Item> listaItems;
-                int posicionItem = -1;
-
-                for (int i = 1; i <= listaJugadores.longitud(); i++) {
-                    listaItems = listaJugadores.recuperar(i).getItems();
-                    posicionItem = listaItems.localizar(item);
-
-                    do {
-                        listaItems.eliminar(posicionItem);
-                        posicionItem = listaItems.localizar(item);
-                    } while (posicionItem > -1);
-                }
-
                 log(String.format("Se borró el ítem \"%s\"", codigo));
             } else {
                 log(String.format("Se intentó borrar un ítem inexistente \"%s\"", codigo));
@@ -920,8 +959,8 @@ public class Juego {
                     System.out.println("Precio actual: " + precioAnterior);
                     int precioNuevo = leerPrecio();
                     item.setPrecio(precioNuevo);
-                    inventario.eliminar(item);
-                    inventario.insertar(item);
+                    eliminarItem(item);
+                    insertarItem(item);
 
                     log(String.format("Se modificó el precio del ítem \"%s\" de %s a %s", item.getNombre(),
                             formDinero(precioAnterior), formDinero(precioNuevo)));
@@ -993,7 +1032,7 @@ public class Juego {
             if (jugadores.existeClave(usuario)) {
                 Jugador jugador = jugadores.obtenerInformacion(usuario);
                 int dinero = jugador.getDinero();
-                mostrarItemsParaComprar(jugador, inventario.listarRangoPorPrecio(0, dinero));
+                mostrarItemsParaComprar(jugador, inventario.listarRango(0, dinero));
             } else {
                 System.out.println("No existen jugadores para consultar");
             }
@@ -1015,7 +1054,7 @@ public class Juego {
             int minimo = leerDinero();
             System.out.print("Máximo ");
             int maximo = leerDinero();
-            Lista<Item> itemsPosibles = inventario.listarRangoPorPrecio(minimo, maximo);
+            Lista<Item> itemsPosibles = inventario.listarRango(minimo, maximo);
             Item item;
 
             for (int i = 1; i <= itemsPosibles.longitud(); i++) {
@@ -1048,10 +1087,6 @@ public class Juego {
 
     private void comprarItem(Jugador jugador, Item item) {
         if (jugador.comprarItem(item)) {
-            if (item.getCantidadDisponible() == 0) {
-                inventario.eliminar(item);
-            }
-
             log(String.format("El jugador \"%s\" compró \"%s\"", jugador.getUsuario(), item.getNombre()));
         } else {
             System.out.println(String.format("No hay disponibilidad para comprar el ítem %s", item.getNombre()));
@@ -1754,12 +1789,14 @@ public class Juego {
         titulo("Ítems con última disponibilidad");
 
         if (!inventario.esVacio()) {
-            Lista<Item> ultimosDisponibles = inventario.listarUltimosDisponibles();
+            Lista<Item> ultimosDisponibles = inventario.listarDatos();
             Item item;
 
             for (int i = 1; i <= ultimosDisponibles.longitud(); i++) {
                 item = ultimosDisponibles.recuperar(i);
-                System.out.println(String.format("%d: %s", i, formItem(item)));
+                if (item.getCantidadDisponible() == 1) {
+                    System.out.println(String.format("%d: %s", i, formItem(item)));
+                }
             }
 
             log("Se consultaron ítems con última disponibilidad");
