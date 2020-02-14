@@ -17,11 +17,11 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
      *
      * @param origen el origen
      * @param destino el destino
-     * @param distanciaMaxima la longitud máxima
-     * @return la lista de caminos
+     * @param longitudMaxima la longitud numérica máxima
+     * @return la lista de lista de elementos
      */
-    public Lista<Camino> caminosHastaDistancia(T origen, T destino, double distanciaMaxima) {
-        Lista<Camino> caminos = new Lista<>();
+    public Lista<Lista<String>> caminosHastaLongitud(T origen, T destino, double longitudMaxima) {
+        Lista<Lista<String>> caminos = new Lista<>();
 
         // Evitar buscar caminos de origen igual al destino
         if (!origen.equals(destino)) {
@@ -30,19 +30,19 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
 
             // Proceder a buscar sólo si existe el origen y destino
             if (verticeOrigen != null && verticeDestino != null) {
-                caminosHastaDistanciaDesde(verticeOrigen, destino, distanciaMaxima, new Camino(), caminos);
+                caminosHastaLongitudDesde(verticeOrigen, destino, longitudMaxima, new Camino(), caminos);
             }
         }
 
         return caminos;
     }
 
-    private void caminosHastaDistanciaDesde(
+    private void caminosHastaLongitudDesde(
             NodoVertice<T, Double> vertice,
             T destino,
             double distanciaMax,
             Camino caminoActual,
-            Lista<Camino> caminosValidos) {
+            Lista<Lista<String>> caminosValidos) {
         Lista<T> elementosRecorridos = caminoActual.getElementos();
         double distanciaRecorrida = caminoActual.getLongitud();
         double distancia;
@@ -52,7 +52,7 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
 
             if (vertice.getElemento().equals(destino)) { // Destino encontrado
                 if (distanciaRecorrida <= distanciaMax) {
-                    caminosValidos.insertar(caminoActual.clone(), caminosValidos.longitud() + 1);
+                    caminosValidos.insertar(caminoActual.getElementos().clone(), caminosValidos.longitud() + 1);
                 }
             } else { // Destino no encontrado; buscar en los adyacentes
                 NodoVertice<T, Double> verticeAdy;
@@ -66,7 +66,7 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
                     if (distancia <= distanciaMax
                             && elementosRecorridos.localizar(verticeAdy.getElemento()) < 0) {
                         caminoActual.setLongitud(distancia);
-                        caminosHastaDistanciaDesde(verticeAdy, destino, distanciaMax, caminoActual, caminosValidos);
+                        caminosHastaLongitudDesde(verticeAdy, destino, distanciaMax, caminoActual, caminosValidos);
                     }
 
                     adyacente = adyacente.getSiguienteAdyacente();

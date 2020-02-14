@@ -1472,17 +1472,15 @@ public class Juego {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
             double distanciaMaxima = leerDistancia("Distancia máxima: ");
-            Lista<Camino> caminos = mapa.caminosHastaDistancia(locacion1, locacion2, distanciaMaxima);
+            Lista<Lista<String>> caminos = mapa.caminosHastaLongitud(locacion1, locacion2, distanciaMaxima);
 
             if (!caminos.esVacia()) {
-                Camino camino;
+                Lista<String> camino;
                 System.out.println("Se encontraron los siguientes caminos:");
 
                 for (int i = 1; i <= caminos.longitud(); i++) {
                     camino = caminos.recuperar(i);
-                    System.out.println(String.format("Camino %d:", i));
-                    System.out.println(String.format("  Distancia: %.f", camino.getLongitud()));
-                    System.out.println(String.format("  Locaciones: %s", camino.getElementos()));
+                    System.out.println(String.format("Camino %d: %s", i, camino));
                 }
 
                 log(String.format("Se consultaron los caminos más cortos entre \"%s\" y \"%s\" de hasta %.0f kms",
