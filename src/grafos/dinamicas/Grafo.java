@@ -12,7 +12,7 @@ import utiles.Valor;
  * @param <T> el tipo de los elementos
  * @param <E> el tipo de las etiquetas
  */
-public class Grafo<T, E extends Comparable<E>> {
+public class Grafo<T, E> {
 
     /**
      * El vértice de inicio del grafo.
@@ -662,6 +662,58 @@ public class Grafo<T, E extends Comparable<E>> {
                 }
             }
         }
+    }
+
+    /**
+     * Devuelve una lista con los elementos adyacentes a un elemento dado.
+     *
+     * @param elemento el vertice
+     * @return la lista de elementos adyacentes
+     */
+    public Lista<T> listarVertices() {
+        Lista<T> vertices = new Lista<>();
+        NodoVertice<T, E> vertice = inicio;
+
+        while (vertice != null) {
+            vertices.insertar(vertice.getElemento(), vertices.longitud() + 1);
+            vertice = vertice.getSiguienteVertice();
+        }
+
+        return vertices;
+    }
+
+    /**
+     * Devuelve una lista con los elementos adyacentes a un elemento dado.
+     *
+     * @param elemento el vertice
+     * @return la lista de elementos adyacentes
+     */
+    public Lista<T> listarAdyacentes(T elemento) {
+        Lista<T> adyacentes = new Lista<>();
+        NodoVertice<T, E> vertice = buscarVertice(elemento);
+
+        if (vertice != null) {
+            NodoAdyacente<T, E> adyacente = vertice.getPrimerAdyacente();
+
+            while (adyacente != null) {
+                adyacentes.insertar(adyacente.getVertice().getElemento(), adyacentes.longitud() + 1);
+                adyacente = adyacente.getSiguienteAdyacente();
+            }
+        }
+
+        return adyacentes;
+    }
+
+    /**
+     * Devuelve la etiqueta de un arco entre origen y destino.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return la etiqueta, o nulo si no existe el arco
+     */
+    public E obtenerEtiqueta(T origen, T destino) {
+        NodoAdyacente<T, E> adyacente = buscarAdyacente(buscarVertice(origen), destino);
+        return adyacente != null ? adyacente.getEtiqueta() : null;
     }
 
     /**

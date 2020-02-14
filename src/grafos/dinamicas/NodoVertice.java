@@ -8,7 +8,7 @@ package grafos.dinamicas;
  * @param <T> el tipo de elemento
  * @param <E> el tipo de etiqueta
  */
-public class NodoVertice<T, E extends Comparable<E>> {
+public class NodoVertice<T, E> {
 
     /**
      * El elemento del vértice.
