@@ -80,6 +80,9 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
     /**
      * Camino más corto según el peso de la etiqueta.
      *
+     * Explicación breve:
+     * Similar a Grafo.caminoMasCorto() pero teniendo en cuenta la menor distancia desde las etiquetas.
+     *
      * @param origen el origen
      * @param destino el destino
      * @return el camino más corto

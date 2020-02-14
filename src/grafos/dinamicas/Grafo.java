@@ -435,6 +435,16 @@ public class Grafo<T, E> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
+     * Explicación breve:
+     * Se recorre la estructura en anchura de forma similar a "por niveles" en un Árbol, es decir, primero todos los
+     * que están a un arco de distancia, luego los que están a dos, luego a tres, etc. Y por lo tanto tan pronto se
+     * encuentre el elemento destino, ese va a ser el/uno de los caminos que pasan por menos vertices.
+     * Para armar el camino al final, se utiliza una lista auxiliar donde se guarda cada vertice asociado con su
+     * predecesor, es decir el vertice con un arco menos de distancia desde el origen.
+     * La ventaja es que encuentra el camino en a lo sumo O(cantidad de vertices + cantidad de arcos) con la desventaja
+     * es que se requiere usar Lista.insertar(), recuperar() y localizar() por cada iteración en la lista auxiliar que
+     * a lo sumo tendrá longitud de la cantidad de vertices.
+     *
      * @param origen el elemento origen
      * @param destino el elemento destino
      * @return la lista con el camino más corto
