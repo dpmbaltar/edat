@@ -21,7 +21,6 @@ public class PruebaGrafoPonderado {
      */
     public void pruebaCaminoMasCortoEtiqueta() {
         GrafoPonderado<Character> grafo = crearGrafoPonderado();
-        System.out.println(grafo.caminoMasCortoEtiqueta('I', 'D'));
         assert grafo.caminoMasCortoEtiqueta('A', 'I').toString().equals("[A, F, I]")
                 : "Camino más corto de A a I debe ser A,F,I";
         assert grafo.caminoMasCortoEtiqueta('I', 'A').toString().equals("[I, F, A]")
