@@ -18,7 +18,7 @@ public class Camino<T> {
     /**
      * Lista de elementos del camino.
      */
-    private final Lista<T> elementos;
+    private Lista<T> elementos;
 
     /**
      * Constructor con longitud y elementos.
@@ -35,7 +35,7 @@ public class Camino<T> {
      * Constructor vacío.
      */
     public Camino() {
-        this(0, new Lista<>());
+        this(0.0, new Lista<>());
     }
 
     /**
@@ -63,6 +63,15 @@ public class Camino<T> {
      */
     public Lista<T> getElementos() {
         return elementos;
+    }
+
+    /**
+     * Establece la lista de elementos del camino.
+     *
+     * @param elementos los elementos
+     */
+    public void setElementos(Lista<T> elementos) {
+        this.elementos = elementos;
     }
 
     /**

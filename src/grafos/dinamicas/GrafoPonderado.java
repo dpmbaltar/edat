@@ -84,7 +84,7 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
      * @param destino el destino
      * @return el camino más corto
      */
-    public Camino caminoMasCortoEtiqueta(T origen, T destino) {
+    public Lista<T> caminoMasCortoEtiqueta2(T origen, T destino) {
         Camino camino = new Camino();
         NodoVertice<T, Double> vertice = buscarVertice(origen);
 
@@ -169,7 +169,72 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
             }
         }
 
-        return camino;
+        return camino.getElementos();
+    }
+
+    /**
+     * Camino más corto según el peso de la etiqueta.
+     *
+     * @param origen el origen
+     * @param destino el destino
+     * @return el camino más corto
+     */
+    public Lista<T> caminoMasCortoEtiqueta(T origen, T destino) {
+        Camino<T> camino = new Camino<>();
+        camino.setLongitud(Double.MAX_VALUE);
+
+        // Evitar buscar caminos de origen igual al destino
+        if (!origen.equals(destino)) {
+            NodoVertice<T, Double> verticeOrigen = buscarVertice(origen);
+            NodoVertice<T, Double> verticeDestino = buscarVertice(destino);
+
+            // Proceder a buscar sólo si existe el origen y destino
+            if (verticeOrigen != null && verticeDestino != null) {
+                caminoMasCortoEtiquetaDesde(verticeOrigen, destino, new Camino<>(), camino);
+            }
+        }
+
+        return camino.getElementos();
+    }
+
+    private void caminoMasCortoEtiquetaDesde(
+            NodoVertice<T, Double> vertice,
+            T destino,
+            Camino caminoActual,
+            Camino caminoMasCorto) {
+        Lista<T> elementosRecorridos = caminoActual.getElementos();
+        double longitudRecorrida = caminoActual.getLongitud();
+        double longitud;
+
+        if (vertice != null) {
+            elementosRecorridos.insertar(vertice.getElemento(), elementosRecorridos.longitud() + 1);
+
+            // Destino encontrado
+            if (vertice.getElemento().equals(destino)
+                    && longitudRecorrida < caminoMasCorto.getLongitud()) {
+                caminoMasCorto.setLongitud(longitudRecorrida);
+                caminoMasCorto.setElementos(caminoActual.getElementos().clone());
+            } else { // Destino no encontrado; buscar en los adyacentes
+                NodoVertice<T, Double> verticeAdy;
+                NodoAdyacente<T, Double> adyacente = vertice.getPrimerAdyacente();
+
+                while (adyacente != null) {
+                    verticeAdy = adyacente.getVertice();
+                    longitud = longitudRecorrida + adyacente.getEtiqueta();
+
+                    // Continuar buscando caminos solo cuando no supere la distancia mínima encontrada
+                    if (longitud < caminoMasCorto.getLongitud()
+                            && elementosRecorridos.localizar(verticeAdy.getElemento()) < 0) {
+                        caminoActual.setLongitud(longitud);
+                        caminoMasCortoEtiquetaDesde(verticeAdy, destino, caminoActual, caminoMasCorto);
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            elementosRecorridos.eliminar(elementosRecorridos.longitud());
+        }
     }
 
 }

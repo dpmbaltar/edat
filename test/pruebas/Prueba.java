@@ -42,6 +42,7 @@ public class Prueba {
             exito(new pruebas.conjuntistas.PruebaTablaHashCerrado());
             exito(new pruebas.conjuntistas.PruebaDiccionario());
             exito(new pruebas.grafos.dinamicas.PruebaGrafo());
+            exito(new pruebas.grafos.dinamicas.PruebaGrafoPonderado());
 
             // Fin de prueba
             System.out.println();
