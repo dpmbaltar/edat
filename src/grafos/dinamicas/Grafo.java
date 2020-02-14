@@ -295,71 +295,6 @@ public class Grafo<T, E> {
     }
 
     /**
-     * Dados dos elementos de tipo T (origen y destino), devuelve un camino (lista de vértices) que indique el camino
-     * que pasa por menos vértices que permite llegar del vértice origen al vértice destino. Si hay más de un camino
-     * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
-     * camino posible entre ellos devuelve la lista vacía.
-     *
-     * @param origen el elemento origen
-     * @param destino el elemento destino
-     * @return la lista con el camino más corto
-     */
-    public Lista<T> caminoMasCorto(T origen, T destino) {
-        Lista<T> camino = new Lista<>();
-        NodoVertice<T, E> vertice = buscarVertice(origen);
-
-        if (vertice != null) {
-            boolean encontrado = false;
-            T elementoAdy;
-            NodoVertice<T, E> predecesor;
-            NodoAdyacente<T, E> adyacente;
-            Cola<NodoVertice<T, E>> colaVertices = new Cola<>();
-            Lista<NodoVertice<T, E>> visitados = new Lista<>();
-
-            // Visitar el origen primero y guardarlo como predecesor
-            predecesor = new NodoVertice<T, E>(vertice.getElemento());
-            visitados.insertar(predecesor, 1);
-            colaVertices.poner(vertice);
-
-            // Recorrer cada vértice como en listar en anchura
-            while (!colaVertices.esVacia() && !encontrado) {
-                vertice = colaVertices.obtenerFrente();
-                colaVertices.sacar();
-                predecesor = visitados.recuperar(visitados.localizar(vertice));
-                adyacente = vertice.getPrimerAdyacente();
-
-                // Visitar cada vértice adyacente guardando su predecesor
-                while (adyacente != null && !encontrado) {
-                    elementoAdy = adyacente.getVertice().getElemento();
-
-                    if (visitados.localizar(adyacente.getVertice()) < 0) {
-                        visitados.insertar(new NodoVertice<T, E>(elementoAdy, predecesor), visitados.longitud() + 1);
-                        colaVertices.poner(adyacente.getVertice());
-
-                        // Finalizar si el destino fue encontrado
-                        if (elementoAdy.equals(destino)) {
-                            encontrado = true;
-                        }
-                    }
-
-                    adyacente = adyacente.getSiguienteAdyacente();
-                }
-            }
-
-            // Obtener el camino más corto a través de la lista auxiliar de predecesores
-            if (encontrado) {
-                vertice = visitados.recuperar(visitados.longitud());
-                while (vertice != null) {
-                    camino.insertar(vertice.getElemento(), 1);
-                    vertice = vertice.getSiguienteVertice();
-                }
-            }
-        }
-
-        return camino;
-    }
-
-    /**
      * Dados tres elementos de tipo T (origen, destino y sinLocacion), devuelve un camino (lista de vértices) que
      * indique el camino que pasa por menos vértices que permite llegar del vértice origen al vértice destino, sin
      * pasar por sinLocacion. Si hay más de un camino con igual cantidad de vértices, devuelve cualquiera de ellos.
@@ -437,7 +372,7 @@ public class Grafo<T, E> {
      * @param destino el elemento destino
      * @return la lista con el camino más corto
      */
-    public Lista<T> caminoMasCorto2(T origen, T destino) {
+    public Lista<T> caminoMasCorto(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
         NodoVertice<T, E> vertice = buscarVertice(origen);
 
@@ -492,6 +427,71 @@ public class Grafo<T, E> {
 
             camino.eliminar(nuevaLongitud);
         }
+    }
+
+    /**
+     * Dados dos elementos de tipo T (origen y destino), devuelve un camino (lista de vértices) que indique el camino
+     * que pasa por menos vértices que permite llegar del vértice origen al vértice destino. Si hay más de un camino
+     * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
+     * camino posible entre ellos devuelve la lista vacía.
+     *
+     * @param origen el elemento origen
+     * @param destino el elemento destino
+     * @return la lista con el camino más corto
+     */
+    public Lista<T> caminoMasCorto2(T origen, T destino) {
+        Lista<T> camino = new Lista<>();
+        NodoVertice<T, E> vertice = buscarVertice(origen);
+
+        if (vertice != null) {
+            boolean encontrado = false;
+            T elementoAdy;
+            NodoVertice<T, E> predecesor;
+            NodoAdyacente<T, E> adyacente;
+            Cola<NodoVertice<T, E>> colaVertices = new Cola<>();
+            Lista<NodoVertice<T, E>> visitados = new Lista<>();
+
+            // Visitar el origen primero y guardarlo como predecesor
+            predecesor = new NodoVertice<T, E>(vertice.getElemento());
+            visitados.insertar(predecesor, 1);
+            colaVertices.poner(vertice);
+
+            // Recorrer cada vértice como en listar en anchura
+            while (!colaVertices.esVacia() && !encontrado) {
+                vertice = colaVertices.obtenerFrente();
+                colaVertices.sacar();
+                predecesor = visitados.recuperar(visitados.localizar(vertice));
+                adyacente = vertice.getPrimerAdyacente();
+
+                // Visitar cada vértice adyacente guardando su predecesor
+                while (adyacente != null && !encontrado) {
+                    elementoAdy = adyacente.getVertice().getElemento();
+
+                    if (visitados.localizar(adyacente.getVertice()) < 0) {
+                        visitados.insertar(new NodoVertice<T, E>(elementoAdy, predecesor), visitados.longitud() + 1);
+                        colaVertices.poner(adyacente.getVertice());
+
+                        // Finalizar si el destino fue encontrado
+                        if (elementoAdy.equals(destino)) {
+                            encontrado = true;
+                        }
+                    }
+
+                    adyacente = adyacente.getSiguienteAdyacente();
+                }
+            }
+
+            // Obtener el camino más corto a través de la lista auxiliar de predecesores
+            if (encontrado) {
+                vertice = visitados.recuperar(visitados.longitud());
+                while (vertice != null) {
+                    camino.insertar(vertice.getElemento(), 1);
+                    vertice = vertice.getSiguienteVertice();
+                }
+            }
+        }
+
+        return camino;
     }
 
     /**
