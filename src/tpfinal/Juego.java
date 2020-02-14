@@ -13,6 +13,8 @@ import java.util.Iterator;
 
 import conjuntistas.Diccionario;
 import conjuntistas.TablaHashAbierto;
+import grafos.dinamicas.Grafo;
+import java.util.concurrent.ThreadLocalRandom;
 import lineales.dinamicas.ColaPrioridad;
 import lineales.dinamicas.Lista;
 import utiles.Funciones;
@@ -62,7 +64,7 @@ public class Juego {
     /**
      * El mapa del juego (grafo etiquetado extendido con elementos tipo String y etiquetas tipo Integer).
      */
-    private Mapa mapa;
+    private Grafo<String, Integer> mapa;
 
     /**
      * Tabla Hash para generar códigos de ítem únicos.
@@ -92,12 +94,12 @@ public class Juego {
     }
 
     /**
-     * Devuelve el mapa del juego.
+     * Devuelve una copia del mapa del juego.
      *
      * @return el mapa
      */
-    public Mapa getMapa() {
-        return mapa;
+    public Grafo<String, Integer> getMapa() {
+        return mapa.clone();
     }
 
     /**
@@ -287,7 +289,7 @@ public class Juego {
             }
 
             // Mapa
-            salida.print(mapa.exportar());
+            salida.print(exportarMapaCSV());
 
             // Equipos
             while (iteradorEquipos.hasNext()) {
@@ -1287,8 +1289,17 @@ public class Juego {
 
     private String modificarNombreLocacion(String locacion) {
         String nuevaLocacion = leerLocacion();
-        mapa.modificarVertice(locacion, nuevaLocacion);
+        String adyacente;
+        Lista<String> adyacentes = mapa.listarAdyacentes(locacion);
+        mapa.insertarVertice(nuevaLocacion);
 
+        // Crear nueva locación, copiar adyacentes y borrar la anterior
+        for (int i = 1; i <= adyacentes.longitud(); i++) {
+            adyacente = adyacentes.recuperar(i);
+            mapa.insertarArco(nuevaLocacion, adyacente, mapa.obtenerEtiqueta(locacion, adyacente));
+        }
+
+        mapa.eliminarVertice(locacion);
         log(String.format("Se modificó el nombre de la locación \"%s\" a \"%s\"", locacion, nuevaLocacion));
 
         return nuevaLocacion;
@@ -1296,7 +1307,7 @@ public class Juego {
 
     private void agregarCamino(String locacion) {
         titulo(String.format("Nuevo destino para %s", locacion));
-        Lista<String> locaciones = mapa.listarVertices();
+        Lista<String> locaciones = mapa.listarEnAnchura();
         String destino;
 
         for (int i = 1; i <= locaciones.longitud(); i++) {
@@ -1524,6 +1535,58 @@ public class Juego {
         }
     }
 
+    /**
+     * Devuelve una locación aleatoria del mapa.
+     *
+     * @return la locación obtenida
+     */
+    private String locacionAleatoria() {
+        String locacion = null;
+
+        if (!mapa.esVacio()) {
+            Lista<String> locaciones = mapa.listarEnAnchura();
+            int aleatorio = ThreadLocalRandom.current().nextInt(0, locaciones.longitud() - 1);
+            locacion = locaciones.recuperar(aleatorio);
+        }
+
+        return locacion;
+    }
+
+    /**
+     * Devuelve la representación del mapa en formato CSV (de 7 columnas).
+     *
+     * @return el mapa en CSV
+     */
+    public String exportarMapaCSV() {
+        StringBuilder cadena = new StringBuilder();
+        StringBuilder cadenaCaminos = new StringBuilder();
+        String locacionOrigen = null;
+        String locacionDestino = null;
+        String caminoOpuesto = null;
+        Lista<String> locaciones = mapa.listarEnAnchura();
+        Lista<String> adyacentes;
+
+        for (int i = 1; i <= locaciones.longitud(); i++) {
+            locacionOrigen = locaciones.recuperar(i);
+            cadena.append(String.format("L:%s;;;;;;\r\n", locacionOrigen));
+            adyacentes = mapa.listarAdyacentes(locacionOrigen);
+
+            for (int j = 1; j <= adyacentes.longitud(); j++) {
+                locacionDestino = adyacentes.recuperar(j);
+                caminoOpuesto = locacionDestino + ";" + locacionOrigen;
+
+                // Verificar que no esté impreso el camino opuesto
+                if (cadenaCaminos.indexOf(caminoOpuesto) == -1) {
+                    cadenaCaminos.append("C:").append(locacionOrigen).append(";");
+                    cadenaCaminos.append(locacionDestino).append(";");
+                    cadenaCaminos.append(mapa.obtenerEtiqueta(locacionOrigen, locacionDestino)).append(";;;;\r\n");
+                }
+            }
+        }
+
+        return cadena.append(cadenaCaminos.toString()).toString();
+    }
+
     private static String leerLocacion(String etiqueta) {
         return Funciones.leerFrase(etiqueta != null ? etiqueta : "Nombre de locación: ",
                 "El nombre de locación ingresado no es válido."
@@ -1585,7 +1648,7 @@ public class Juego {
 
         if (esperando.longitud() >= 3) {
             String nombre = leerNombreEquipo();
-            Equipo equipo = new Equipo(nombre, mapa.locacionAleatoria());
+            Equipo equipo = new Equipo(nombre, locacionAleatoria());
             Lista<Jugador> jugadores = equipo.getJugadores();
             Categoria categoria = null;
             Jugador jugador;
