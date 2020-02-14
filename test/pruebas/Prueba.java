@@ -16,9 +16,7 @@ public class Prueba {
         try {
             try {
                 assert false;
-                System.out.println(
-                        "ERROR: las pruebas deben ser ejecutadas con el parámetro de JVM -enableassertions (ó -ea). "
-                            + "Leer README.md");
+                System.out.println("ERROR: las pruebas deben ejecutarse en la JVM con -enableassertions (ó -ea). ");
                 System.exit(0);
             } catch (AssertionError e) {
             }
