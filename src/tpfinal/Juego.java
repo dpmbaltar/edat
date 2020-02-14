@@ -1,6 +1,5 @@
 package tpfinal;
 
-import grafos.dinamicas.Camino;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -1410,12 +1409,10 @@ public class Juego {
         if (!mapa.esVacio()) {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
-            Camino caminoMasCortoKms = mapa.caminoMasCortoEtiqueta(locacion1, locacion2);
-            Lista<String> locaciones = caminoMasCortoKms.getElementos();
-            double distancia = caminoMasCortoKms.getLongitud();
+            Lista<String> locaciones = mapa.caminoMasCortoEtiqueta(locacion1, locacion2);
 
-            System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es de %.0f kms:",
-                    locacion1, locacion2, distancia));
+            System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es:",
+                    locacion1, locacion2));
 
             if (!locaciones.esVacia()) {
                 for (int i = 1; i <= locaciones.longitud(); i++) {
