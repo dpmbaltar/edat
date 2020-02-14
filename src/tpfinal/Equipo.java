@@ -104,12 +104,12 @@ public class Equipo {
     }
 
     /**
-     * Devuelve los jugadores del equipo.
+     * Devuelve una copia de los jugadores del equipo.
      *
      * @return los jugadores del equipo
      */
     public Lista<Jugador> getJugadores() {
-        return jugadores;
+        return jugadores.clone();
     }
 
     /**
