@@ -300,14 +300,6 @@ public class Grafo<T, E> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
-     * <p>Esta implementación es medianamente mejor que {@link #caminoMasCorto2}, ya que recorre a lo sumo cada
-     * vértice una sola vez, como en {@link #listarEnAnchura}, y no utiliza recursión. Sin embargo, utiliza una cola y
-     * lista auxiliar, que a lo sumo tiene la mísma cantidad de elementos que vértices en el grafo, pero con una sola
-     * referencia que es al vértice predecesor, para armar el camino al final del método. También, se agregó el método
-     * {@link NodoVertice#equals}, que devuelve verdadero sólo si el elemento es igual al elemento del otro nodo, para
-     * poder ubicar un vértice en la lista con el método {@link Lista#localizar}. Quizá sería mejor buscar una versión
-     * alternativa para esta funcionalidad sin alterar la clase {@link NodoVertice}.</p>
-     *
      * @param origen el elemento origen
      * @param destino el elemento destino
      * @return la lista con el camino más corto
@@ -440,17 +432,11 @@ public class Grafo<T, E> {
      * con igual cantidad de vértices, devuelve cualquiera de ellos. Si alguno de los vértices no existe o no hay
      * camino posible entre ellos devuelve la lista vacía.
      *
-     * @deprecated
-     * Esta implementación recorre casi todos los caminos posibles desde el origen manteniendo el camino más corto por
-     * parámetro, incluyendo a veces caminos que no llegan al destino, y por lo tanto es más costoso que
-     * {@link #caminoMasCorto}.<p>
-     *
      * @see #caminoMasCorto
      * @param origen el elemento origen
      * @param destino el elemento destino
      * @return la lista con el camino más corto
      */
-    @Deprecated
     public Lista<T> caminoMasCorto2(T origen, T destino) {
         Valor<Lista<T>> camino = new Valor<>(new Lista<>());
         NodoVertice<T, E> vertice = buscarVertice(origen);
@@ -467,16 +453,12 @@ public class Grafo<T, E> {
      * dado es el destino, entonces se ha encontrado un camino. Luego, si el camino encontrado es de menor longitud
      * que minimaLongitud, entonces se guarda el camino en el contenedor caminoMin.
      *
-     * @deprecated
-     * Parte de la implementación de {@link #caminoMasCorto2}.
-     *
      * @param vertice el vertice de origen
      * @param destino el elemento destino
      * @param camino el camino actual
      * @param caminoMin el camino mínimo encontrado
      * @param minimaLongitud la longitud del camino mínimo encontrado
      */
-    @Deprecated
     private void caminoMasCortoDesde(
             NodoVertice<T, E> vertice,
             T destino,

@@ -84,7 +84,7 @@ public class GrafoPonderado<T> extends Grafo<T, Double> {
      * @param destino el destino
      * @return el camino más corto
      */
-    public Camino caminoMasCortoKms(T origen, T destino) {
+    public Camino caminoMasCortoEtiqueta(T origen, T destino) {
         Camino camino = new Camino();
         NodoVertice<T, Double> vertice = buscarVertice(origen);
 

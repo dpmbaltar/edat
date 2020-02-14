@@ -1410,7 +1410,7 @@ public class Juego {
         if (!mapa.esVacio()) {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
-            Camino caminoMasCortoKms = mapa.caminoMasCortoKms(locacion1, locacion2);
+            Camino caminoMasCortoKms = mapa.caminoMasCortoEtiqueta(locacion1, locacion2);
             Lista<String> locaciones = caminoMasCortoKms.getElementos();
             double distancia = caminoMasCortoKms.getLongitud();
 
