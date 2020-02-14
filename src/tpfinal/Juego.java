@@ -1,5 +1,6 @@
 package tpfinal;
 
+import grafos.dinamicas.Camino;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,7 +14,7 @@ import java.util.Iterator;
 
 import conjuntistas.Diccionario;
 import conjuntistas.TablaHashAbierto;
-import grafos.dinamicas.Grafo;
+import grafos.dinamicas.GrafoPonderado;
 import java.util.concurrent.ThreadLocalRandom;
 import lineales.dinamicas.ColaPrioridad;
 import lineales.dinamicas.Lista;
@@ -64,7 +65,7 @@ public class Juego {
     /**
      * El mapa del juego (grafo etiquetado extendido con elementos tipo String y etiquetas tipo Integer).
      */
-    private Grafo<String, Integer> mapa;
+    private GrafoPonderado<String> mapa;
 
     /**
      * Tabla Hash para generar códigos de ítem únicos.
@@ -90,7 +91,7 @@ public class Juego {
         esperando = new ColaPrioridad<>();
         items = new Diccionario<>();
         inventario = new Diccionario<>();
-        mapa = new Mapa();
+        mapa = new GrafoPonderado<>();
     }
 
     /**
@@ -98,8 +99,8 @@ public class Juego {
      *
      * @return el mapa
      */
-    public Grafo<String, Integer> getMapa() {
-        return mapa.clone();
+    public GrafoPonderado<String> getMapa() {
+        return (GrafoPonderado<String>) mapa.clone();
     }
 
     /**
@@ -140,7 +141,7 @@ public class Juego {
                         String[] partes = linea.substring(2).split(";");
 
                         if (partes.length >= 3) {
-                            int etiqueta = Integer.valueOf(partes[2]);
+                            double etiqueta = Double.valueOf(partes[2]);
                             mapa.insertarArco(partes[0], partes[1], etiqueta);
                         }
                         break;
@@ -1307,7 +1308,7 @@ public class Juego {
 
     private void agregarCamino(String locacion) {
         titulo(String.format("Nuevo destino para %s", locacion));
-        Lista<String> locaciones = mapa.listarEnAnchura();
+        Lista<String> locaciones = mapa.listarVertices();
         String destino;
 
         for (int i = 1; i <= locaciones.longitud(); i++) {
@@ -1322,11 +1323,11 @@ public class Juego {
         int opcion = leerOpcion(0, locaciones.longitud());
 
         if (opcion > 0) {
-            int distancia = leerDistancia();
+            double distancia = leerDistancia();
             destino = locaciones.recuperar(opcion);
             mapa.insertarArco(locacion, destino, distancia);
 
-            log(String.format("Se insertó un camino de una distancia de %d kms desde \"%s\" hasta \"%s\"", distancia,
+            log(String.format("Se insertó un camino de una distancia de %.0f kms desde \"%s\" hasta \"%s\"", distancia,
                     locacion, destino));
         }
     }
@@ -1363,10 +1364,11 @@ public class Juego {
 
         if (opcion > 0) {
             String destino = adyacentes.recuperar(opcion);
-            int distancia = leerDistancia();
-            mapa.modificarEtiqueta(locacion, destino, distancia);
+            double distancia = leerDistancia();
+            mapa.eliminarArco(locacion, destino);
+            mapa.insertarArco(locacion, destino, distancia);
 
-            log(String.format("Se modificó la distancia del camino desde \"%s\" hasta \"%s\" a %d kms", locacion,
+            log(String.format("Se modificó la distancia del camino desde \"%s\" hasta \"%s\" a %.0f kms", locacion,
                     destino, distancia));
         }
     }
@@ -1409,10 +1411,10 @@ public class Juego {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
             Camino caminoMasCortoKms = mapa.caminoMasCortoKms(locacion1, locacion2);
-            Lista<String> locaciones = caminoMasCortoKms.getLocaciones();
-            int distancia = caminoMasCortoKms.getDistancia();
+            Lista<String> locaciones = caminoMasCortoKms.getElementos();
+            double distancia = caminoMasCortoKms.getLongitud();
 
-            System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es de %d kms:",
+            System.out.println(String.format("El camino más corto entre \"%s\" y \"%s\" es de %.0f kms:",
                     locacion1, locacion2, distancia));
 
             if (!locaciones.esVacia()) {
@@ -1469,7 +1471,7 @@ public class Juego {
         if (!mapa.esVacio()) {
             String locacion1 = leerLocacion("Locación origen: ");
             String locacion2 = leerLocacion("Locación destino: ");
-            int distanciaMaxima = leerDistancia("Distancia máxima: ");
+            double distanciaMaxima = leerDistancia("Distancia máxima: ");
             Lista<Camino> caminos = mapa.caminosHastaDistancia(locacion1, locacion2, distanciaMaxima);
 
             if (!caminos.esVacia()) {
@@ -1479,11 +1481,11 @@ public class Juego {
                 for (int i = 1; i <= caminos.longitud(); i++) {
                     camino = caminos.recuperar(i);
                     System.out.println(String.format("Camino %d:", i));
-                    System.out.println(String.format("  Distancia: %d", camino.getDistancia()));
-                    System.out.println(String.format("  Locaciones: %s", camino.getLocaciones()));
+                    System.out.println(String.format("  Distancia: %.f", camino.getLongitud()));
+                    System.out.println(String.format("  Locaciones: %s", camino.getElementos()));
                 }
 
-                log(String.format("Se consultaron los caminos más cortos entre \"%s\" y \"%s\" de hasta %d kms",
+                log(String.format("Se consultaron los caminos más cortos entre \"%s\" y \"%s\" de hasta %.0f kms",
                         locacion1, locacion2, distanciaMaxima));
             } else {
                 System.out.println(String.format("Alguna de las locaciones no existe, \"%s\" y/o \"%s\"",
@@ -1598,12 +1600,12 @@ public class Juego {
         return leerLocacion(null);
     }
 
-    private static int leerDistancia(String etiqueta) {
+    private static double leerDistancia(String etiqueta) {
         return Funciones.leerEnteroPositivo(etiqueta != null ? etiqueta : "Distancia: ",
                 "El distancia ingresada no es válida.\r\nDebe ser un entero positivo.\r\nReintentar: ");
     }
 
-    private static int leerDistancia() {
+    private static double leerDistancia() {
         return leerDistancia(null);
     }
 
