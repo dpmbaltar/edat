@@ -26,6 +26,7 @@ public class PruebaArbolGenerico {
         pruebaListarPosorden();
         pruebaListarNiveles();
         pruebaClonar();
+        pruebaCaminoAHojaMasCercana();
     }
 
     /**
@@ -167,6 +168,20 @@ public class PruebaArbolGenerico {
     public void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.toString().equals(ag.clone().toString()) : "Árbol debe ser igual a su clon";
+    }
+
+    /**
+     * Prueba {@link jerarquicas.ArbolGenerico#caminoAHojaMasCercana()}.
+     */
+    public void pruebaCaminoAHojaMasCercana() {
+        ArbolGenerico<Character> ag = crearArbolGenerico();
+        System.out.println(ag.caminoAHojaMasCercana());
+        assert ag.caminoAHojaMasCercana().toString().equals("[a, b, e]") : "La hoja más cercana debe ser e";
+        ag = new ArbolGenerico<>();
+        assert ag.caminoAHojaMasCercana().toString().equals("[]") : "No debe existir un camino a una hoja";
+        ag = new ArbolGenerico<>();
+        ag.insertar('a', null);
+        assert ag.caminoAHojaMasCercana().toString().equals("[a]") : "La hoja más cercana es la raíz";
     }
 
     /**

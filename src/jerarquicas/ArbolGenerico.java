@@ -2,6 +2,7 @@ package jerarquicas;
 
 import lineales.dinamicas.Cola;
 import lineales.dinamicas.Lista;
+import utiles.Valor;
 
 /**
  * Implementación dinámica de Árbol Genérico.
@@ -516,5 +517,47 @@ public class ArbolGenerico<T> {
     @Override
     public String toString() {
         return listarNiveles().toString();
+    }
+
+    /**
+     * Método de práctica final 2019.
+     * Devuelve el camino desde la raíz hasta la hoja más cercana a la raíz.
+     *
+     * @return el camino
+     */
+    public Lista<T> caminoAHojaMasCercana() {
+        Valor<Lista<T>> camino = new Valor<>(new Lista<>());
+        caminoAHojaMasCercanaDesde(raiz, new Lista<>(), camino, new Valor<>(Integer.MAX_VALUE));
+
+        return camino.getValor();
+    }
+
+    private void caminoAHojaMasCercanaDesde(
+            Nodo<T> nodo,
+            Lista<T> caminoActual,
+            Valor<Lista<T>> caminoMin,
+            Valor<Integer> distanciaMin) {
+        if (nodo != null) {
+            caminoActual.insertar(nodo.getElemento(), caminoActual.longitud() + 1);
+            Nodo<T> hijo = nodo.getIzquierdo();
+
+            if (hijo == null) { // Se encuentra una hoja
+                if (caminoActual.longitud() < distanciaMin.getValor()) { // Actualizar camino mínimo si corresponde
+                    caminoMin.setValor(caminoActual.clone());
+                    distanciaMin.setValor(caminoActual.longitud());
+                }
+            } else if ((caminoActual.longitud() + 1) < distanciaMin.getValor()) { // Seguir en prof. cuando sea nec.
+                caminoAHojaMasCercanaDesde(hijo, caminoActual, caminoMin, distanciaMin);
+            }
+
+            // Actualizar el camino actual para seguir con los hermanos
+            caminoActual.eliminar(caminoActual.longitud());
+            Nodo<T> hermano = nodo.getDerecho();
+
+            while (hermano != null) {
+                caminoAHojaMasCercanaDesde(hermano, caminoActual, caminoMin, distanciaMin);
+                hermano = hermano.getDerecho();
+            }
+        }
     }
 }
