@@ -177,7 +177,13 @@ public class PruebaArbolGenerico {
     public void pruebaFrontera() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.frontera().toString().equals("[e, f, g, j, k, m, n, i]")
-                : "Frontera debe ser [e, f, g, j, k, m, n, i]";
+                : "Frontera debe ser: [e, f, g, j, k, m, n, i]";
+        ag = new ArbolGenerico<>();
+        assert ag.frontera().toString().equals("[]")
+                : "Frontera debe ser vacía: []";
+        ag.insertar('a', null);
+        assert ag.frontera().toString().equals("[a]")
+                : "Frontera debe ser la raíz: [a]";
     }
 
     /**
