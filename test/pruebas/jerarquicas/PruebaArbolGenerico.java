@@ -26,6 +26,7 @@ public class PruebaArbolGenerico {
         pruebaListarPosorden();
         pruebaListarNiveles();
         pruebaClonar();
+        pruebaFrontera();
         pruebaCaminoAHojaMasCercana();
     }
 
@@ -171,11 +172,19 @@ public class PruebaArbolGenerico {
     }
 
     /**
+     * Prueba {@link jerarquicas.ArbolGenerico#frontera()}.
+     */
+    public void pruebaFrontera() {
+        ArbolGenerico<Character> ag = crearArbolGenerico();
+        assert ag.frontera().toString().equals("[e, f, g, j, k, m, n, i]")
+                : "Frontera debe ser [e, f, g, j, k, m, n, i]";
+    }
+
+    /**
      * Prueba {@link jerarquicas.ArbolGenerico#caminoAHojaMasCercana()}.
      */
     public void pruebaCaminoAHojaMasCercana() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
-        System.out.println(ag.caminoAHojaMasCercana());
         assert ag.caminoAHojaMasCercana().toString().equals("[a, b, e]") : "La hoja más cercana debe ser e";
         ag = new ArbolGenerico<>();
         assert ag.caminoAHojaMasCercana().toString().equals("[]") : "No debe existir un camino a una hoja";
@@ -195,21 +204,26 @@ public class PruebaArbolGenerico {
      * Inorden:     [e, b, f, a, g, c, j, h, k, m, l, n, d, i]
      * Posorden:    [e, f, b, g, c, j, k, m, n, l, h, i, d, a]
      * Por niveles: [a, b, c, d, e, f, g, h, i, j, k, l, m, n]
+     * Frontera:    [e, f, g, j, k, m, n, i]
      *
-     * a
-     * +-b
-     * | +-e
-     * | +-f
-     * +-c
-     * | +-g
-     * +-d
-     *   +-h
-     *   | +-j
-     *   | +-k
-     *   | +-l
-     *   |   +-m
-     *   |   +-n
-     *   +-i
+     *         (a)
+     *         /|\
+     *        / | \
+     *       /  |  \
+     *      /   |   \
+     *     /    |    \
+     *   (b)   (c)   (d)
+     *   / \    |    / \
+     * (e) (f) (g) (h) (i)
+     *             /|\
+     *            / | \
+     *           /  |  \
+     *          /   |   \
+     *         /    |    \
+     *        /     |     \
+     *      (j)    (k)    (l)
+     *                    / \
+     *                  (m) (n)
      * </pre>
      *
      * @return el árbol genérico de prueba

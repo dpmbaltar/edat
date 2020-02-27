@@ -520,6 +520,45 @@ public class ArbolGenerico<T> {
     }
 
     /**
+     * Devuelve la frontera del árbol.
+     *
+     * @return la lista con los elementos de la frontera
+     */
+    public Lista<T> frontera() {
+        Lista<T> hojas = new Lista<>();
+        fronteraDesde(raiz, hojas);
+
+        return hojas;
+    }
+
+    private void fronteraDesde(Nodo<T> nodo, Lista<T> frontera) {
+        if (nodo != null) {
+            Nodo<T> hijoIzquierdo = nodo.getIzquierdo();
+            Nodo<T> hermanoDerecho = nodo.getDerecho();
+
+            // Verificar nodo actual
+            if (hijoIzquierdo == null) {
+                frontera.insertar(nodo.getElemento(), frontera.longitud() + 1);
+            } else {
+                fronteraDesde(hijoIzquierdo, frontera);
+            }
+
+            // Verificar hermanos del nodo actual
+            while (hermanoDerecho != null) {
+                hijoIzquierdo = hermanoDerecho.getIzquierdo();
+
+                if (hijoIzquierdo == null) {
+                    frontera.insertar(hermanoDerecho.getElemento(), frontera.longitud() + 1);
+                } else {
+                    fronteraDesde(hijoIzquierdo, frontera);
+                }
+
+                hermanoDerecho = hermanoDerecho.getDerecho();
+            }
+        }
+    }
+
+    /**
      * Método de práctica final 2019.
      * Devuelve el camino desde la raíz hasta la hoja más cercana a la raíz.
      *
