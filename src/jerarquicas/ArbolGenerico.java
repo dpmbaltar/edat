@@ -520,6 +520,61 @@ public class ArbolGenerico<T> {
     }
 
     /**
+     * Verifica si existe el camino dado desde raíz a una hoja.
+     *
+     * @param patron el patrin de elementos
+     * @return verdadero si existe, falso en caso contrario
+     */
+    public boolean verificarPatron(Lista<T> patron) {
+        return verificarPatronDesde(raiz, patron, 1);
+    }
+
+    private boolean verificarPatronDesde(Nodo<T> nodo, Lista<T> patron, int posicion) {
+        boolean existe = false;
+        Nodo<T> primerHijo;
+
+        if (nodo != null) {
+            T elemento = nodo.getElemento();
+            T elementoPatron = patron.recuperar(posicion);
+
+            // Comparar elementos actuales
+            if (elemento.equals(elementoPatron)) {
+                primerHijo = nodo.getIzquierdo();
+                posicion++;
+
+                // Fin del patrón alcanzado
+                if (posicion > patron.longitud() && primerHijo == null) {
+                    existe = true;
+                } else if (posicion <= patron.longitud() && primerHijo != null) {
+                    existe = verificarPatronDesde(primerHijo, patron, posicion);
+                }
+            } else {
+                Nodo<T> hermano = nodo.getDerecho();
+
+                while (!existe && hermano != null) {
+                    elemento = hermano.getElemento();
+
+                    if (elemento.equals(elementoPatron)) {
+                        primerHijo = hermano.getIzquierdo();
+                        posicion++;
+
+                        // Fin del patrón alcanzado
+                        if (posicion > patron.longitud() && primerHijo == null) {
+                            existe = true;
+                        } else if (posicion <= patron.longitud() && primerHijo != null) {
+                            existe = verificarPatronDesde(primerHijo, patron, posicion);
+                        }
+                    }
+
+                    hermano = hermano.getDerecho();
+                }
+            }
+        }
+
+        return existe;
+    }
+
+    /**
      * Devuelve la frontera del árbol.
      *
      * @return la lista con los elementos de la frontera
@@ -599,4 +654,5 @@ public class ArbolGenerico<T> {
             }
         }
     }
+
 }

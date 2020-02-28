@@ -26,6 +26,7 @@ public class PruebaArbolGenerico {
         pruebaListarPosorden();
         pruebaListarNiveles();
         pruebaClonar();
+        pruebaVerificarPatron();
         pruebaFrontera();
         pruebaCaminoAHojaMasCercana();
     }
@@ -169,6 +170,46 @@ public class PruebaArbolGenerico {
     public void pruebaClonar() {
         ArbolGenerico<Character> ag = crearArbolGenerico();
         assert ag.toString().equals(ag.clone().toString()) : "Árbol debe ser igual a su clon";
+    }
+
+    /**
+     * Prueba {@link jerarquicas.ArbolGenerico#verificarPatron()}.
+     */
+    public void pruebaVerificarPatron() {
+        ArbolGenerico<Character> ag = crearArbolGenerico();
+        Lista<Character> patron = new Lista<>();
+        patron.insertar('a', 1);
+        patron.insertar('b', 2);
+        patron.insertar('e', 3);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, b, e]";
+        patron.eliminar(3);
+        patron.insertar('f', 3);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, b, f]";
+        patron.eliminar(3);
+        patron.eliminar(2);
+        patron.insertar('c', 2);
+        patron.insertar('g', 3);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, c, g]";
+        patron.eliminar(3);
+        patron.eliminar(2);
+        patron.insertar('d', 2);
+        patron.insertar('h', 3);
+        patron.insertar('j', 4);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, d, h, j]";
+        patron.eliminar(4);
+        patron.insertar('k', 4);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, d, h, k]";
+        patron.eliminar(4);
+        patron.insertar('l', 4);
+        patron.insertar('m', 5);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, d, h, l, m]";
+        patron.eliminar(5);
+        patron.insertar('m', 5);
+        assert ag.verificarPatron(patron) : "Debe existir patrón [a, d, h, l, n]";
+        patron = new Lista<>();
+        patron.insertar('a', 1);
+        patron.insertar('b', 2);
+        assert !ag.verificarPatron(patron) : "No debe existir patrón [a, b] (inválido)";
     }
 
     /**
