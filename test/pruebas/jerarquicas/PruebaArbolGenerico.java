@@ -28,6 +28,7 @@ public class PruebaArbolGenerico {
         pruebaClonar();
         pruebaVerificarPatron();
         pruebaFrontera();
+        pruebaListaQueJustificaAltura();
         pruebaCaminoAHojaMasCercana();
     }
 
@@ -238,6 +239,15 @@ public class PruebaArbolGenerico {
         ag = new ArbolGenerico<>();
         ag.insertar('a', null);
         assert ag.caminoAHojaMasCercana().toString().equals("[a]") : "La hoja más cercana es la raíz";
+    }
+
+    /**
+     * Prueba {@link jerarquicas.ArbolGenerico#listaQueJustificaAltura()}.
+     */
+    public void pruebaListaQueJustificaAltura() {
+        ArbolGenerico<Character> ag = crearArbolGenerico();
+        assert ag.listaQueJustificaAltura().toString().equals("[a, d, h, l, m]")
+                : "El primer camino más largo debe ser: [a, d, h, l, m]";
     }
 
     /**

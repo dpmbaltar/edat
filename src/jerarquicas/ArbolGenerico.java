@@ -614,6 +614,56 @@ public class ArbolGenerico<T> {
     }
 
     /**
+     * Devuelve una lista de elementos que es el camino que comienza en la raíz y termina en la hoja más lejana.
+     *
+     * @return el camino de la raíz a la hoja más lejana
+     */
+    public Lista<T> listaQueJustificaAltura() {
+        Valor<Lista<T>> camino = new Valor<>(new Lista<>());
+        listaQueJustificaAlturaDesde(raiz, new Lista<>(), 0, camino, new Valor<>(-1));
+
+        return camino.getValor();
+    }
+
+    private void listaQueJustificaAlturaDesde(
+            Nodo<T> nodo,
+            Lista<T> caminoActual,
+            int alturaActual,
+            Valor<Lista<T>> caminoMax,
+            Valor<Integer> alturaMax) {
+        if (nodo != null) {
+            Nodo<T> hijo = nodo.getIzquierdo();
+            caminoActual.insertar(nodo.getElemento(), caminoActual.longitud() + 1);
+
+            if (hijo == null && caminoActual.longitud() > alturaMax.getValor()) {
+                caminoMax.setValor(caminoActual.clone());
+                alturaMax.setValor(caminoActual.longitud());
+            } else if (hijo != null) {
+                listaQueJustificaAlturaDesde(hijo, caminoActual, alturaActual + 1, caminoMax, alturaMax);
+            }
+
+            // Actualizar el camino actual para seguir con los hermanos
+            caminoActual.eliminar(caminoActual.longitud());
+            Nodo<T> hermano = nodo.getDerecho();
+
+            while (hermano != null) {
+                hijo = hermano.getIzquierdo();
+                caminoActual.insertar(hermano.getElemento(), caminoActual.longitud() + 1);
+
+                if (hijo == null && caminoActual.longitud() > alturaMax.getValor()) {
+                    caminoMax.setValor(caminoActual.clone());
+                    alturaMax.setValor(caminoActual.longitud());
+                } else if (hijo != null) {
+                    listaQueJustificaAlturaDesde(hijo, caminoActual, alturaActual + 1, caminoMax, alturaMax);
+                }
+
+                caminoActual.eliminar(caminoActual.longitud());
+                hermano = hermano.getDerecho();
+            }
+        }
+    }
+
+    /**
      * Método de práctica final 2019.
      * Devuelve el camino desde la raíz hasta la hoja más cercana a la raíz.
      *
